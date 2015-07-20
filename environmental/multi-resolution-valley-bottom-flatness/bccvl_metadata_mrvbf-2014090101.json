@@ -1,0 +1,27 @@
+{
+    "files": {
+        "multi_res_valley_bottom_flat/data/multi_res_valley_bottom_flat.tif": {
+            "layer": "multi_res_valley_bottom_flat"
+        }
+    }, 
+    "license": "Creative Commons Attribution 3.0 AU ihttp://creativecommons.org/licenses/by/3.0/au", 
+    "data_type": "Categorical", 
+    "title": "Multi-resolution Valley Bottom Flatness", 
+    "format": "GeoTIFF", 
+    "acknowledgement": "John Gallant; Trevor Dowling; Jenet Austin (2012): Multi-resolution Valley Bottom Flatness (MrVBF, 3\" resolution). v2. CSIRO. Data Collection. 10.4225/08/512EF27AC3888", 
+    "geogcs": "WGS84", 
+    "temporal_coverage": {
+        "start": "2000-2-11", 
+        "end": "2000-2-22"
+    }, 
+    "bounding_box": {
+        "top": "-10.0000000", 
+        "right": "154.0000000", 
+        "bottom": "-44.0000000", 
+        "left": "113.0000000"
+    }, 
+    "genre": "Environmental", 
+    "bccvl_metadata_version": "2014-09-01-01", 
+    "resolution": "3 arcsec", 
+    "external_url": "https://data.csiro.au/dap/landingpage?pid=csiro:5681"
+}

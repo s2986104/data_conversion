@@ -1,0 +1,21 @@
+{
+    "bccvl_metadata_version": "2015-03-09-01",
+    "title": "MODIS-fPAR time series for Australia - {month} {year}",
+    "genre": "Environmental",
+    "data_type": "Continuous",
+    "format": "GeoTIFF",
+    "resolution": "9 arcsec",
+    "geogcs": "WGS84",
+    "bounding_box": {
+        "top": " -10.0000000",
+        "right": "155.1000000",
+        "bottom": "-45.1000000",
+        "left": "110.0000000"
+    },
+    "temporal_coverage": {
+        "start": "",
+        "end": ""
+    },
+    "external_url": "Not Specified",
+    "license": "Not Specified"
+}
