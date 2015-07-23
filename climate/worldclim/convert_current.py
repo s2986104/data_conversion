@@ -209,8 +209,21 @@ def main(argv):
         print "Usage: {0} <srcdir> <destdir>".format(argv[0])
         sys.exit(1)
     src  = argv[1] # TODO: check src exists and is zip?
-    dest = argv[2] # TODO: check dest exists
-    
+    dest = argv[2] 
+
+    # fail if destination exists but is not a directory
+    if os.path.exists(os.path.abspath(dest)) and not os.path.isdir(os.path.abspath(dest)):
+        print "Path {} exists and is not a directory.".format(os.path.abspath(dest))
+        sys.exit(os.EX_IOERR)
+
+    # try to create destination if it doesn't exist
+    if not os.path.isdir(os.path.abspath(dest)):
+        try:
+            os.makedirs(os.path.abspath(dest))
+        except Exception as e:
+            print "Failed to create directory at {}.".format(os.path.abspath(dest))
+            sys.exit(os.EX_IOERR)
+
     for res in sorted(RESOLUTION_MAP.keys()):
         # sorting isn't important, it just forces it to 
         # hit the smallest dataset first for testing
