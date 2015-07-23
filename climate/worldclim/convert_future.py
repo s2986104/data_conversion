@@ -2,13 +2,18 @@ import re
 import sys
 import glob
 import json
+import os
 import os.path
 import zipfile
 import calendar
 import itertools
+import tempfile
+import shutil
 
 JSON_TEMPLATE = 'worldclim.template.json'
 TITLE_TEMPLATE = u'WorldClim Future Projection using {gcm} {rcp} at {res} ({year})'
+
+TMPDIR = "/mnt/playground/"
 
 ## Lookups for metadata construction
 #  Details taken from:
@@ -22,6 +27,7 @@ RESOLUTION_MAP = {
     '10m': 'Resolution10m',
 }
 
+# global climate models (GCMs)
 GCM_MAP = {
     'ac': 'ACCESS1-0',
     'bc': 'BCC-CSM1-1',
@@ -44,6 +50,7 @@ GCM_MAP = {
     'no': 'NorESM1-M',  
 }
 
+# representative concentration pathways (RCPs)
 RCP_MAP = {
     '26': 'RCP3PD',
     '45': 'RCP4.5',
@@ -65,6 +72,17 @@ YEAR_MAP = {
 
 ##
 
+GEOTIFF_PATTERN = re.compile(
+    r"""
+    (?P<gcm>..)                 # GCM
+    (?P<rcp>[0-9][0-9])         # RCP
+    (?P<layer_type>..)          # Layer type
+    (?P<year>[0-9][0-9])        # Year    
+    (?P<layer_num>[0-9][0-9]?)  # Layer no.
+    """, 
+    re.VERBOSE
+)
+
 def potential_converts(source):
     potentials = itertools.product(
         GCM_MAP, RCP_MAP, YEAR_MAP, RESOLUTION_MAP
@@ -76,6 +94,30 @@ def potential_converts(source):
         if source_files:
             yield gcm, rcp, year, res, source_files
 
+def convert_geotiff_temperature(itemname, file_content):
+    tmpdir = tempfile.mkdtemp(dir=TMPDIR)
+    infile = os.path.join(tmpdir, "infile.tif")
+    outfile = os.path.join(tmpdir, "outfile.tif")
+    with open(infile, 'wb') as f:
+        f.write(file_content)
+    print "Changing temperature representation for {}".format(itemname)
+    command = 'gdal_calc.py -A {0} --calc="A*0.1" --creation-option="COMPRESS=LZW" --creation-option="TILED=YES" --outfile {1} --type "Float32"'.format(infile, outfile)
+    ret = os.system(command)
+    if ret != 0:
+        raise Exception("COMMAND '{}' failed.".format(command))
+    with open(outfile, 'rb') as f:
+        new_file_content = f.read()
+    shutil.rmtree(tmpdir)
+    return new_file_content
+
+
+def get_geotiff_str(itemname, file_content):
+    geotiff_info = GEOTIFF_PATTERN.match(itemname).groupdict()
+    if geotiff_info['layer_type'] in ['tn', 'tx'] or (geotiff_info['layer_type'] == 'bi' and geotiff_info['layer_num'] in map(str, range(1,3)+range(5,12)) ):
+        return convert_geotiff_temperature(itemname, file_content)
+    else:
+        return file_content
+
     
 def add_source_files(destzip, destname, filenames):
     for filename in filenames:
@@ -85,8 +127,9 @@ def add_source_files(destzip, destname, filenames):
             print "Unable to handle '{}' as zip".format(filename)
             continue
         for itemname in (item.filename for item in srczip.filelist):
+            geotiff_str = get_geotiff_str(itemname, srczip.read(itemname))
             destzip.writestr(
-                os.path.join(destname, 'data', itemname), srczip.read(itemname)
+                os.path.join(destname, 'data', itemname), geotiff_str
             )
 
 
@@ -95,16 +138,7 @@ def add_metadata(destzip, destname, metadata):
         os.path.join(destname, 'bccvl', 'metadata.json'), metadata
     )
     
-GEOTIFF_PATTERN = re.compile(
-    r"""
-    (?P<gcm>..)                 # GCM
-    (?P<rcp>[0-9][0-9])         # RCP
-    (?P<layer_type>..)          # Layer type
-    (?P<year>[0-9][0-9])        # Year    
-    (?P<layer_num>[0-9][0-9]?)  # Layer no.
-    """, 
-    re.VERBOSE
-)
+
 
 def create_metadata_json(destfile, gcm, rcp, year, res, files):
     with open(JSON_TEMPLATE, 'r') as template:
@@ -143,6 +177,19 @@ def main(argv):
         sys.exit(1)
     src  = argv[1] # TODO: check src exists and is zip?
     dest = argv[2] # TODO: check dest exists
+
+    # fail if destination exists but is not a directory
+    if os.path.exists(os.path.abspath(dest)) and not os.path.isdir(os.path.abspath(dest)):
+        print "Path {} exists and is not a directory.".format(os.path.abspath(dest))
+        sys.exit(os.EX_IOERR)
+
+    # try to create destination if it doesn't exist
+    if not os.path.isdir(os.path.abspath(dest)):
+        try:
+            os.makedirs(os.path.abspath(dest))
+        except Exception as e:
+            print "Failed to create directory at {}.".format(os.path.abspath(dest))
+            sys.exit(os.EX_IOERR)
     
     for gcm, rcp, year, res, files in potential_converts(src):
         destname = '{gcm}_{rcp}_{year}_{res}'.format(
