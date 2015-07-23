@@ -85,6 +85,9 @@ LAYER_MAP = {
     'bio_19.tif': 'B19',
 }
 
+# Layers 1,2 and 5-11 of bioclim contain temperature in C *10 as integers. 
+TEMPERATURE_LAYERS = map(lambda x: 'bio_{}'.format(x), range(1,3)+range(5,12))
+
 RESOLUTION_MAP = {
     '30s': '30 arcsec',
     '2-5m': '2.5 arcmin',
@@ -110,21 +113,32 @@ def unpack(zipname, path):
 def convert(filename, folder, dest):
     """convert .asc.gz files in folder to .tif in dest
     """
+    tmpdir = tempfile.mkdtemp(dir=TMPDIR)    
     # parse info from filename
     base = os.path.basename(filename)
     m = re.match(r'(\w*)_([\w-]*)_(\d*)', base)
     layer = m.group(1)
     for srcfile in glob.glob(os.path.join(folder, '{0}/{0}*'.format(layer))):
+        print "DEBUG: srcfile: {}".format(srcfile)
         basename = os.path.basename(srcfile)
         destfile = os.path.join(dest, 'data', '{}.tif'.format(basename))
+        # Temperature layers get copied to a temp location. 
+        outfile  = os.path.join(tmpdir, '{}.tif'.format(basename)) if basename in TEMPERATURE_LAYERS else destfile
         ret = os.system(
             #'gdal_translate -of GTiff {0} {1}'.format(srcfile, destfile)
-            'gdal_translate -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'.format(srcfile, destfile)
+            'gdal_translate -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'.format(srcfile, outfile)
         )
         if ret != 0:
-            raise Exception(
-                "can't gdal_translate {0} ({1})".format(srcfile, ret)
-            )
+            raise Exception("can't gdal_translate {0} ({1})".format(srcfile, ret))
+        if basename in TEMPERATURE_LAYERS:
+            # change temperature representation to C as float to match other datasets.
+            print "Changing temperature representation for {}".format(basename)
+            command = 'gdal_calc.py -A {0} --calc="A*0.1" --creation-option="COMPRESS=LZW" --creation-option="TILED=YES" --outfile {1} --type "Float32"'.format(outfile, destfile)
+            ret = os.system(command)
+            if ret != 0:
+                raise Exception("COMMAND '{}' failed.".format(command))
+    shutil.rmtree(tmpdir)
+
 
 
 def gen_metadatajson(template, dest):
