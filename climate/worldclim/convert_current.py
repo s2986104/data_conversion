@@ -14,79 +14,150 @@ TMPDIR = "/mnt/playground/"
 JSON_TEMPLATE = 'worldclim.template.json'
 TITLE_TEMPLATE = u'WorldClim Current Conditions (1950-2000) at {}'
 
+FILE_MAP = {
+    'alt':    'altitude',
+    'prec_1': 'prec_01',
+    'prec_2': 'prec_02',
+    'prec_3': 'prec_03',
+    'prec_4': 'prec_04',
+    'prec_5': 'prec_05',
+    'prec_6': 'prec_06',
+    'prec_7': 'prec_07',
+    'prec_8': 'prec_08',
+    'prec_9': 'prec_09',
+    'prec_10': 'prec_10',
+    'prec_11': 'prec_11',
+    'prec_12': 'prec_12',
+    'tmax_1': 'tmax_01',
+    'tmax_2': 'tmax_02',
+    'tmax_3': 'tmax_03',
+    'tmax_4': 'tmax_04',
+    'tmax_5': 'tmax_05',
+    'tmax_6': 'tmax_06',
+    'tmax_7': 'tmax_07',
+    'tmax_8': 'tmax_08',
+    'tmax_9': 'tmax_09',
+    'tmax_10': 'tmax_10',
+    'tmax_11': 'tmax_11',
+    'tmax_12': 'tmax_12',
+    'tmean_1': 'tmean_01',
+    'tmean_2': 'tmean_02',
+    'tmean_3': 'tmean_03',
+    'tmean_4': 'tmean_04',
+    'tmean_5': 'tmean_05',
+    'tmean_6': 'tmean_06',
+    'tmean_7': 'tmean_07',
+    'tmean_8': 'tmean_08',
+    'tmean_9': 'tmean_09',
+    'tmean_10': 'tmean_10',
+    'tmean_11': 'tmean_11',
+    'tmean_12': 'tmean_12',
+    'tmin_1': 'tmin_01',
+    'tmin_2': 'tmin_02',
+    'tmin_3': 'tmin_03',
+    'tmin_4': 'tmin_04',
+    'tmin_5': 'tmin_05',
+    'tmin_6': 'tmin_06',
+    'tmin_7': 'tmin_07',
+    'tmin_8': 'tmin_08',
+    'tmin_9': 'tmin_09',
+    'tmin_10': 'tmin_10',
+    'tmin_11': 'tmin_11',
+    'tmin_12': 'tmin_12',
+    'bio_1': 'bioclim_01',
+    'bio_2': 'bioclim_02',
+    'bio_3': 'bioclim_03',
+    'bio_4': 'bioclim_04',
+    'bio_5': 'bioclim_05',
+    'bio_6': 'bioclim_06',
+    'bio_7': 'bioclim_07',
+    'bio_8': 'bioclim_08',
+    'bio_9': 'bioclim_09',
+    'bio_10': 'bioclim_10',
+    'bio_11': 'bioclim_11',
+    'bio_12': 'bioclim_12',
+    'bio_13': 'bioclim_13',
+    'bio_14': 'bioclim_14',
+    'bio_15': 'bioclim_15',
+    'bio_16': 'bioclim_16',
+    'bio_17': 'bioclim_17',
+    'bio_18': 'bioclim_18',
+    'bio_19': 'bioclim_19',
+}
+
 LAYER_MAP = {
-    'alt.tif': 'Altitude',
-    'prec_1.tif': 'PR1',
-    'prec_2.tif': 'PR2',
-    'prec_3.tif': 'PR3',
-    'prec_4.tif': 'PR4',
-    'prec_5.tif': 'PR5',
-    'prec_6.tif': 'PR6',
-    'prec_7.tif': 'PR7',
-    'prec_8.tif': 'PR8',
-    'prec_9.tif': 'PR9',
+    'altitude.tif': 'Altitude',
+    'prec_01.tif': 'PR1',
+    'prec_02.tif': 'PR2',
+    'prec_03.tif': 'PR3',
+    'prec_04.tif': 'PR4',
+    'prec_05.tif': 'PR5',
+    'prec_06.tif': 'PR6',
+    'prec_07.tif': 'PR7',
+    'prec_08.tif': 'PR8',
+    'prec_09.tif': 'PR9',
     'prec_10.tif': 'PR10',
     'prec_11.tif': 'PR11',
     'prec_12.tif': 'PR12',
-    'tmax_1.tif': 'TX1',
-    'tmax_2.tif': 'TX2',
-    'tmax_3.tif': 'TX3',
-    'tmax_4.tif': 'TX4',
-    'tmax_5.tif': 'TX5',
-    'tmax_6.tif': 'TX6',
-    'tmax_7.tif': 'TX7',
-    'tmax_8.tif': 'TX8',
-    'tmax_9.tif': 'TX9',
+    'tmax_01.tif': 'TX1',
+    'tmax_02.tif': 'TX2',
+    'tmax_03.tif': 'TX3',
+    'tmax_04.tif': 'TX4',
+    'tmax_05.tif': 'TX5',
+    'tmax_06.tif': 'TX6',
+    'tmax_07.tif': 'TX7',
+    'tmax_08.tif': 'TX8',
+    'tmax_09.tif': 'TX9',
     'tmax_10.tif': 'TX10',
     'tmax_11.tif': 'TX11',
     'tmax_12.tif': 'TX12',
-    'tmean_1.tif': 'TM1',
-    'tmean_2.tif': 'TM2',
-    'tmean_3.tif': 'TM3',
-    'tmean_4.tif': 'TM4',
-    'tmean_5.tif': 'TM5',
-    'tmean_6.tif': 'TM6',
-    'tmean_7.tif': 'TM7',
-    'tmean_8.tif': 'TM8',
-    'tmean_9.tif': 'TM9',
+    'tmean_01.tif': 'TM1',
+    'tmean_02.tif': 'TM2',
+    'tmean_03.tif': 'TM3',
+    'tmean_04.tif': 'TM4',
+    'tmean_05.tif': 'TM5',
+    'tmean_06.tif': 'TM6',
+    'tmean_07.tif': 'TM7',
+    'tmean_08.tif': 'TM8',
+    'tmean_09.tif': 'TM9',
     'tmean_10.tif': 'TM10',
     'tmean_11.tif': 'TM11',
     'tmean_12.tif': 'TM12',
-    'tmin_1.tif': 'TN1',
-    'tmin_2.tif': 'TN2',
-    'tmin_3.tif': 'TN3',
-    'tmin_4.tif': 'TN4',
-    'tmin_5.tif': 'TN5',
-    'tmin_6.tif': 'TN6',
-    'tmin_7.tif': 'TN7',
-    'tmin_8.tif': 'TN8',
-    'tmin_9.tif': 'TN9',
+    'tmin_01.tif': 'TN1',
+    'tmin_02.tif': 'TN2',
+    'tmin_03.tif': 'TN3',
+    'tmin_04.tif': 'TN4',
+    'tmin_05.tif': 'TN5',
+    'tmin_06.tif': 'TN6',
+    'tmin_07.tif': 'TN7',
+    'tmin_08.tif': 'TN8',
+    'tmin_09.tif': 'TN9',
     'tmin_10.tif': 'TN10',
     'tmin_11.tif': 'TN11',
     'tmin_12.tif': 'TN12',
-    'bio_1.tif': 'B01',
-    'bio_2.tif': 'B02',
-    'bio_3.tif': 'B03',
-    'bio_4.tif': 'B04',
-    'bio_5.tif': 'B05',
-    'bio_6.tif': 'B06',
-    'bio_7.tif': 'B07',
-    'bio_8.tif': 'B08',
-    'bio_9.tif': 'B09',
-    'bio_10.tif': 'B10',
-    'bio_11.tif': 'B11',
-    'bio_12.tif': 'B12',
-    'bio_13.tif': 'B13',
-    'bio_14.tif': 'B14',
-    'bio_15.tif': 'B15',
-    'bio_16.tif': 'B16',
-    'bio_17.tif': 'B17',
-    'bio_18.tif': 'B18',
-    'bio_19.tif': 'B19',
+    'bioclim_01.tif': 'B01',
+    'bioclim_02.tif': 'B02',
+    'bioclim_03.tif': 'B03',
+    'bioclim_04.tif': 'B04',
+    'bioclim_05.tif': 'B05',
+    'bioclim_06.tif': 'B06',
+    'bioclim_07.tif': 'B07',
+    'bioclim_08.tif': 'B08',
+    'bioclim_09.tif': 'B09',
+    'bioclim_10.tif': 'B10',
+    'bioclim_11.tif': 'B11',
+    'bioclim_12.tif': 'B12',
+    'bioclim_13.tif': 'B13',
+    'bioclim_14.tif': 'B14',
+    'bioclim_15.tif': 'B15',
+    'bioclim_16.tif': 'B16',
+    'bioclim_17.tif': 'B17',
+    'bioclim_18.tif': 'B18',
+    'bioclim_19.tif': 'B19',
 }
 
-# Layers 1,2 and 5-11 of bioclim contain temperature in C *10 as integers. 
-TEMPERATURE_LAYERS = map(lambda x: 'bio_{}'.format(x), range(1,3)+range(5,12))
+# Layers 1,2 and 5-11 of bioclim contain temperature in C *10 as integers.
+TEMPERATURE_LAYERS = map(lambda x: 'bioclim_{:02d}'.format(x), range(1,3)+range(5,12))
 
 RESOLUTION_MAP = {
     '30s': '30 arcsec',
@@ -113,7 +184,7 @@ def unpack(zipname, path):
 def convert(filename, folder, dest):
     """convert .asc.gz files in folder to .tif in dest
     """
-    tmpdir = tempfile.mkdtemp(dir=TMPDIR)    
+    tmpdir = tempfile.mkdtemp(dir=TMPDIR)
     # parse info from filename
     base = os.path.basename(filename)
     m = re.match(r'(\w*)_([\w-]*)_(\d*)', base)
@@ -121,8 +192,10 @@ def convert(filename, folder, dest):
     for srcfile in glob.glob(os.path.join(folder, '{0}/{0}*'.format(layer))):
         print "DEBUG: srcfile: {}".format(srcfile)
         basename = os.path.basename(srcfile)
+        # map filenames to common layer file names
+        basename = FILE_MAP[basename]
         destfile = os.path.join(dest, 'data', '{}.tif'.format(basename))
-        # Temperature layers get copied to a temp location. 
+        # Temperature layers get copied to a temp location.
         outfile  = os.path.join(tmpdir, '{}.tif'.format(basename)) if basename in TEMPERATURE_LAYERS else destfile
         ret = os.system(
             #'gdal_translate -of GTiff {0} {1}'.format(srcfile, destfile)
@@ -137,6 +210,9 @@ def convert(filename, folder, dest):
             ret = os.system(command)
             if ret != 0:
                 raise Exception("COMMAND '{}' failed.".format(command))
+        else:
+            # delete .aux.xml files as they only contain histogram data
+            os.remove(destfile + '.aux.xml')
     shutil.rmtree(tmpdir)
 
 
@@ -150,7 +226,7 @@ def gen_metadatajson(template, dest):
     m = re.match(r'(\w*)_([\w-]*)', base)
     # check for future climate dataset:
     md = json.load(open(template, 'r'))
-    md[u'title'] = TITLE_TEMPLATE.format(RESOLUTION_MAP[m.group(2)])   
+    md[u'title'] = TITLE_TEMPLATE.format(RESOLUTION_MAP[m.group(2)])
     md[u'temporal_coverage'][u'start'] = u'1950'
     md[u'temporal_coverage'][u'end'] = u'2000'
     md[u'genre'] = u'Climate'
@@ -209,7 +285,7 @@ def main(argv):
         print "Usage: {0} <srcdir> <destdir>".format(argv[0])
         sys.exit(1)
     src  = argv[1] # TODO: check src exists and is zip?
-    dest = argv[2] 
+    dest = argv[2]
 
     # fail if destination exists but is not a directory
     if os.path.exists(os.path.abspath(dest)) and not os.path.isdir(os.path.abspath(dest)):
@@ -225,7 +301,7 @@ def main(argv):
             sys.exit(os.EX_IOERR)
 
     for res in sorted(RESOLUTION_MAP.keys()):
-        # sorting isn't important, it just forces it to 
+        # sorting isn't important, it just forces it to
         # hit the smallest dataset first for testing
         destfile = 'worldclim_{}'.format(res)
         try:
@@ -244,4 +320,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv)
-
