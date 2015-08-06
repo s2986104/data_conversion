@@ -65,6 +65,14 @@ RCP_MAP = {
 #    'bi': 'Bioclim',
 #}
 
+LAYER_TYPE_MAP = {
+   'tn': 'tmin',
+   'tx': 'tmax',
+   'pr': 'prec',
+   'bi': 'bioclim',
+}
+
+
 YEAR_MAP = {
     '50': '2050',
     '70': '2070',
@@ -82,6 +90,11 @@ GEOTIFF_PATTERN = re.compile(
     """, 
     re.VERBOSE
 )
+
+def convert_filename(filename):
+    geotiff_info = GEOTIFF_PATTERN.match(filename).groupdict()
+    return "{0}_{1:02d}.tif".format(LAYER_TYPE_MAP[geotiff_info['layer_type']], int(geotiff_info['layer_num']))
+
 
 def potential_converts(source):
     potentials = itertools.product(
@@ -129,7 +142,7 @@ def add_source_files(destzip, destname, filenames):
         for itemname in (item.filename for item in srczip.filelist):
             geotiff_str = get_geotiff_str(itemname, srczip.read(itemname))
             destzip.writestr(
-                os.path.join(destname, 'data', itemname), geotiff_str
+                os.path.join(destname, 'data', convert_filename(itemname)), geotiff_str
             )
 
 
@@ -192,19 +205,22 @@ def main(argv):
             sys.exit(os.EX_IOERR)
     
     for gcm, rcp, year, res, files in potential_converts(src):
-        destname = '{gcm}_{rcp}_{year}_{res}'.format(
-            gcm = GCM_MAP[gcm], 
-            rcp = RCP_MAP[rcp],
-            year = YEAR_MAP[year],
-            res = res,
-        )
-        destfile = os.path.join(dest, destname + '.zip')
-        with zipfile.ZipFile(destfile, 'w', allowZip64=True) as zip:
-            add_source_files(zip, destname, files)
-            metadata = create_metadata_json(destname, gcm, rcp, year, res, 
-                (os.path.basename(f.filename) for f in zip.filelist)
+        for f in files:
+            layer = f[-8:-6]
+            destname = '{gcm}_{rcp}_{year}_{res}_{layer}'.format(
+                gcm = GCM_MAP[gcm], 
+                rcp = RCP_MAP[rcp],
+                year = YEAR_MAP[year],
+                res = res,
+                layer = LAYER_TYPE_MAP[layer],
             )
-            add_metadata(zip, destname, metadata)
+            destfile = os.path.join(dest, destname + '.zip')
+            with zipfile.ZipFile(destfile, 'w', allowZip64=True) as zip:
+                add_source_files(zip, destname, [f,])
+                metadata = create_metadata_json(destname, gcm, rcp, year, res, 
+                    (os.path.basename(f.filename) for f in zip.filelist)
+                )
+                add_metadata(zip, destname, metadata)
 
 if __name__ == "__main__":
     main(sys.argv)
