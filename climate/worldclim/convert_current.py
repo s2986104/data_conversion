@@ -176,7 +176,7 @@ LAYER_TYPE_MAP = {
    'bio': 'bioclim',
 }
 
-SKIP_RESOLUTIONS = ['30s',]
+
 
 def ungz(filename):
     """gunzip given filename.
@@ -313,8 +313,6 @@ def main(argv):
             sys.exit(os.EX_IOERR)
 
     for res in sorted(RESOLUTION_MAP.keys()):
-        if res in SKIP_RESOLUTIONS:
-            continue
         # sorting isn't important, it just forces it to
         # hit the smallest dataset first for testing
         for prefix in LAYER_TYPE_MAP.keys():
