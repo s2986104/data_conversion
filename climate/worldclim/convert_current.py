@@ -156,8 +156,9 @@ LAYER_MAP = {
     'bioclim_19.tif': 'B19',
 }
 
-# Layers 1,2 and 5-11 of bioclim contain temperature in C *10 as integers.
-TEMPERATURE_LAYERS = map(lambda x: 'bioclim_{:02d}'.format(x), range(1,3)+range(5,12))
+# Layers 1,2 and 5-11 of bioclim contain temperature in C *10 as integers. So do tmin, tmax and tmean.
+TEMPERATURE_LAYERS =  ['bioclim_{:02d}'.format(x) for x in  range(1,3)+range(5,12)]
+TEMPERATURE_LAYERS += ["{}_{:02d}".format(x,y) for x in ['tmin','tmax','tmean'] for y in range(1,13)]
 
 RESOLUTION_MAP = {
     '30s': '30 arcsec',
@@ -165,6 +166,17 @@ RESOLUTION_MAP = {
     '5m': '5 arcmin',
     '10m': '10 arcmin',
 }
+
+LAYER_TYPE_MAP = {
+   'alt': 'alt',
+   'tmax': 'tmax',
+   'tmin': 'tmin',
+   'tmean': 'tmean',      
+   'prec': 'prec',
+   'bio': 'bioclim',
+}
+
+
 
 def ungz(filename):
     """gunzip given filename.
@@ -190,7 +202,6 @@ def convert(filename, folder, dest):
     m = re.match(r'(\w*)_([\w-]*)_(\d*)', base)
     layer = m.group(1)
     for srcfile in glob.glob(os.path.join(folder, '{0}/{0}*'.format(layer))):
-        print "DEBUG: srcfile: {}".format(srcfile)
         basename = os.path.basename(srcfile)
         # map filenames to common layer file names
         basename = FILE_MAP[basename]
@@ -206,13 +217,14 @@ def convert(filename, folder, dest):
         if basename in TEMPERATURE_LAYERS:
             # change temperature representation to C as float to match other datasets.
             print "Changing temperature representation for {}".format(basename)
-            command = 'gdal_calc.py -A {0} --calc="A*0.1" --creation-option="COMPRESS=LZW" --creation-option="TILED=YES" --outfile {1} --type "Float32"'.format(outfile, destfile)
+            command = 'gdal_calc.py -A {0} --calc="A*0.1" --creation-option="COMPRESS=LZW" --NoDataValue=-9999 --creation-option="TILED=YES" --outfile {1} --type "Float32"'.format(outfile, destfile)
             ret = os.system(command)
             if ret != 0:
                 raise Exception("COMMAND '{}' failed.".format(command))
         else:
             # delete .aux.xml files as they only contain histogram data
-            os.remove(destfile + '.aux.xml')
+            if os.path.exists(destfile + '.aux.xml'):
+                os.remove(destfile + '.aux.xml')
     shutil.rmtree(tmpdir)
 
 
@@ -223,7 +235,7 @@ def gen_metadatajson(template, dest):
     """
     base = os.path.basename(dest)
     # parse info from filename
-    m = re.match(r'(\w*)_([\w-]*)', base)
+    m = re.match(r'(\w*)_([\w-]*)_(\w*)', base)
     # check for future climate dataset:
     md = json.load(open(template, 'r'))
     md[u'title'] = TITLE_TEMPLATE.format(RESOLUTION_MAP[m.group(2)])
@@ -303,20 +315,21 @@ def main(argv):
     for res in sorted(RESOLUTION_MAP.keys()):
         # sorting isn't important, it just forces it to
         # hit the smallest dataset first for testing
-        destfile = 'worldclim_{}'.format(res)
-        try:
-            ziproot = create_target_dir(dest, destfile)
-            for srcfile in glob.glob(os.path.join(src, 'bio*_{}_*'.format(res))):
-                srctmpdir = unzip_dataset(srcfile)
-                convert(srcfile, srctmpdir, ziproot)
-                if srctmpdir:
-                    shutil.rmtree(srctmpdir)
-            gen_metadatajson(JSON_TEMPLATE, ziproot)
-            zipbccvldataset(ziproot, dest)
-        finally:
-            # cleanup temp location
-            if ziproot:
-                shutil.rmtree(ziproot)
+        for prefix in LAYER_TYPE_MAP.keys():
+            destfile = 'worldclim_{}_{}'.format(res, LAYER_TYPE_MAP[prefix])
+            try:
+                ziproot = create_target_dir(dest, destfile)
+                for srcfile in glob.glob(os.path.join(src, '{}_{}_*'.format(prefix, res))):
+                    srctmpdir = unzip_dataset(srcfile)
+                    convert(srcfile, srctmpdir, ziproot)
+                    if srctmpdir:
+                        shutil.rmtree(srctmpdir)
+                gen_metadatajson(JSON_TEMPLATE, ziproot)
+                zipbccvldataset(ziproot, dest)
+            finally:
+                # cleanup temp location
+                if ziproot:
+                    shutil.rmtree(ziproot)
 
 if __name__ == "__main__":
     main(sys.argv)
