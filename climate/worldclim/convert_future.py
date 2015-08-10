@@ -13,7 +13,7 @@ import shutil
 JSON_TEMPLATE = 'worldclim.template.json'
 TITLE_TEMPLATE = u'WorldClim Future Projection using {gcm} {rcp} at {res} ({year})'
 
-TMPDIR = "/mnt/playground/"
+TMPDIR = os.getenv("BCCVL_TMP", "/mnt/playground/")
 
 ## Lookups for metadata construction
 #  Details taken from:
@@ -114,11 +114,12 @@ def convert_geotiff_temperature(itemname, file_content):
     with open(infile, 'wb') as f:
         f.write(file_content)
     print "Changing temperature representation for {}".format(itemname)
-    # No data is set to -9999 is used to be consistent with other datasets. 
-    command = 'gdal_calc.py -A {infile} --calc="A*0.1" --creation-option="COMPRESS=LZW" --NoDataValue=-9999  --creation-option="TILED=YES" --outfile {outfile} --type "Float32"'.format(**locals())
-    ret = os.system(command)
+    # No data is set to -9999 is used to be consistent with other datasets.
+    cmd = 'gdal_calc.py -A {infile} --calc="A*0.1" --co="COMPRESS=LZW" --NoDataValue=-9999 --co="TILED=YES" --outfile {outfile} --type "Float32"'.format(
+        **locals())
+    ret = os.system(cmd)
     if ret != 0:
-        raise Exception("COMMAND '{}' failed.".format(command))
+        raise Exception("COMMAND '{}' failed.".format(cmd))
     with open(outfile, 'rb') as f:
         new_file_content = f.read()
     shutil.rmtree(tmpdir)
@@ -126,9 +127,9 @@ def convert_geotiff_temperature(itemname, file_content):
 
 
 def fix_geotiff(file_content):
-    """ For some reason the original GeoTIFFs cause issues with gdal calc (file sizes become enourmous after conversion with gdal_calc).  
+    """ For some reason the original GeoTIFFs cause issues with gdal calc (file sizes become enourmous after conversion with gdal_calc).
         This function uses GDAL Translate to convert the files into new GeoTIFFs that for some reason don't have this problem
-        despite appearing to have the same content. 
+        despite appearing to have the same content.
     """
     print "Running gdal_translate to fix GeoTIFF"
     tmpdir = tempfile.mkdtemp(dir=TMPDIR)
@@ -142,17 +143,30 @@ def fix_geotiff(file_content):
     if ret != 0:
         raise Exception("can't gdal_translate {0} ({1})".format(srcfile, ret))
     with open(outfile, 'rb') as f:
-        new_file_content = f.read()        
+        new_file_content = f.read()
     shutil.rmtree(tmpdir)
     return new_file_content
 
+
+def is_temperature_layer(itemname):
+    # tn, tx and a subset of bioclim are temperature layers
+    info = GEOTIFF_PATTERN.match(itemname).groupdict()
+    bioclim_temp_layers = ['1', '2', '5', '6', '7', '8', '9', '10', '11']
+    if info['layer_type'] in ['tn', 'tx']:
+        return True
+    elif info['layer_type'] == 'bi' and info['layer_num'] in bioclim_temp_layers:
+        return True
+    else:
+        return False
+
+
 def get_geotiff_str(itemname, file_content):
-    geotiff_info = GEOTIFF_PATTERN.match(itemname).groupdict()
     fixed_geotiff = fix_geotiff(file_content)
-    if geotiff_info['layer_type'] in ['tn', 'tx'] or (geotiff_info['layer_type'] == 'bi' and geotiff_info['layer_num'] in map(str, range(1,3)+range(5,12)) ):
+    if is_temperature_layer(itemname):
         return convert_geotiff_temperature(itemname, fixed_geotiff)
     else:
         return fixed_geotiff
+
 
     
 def add_source_files(destzip, destname, filenames):

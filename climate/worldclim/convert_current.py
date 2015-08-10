@@ -9,7 +9,7 @@ import shutil
 import sys
 import re
 
-TMPDIR = "/mnt/playground/"
+TMPDIR = os.getenv("BCCVL_TMP", "/mnt/playground/")
 
 JSON_TEMPLATE = 'worldclim.template.json'
 TITLE_TEMPLATE = u'WorldClim Current Conditions (1950-2000) at {}'
@@ -156,8 +156,9 @@ LAYER_MAP = {
     'bioclim_19.tif': 'B19',
 }
 
-# Layers 1,2 and 5-11 of bioclim contain temperature in C *10 as integers. So do tmin, tmax and tmean.
+# Layers 1,2 and 5-11 of bioclim are temperature layers
 TEMPERATURE_LAYERS =  ['bioclim_{:02d}'.format(x) for x in  range(1,3)+range(5,12)]
+# All layers in tmin, tmax, tmean are temperature layers
 TEMPERATURE_LAYERS += ["{}_{:02d}".format(x,y) for x in ['tmin','tmax','tmean'] for y in range(1,13)]
 
 RESOLUTION_MAP = {
@@ -205,22 +206,29 @@ def convert(filename, folder, dest):
         basename = os.path.basename(srcfile)
         # map filenames to common layer file names
         basename = FILE_MAP[basename]
-        destfile = os.path.join(dest, 'data', '{}.tif'.format(basename))
+        destfile = os.path.abspath(os.path.join(dest, 'data', '{}.tif'.format(basename)))
         # Temperature layers get copied to a temp location.
-        outfile  = os.path.join(tmpdir, '{}.tif'.format(basename)) if basename in TEMPERATURE_LAYERS else destfile
+        outfile = os.path.join(tmpdir, '{}.tif'.format(basename)) if basename in TEMPERATURE_LAYERS else destfile
         ret = os.system(
             #'gdal_translate -of GTiff {0} {1}'.format(srcfile, destfile)
-            'gdal_translate -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'.format(srcfile, outfile)
+            'gdal_translate -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'.format(
+                srcfile,
+                outfile)
         )
         if ret != 0:
-            raise Exception("can't gdal_translate {0} ({1})".format(srcfile, ret))
+            raise Exception(
+                "can't gdal_translate {0} ({1})".format(
+                    srcfile,
+                    ret))
         if basename in TEMPERATURE_LAYERS:
-            # change temperature representation to C as float to match other datasets.
+            # change temperature representation to C as float to match other
+            # datasets.
             print "Changing temperature representation for {}".format(basename)
-            command = 'gdal_calc.py -A {0} --calc="A*0.1" --creation-option="COMPRESS=LZW" --NoDataValue=-9999 --creation-option="TILED=YES" --outfile {1} --type "Float32"'.format(outfile, destfile)
-            ret = os.system(command)
+            cmd = 'gdal_calc.py -A {outfile} --calc="A*0.1" --co="COMPRESS=LZW" --NoDataValue=-9999 --co="TILED=YES" --outfile {destfile} --type "Float32"'.format(
+                **locals())
+            ret = os.system(cmd)
             if ret != 0:
-                raise Exception("COMMAND '{}' failed.".format(command))
+                raise Exception("COMMAND '{}' failed.".format(cmd))
         else:
             # delete .aux.xml files as they only contain histogram data
             if os.path.exists(destfile + '.aux.xml'):
@@ -296,11 +304,13 @@ def main(argv):
     if len(argv) != 3:
         print "Usage: {0} <srcdir> <destdir>".format(argv[0])
         sys.exit(1)
-    src  = argv[1] # TODO: check src exists and is zip?
+    src = argv[1]  # TODO: check src exists and is zip?
     dest = argv[2]
 
     # fail if destination exists but is not a directory
-    if os.path.exists(os.path.abspath(dest)) and not os.path.isdir(os.path.abspath(dest)):
+    if os.path.exists(
+            os.path.abspath(dest)) and not os.path.isdir(
+            os.path.abspath(dest)):
         print "Path {} exists and is not a directory.".format(os.path.abspath(dest))
         sys.exit(os.EX_IOERR)
 
@@ -319,7 +329,8 @@ def main(argv):
             destfile = 'worldclim_{}_{}'.format(res, LAYER_TYPE_MAP[prefix])
             try:
                 ziproot = create_target_dir(dest, destfile)
-                for srcfile in glob.glob(os.path.join(src, '{}_{}_*'.format(prefix, res))):
+                for srcfile in glob.glob(
+                        os.path.join(src, '{}_{}_*'.format(prefix, res))):
                     srctmpdir = unzip_dataset(srcfile)
                     convert(srcfile, srctmpdir, ziproot)
                     if srctmpdir:
