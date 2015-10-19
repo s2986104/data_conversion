@@ -33,8 +33,8 @@ def gen_metadatajson(src, dest):
         m = re.match(r'fpar\.(....)\.(..)\.*', base)
         year = m.group(1)
         month = int(m.group(2))
-        layer_id = 'FPAR{}'.format(month)
-        md[u'title'] = md[u'title'].format(month=calendar.month_name[month], year=year)   
+        layer_id = 'FPAR{:02d}'.format(month)
+        md[u'title'] = md[u'title'].format(month=calendar.month_name[month], year=year)
         filename = filename[len(os.path.dirname(dest)):].lstrip('/')
         md[u'files'][filename] = {
             u'layer': layer_id,
@@ -74,7 +74,7 @@ def main(argv):
             print "Valid years: {}".format(','.join(year_range))
             sys.exit(1)
         year_range = [ argv[1] ]
-        
+
     srcfolder = 'source/fpar'
     destfolder = 'bccvl'
     ziproot = None
@@ -94,4 +94,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv)
-
