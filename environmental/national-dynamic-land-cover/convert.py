@@ -115,11 +115,12 @@ def get_rat_from_vat(filename):
     mdl = md.GetLayer(0)
     # get column definitions:
     rat = gdal.RasterAttributeTable()
+    # use skip to adjust column index
     layer_defn = mdl.GetLayerDefn()
     for field_idx in range(0, layer_defn.GetFieldCount()):
         field_defn = layer_defn.GetFieldDefn(field_idx)
         field_type = TYPE_MAP[field_defn.GetType()]
-        if not field_type:
+        if field_type is None:
             # skip unmappable field type
             continue
         rat.CreateColumn(
@@ -129,18 +130,21 @@ def get_rat_from_vat(filename):
         )
     for feature_idx in range(0, mdl.GetFeatureCount()):
         feature = mdl.GetFeature(feature_idx)
+        skip = 0
         for field_idx in range (0, feature.GetFieldCount()):
             field_type = TYPE_MAP[feature.GetFieldType(field_idx)]
             if field_type == gdal.GFT_Integer:
-                rat.SetValueAsInt(feature_idx, field_idx,
+                rat.SetValueAsInt(feature_idx, field_idx - skip,
                                   feature.GetFieldAsInteger(field_idx))
             elif field_type == gdal.GFT_Real:
-                rat.SetValueAsDouble(feature_idx, field_idx,
+                rat.SetValueAsDouble(feature_idx, field_idx - skip,
                                      feature.GetFieldAsDouble(field_idx))
             elif field_type == gdal.GFT_String:
-                rat.SetValueAsString(feature_idx, field_idx,
+                rat.SetValueAsString(feature_idx, field_idx - skip,
                                      feature.GetFieldAsString(field_idx))
-            # skip all unmappable field types
+            else:
+                # skip all unmappable field types
+                skip += 1
     return rat
 
 
