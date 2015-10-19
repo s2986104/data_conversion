@@ -70,7 +70,7 @@ def zip_dataset(ziproot, dest):
     zipdir = os.path.basename(ziproot)
     zipname = os.path.abspath(os.path.join(dest, zipdir + '.zip'))
     ret = os.system(
-        'cd {0}; zip -r {1} {2} -x *.aux.xml*'.format(workdir, zipname, zipdir)
+        'cd {0}; zip -r {1} {2}'.format(workdir, zipname, zipdir)
     )
     if ret != 0:
         raise Exception("can't zip {0} ({1})".format(ziproot, ret))
