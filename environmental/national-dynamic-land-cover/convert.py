@@ -26,6 +26,21 @@ USAGE_MAP = {
     'CLASSLABEL': gdal.GFU_Generic
 }
 
+TYPE_MAP = {
+    ogr.OFTInteger: gdal.GFT_Integer, # 0
+    ogr.OFTIntegerList: None, # 1
+    ogr.OFTReal: gdal.GFT_Real, # 2
+    ogr.OFTRealList: None, # 3
+    ogr.OFTString: gdal.GFT_String, # 4
+    ogr.OFTStringList: None, # 5
+    ogr.OFTWideString: gdal.GFT_String, # 6
+    ogr.OFTWideStringList: None, # 7
+    ogr.OFTBinary: None,  # 8
+    ogr.OFTDate: None, # 9
+    ogr.OFTTime: None, # 10
+    ogr.OFTDateTime: None, # 11
+}
+
 
 def gen_metadatajson(src, dest):
     """read metadata template and populate rest of fields
@@ -103,24 +118,29 @@ def get_rat_from_vat(filename):
     layer_defn = mdl.GetLayerDefn()
     for field_idx in range(0, layer_defn.GetFieldCount()):
         field_defn = layer_defn.GetFieldDefn(field_idx)
+        field_type = TYPE_MAP[field_defn.GetType()]
+        if not field_type:
+            # skip unmappable field type
+            continue
         rat.CreateColumn(
             field_defn.GetName(),
-            field_defn.GetType(),
+            field_type,
             USAGE_MAP[field_defn.GetName()]
         )
     for feature_idx in range(0, mdl.GetFeatureCount()):
         feature = mdl.GetFeature(feature_idx)
         for field_idx in range (0, feature.GetFieldCount()):
-            field_type = feature.GetFieldType(field_idx)
+            field_type = TYPE_MAP[feature.GetFieldType(field_idx)]
             if field_type == gdal.GFT_Integer:
                 rat.SetValueAsInt(feature_idx, field_idx,
                                   feature.GetFieldAsInteger(field_idx))
             elif field_type == gdal.GFT_Real:
                 rat.SetValueAsDouble(feature_idx, field_idx,
                                      feature.GetFieldAsDouble(field_idx))
-            else:
+            elif field_type == gdal.GFT_String:
                 rat.SetValueAsString(feature_idx, field_idx,
                                      feature.GetFieldAsString(field_idx))
+            # skip all unmappable field types
     return rat
 
 
@@ -181,8 +201,7 @@ def main(argv):
                         destfolder)
         finally:
             if tmpdest:
-                #shutil.rmtree(tmpdest)
-                pass
+                shutil.rmtree(tmpdest)
 
 
 if __name__ == "__main__":
