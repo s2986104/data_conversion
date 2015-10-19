@@ -189,7 +189,7 @@ def main(argv):
     srcfolder = 'source/web_data_20140825'
     destfolder = 'bccvl'
 
-    for dataset in glob.glob(os.path.join(srcfolder, '*.zip')):
+    for dataset in glob.glob(os.path.join(srcfolder, 'Scene01-*.zip')):
         tmpdest = None
         try:
             basename, _ = os.path.splitext(dataset)
