@@ -198,6 +198,7 @@ def main(argv):
         try:
             basename, _ = os.path.splitext(dataset)
             _, basename = basename.split('-')
+            basename = 'ndlc_{}'.format(basename)
 
             tmpdest = convert_dataset(dataset, basename)
             # ziproot = temdest/basename
