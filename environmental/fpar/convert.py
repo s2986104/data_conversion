@@ -106,7 +106,7 @@ def main(argv):
                 zip_dataset(ziproot, destfolder)
             except Exception as e:
                 print "Error: ", e
-                failed = False
+                success = False
 
     # Calculate the fpar statistics for the tiff files
     # tif_dir is thei relative path to the tiff files generated above
