@@ -113,12 +113,10 @@ def main(argv):
                     shutil.copyfile(tmptiff, os.path.join(ziproot, 'data', tifname))
                     # generate metadata.json
                     gen_metadatajson(srcfolder, ziproot)
-                    # package up zip
-                    zipdataset = zip_dataset(ziproot, destfolder)
+                    # package up zip in destination
+                    zip_dataset(ziproot, destfolder)
                     # clean up work dir
                     shutil.rmtree(ziproot)
-                    # move zip file to destination
-                    shutil.move(zipdataset, destfolder)
                 except Exception as e:
                     print "Error: ", e
                     raise e
