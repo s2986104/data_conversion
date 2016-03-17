@@ -17,14 +17,17 @@ import fpar_stats
 
 JSON_TEMPLATE = 'fpar.template.json'
 
-def ungz(filename, destfile):
+def ungz(filename):
     """gunzip given filename.
     """
-    _gunzip = 'gunzip -c {0} > {1}'.format(filename, destfile)
+    # unzip file
+    _gunzip = 'gunzip {0}'.format(filename)
     ret = os.system(_gunzip)
     if ret != 0:
         raise Exception("can't gunzip {0} ({1})".format(filename, ret))
-    return destfile
+    # get rid of .gz extension
+    filename, _ = os.path.splitext(filename)
+    return filename
 
 
 def gen_metadatajson(src, dest):
@@ -78,6 +81,8 @@ def scale_down(tiffile):
     ret = os.system(calc)
     if ret != 0:
         raise Exception("fail to scale down {0} ({1})".format(tiffile, ret))
+    # remove orig file
+    os.remove(tiffile)
     # replace source file
     shutil.move(tmpfile, tiffile)
 
@@ -97,18 +102,20 @@ def main(argv):
     tmpdir = tempfile.mkdtemp(prefix="fpar_")
 
     try:
+        # prepare fpar files if necessary
+        for gzfile in glob.glob('{}/*.gz'.format(srcfolder)):
+            tiffile = ungz(gzfile)
+            # re-scale source files
+            scale_down(tiffile)
         for year in year_range:
-            for monthfile in glob.glob('{}/fpar.{}.*.gz'.format(srcfolder, year)):
+            for monthfile in glob.glob('{}/fpar.{}.*.tif'.format(srcfolder, year)):
                 try:
-                    tifname, _ = os.path.splitext(os.path.basename(monthfile))
+                    tifname, _ = os.path.basename(monthfile)
                     destbase, _ = os.path.splitext(tifname)
                     # create bccvl target dir
                     ziproot = create_target_dir(tmpdir, destbase)
                     # unzip source to temp location
                     tmptiff = os.path.join(tmpdir, tifname)
-                    ungz(monthfile, tmptiff)
-                    # re-scale values
-                    scale_down(tmptiff)
                     # copy result to destination
                     shutil.copyfile(tmptiff, os.path.join(ziproot, 'data', tifname))
                     # generate metadata.json
@@ -122,7 +129,7 @@ def main(argv):
                     raise e
 
         # Calculate the fpar statistics for the tiff files
-        fpar_stats.fpar_stats(destfolder ,tmpdir, tmpdir)
+        fpar_stats.fpar_stats(destfolder ,tmpdir, srcfolder)
 
     finally:
         # clean up all tempspace
