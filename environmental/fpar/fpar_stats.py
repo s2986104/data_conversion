@@ -13,8 +13,6 @@ from collections import defaultdict
 import logging
 
 JSON_TEMPLATE = 'fpar.stats.template.json'
-OUT_DIR = 'bccvl'
-fROOT = "." 
 
 
 def initialise_logger():
@@ -33,69 +31,55 @@ def initialise_logger():
     form = "%(levelname)8s %(asctime)s %(funcName)s %(lineno)d %(message)s"
     formatter = logging.Formatter(form)
 
-    # File logging
-    fh = logging.FileHandler(fROOT + '/fparlog2.txt')
-    fh.setLevel(logging.DEBUG)
-    fh.setFormatter(formatter)
-    logger.addHandler(fh)
-
     # STDOUT logging
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
-    logger.critical("Logger initialised ok")
+    logger.info("Logger initialised ok")
     return logger
 
 
-def write_array_to_raster(outfile, dataset, trans, proj, nodatav):
+def write_array_to_raster(outfile, dataset, template):
     """Write numpy array to raster (geoTIFF format).
 
     Keyword arguments:
     outfile -- name of the output file
     dataset -- numpy array to be written to file
-    trans -- geographic transform to be written to file
-    proj -- geographic projection to be written to file
-    nodatav -- No Data Value to be written to file 
+    template -- path to a gdal dataset to use as template
 
     Returns: None.
     """
     log.info("Writing to {}".format(outfile))
 
-    # Define raster related variables
-    rows = 14902
-    cols = 19160
+    # open template dataset
+    templateds = gdal.Open(template)
 
-    # Create the file
-    outdriver = gdal.GetDriverByName("GTiff")
-    outdata = outdriver.Create(str(outfile), cols, rows, 1, gdal.GDT_Int16)
+    # create new dataset
+    outdata = templateds.GetDriver().CreateCopy(outfile, templateds, options=("COMPRESS=LZW", "TILED=YES"))
 
-    # Write to file, set projection and NoDataValue
-    xmin = float(trans[0])
-    PIXEL_SIZE1 = float(trans[1])
-    ymax = float(trans[3])
-    PIXEL_SIZE2 = float(trans[5])
-
-    outdata.SetGeoTransform((xmin, PIXEL_SIZE1, 0, ymax, 0, PIXEL_SIZE2))
-    outdata.SetProjection(proj)
+    # write data to file
     outdata.GetRasterBand(1).WriteArray(dataset)
-    outdata.GetRasterBand(1).SetNoDataValue(nodatav)
+
+    # calculate statistics
+    outdata.GetRasterBand(1).ComputeStatistics(False)
+
+    # flush data to disk
     outdata.FlushCache()
-    outdata = None
 
 
 def get_file_lists(fparroot):
-    """Construct file lists (dictionary data type) for global, long term-monthly, growing years, and calendar years. 
+    """Construct file lists (dictionary data type) for global, long term-monthly, growing years, and calendar years.
 
-    Keyword arguments: 
+    Keyword arguments:
     fparroot -- directory containing source geoTIFF files
 
-    Returns: 
+    Returns:
     globallist -- a list of all geoTIFF files in fparroot
-    monthlylist -- a dictionary with month numbers as keys, matching files as values. 
-    growyearlist -- a dictionary with year numbers (first year of growing year) as keys, matching files as values. 
-    calyearlist -- a dictionary with calendar year numbers as keys, matching files as values. 
+    monthlylist -- a dictionary with month numbers as keys, matching files as values.
+    growyearlist -- a dictionary with year numbers (first year of growing year) as keys, matching files as values.
+    calyearlist -- a dictionary with calendar year numbers as keys, matching files as values.
     """
 
     # Fetch all of the fpar files in this dir
@@ -122,24 +106,23 @@ def get_file_lists(fparroot):
     return globallist, monthlylist, growyearlist, calyearlist
 
 
-def raster_chunking_stats(imlist, fnameformat, year=0, month=0):
-    """Load in raster files in chunks to reduce memory demands, 
+def raster_chunking_stats(imlist):
+    """Load in raster files in chunks to reduce memory demands,
     calculate statistics, and save to file.
 
-    Keyword arguments: 
+    Keyword arguments:
     imlist -- a list of filenames
-    fnameformat --  flag that determines formatting
-    year -- optional arugment used to supply year for formatting
-    month -- optional argument used to supply month for formatting
 
-    Returns: None. 
+    Returns: None.
     """
 
     if len(imlist) == 0:
         return
-    # Define raster related variables
-    rows = 14902
-    cols = 19160
+    # Open all raster files
+    dss = [gdal.Open(img) for img in imlist]
+    # get size from first raster (assume all are the same size)
+    rows = dss[0].GetRasterBand(1).YSize
+    cols = dss[0].GetRasterBand(1).XSize
 
     # Define statistics related arrays
     meanarr = np.zeros((rows, cols))
@@ -150,9 +133,6 @@ def raster_chunking_stats(imlist, fnameformat, year=0, month=0):
     # Define chunk size
     xBSize = 1024 * 4
     yBSize = 1024 * 4
-
-    # Define variables to store rasters
-    rasters = list()
 
     # Reads rasters in in chunks to minimise memory load
     for y in range(0, rows, yBSize):
@@ -168,15 +148,10 @@ def raster_chunking_stats(imlist, fnameformat, year=0, month=0):
                 numCols = cols - x
 
             log.info("Processing row {} block {} col {} block {}".format(y, numRows, x, numCols))
-            # Load in the rasters
-            for img in imlist:
-                ds = gdal.Open(img)
-                imarr = np.array(ds.GetRasterBand(1).ReadAsArray(x, y, numCols, numRows))
-                rasters.append(imarr)
-
-            # Create a rasterStack and delete the rasters list
-            stackRast = np.dstack(rasters)
-            rasters = None
+            # Create a rasterStack with chunks from datasources
+            stackRast = np.dstack(
+                [np.array(ds.GetRasterBand(1).ReadAsArray(x, y, numCols, numRows)) for ds in dss]
+            )
 
             log.debug("-- Calculating stats")
             try:
@@ -186,19 +161,31 @@ def raster_chunking_stats(imlist, fnameformat, year=0, month=0):
                 # covarr[y:y+numRows, x:x+numCols] = scipy.stats.variation(stackRast, axis=2)
             except Exception:
                 log.exception("Error calculating statistics...")
+     # Construct a dictionary as result
+    return {
+        'mean': meanarr,
+        'min': minarr,
+        'max': maxarr,
+        # 'cv': covarr
+    }
 
-            # Create an empty raster list for the next iteration
-            rasters = list()
-            stackRast = None
 
-    # Setup for the output file
-    trans = ds.GetGeoTransform()
-    proj = ds.GetProjection()
-    nodatav = -3000
+def build_dataset(stats, template, destroot, workdir, fnameformat, year=0, month=0):
+    """Load in raster files in chunks to reduce memory demands,
+    calculate statistics, and save to file.
 
-    # Calculate the statistics and write the outputs to file
-    outfileroot = fROOT
+    Keyword arguments:
+    stats -- dictionary with numpy arrayrs to store as datasets
+    template -- a gdal dataset to be used as template to create new ones
+    destfolder -- the folder to store the final zip file in
+    tmpdir -- some scratch location with enough working disk space
+    fnameformat --  flag that determines formatting
+    year -- optional arugment used to supply year for formatting
+    month -- optional argument used to supply month for formatting
 
+    Returns: None.
+    """
+    # generate new file name
     if fnameformat == 'global':
         descriptor = "2000-2014"
     elif fnameformat == 'growyearly':
@@ -207,46 +194,28 @@ def raster_chunking_stats(imlist, fnameformat, year=0, month=0):
         descriptor = "{:04d}".format(year)
     elif fnameformat == 'monthly':
         descriptor = month
-
-    # Construct output file path, and create it if it doesn't exist
-    outfilepath = "{0}/{1}/fpar.{2}.stats.aust".format(outfileroot, OUT_DIR, descriptor)
-    check_or_create_target_dir(outfilepath)
-
-    # Construct a dictionary for easy looping
-    resdict = {
-        'mean': meanarr,
-        'min': minarr,
-        'max': maxarr,
-        # 'cv': covarr
-    }
+    # create zip root
+    ziproot = os.path.join(workdir, "fpar.{0}.stats.aust".format(descriptor))
+    check_or_create_target_dir(ziproot)
 
     # Write the results to raster format with appropriate filenames
-    for stattype, statarr in resdict.items():
-        outfilename = "data/fpar.{0}.{1}.aust.tif".format(descriptor, stattype)
-        outfile = os.path.join(outfilepath, outfilename)
-        write_array_to_raster(outfile, statarr, trans, proj, nodatav)
-        statarr = None
-    resdict = None
-
-    meanarr = None
-    minarr = None
-    maxarr = None
-    trans = None
-    proj = None
+    for stattype, statarr in stats.items():
+        outfile = os.path.join(ziproot, 'data', "fpar.{0}.{1}.aust.tif".format(descriptor, stattype))
+        write_array_to_raster(outfile, statarr, template)
 
     # Write the metadata.json file
-    write_metadatadotjson(outfilepath, fnameformat, year, month)
+    write_metadatadotjson(ziproot, fnameformat, year, month)
     # Zip up the dataset
-    zip_dataset(outfilepath, os.path.join(outfileroot, OUT_DIR))
+    zip_dataset(ziproot, destroot)
 
     # Clean up the directories
-    shutil.rmtree(outfilepath)
+    shutil.rmtree(ziproot)
 
 
-def write_metadatadotjson(dest, fnameformat, year=0, month=0):
+def write_metadatadotjson(ziproot, fnameformat, year=0, month=0):
     """Write BCCVL metadata to json file.
 
-    Keyword arguments: 
+    Keyword arguments:
     dest -- destination for metadata file
     fnameformat --  flag that determines formatting
     year -- optional arugment used to supply year for formatting
@@ -269,20 +238,22 @@ def write_metadatadotjson(dest, fnameformat, year=0, month=0):
 
     log.info("{} {}".format(fnameformat, title))
 
-    md = json.load(open(os.path.join(fROOT, JSON_TEMPLATE), 'r'))
+    workdir = os.path.dirname(ziproot.rstrip(os.path.sep))
+
+    md = json.load(open(JSON_TEMPLATE, 'r'))
     md[u'files'] = {}
-    for filename in glob.glob(os.path.join(dest, '*', '*.tif')):
+    for filename in glob.glob(os.path.join(ziproot, '*', '*.tif')):
         base = os.path.basename(filename)
         m = re.match(rexp, base)
         stattype = m.group(2)
         layer_id = 'FPAR{}'.format(stattype)
         md[u'title'] = md[u'title'].format(title=title)
-        filename = filename[len(os.path.dirname(dest)):].lstrip('/')
+        filename = os.path.relpath(filename, workdir)
         md[u'files'][filename] = {
             u'layer': layer_id,
         }
 
-    mdfile = open(os.path.join(dest, 'bccvl', 'metadata.json'), 'w')
+    mdfile = open(os.path.join(ziproot, 'bccvl', 'metadata.json'), 'w')
     json.dump(md, mdfile, indent=4)
     mdfile.close()
 
@@ -290,7 +261,7 @@ def write_metadatadotjson(dest, fnameformat, year=0, month=0):
 def zip_dataset(ziproot, dest):
     """Zip a folder to specified destination, with .DS_Store exclusion.
 
-    Keyword arguments: 
+    Keyword arguments:
     ziproot -- location of zip target
     dest -- destination for zipfile
 
@@ -299,7 +270,7 @@ def zip_dataset(ziproot, dest):
     workdir = os.path.dirname(ziproot)
     zipdir = os.path.basename(ziproot)
     zipname = os.path.abspath(os.path.join(dest, zipdir + '.zip'))
-    
+
     ret = os.system(
         'cd {0}; zip -r {1} {2} -x *.aux.xml* -x *.DS_Store'.format(workdir, zipname, zipdir)
     )
@@ -309,8 +280,8 @@ def zip_dataset(ziproot, dest):
 
 def check_or_create_target_dir(target):
     """Check if target directory exists, if not recursively create
-    
-    Keyword arguments: 
+
+    Keyword arguments:
     target -- directory to be checked
 
     Returns: None.
@@ -323,26 +294,24 @@ def check_or_create_target_dir(target):
         except:
             log.exception("Unable to create target {}".format(target))
 
-def fpar_stats(tif_dir='tifs'):
+def fpar_stats(destroot, workdir, tif_dir='tifs'):
         # Generate the lists for global, long-term monthly, and yearly raster stacks
-        srcroot = fROOT + '/' + tif_dir
-        (glbl, mntly, growyrly, calyrly) = get_file_lists(srcroot)
-    
+        (glbl, mntly, growyrly, calyrly) = get_file_lists(tif_dir)
+
         # Calculate the statistics
         for mth in mntly.keys():
-            raster_chunking_stats(mntly[mth], 'monthly', month=mth)
+            stats = raster_chunking_stats(mntly[mth])
+            build_dataset(stats, mntly[mth][0], destroot, workdir, 'monthly', month=mth)
         for yr in growyrly.keys():
-            raster_chunking_stats(growyrly[yr], 'growyearly', year=yr)
+            stats = raster_chunking_stats(growyrly[yr])
+            build_dataset(stats, growyrly[yr][0], destroot, workdir, 'growyearly', year=yr)
         for yr in calyrly.keys():
-            raster_chunking_stats(calyrly[yr], 'calyearly', year=yr)
-        raster_chunking_stats(glbl, 'global', year='2000-2014')
+            stats = raster_chunking_stats(calyrly[yr])
+            build_dataset(stats, calyrly[yr][0], destroot, workdir, 'calyearly', year=yr)
+        stats = raster_chunking_stats(glbl)
+        build_dataset(stats, glbl[0], destroot, workdir, 'global', year='2000-2014')
 
 
 log = initialise_logger()
-log.critical("-----------------------------------------------------------")
-log.critical("[BEGIN EXECUTION]")
-
-if __name__ == "__main__":
-    # path to the tif files
-    fpar_stats(srcroot)
-
+log.info("-----------------------------------------------------------")
+log.info("[BEGIN EXECUTION]")

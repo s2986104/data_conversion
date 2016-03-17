@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# This script may use a lot of temp space.
+# Make sure to set TMPDIR / TEMP / TMP envvar to some location with enough free space
+
 import os
 import os.path
 import zipfile
@@ -10,7 +14,7 @@ import sys
 import re
 from collections import namedtuple
 import calendar
-import fpar_stats as fpar
+import fpar_stats
 
 
 JSON_TEMPLATE = 'fpar.template.json'
@@ -22,6 +26,7 @@ def ungz(filename, destfile):
     ret = os.system(_gunzip)
     if ret != 0:
         raise Exception("can't gunzip {0} ({1})".format(filename, ret))
+    return destfile
 
 
 def gen_metadatajson(src, dest):
@@ -51,7 +56,7 @@ def create_target_dir(destdir, destfile):
     return root folder
     """
     root = os.path.join(destdir, destfile)
-    os.mkdir(root)
+    os.makedirs(root)
     os.mkdir(os.path.join(root, 'data'))
     os.mkdir(os.path.join(root, 'bccvl'))
     return root
@@ -65,20 +70,19 @@ def zip_dataset(ziproot, dest):
     )
     if ret != 0:
         raise Exception("can't zip {0} ({1})".format(ziproot, ret))
+    return zipname
+
 
 def scale_down(tiffile):
     # scale down the raster data by 10000, and save as float.
-    workdir = os.path.dirname(tiffile)
-    tifname = os.path.basename(tiffile)
-    # scale down by 10000
-    calc = 'cd {0}; gdal_calc.py -A {1} --outfile=result.tif --calc="A/10000.0" --type="Float32" --overwrite --co "COMPRESS=LZW" --co "TILED=YES"'.format(workdir, tifname)
+    tmpfile = os.path.join(os.path.dirname(tiffile), 'result.tif')
+    calc = 'gdal_calc.py -A {0} --outfile={1} --calc="A/10000.0" --type="Float32" --overwrite --co "COMPRESS=LZW" --co "TILED=YES"'.format(tiffile, tmpfile)
     ret = os.system(calc)
     if ret != 0:
-        raise Exception("fail to scale down {0} ({1})".format(tifname, ret))
-    # Rename result.tif to its original filename
-    ret = os.system('cd {0}; mv -f result.tif {1}'.format(workdir, tifname))
-    if ret != 0:
-        raise Exception("fail to rename scaled file {0} ({1})".format(tifname, ret))
+        raise Exception("fail to scale down {0} ({1})".format(tiffile, ret))
+    # replace source file
+    shutil.move(tmpfile, tiffile)
+
 
 def main(argv):
     year_range = map(str, xrange(2000,2015))
@@ -92,30 +96,45 @@ def main(argv):
     srcfolder = 'source/fpar'
     destfolder = 'bccvl'
     ziproot = None
+    #tmpdir = tempfile.mkdtemp(prefix="fpar_")
+    tmpdir = os.path.join(tempfile.gettempdir(), 'fparhgay_7')
 
-    success = True
-    for year in year_range:
-        for monthfile in glob.glob('{}/fpar.{}.*.gz'.format(srcfolder, year)):
-            try:
-                destfile = os.path.basename(monthfile).replace('.tif.gz','')
-                ziproot = create_target_dir(destfolder, destfile)
-                desttif = os.path.splitext(os.path.split(monthfile)[1])[0]
-                ungz(monthfile, os.path.join(ziproot, 'data', desttif))
-                scale_down(os.path.join(ziproot, 'data', desttif))
-                gen_metadatajson(srcfolder, ziproot)
-                zip_dataset(ziproot, destfolder)
-            except Exception as e:
-                print "Error: ", e
-                success = False
+    try:
+        for year in (): # year_range:
+            for monthfile in glob.glob('{}/fpar.{}.*.gz'.format(srcfolder, year)):
+                try:
+                    tifname, _ = os.path.splitext(os.path.basename(monthfile))
+                    destbase, _ = os.path.splitext(tifname)
+                    # create bccvl target dir
+                    ziproot = create_target_dir(tmpdir, destbase)
+                    # unzip source to temp location
+                    tmptiff = os.path.join(tmpdir, tifname)
+                    ungz(monthfile, tmptiff)
+                    # re-scale values
+                    scale_down(tmptiff)
+                    # copy result to destination
+                    shutil.copyfile(tmptiff, os.path.join(ziproot, 'data', tifname))
+                    # delete tmptiff
+                    # os.remove(tmptiff)
+                    # generate metadata.json
+                    gen_metadatajson(srcfolder, ziproot)
+                    # package up zip
+                    zipdataset = zip_dataset(ziproot, destfolder)
+                    # clean up work dir
+                    shutil.rmtree(ziproot)
+                    # move zip file to destination
+                    shutil.move(zipdataset, destfolder)
+                except Exception as e:
+                    print "Error: ", e
+                    raise e
 
-    # Calculate the fpar statistics for the tiff files
-    # tif_dir is thei relative path to the tiff files generated above
-    if (success and len(argv) == 1):
-        fpar.fpar_stats(tif_dir='{0}/*/data'.format(destfolder))
+        # Calculate the fpar statistics for the tiff files
+        fpar_stats.fpar_stats(destfolder ,tmpdir, tmpdir)
 
-    # Remove the tiff files produced
-    for dirname in [ name for name in os.listdir(destfolder) if os.path.isdir(os.path.join(destfolder, name)) ]:
-        shutil.rmtree(os.path.join(destfolder, dirname))
+    finally:
+        if tmpdir and os.path.exists(tmpdir):
+            shutil.rmtree(tmpdir)
+
 
 if __name__ == "__main__":
     main(sys.argv)
