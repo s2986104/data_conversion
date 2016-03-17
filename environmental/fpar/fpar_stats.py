@@ -1,12 +1,9 @@
 import numpy as np
-import scipy.stats
 from osgeo import gdal
 import glob
 import os
 import os.path
-import subprocess
 import json
-import sys
 import re
 import shutil
 from collections import defaultdict

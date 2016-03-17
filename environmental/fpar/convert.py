@@ -5,14 +5,12 @@
 
 import os
 import os.path
-import zipfile
 import glob
 import json
 import tempfile
 import shutil
 import sys
 import re
-from collections import namedtuple
 import calendar
 import fpar_stats
 
@@ -96,11 +94,10 @@ def main(argv):
     srcfolder = 'source/fpar'
     destfolder = 'bccvl'
     ziproot = None
-    #tmpdir = tempfile.mkdtemp(prefix="fpar_")
-    tmpdir = os.path.join(tempfile.gettempdir(), 'fparhgay_7')
+    tmpdir = tempfile.mkdtemp(prefix="fpar_")
 
     try:
-        for year in (): # year_range:
+        for year in year_range:
             for monthfile in glob.glob('{}/fpar.{}.*.gz'.format(srcfolder, year)):
                 try:
                     tifname, _ = os.path.splitext(os.path.basename(monthfile))
@@ -114,8 +111,6 @@ def main(argv):
                     scale_down(tmptiff)
                     # copy result to destination
                     shutil.copyfile(tmptiff, os.path.join(ziproot, 'data', tifname))
-                    # delete tmptiff
-                    # os.remove(tmptiff)
                     # generate metadata.json
                     gen_metadatajson(srcfolder, ziproot)
                     # package up zip
@@ -132,6 +127,7 @@ def main(argv):
         fpar_stats.fpar_stats(destfolder ,tmpdir, tmpdir)
 
     finally:
+        # clean up all tempspace
         if tmpdir and os.path.exists(tmpdir):
             shutil.rmtree(tmpdir)
 
