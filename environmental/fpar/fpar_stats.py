@@ -131,8 +131,9 @@ def raster_chunking_stats(imlist):
     # covarr = np.zeros((rows, cols))
 
     # Define chunk size
-    xBSize = 1024 * 4
-    yBSize = 1024 * 4
+    chunk_size = 256  # 1024
+    xBSize = chunk_size * 4
+    yBSize = chunk_size * 4
 
     # Reads rasters in in chunks to minimise memory load
     for y in range(0, rows, yBSize):
