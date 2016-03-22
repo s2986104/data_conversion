@@ -176,8 +176,8 @@ def build_dataset(stats, template, destroot, workdir, fnameformat, year=0, month
     Keyword arguments:
     stats -- dictionary with numpy arrayrs to store as datasets
     template -- a gdal dataset to be used as template to create new ones
-    destfolder -- the folder to store the final zip file in
-    tmpdir -- some scratch location with enough working disk space
+    destroot -- the folder to store the final zip file in
+    workdir -- some scratch location with enough free disk space
     fnameformat --  flag that determines formatting
     year -- optional arugment used to supply year for formatting
     month -- optional argument used to supply month for formatting
@@ -301,12 +301,15 @@ def fpar_stats(destroot, workdir, tif_dir='tifs'):
         for mth in mntly.keys():
             stats = raster_chunking_stats(mntly[mth])
             build_dataset(stats, mntly[mth][0], destroot, workdir, 'monthly', month=mth)
+            stats = None
         for yr in growyrly.keys():
             stats = raster_chunking_stats(growyrly[yr])
             build_dataset(stats, growyrly[yr][0], destroot, workdir, 'growyearly', year=yr)
+            stats = None
         for yr in calyrly.keys():
             stats = raster_chunking_stats(calyrly[yr])
             build_dataset(stats, calyrly[yr][0], destroot, workdir, 'calyearly', year=yr)
+            stats = None
         stats = raster_chunking_stats(glbl)
         build_dataset(stats, glbl[0], destroot, workdir, 'global', year='2000-2014')
 
