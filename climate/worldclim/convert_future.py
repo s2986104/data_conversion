@@ -47,7 +47,7 @@ GCM_MAP = {
     'mc': 'MIROC5',
     'mp': 'MPI-ESM-LR',
     'mg': 'MRI-CGCM3',
-    'no': 'NorESM1-M',  
+    'no': 'NorESM1-M',
 }
 
 # representative concentration pathways (RCPs)
@@ -85,9 +85,9 @@ GEOTIFF_PATTERN = re.compile(
     (?P<gcm>..)                 # GCM
     (?P<rcp>[0-9][0-9])         # RCP
     (?P<layer_type>..)          # Layer type
-    (?P<year>[0-9][0-9])        # Year    
+    (?P<year>[0-9][0-9])        # Year
     (?P<layer_num>[0-9][0-9]?)  # Layer no.
-    """, 
+    """,
     re.VERBOSE
 )
 
@@ -151,7 +151,7 @@ def fix_geotiff(file_content):
 def is_temperature_layer(itemname):
     # tn, tx and a subset of bioclim are temperature layers
     info = GEOTIFF_PATTERN.match(itemname).groupdict()
-    bioclim_temp_layers = ['1', '2', '5', '6', '7', '8', '9', '10', '11']
+    bioclim_temp_layers = ['1', '2', '4', '5', '6', '7', '8', '9', '10', '11']
     if info['layer_type'] in ['tn', 'tx']:
         return True
     elif info['layer_type'] == 'bi' and info['layer_num'] in bioclim_temp_layers:
@@ -168,7 +168,7 @@ def get_geotiff_str(itemname, file_content):
         return fixed_geotiff
 
 
-    
+
 def add_source_files(destzip, destname, filenames):
     for filename in filenames:
         try:
@@ -187,14 +187,14 @@ def add_metadata(destzip, destname, metadata):
     destzip.writestr(
         os.path.join(destname, 'bccvl', 'metadata.json'), metadata
     )
-    
+
 
 
 def create_metadata_json(destfile, gcm, rcp, year, res, files):
     with open(JSON_TEMPLATE, 'r') as template:
         meta = json.load(template)
         meta[u'title'] = TITLE_TEMPLATE.format(
-            gcm = GCM_MAP[gcm], 
+            gcm = GCM_MAP[gcm],
             rcp = RCP_MAP[rcp],
             year = YEAR_MAP[year],
             res = RESOLUTION_MAP[res],
@@ -240,12 +240,12 @@ def main(argv):
         except Exception as e:
             print "Failed to create directory at {}.".format(os.path.abspath(dest))
             sys.exit(os.EX_IOERR)
-    
+
     for gcm, rcp, year, res, files in potential_converts(src):
         for f in files:
             layer = f[-8:-6]
             destname = '{gcm}_{rcp}_{year}_{res}_{layer}'.format(
-                gcm = GCM_MAP[gcm], 
+                gcm = GCM_MAP[gcm],
                 rcp = RCP_MAP[rcp],
                 year = YEAR_MAP[year],
                 res = res,
@@ -254,7 +254,7 @@ def main(argv):
             destfile = os.path.join(dest, destname + '.zip')
             with zipfile.ZipFile(destfile, 'w', allowZip64=True) as zip:
                 add_source_files(zip, destname, [f,])
-                metadata = create_metadata_json(destname, gcm, rcp, year, res, 
+                metadata = create_metadata_json(destname, gcm, rcp, year, res,
                     (os.path.basename(f.filename) for f in zip.filelist)
                 )
                 add_metadata(zip, destname, metadata)
