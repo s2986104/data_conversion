@@ -110,14 +110,12 @@ def main(argv):
         for year in year_range:
             for monthfile in glob.glob('{}/fpar.{}.*.tif'.format(srcfolder, year)):
                 try:
-                    tifname, _ = os.path.basename(monthfile)
+                    tifname = os.path.basename(monthfile)
                     destbase, _ = os.path.splitext(tifname)
                     # create bccvl target dir
                     ziproot = create_target_dir(tmpdir, destbase)
-                    # unzip source to temp location
-                    tmptiff = os.path.join(tmpdir, tifname)
                     # copy result to destination
-                    shutil.copyfile(tmptiff, os.path.join(ziproot, 'data', tifname))
+                    shutil.copyfile(monthfile, os.path.join(ziproot, 'data', tifname))
                     # generate metadata.json
                     gen_metadatajson(srcfolder, ziproot)
                     # package up zip in destination
@@ -126,7 +124,7 @@ def main(argv):
                     shutil.rmtree(ziproot)
                 except Exception as e:
                     print "Error: ", e
-                    raise e
+                    raise
 
         # Calculate the fpar statistics for the tiff files
         fpar_stats.fpar_stats(destfolder ,tmpdir, srcfolder)
