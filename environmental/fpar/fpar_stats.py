@@ -150,9 +150,7 @@ def raster_chunking_stats(imlist):
 
             log.info("Processing row {} block {} col {} block {}".format(y, numRows, x, numCols))
             # Create a rasterStack with chunks from datasources
-            stackRast = np.dstack(
-                [np.array(ds.GetRasterBand(1).ReadAsArray(x, y, numCols, numRows)) for ds in dss]
-            )
+            stackRast = np.dstack((np.array(ds.GetRasterBand(1).ReadAsArray(x, y, numCols, numRows)) for ds in dss))
 
             log.debug("-- Calculating stats")
             try:
