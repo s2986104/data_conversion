@@ -122,9 +122,12 @@ def raster_chunking_stats(imlist):
     cols = dss[0].GetRasterBand(1).XSize
 
     # Define statistics related arrays
-    meanarr = np.zeros((rows, cols))
-    minarr = np.zeros((rows, cols))
-    maxarr = np.zeros((rows, cols))
+    meanarr = np.empty((rows, cols), np.float32)
+    meanarr[:] = 0.0
+    minarr = np.empty((rows, cols), np.float32)
+    minarr[:] = 0.0
+    maxarr = np.empty((rows, cols), np.float32)
+    maxarr[:] = 0.0
     # covarr = np.zeros((rows, cols))
 
     # Define chunk size
