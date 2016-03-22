@@ -157,7 +157,7 @@ LAYER_MAP = {
 }
 
 # Layers 1,2 and 5-11 of bioclim are temperature layers
-TEMPERATURE_LAYERS =  ['bioclim_{:02d}'.format(x) for x in  range(1,3)+range(5,12)]
+TEMPERATURE_LAYERS =  ['bioclim_{:02d}'.format(x) for x in  range(1,3)+range(4,12)]
 # All layers in tmin, tmax, tmean are temperature layers
 TEMPERATURE_LAYERS += ["{}_{:02d}".format(x,y) for x in ['tmin','tmax','tmean'] for y in range(1,13)]
 
@@ -172,7 +172,7 @@ LAYER_TYPE_MAP = {
    'alt': 'alt',
    'tmax': 'tmax',
    'tmin': 'tmin',
-   'tmean': 'tmean',      
+   'tmean': 'tmean',
    'prec': 'prec',
    'bio': 'bioclim',
 }
