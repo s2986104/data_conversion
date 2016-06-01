@@ -79,8 +79,9 @@ def gen_metadatajson(template, ziproot, basename, year):
     """
     md = json.load(open(template, 'r'))
     
-    # Need to update the year of temporal_coverage
+    # Update the title, and year of temporal_coverage
     start_year = int(year) - 14
+    md['title'] = md['title'].format(year=year)
     md['temporal_coverage']['start'] = str(start_year)
     md['temporal_coverage']['end'] = str(start_year + 29)
 
