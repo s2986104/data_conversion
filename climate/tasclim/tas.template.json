@@ -1,0 +1,25 @@
+{
+    "bccvl_metadata_version": "2015-03-09-01",
+    "title": "Climate Futures Tasmania (CFT) Bioclimate Map Time-Series, 1980 - 2085: year {year}.  30-year average mapped bioclimatic variables at global extent with 6 arcminute resolution.",
+    "description": "A set of 19 bioclimatic variables, calculated according to the WorldClim method.  They are coded as follows: TASCLIM_01 = Annual Mean Temperature, TASCLIM_02 = Mean Diurnal Range, TASCLIM_03 = Isothermality (TASCLIM_02/TASCLIM_07), TASCLIM_04 = Temperature Seasonality, TASCLIM_05 = Max Temperature of Warmest Month, TASCLIM_06 = Min Temperature of Coldest Month, TASCLIM_07 = Temperature Annual Range (TASCLIM_05-TASCLIM_06), TASCLIM_08 = Mean Temperature of Wettest Quarter, TASCLIM_09 = Mean Temperature of Driest Quarter, TASCLIM_10 = Mean Temperature of Warmest Quarter, TASCLIM_11 = Mean Temperature of Coldest Quarter, TASCLIM_12 = Annual Precipitation, TASCLIM_13 = Precipitation of Wettest Month, TASCLIM_14 = Precipitation of Driest Month, TASCLIM_15 = Precipitation Seasonality (Coefficient of Variation), TASCLIM_16 = Precipitation of Wettest Quarter, TASCLIM_17 = Precipitation of Driest Quarter, TASCLIM_18 = Precipitation of Warmest Quarter, TASCLIM_19 = Precipitation of Coldest Quarter",
+    "genre": "Climate",
+    "data_type": "Continuous",
+    "format": "GeoTIFF",
+    "resolution": "6 arcmin",
+    "geogcs": "WGS84",
+    "bounding_box": {
+        "top": "-38.9500000",
+        "right": "149.0500000",
+        "bottom": "-44.0500000",
+        "left": "143.4500000"
+    },
+    "temporal_coverage": {
+        "start": "1980",
+        "end": "2085"
+    },
+    "external_url": "http://www.dpac.tas.gov.au/__data/assets/pdf_file/0016/151126/CFT_-_Climate_Modelling_Summary.pdf",
+    "license": "AU CC BY 3.0",
+    "acknowledgement": [
+        "Corney, S. P., J. J. Katzfey, J. L. McGregor, M. R. Grose, J. C. Bennett, C. J. White, G. K. Holz, S. Gaynor, and N. L. Bindoff, 2010: Climate Futures for Tasmania: climate modelling. Antarctic Climate and Ecosystems Cooperative Research Centre, Hobart, Tasmania."
+    ]
+}

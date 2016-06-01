@@ -10,8 +10,22 @@ import re
 import zipfile
 
 
-CURRENT_PREFIX = "accuclim_"
-JSON_TEMPLATE = "accu.template.json"
+JSON_TEMPLATE = "tas.template.json"
+
+SRC_FILE_MAP = {
+    'TASCLIM_A2_ECHAM5':    'TASCLIM_ECHAM5',
+    'TASCLIM_A2_GCM_MEAN': 'TASCLIM',
+    'TASCLIM_A2_GFDL-CM2.0': 'TASCLIM_GFDL-CM2.0',
+    'TASCLIM_A2_GFDL-CM2.1': 'TASCLIM_GFDL-CM2.1',
+    'TASCLIM_A2_MIROC3.2_MEDRES': 'TASCLIM_MIROC3.2_MEDRES',
+    'TASCLIM_A2_UKMO-HadCM3': 'TASCLIM_UKMO-HadCM3',
+    'TASCLIM_B1_ECHAM5':    'TASCLIM_ECHAM5',
+    'TASCLIM_B1_GCM_MEAN': 'TASCLIM',
+    'TASCLIM_B1_GFDL-CM2.0': 'TASCLIM_GFDL-CM2.0',
+    'TASCLIM_B1_GFDL-CM2.1': 'TASCLIM_GFDL-CM2.1',
+    'TASCLIM_B1_MIROC3.2_MEDRES': 'TASCLIM_MIROC3.2_MEDRES',
+    'TASCLIM_B1_UKMO-HadCM3': 'TASCLIM_UKMO-HadCM3'
+}
 
 
 def create_target_dir(basename):
@@ -32,15 +46,14 @@ def gdal_translate(src, dest):
     if ret != 0:
         raise Exception("can't gdal_translate {0} ({1})".format(src, ret))
 
-
-def convert(srcdir, ziproot, basename, year):
+def convert(srcdir, ziproot, basename, year, filename):
     """copy all files and convert if necessary to zip preparation dir.
     """
-    for i in range(1, 8):
-        srcfile = 'accuCLIM_{0:02d}_{1}.tif'.format(i, year)
+    for i in range(1, 20):
+        srcfile = '{0}_{1:02d}_{2}.tif'.format(SRC_FILE_MAP[filename], i, year)
         vsizip_src_dir = "/vsizip/" + os.path.join(srcdir, year, srcfile)
-        # just copy all the others
-        destfile = 'accuCLIM_{0:02d}.tif'.format(i)
+        # just copy all the files
+        destfile = 'TASCLIM_{0:02d}.tif'.format(i)
         gdal_translate(vsizip_src_dir, os.path.join(ziproot, basename, 'data', destfile))
 
 
@@ -89,14 +102,16 @@ def main(argv):
             sys.exit(1)
         srcdir = argv[1]
         destdir = argv[2]
+        fname, ext = os.path.splitext(os.path.basename(srcdir))
+
         zf = zipfile.ZipFile(srcdir)
         yearlist = list(set([os.path.dirname(fp) for fp in zf.namelist()]))
         for year in yearlist: 
             # unpack contains one destination datasets
-            base_dir = CURRENT_PREFIX + year
+            base_dir = fname + '_' + year
             ziproot = create_target_dir(base_dir)
 
-            convert(srcdir, ziproot, base_dir, year)
+            convert(srcdir, ziproot, base_dir, year, fname)
             gen_metadatajson(JSON_TEMPLATE, ziproot, base_dir, year)
             zipbccvldataset(ziproot, destdir, base_dir)
             if ziproot:
