@@ -104,11 +104,19 @@ def main(argv):
         destdir = argv[2]
         fname, ext = os.path.splitext(os.path.basename(srcdir))
 
+        # Replace the short emsc with full emsc name
+        if fname.startswith('TASCLIM_A2_'):
+            dest_filename = fname.replace('TASCLIM_A2', 'TASCLIM_SRES-A2', 1)
+        elif fname.startswith('TASCLIM_B1_'):
+            dest_filename = fname.replace('TASCLIM_B1', 'TASCLIM_SRES-B1', 1)
+        else:
+            dest_filename = fname
+
         zf = zipfile.ZipFile(srcdir)
         yearlist = list(set([os.path.dirname(fp) for fp in zf.namelist()]))
         for year in yearlist: 
             # unpack contains one destination datasets
-            base_dir = fname + '_' + year
+            base_dir = dest_filename + '_' + year
             ziproot = create_target_dir(base_dir)
 
             convert(srcdir, ziproot, base_dir, year, fname)
