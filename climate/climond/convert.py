@@ -110,7 +110,7 @@ def main(argv):
             dest_filename = fname
 
         zf = zipfile.ZipFile(srcdir)
-        if dest_filename.startswith('CLIMOND_CURRENT.zip'):
+        if dest_filename.startswith('CLIMOND_CURRENT'):
             # Current climate dataset        
             base_dir = dest_filename
             ziproot = create_target_dir(base_dir)
