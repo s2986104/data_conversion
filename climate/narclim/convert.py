@@ -101,21 +101,21 @@ def convert_file(srczip, destdir):
             year = int(nameparts[2])
             gcm = nameparts[3]
             rcm = nameparts[4]
-            dest_filename = 'NaRCLIM_1km_{gcm}_{rcm}_{year}'.format(gcm=gcm, rcm=rcm, year=year)
-        elif fname.startswith('NARCLIM_'):
+            dest_filename = 'NaRCLIM_{gcm}_{rcm}_{year}'.format(gcm=gcm, rcm=rcm, year=year)
+        elif fname.startswith('NaRCLIM_baseline_'):
+            resolution = '36 arcsec (1km)'
+            dest_filename = fname
+            year = 2000
+        elif fname.startswith('NaRCLIM_baseline'):
+            resolution = '9 arcsec (250m)'
+            dest_filename = fname
+            year = 2000
+        elif fname.startswith('NaRCLIM_'):
             resolution = '9 arcsec (250m)'
             year = int(nameparts[1])
             gcm = nameparts[2]
             rcm = nameparts[3]
-            dest_filename = 'NaRCLIM_250m_{gcm}_{rcm}_{year}'.format(gcm=gcm, rcm=rcm, year=year)            
-        elif fname.startswith('NaRCLIM_baseline_'):
-            resolution = '36 arcsec (1km)'
-            dest_filename = fname + '_1km'
-            year = 2000
-        elif fname.startswith('NaRCLIM_baseline'):
-            resolution = '9 arcsec (250m)'
-            dest_filename = fname + '_250m'
-            year = 2000
+            dest_filename = 'NaRCLIM_{gcm}_{rcm}_{year}'.format(gcm=gcm, rcm=rcm, year=year)            
         else:
             raise Exception("Unexpected file {}".format(srczip))
 
