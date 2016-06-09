@@ -1,0 +1,25 @@
+{
+    "bccvl_metadata_version": "2015-03-09-01",
+    "title": "NaRCLIM Bioclimate Maps: year {year}.  20-year average mapped bioclimatic variables for NSW, VIC & ACT with {resolution} resolution",
+    "description": "A set of 35 bioclimatic variables, calculated according to the WorldClim method.  They are coded as follows: projected_NaRCLIM_01 = Annual Mean Temperature, projected_NaRCLIM_02 = Mean Diurnal Range, projected_NaRCLIM_03 = Isothermality (projected_NaRCLIM_02/projected_NaRCLIM_07), projected_NaRCLIM_04 = Temperature Seasonality, projected_NaRCLIM_05 = Max Temperature of Warmest Month, projected_NaRCLIM_06 = Min Temperature of Coldest Month, projected_NaRCLIM_07 = Temperature Annual Range (projected_NaRCLIM_05-projected_NaRCLIM_06), projected_NaRCLIM_08 = Mean Temperature of Wettest Quarter, projected_NaRCLIM_09 = Mean Temperature of Driest Quarter, projected_NaRCLIM_10 = Mean Temperature of Warmest Quarter, projected_NaRCLIM_11 = Mean Temperature of Coldest Quarter, projected_NaRCLIM_12 = Annual Precipitation, projected_NaRCLIM_13 = Precipitation of Wettest Month, projected_NaRCLIM_14 = Precipitation of Driest Month, projected_NaRCLIM_15 = Precipitation Seasonality (Coefficient of Variation), projected_NaRCLIM_16 = Precipitation of Wettest Quarter, projected_NaRCLIM_17 = Precipitation of Driest Quarter, projected_NaRCLIM_18 = Precipitation of Warmest Quarter, projected_NaRCLIM_19 = Precipitation of Coldest Quarter, projected_NaRCLIM_20 = Annual Mean Radiation, projected_NaRCLIM_21 = Highest Weekly Radiation, projected_NaRCLIM_22 = Lowest Weekly Radiation, projected_NaRCLIM_23 = Radiation Seasonality (Coefficient of Variation), projected_NaRCLIM_24 = Radiation of the Wettest Quarter, projected_NaRCLIM_25 = Radiation of the Driest Quarter, projected_NaRCLIM_26 = Radiation of the Warmest Quarter, projected_NaRCLIM_27 = Radiation of the Coldest Quarter, projected_NaRCLIM_28 = Annual Mean Moisture Index, projected_NaRCLIM_29 = Highest Weekly Moisture Index, projected_NaRCLIM_30 = Lowest Weekly Moisture Index, projected_NaRCLIM_31 = Moisture Index Seasonality (Coefficient of Variation), projected_NaRCLIM_32 = Mean Moisture Index of the Wettest Quarter, projected_NaRCLIM_33 = Mean Moisture Index of the Driest Quarter, projected_NaRCLIM_34 = Mean Moisture Index of the Warmest Quarter, projected_NaRCLIM_35 = Mean Moisture Index of the Coldest Quarter",
+    "genre": "Climate",
+    "data_type": "Continuous",
+    "format": "GeoTIFF",
+    "resolution": "{resolution}",
+    "geogcs": "WGS84",
+    "bounding_box": {
+        "top": "-10.0000000",
+        "right": "154.0000000",
+        "bottom": "-43.7400000",
+        "left": "112.9000000"
+    },
+    "temporal_coverage": {
+        "start": "2030",
+        "end": "2070"
+    },
+    "external_url": "https://climatedata.environment.nsw.gov.au/",
+    "license": "AU CC BY 4.0",
+    "acknowledgement": [
+        "Evans JP, Ji F, Lee C, Smith P, Argueso D and Fita L (2014) Design of a regional climate modelling projection ensemble experiment Geosci. Model Dev., 7, 621-629"
+    ]
+}
