@@ -8,10 +8,10 @@
     "resolution": "{resolution}",
     "geogcs": "WGS84",
     "bounding_box": {
-        "top": "-10.0000000",
-        "right": "154.0000000",
-        "bottom": "-43.7400000",
-        "left": "112.9000000"
+        "top": "-23.5849985",
+        "right": "153.7035022",
+        "bottom": "-39.4749985",
+        "left": "135.6835022"
     },
     "temporal_coverage": {
         "start": "2030",

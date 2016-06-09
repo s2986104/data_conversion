@@ -30,13 +30,13 @@ def gdal_translate(src, dest):
     if ret != 0:
         raise Exception("can't gdal_translate {0} ({1})".format(src, ret))
 
-def convert(srcdir, ziproot, basename):
+def convert(srczip, ziproot, basename):
     """copy all files and convert if necessary to zip preparation dir.
     """
 
-    zf = zipfile.ZipFile(srcdir)
+    zf = zipfile.ZipFile(srczip)
     for filename in zf.namelist(): 
-        vsizip_src_dir = "/vsizip/" + os.path.join(srcdir, filename)
+        vsizip_src_dir = "/vsizip/" + os.path.join(srczip, filename)
         parts = os.path.basename(filename).split('_')
         # just copy all the files
         destfile = 'NARCLIM_{0}'.format(parts[-1])
@@ -55,6 +55,15 @@ def gen_metadatajson(template, ziproot, basename, year, resolution):
     md['resolution'] = md['resolution'].format(resolution=resolution)
     md['temporal_coverage']['start'] = str(start_year)
     md['temporal_coverage']['end'] = str(start_year + 19)
+
+    # Special case for Aus extent
+    if basename.startswith('NaRCLIM_baseline_Aus_Extent'):
+        md['bounding_box'] = {
+            "top": "-10.0000000",
+            "right": "154.0000000",
+            "bottom": "-43.7400000",
+            "left": "112.9000000"
+        }
 
     # update layer info
     md['files'] = {}
@@ -79,17 +88,11 @@ def zipbccvldataset(ziproot, destdir, basename):
     if ret != 0:
         raise Exception("can't zip {0} ({1})".format(ziproot, ret))
 
-
-def main(argv):
-    ziproot = None
-    srcdir = None
+def convert_file(srczip, destdir):
+    ziproot = None    
     try:
-        if len(argv) != 3:
-            print "Usage: {0} <srczip> <destdir>".format(argv[0])
-            sys.exit(1)
-        srcdir = argv[1]
-        destdir = argv[2]
-        fname, ext = os.path.splitext(os.path.basename(srcdir))
+        print "Converting {0} ...".format(srczip)
+        fname, ext = os.path.splitext(os.path.basename(srczip))
 
         # Replace the short emsc with full emsc name
         nameparts = fname.split('_')
@@ -107,19 +110,19 @@ def main(argv):
             dest_filename = 'NaRCLIM_250m_{gcm}_{rcm}_{year}'.format(gcm=gcm, rcm=rcm, year=year)            
         elif fname.startswith('NaRCLIM_baseline_'):
             resolution = '36 arcsec (1km)'
-            dest_filename = fname + '1km'
+            dest_filename = fname + '_1km'
             year = 2000
         elif fname.startswith('NaRCLIM_baseline'):
             resolution = '9 arcsec (250m)'
-            dest_filename = fname + '250m'
+            dest_filename = fname + '_250m'
             year = 2000
         else:
-            raise Exception("Unexpected file {}".format(srcdir))
+            raise Exception("Unexpected file {}".format(srczip))
 
         base_dir = dest_filename
         ziproot = create_target_dir(base_dir)
 
-        convert(srcdir, ziproot, base_dir)
+        convert(srczip, ziproot, base_dir)
         gen_metadatajson(JSON_TEMPLATE, ziproot, base_dir, year, resolution)
         zipbccvldataset(ziproot, destdir, base_dir)
         if ziproot:
@@ -129,6 +132,24 @@ def main(argv):
         if ziproot and os.path.exists(ziproot):
             shutil.rmtree(ziproot)
 
+
+def main(argv):
+    srcdir = None
+    if len(argv) != 3:
+        print "Usage: {0} <srczip> <destdir>".format(argv[0])
+        sys.exit(1)
+    srcdir = argv[1]
+    destdir = argv[2]
+
+
+    if os.path.isdir(srcdir):
+        for srczip in glob.glob(os.path.join(srcdir, '*.zip')):
+            convert_file(srczip, destdir)
+    elif os.path.isfile(srcdir):
+        convert_file(srcdir, destdir)
+    else:
+        print "Source {0} does not exist".format(srcdir)
+        sys.exit(1)
 
 if __name__ == '__main__':
     main(sys.argv)
