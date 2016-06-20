@@ -8,7 +8,7 @@
     "resolution": "10 arcmin",
     "geogcs": "WGS84",
     "bounding_box": {
-        "top": "-83.6666667",
+        "top": "83.6666667",
         "right": "180.0000000",
         "bottom": "-59.1666667",
         "left": "-180.0000000"
