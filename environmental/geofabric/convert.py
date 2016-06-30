@@ -34,7 +34,7 @@ attributes = {
         'climate': ['catannrad', 'catanntemp', 'catcoldmthmin', 'cathotmthmax', 'catannrain', 'catdryqrain', 
                     'catwetqrain', 'catwarmqrain', 'catcoldqrain', 'catcoldqtemp', 'catdryqtemp', 'catwetqtemp',
                     'catanngromega', 'catanngromeso', 'catanngromicro', 'catgromegaseas', 'catgromesoseas', 
-                    'catgromicroseas', 'caterosivity', 'suberosivity'],
+                    'catgromicroseas', 'caterosivity'],
         'vegetation': ['catbare_ext', 'catforests_ext', 'catgrasses_ext', 'catnodata_ext', 'catwoodlands_ext', 
                        'catshrubs_ext', 'catbare_nat', 'catforests_nat', 'catgrasses_nat', 'catnodata_nat', 
                        'catwoodlands_nat', 'catshrubs_nat'],
@@ -47,7 +47,7 @@ attributes = {
         'climate': ['strannrad', 'stranntemp', 'strcoldmthmin', 'strhotmthmax', 'strannrain', 'strdryqrain', 
                     'strwetqrain', 'strwarmqrain', 'strcoldqrain', 'strcoldqtemp', 'strdryqtemp', 'strwetqtemp',
                     'stranngromega', 'stranngromeso', 'stranngromicro', 'strgromegaseas', 'strgromesoseas', 
-                    'strgromicroseas'],
+                    'strgromicroseas', 'suberosivity'],
         'vegetation': ['strbare_ext', 'strforests_ext', 'strgrasses_ext', 'strnodata_ext', 'strwoodlands_ext', 
                        'strshrubs_ext', 'strbare_nat', 'strforests_nat', 'strgrasses_nat', 'strnodata_nat', 
                        'strwoodlands_nat', 'strshrubs_nat'],
@@ -92,7 +92,8 @@ def gen_metadatajson(template, ziproot, basename, baselayer, attrlayer, dbfilena
     # TODO: Shapefile has a max column length of 10 characters.
     # The layername is the new table name which is same as basename
     md['layers'] = ["{bfname}-{cat}.{afname}-{layername}.{attr}".format( 
-            bfname=base_filename, cat=basetable, afname=dbfilename, layername=basename, attr=attr) for attr in attributes[baselyrname][layername]]
+            bfname=base_filename, cat=basetable, afname=dbfilename, layername=basename, attr=attr)
+            for attr in truncate_name(attributes[baselyrname][layername])]
     md['foreignKey'] = "segmentno"
     md['base_filename'] = base_filename
     md['attribute_filename'] = dbfilename
@@ -111,7 +112,7 @@ def ogr_extract(attrfile, attrtable, attrlist, dest):
         raise Exception("can't extract attributes '{0}' from '{1}' ({2})".format(','.join(attrlist), attrtable, ret))
 
 def convert(srcdir, ziproot, basename, baselayer, attrlayer, destfilename):
-    """Extract relevant attributes from the attribute table.
+    """Extract relevant attributes from the attribute table, and save it as Shapefile
     """
     # attribute file
     attrfile = os.path.join(srcdir, attrlayer[0])
@@ -137,6 +138,22 @@ def zipdir(path, zipfilename):
         raise Exception("can't zip {0}: {1}".format(ziproot, str(e)))
     finally:
         zipf.close()
+
+def truncate_name(namelist, maxchar=10):
+    # Truncate the field names as during the conversion from gdb to shapefile would using ogr2ogr.
+    # TODO: Check this work for all cases
+    truncatedList = [name[:maxchar] for name in namelist]
+    for i in range(len(truncatedList)):
+        index = [i]
+        for j in range(len(truncatedList)):
+            if i != j and truncatedList[j] == truncatedList[i]:
+                index.append(j)
+        # Change name again; the last 2 character is _{digit}
+        if len(index) > 1:
+            for k in range(1, len(index)):
+                tname = truncatedList[index[k]][:(maxchar-2)] + "_{}".format(k)
+                truncatedList[index[k]] = tname
+    return truncatedList
 
 def main(argv):
     ziproot = None
@@ -165,14 +182,14 @@ def main(argv):
         for baselayer in cats:
             for attrlayer in layers:
                 base_dir = '{baselayer}_{attrlayer}'.format(baselayer=baselayer[1], attrlayer=attrlayer[1])
-                fname = base_dir + '.dbf'
+                shpfilename = base_dir + '.dbf'  # shape file
                 ziproot = create_target_dir(base_dir)
 
                 # Extract the layer from attribute file and save as Shapefile
-                convert(srcdir, ziproot, base_dir, baselayer, attrlayer, fname)
+                convert(srcdir, ziproot, base_dir, baselayer, attrlayer, shpfilename)
 
                 # Generate metadata
-                gen_metadatajson(JSON_TEMPLATE_ATTR, ziproot, base_dir, baselayer, attrlayer, fname)
+                gen_metadatajson(JSON_TEMPLATE_ATTR, ziproot, base_dir, baselayer, attrlayer, shpfilename)
                 zipbccvldataset(ziproot, destdir, base_dir)
                 if ziproot:
                     shutil.rmtree(ziproot)
