@@ -1,0 +1,24 @@
+{
+    "bccvl_metadata_version": "2015-03-09-01",
+    "title": "Geofabric Geospatial dataset",
+    "description": "",
+    "genre": "Environmental",
+    "data_type": "Continuous",
+    "format": "GDB",
+    "geogcs": "WGS84",
+    "bounding_box": {
+        "top": "-9.1975000",
+        "right": "112.9225000",
+        "bottom": "-43.7400000",
+        "left": "-153.6375000"
+    },
+    "temporal_coverage": {
+        "start": "2008",
+        "end": "2008"
+    },
+    "external_url": "http://www.bom.gov.au/water/geofabric",
+    "license": "CC BY 3.0 AU",
+    "acknowledgement": [
+        "Bureau of Meteorology, Australian Government"
+    ]
+}
