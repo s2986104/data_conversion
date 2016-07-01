@@ -105,7 +105,7 @@ def gen_metadatajson(template, ziproot, basename, baselayer, attrlayer, dbfilena
 def ogr_extract(attrfile, attrtable, attrlist, dest):
     """Use ogr2ogr to extract relevant attributes from src file to dest"""
     # The new table will have the same name as the output file
-    sqlcmd = 'select FID, segmentno, {attributes} from {attrtable}'.format(attributes=','.join(attrlist), attrtable=attrtable)
+    sqlcmd = 'select segmentno, {attributes} from {attrtable}'.format(attributes=','.join(attrlist), attrtable=attrtable)
     ret = os.system('ogr2ogr -f "ESRI Shapefile" {outfile} {attrfile} {attrtable} -sql "{select}"'.format(
                     outfile=dest, attrfile=attrfile, attrtable=attrtable, select=sqlcmd))
     if ret != 0:
