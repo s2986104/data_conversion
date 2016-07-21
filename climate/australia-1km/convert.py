@@ -9,6 +9,7 @@ import shutil
 import sys
 import re
 
+CURRENT_CITATION = u'Jones, D. A., Wang, W., & Fawcett, R. (2009). High-quality spatial climate data-sets for Australia. Australian Meteorological and Oceanographic Journal, 58(4), 233.'
 CURRENT_TEMPLATE = u'Current climate layers for Australia, 30arcsec (~1km)'
 FUTURE_TEMPLATE = u'Climate Projection {0} based on {1}, 30arcsec (~1km) - {2}'
 JSON_TEMPLATE = 'bccvl_australia_1km.template.json'
@@ -90,6 +91,8 @@ def gen_metadatajson(template, dest):
         md[u'temporal_coverage'][u'start'] = u'1976'
         md[u'temporal_coverage'][u'end'] = u'2005'
         md[u'title'] = CURRENT_TEMPLATE
+        md[u'acknowledgement'] = CURRENT_CITATION
+        md[u'external_url'] = u''
     md['files'] = {}
     for filename in glob.glob(os.path.join(dest, '*', '*.tif')):
         filename = filename[len(os.path.dirname(dest)):].lstrip('/')
