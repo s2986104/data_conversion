@@ -79,7 +79,7 @@ def gen_metadatajson(template, ziproot, basename):
     for filename in glob.glob(os.path.join(ziproot, basename, 'data', '*.tif')):
         # get zip root relative path
         zippath = os.path.relpath(filename, ziproot)
-        layer_num = re.match(r'.*(\d\d).*\.tif', os.path.basename(filename)).group(1)
+        layer_num = re.match(r'.*_(\d\d)_.*\.tif', os.path.basename(filename)).group(1)
 	md['files'][zippath] = {
             'layer': 'B{0}'.format(layer_num)
         }
