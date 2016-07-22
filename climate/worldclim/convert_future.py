@@ -5,7 +5,6 @@ import json
 import os
 import os.path
 import zipfile
-import calendar
 import itertools
 import tempfile
 import shutil
@@ -107,7 +106,7 @@ def potential_converts(source):
         if source_files:
             yield gcm, rcp, year, res, source_files
 
-def convert_geotiff_temperature(itemname, file_content):
+def convert_geotiff_temperature(itemname, file_content, scale):
     tmpdir = tempfile.mkdtemp(dir=TMPDIR)
     infile = os.path.join(tmpdir, "infile.tif")
     outfile = os.path.join(tmpdir, "outfile.tif")
@@ -115,7 +114,7 @@ def convert_geotiff_temperature(itemname, file_content):
         f.write(file_content)
     print "Changing temperature representation for {}".format(itemname)
     # No data is set to -9999 is used to be consistent with other datasets.
-    cmd = 'gdal_calc.py -A {infile} --calc="A*0.1" --co="COMPRESS=LZW" --NoDataValue=-9999 --co="TILED=YES" --outfile {outfile} --type "Float32"'.format(
+    cmd = 'gdal_calc.py -A {infile} --calc="A*{scale}" --co="COMPRESS=LZW" --NoDataValue=-9999 --co="TILED=YES" --outfile {outfile} --type "Float32"'.format(
         **locals())
     ret = os.system(cmd)
     if ret != 0:
@@ -148,22 +147,27 @@ def fix_geotiff(file_content):
     return new_file_content
 
 
-def is_temperature_layer(itemname):
+def get_scale_factor(itemname):
     # tn, tx and a subset of bioclim are temperature layers
     info = GEOTIFF_PATTERN.match(itemname).groupdict()
-    bioclim_temp_layers = ['1', '2', '4', '5', '6', '7', '8', '9', '10', '11']
+    bioclim_temp_layers = ['1', '2', '5', '6', '7', '8', '9', '10', '11']
     if info['layer_type'] in ['tn', 'tx']:
-        return True
+        return '0.1'
     elif info['layer_type'] == 'bi' and info['layer_num'] in bioclim_temp_layers:
-        return True
+        return '0.1'
+    elif info['layer_type'] == 'bi' and info['layer_num'] in ['3']:
+        return '0.01'
+    elif info['layer_type'] == 'bi' and info['layer_num'] in ['4']:
+        return '0.001'
     else:
-        return False
+        return None
 
 
 def get_geotiff_str(itemname, file_content):
     fixed_geotiff = fix_geotiff(file_content)
-    if is_temperature_layer(itemname):
-        return convert_geotiff_temperature(itemname, fixed_geotiff)
+    scale = get_scale_factor(itemname)
+    if scale:
+        return convert_geotiff_temperature(itemname, fixed_geotiff, scale)
     else:
         return fixed_geotiff
 

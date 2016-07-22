@@ -156,10 +156,19 @@ LAYER_MAP = {
     'bioclim_19.tif': 'B19',
 }
 
-# Layers 1,2 and 5-11 of bioclim are temperature layers
-TEMPERATURE_LAYERS =  ['bioclim_{:02d}'.format(x) for x in  range(1,3)+range(4,12)]
+
+# Layers 1,2 and 5-11 of bioclim are temperature layers scaled by 10
+# Layer 3 is scaled by 100 (percent)
+# Layer 4 is sclade by 10 (temp) and by 100 (percent) -> 1000
+SCALE_FACTORS = {
+  'bioclim_01': '0.1',   'bioclim_02': '0.1', 'bioclim_03': '0.01',
+  'bioclim_04': '0.001', 'bioclim_05': '0.1', 'bioclim_06': '0.1',
+  'bioclim_07': '0.1',   'bioclim_08': '0.1', 'bioclim_09': '0.1',
+  'bioclim_10': '0.1',   'bioclim_11': '0.1'}
 # All layers in tmin, tmax, tmean are temperature layers
-TEMPERATURE_LAYERS += ["{}_{:02d}".format(x,y) for x in ['tmin','tmax','tmean'] for y in range(1,13)]
+for l in ["{}_{:02d}".format(x,y) for x in ['tmin','tmax','tmean'] for y in range(1,13)]:
+    SCALE_FACTORS[l] = '0.1'
+
 
 RESOLUTION_MAP = {
     '30s': '30 arcsec',
@@ -208,7 +217,7 @@ def convert(filename, folder, dest):
         basename = FILE_MAP[basename]
         destfile = os.path.abspath(os.path.join(dest, 'data', '{}.tif'.format(basename)))
         # Temperature layers get copied to a temp location.
-        outfile = os.path.join(tmpdir, '{}.tif'.format(basename)) if basename in TEMPERATURE_LAYERS else destfile
+        outfile = os.path.join(tmpdir, '{}.tif'.format(basename)) if basename in SCALE_FACTORS else destfile
         ret = os.system(
             #'gdal_translate -of GTiff {0} {1}'.format(srcfile, destfile)
             'gdal_translate -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'.format(
@@ -220,11 +229,12 @@ def convert(filename, folder, dest):
                 "can't gdal_translate {0} ({1})".format(
                     srcfile,
                     ret))
-        if basename in TEMPERATURE_LAYERS:
+        if basename in SCALE_FACTORS:
             # change temperature representation to C as float to match other
             # datasets.
             print "Changing temperature representation for {}".format(basename)
-            cmd = 'gdal_calc.py -A {outfile} --calc="A*0.1" --co="COMPRESS=LZW" --NoDataValue=-9999 --co="TILED=YES" --outfile {destfile} --type "Float32"'.format(
+            cmd = 'gdal_calc.py -A {outfile} --calc="A*{scale}" --co="COMPRESS=LZW" --NoDataValue=-9999 --co="TILED=YES" --outfile {destfile} --type "Float32"'.format(
+                scale=SCALE_FACTORS[basename],
                 **locals())
             ret = os.system(cmd)
             if ret != 0:
