@@ -39,7 +39,7 @@ def gdal_calc(src, dest, formula):
     try:
         tmpfile = os.path.join(os.path.dirname(dest), 'calc_{0}'.format(os.path.basename(dest)))
         # rescale values to tempdir
-        cmd = ('gdal_calc.py -A {srcfile} --calc="{formula}" --outfile={destfile}'
+        cmd = ('gdal_calc.py -A {srcfile} --calc="{formula}" --outfile={destfile} --NoDataValue=-1.69999999999999994e+308'
                .format(srcfile=src,
                        destfile=tmpfile,
                        formula=formula)
@@ -63,16 +63,10 @@ def convert(srcdir, ziproot, basename):
     """copy all files and convert if necessary to zip preparation dir.
     """
     for i in range(1, 20):
-        srcfile = 'CRUCLIM_{0:02d}.tif'.format(i)
-        if i == 4:
-            # We need to rescale layer 4
-            gdal_calc(os.path.join(srcdir, srcfile),
-                      os.path.join(ziproot, basename, 'data', srcfile),
-                      "A*100.0")
-        else:
-            # just copy all the others
-            gdal_translate(os.path.join(srcdir, srcfile),
-                           os.path.join(ziproot, basename, 'data', srcfile))
+        srcfile = 'CRUCLIM_{0:02d}_1990.tif'.format(i)
+        # just copy all the data
+        gdal_translate(os.path.join(srcdir, srcfile),
+                       os.path.join(ziproot, basename, 'data', srcfile))
 
 
 def gen_metadatajson(template, ziproot, basename):
@@ -85,7 +79,7 @@ def gen_metadatajson(template, ziproot, basename):
     for filename in glob.glob(os.path.join(ziproot, basename, 'data', '*.tif')):
         # get zip root relative path
         zippath = os.path.relpath(filename, ziproot)
-        layer_num = re.match(r'.*(\d\d).tif', os.path.basename(filename)).group(1)
+        layer_num = re.match(r'.*(\d\d).*\.tif', os.path.basename(filename)).group(1)
 	md['files'][zippath] = {
             'layer': 'B{0}'.format(layer_num)
         }
