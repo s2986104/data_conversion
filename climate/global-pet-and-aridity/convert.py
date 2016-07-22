@@ -67,11 +67,10 @@ def main(argv):
                     os.path.join(datadir, 'pet_he_yr.tif')
         ))
         if ret != 0:
-            raise Exception(
-                "can't gdal_translate")
+            raise Exception("can't gdal_translate")
         ret = os.system('gdal_calc.py -A "{srcfile}" --calc="A*{scale}" --co="COMPRESS=LZW" --NoDataValue=-9999 --co="TILED=YES" --outfile "{destfile}" --type "Float32"'.format(
             scale='0.0001',
-            srcfile=os.path.join(TMPDIR, 'AI_Annual', 'ai_yr/'),
+            srcfile=os.path.join(TMPDIR, 'AI_annual', 'ai_yr/'),
             destfile=os.path.join(datadir, 'ai_yr.tif'))
         )
         if ret != 0:
@@ -83,20 +82,21 @@ def main(argv):
         ret = os.system(
             'cd {0}; zip -r {1} {2} -x *.aux.xml*'.format(
                 TMPDIR,
-            'global-pet-and-aridity.zip',
+            os.path.join(os.path.abspath(dest), 'global-pet-and-aridity.zip'),
             'global-pet-and-aridity')
         )
         if ret != 0:
             raise Exception("can't zip dataset")
     finally:
-        # if dataroot and os.path.exists(dataroot):
-        #     shutil.rmtree(dataroot)
+        if dataroot and os.path.exists(dataroot):
+            shutil.rmtree(dataroot)
         if os.path.exists(os.path.join(TMPDIR, 'AI_annual')):
             shutil.rmtree(os.path.join(TMPDIR, 'AI_annual'))
         if os.path.exists(os.path.join(TMPDIR, 'PET_he_annual')):
             shutil.rmtree(os.path.join(TMPDIR, 'PET_he_annual'))
         if os.path.exists(os.path.join(TMPDIR, 'Global PET and Aridity Index')):
             shutil.rmtree(os.path.join(TMPDIR, 'Global PET and Aridity Index'))
+
 
 if __name__ == "__main__":
     main(sys.argv)
