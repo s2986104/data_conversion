@@ -3,7 +3,6 @@ import os
 import os.path
 import glob
 import json
-import tempfile
 import shutil
 import sys
 import re
@@ -16,7 +15,8 @@ def create_target_dir(basename):
     """create zip folder structure in tmp location.
     return root folder
     """
-    tmpdir = tempfile.mkdtemp(prefix=basename)
+    tmpdir = "tmp_{}".format(basename)
+    os.makedirs(tmpdir)
     os.mkdir(os.path.join(tmpdir, basename))
     os.mkdir(os.path.join(tmpdir, basename, 'data'))
     os.mkdir(os.path.join(tmpdir, basename, 'bccvl'))
@@ -35,7 +35,7 @@ def convert(srczip, ziproot, basename):
     """
 
     zf = zipfile.ZipFile(srczip)
-    for filename in zf.namelist(): 
+    for filename in zf.namelist():
         vsizip_src_dir = "/vsizip/" + os.path.join(srczip, filename)
         parts = os.path.basename(filename).split('_')
         # just copy all the files
@@ -48,7 +48,7 @@ def gen_metadatajson(template, ziproot, basename, year, resolution):
     and write to ziproot + '/bccvl/metadata.json'
     """
     md = json.load(open(template, 'r'))
-    
+
     # Update the title, and year of temporal_coverage (20 years period)
     start_year = int(year) - 10
     md['title'] = md['title'].format(year=year, resolution=resolution)
@@ -89,7 +89,7 @@ def zipbccvldataset(ziproot, destdir, basename):
         raise Exception("can't zip {0} ({1})".format(ziproot, ret))
 
 def convert_file(srczip, destdir):
-    ziproot = None    
+    ziproot = None
     try:
         print "Converting {0} ...".format(srczip)
         fname, ext = os.path.splitext(os.path.basename(srczip))
@@ -115,7 +115,7 @@ def convert_file(srczip, destdir):
             year = int(nameparts[1])
             gcm = nameparts[2]
             rcm = nameparts[3]
-            dest_filename = 'NaRCLIM_{gcm}_{rcm}_{year}'.format(gcm=gcm, rcm=rcm, year=year)            
+            dest_filename = 'NaRCLIM_{gcm}_{rcm}_{year}'.format(gcm=gcm, rcm=rcm, year=year)
         else:
             raise Exception("Unexpected file {}".format(srczip))
 
