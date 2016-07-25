@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import stats
 from osgeo import gdal
 import glob
 import os
@@ -169,6 +170,48 @@ def raster_chunking_stats(imlist):
     }
 
 
+def calc_cov(dsfiles):
+    """Calculates CoV over given list of input files
+
+    dsfiles ... list of files to calculate CoV from
+    returns numpy array
+    """
+
+    # open files
+    datasets = [gdal.Open(fname) for fname in dsfiles]
+    # check shape of all datasets:
+    shape = set((ds.RasterYSize, ds.RasterXSize) for ds in datasets)
+    if len(shape) != 1:
+        raise Exception("Raster have different shape")
+    ysize, xsize = shape.pop()
+    result = np.zeros((ysize, xsize), dtype=np.float32)
+    # build buffer array for blocked reading (assume same block size for all datasets, and only one band)
+    x_block_size, y_block_size = datasets[0].GetRasterBand(1).GetBlockSize()
+    #import pdb; pdb.set_trace()
+    for i in range(0, ysize, y_block_size):
+        # determine block height to read
+        if i + y_block_size < ysize:
+            rows = y_block_size
+        else:
+            rows = ysize - i
+        # determine blogk width to read
+        for j in range(0, xsize, x_block_size):
+            if j + x_block_size < xsize:
+                cols = x_block_size
+            else:
+                cols = xsize - j
+        # create buffer array across all datasets
+        inarr = np.zeros((rows, cols, len(datasets)), dtype=np.int16)
+        for idx, ds in enumerate(datasets):
+            inarr[:,:,idx] = ds.GetRasterBand(1).ReadAsArray(xoff=j, yoff=i,
+                                                             win_xsize=cols, win_ysize=rows)
+        # apply func
+        result[i:i+inarr.shape[0], j:j+inarr.shape[1]] = stats.variation(inarr, axis=2)
+
+    return result
+
+
+
 def build_dataset(stats, template, destroot, workdir, fnameformat, year=0, month=0):
     """Load in raster files in chunks to reduce memory demands,
     calculate statistics, and save to file.
@@ -311,6 +354,7 @@ def fpar_stats(destroot, workdir, tif_dir='tifs'):
             build_dataset(stats, calyrly[yr][0], destroot, workdir, 'calyearly', year=yr)
             stats = None
         stats = raster_chunking_stats(glbl)
+        stats['cov'] = calc_cov(glbl)
         build_dataset(stats, glbl[0], destroot, workdir, 'global', year='2000-2014')
 
 
