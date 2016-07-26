@@ -26,6 +26,7 @@ LAYER_MAP = {
     'gppyrmax_2000_07_molco2yr.tif':    ('GPP1', '2000-2007'),
     'gppyrmean_2000_07_molco2yr.tif':   ('GPP2', '2000-2007'),
     'gppyrmin_2000_07_molco2yr.tif':    ('GPP3', '2000-2007'),
+    'gpp_summary_00_07_cov.tif':        ('GPPcov', '2000-2007'),
 
     # gpp_year_means2000_2007
     'gppyr_2000_01_molco2m2yr_m.tif':   ('GPP4', '2000'),
@@ -144,13 +145,20 @@ def write_array_to_raster(outfile, dataset, template):
 
     Returns: None.
     """
-    log.info("Writing to {}".format(outfile))
+    #log.info("Writing to {}".format(outfile))
 
     # open template dataset
     templateds = gdal.Open(template)
 
+    # get gtiff driver
+    driver = gdal.GetDriverByName('GTiff')
+
     # create new dataset
-    outdata = templateds.GetDriver().CreateCopy(outfile, templateds, options=("COMPRESS=LZW", "TILED=YES"))
+    outdata = driver.Create(outfile, xsize=templateds.RasterXSize, ysize=templateds.RasterYSize, bands=1, eType=gdal.GDT_Float32, options=("COMPRESS=LZW", "TILED=YES"))
+
+    # copy over metadata bits
+    outdata.SetProjection(templateds.GetProjection())
+    outdata.SetGeoTransform(templateds.GetGeoTransform())
 
     # write data to file
     outdata.GetRasterBand(1).WriteArray(dataset)
