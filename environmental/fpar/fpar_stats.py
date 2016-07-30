@@ -166,7 +166,7 @@ def raster_chunking_stats(imlist):
         'mean': meanarr,
         'min': minarr,
         'max': maxarr,
-        # 'cv': covarr
+        # 'cov': covarr
     }
 
 
@@ -200,13 +200,19 @@ def calc_cov(dsfiles):
                 cols = x_block_size
             else:
                 cols = xsize - j
-        # create buffer array across all datasets
-        inarr = np.zeros((rows, cols, len(datasets)), dtype=np.int16)
-        for idx, ds in enumerate(datasets):
-            inarr[:,:,idx] = ds.GetRasterBand(1).ReadAsArray(xoff=j, yoff=i,
-                                                             win_xsize=cols, win_ysize=rows)
-        # apply func
-        result[i:i+inarr.shape[0], j:j+inarr.shape[1]] = stats.variation(inarr, axis=2)
+
+            log.info("Processing row {} block {} col {} block {}".format(i, rows, j, cols))
+            inarr = np.dstack((
+                ds.GetRasterBand(1).ReadAsArray(xoff=j, yoff=i,
+                                                win_xsize=cols, win_ysize=rows)
+                for ds in datasets))
+
+            inarr = np.zeros((rows, cols, len(datasets)), dtype=np.int16)
+            for idx, ds in enumerate(datasets):
+                inarr[:,:,idx] = ds.GetRasterBand(1).ReadAsArray(xoff=j, yoff=i,
+                                                                 win_xsize=cols, win_ysize=rows)
+            # calculate coefficient of variance across datasets (axis 2)
+            result[i:i+inarr.shape[0], j:j+inarr.shape[1]] = stats.variation(inarr, axis=2)
 
     return result
 
@@ -267,16 +273,16 @@ def write_metadatadotjson(ziproot, fnameformat, year=0, month=0):
     """
     if fnameformat == 'global':
         title = "2000 to 2014 (Average, Minimum, Maximum)"
-        rexp = r'fpar\.(.{9})\.(mean|max|min|cv)\.*'
+        rexp = r'fpar\.(.{9})\.(mean|max|min|cov)\.*'
     elif fnameformat == 'growyearly':
         title = "{:04d} to {:04d} Growing Year (Average, Minumum, Maximum)".format(year, year + 1)
-        rexp = r'fpar\.(.{9})\.(mean|max|min|cv)\.*'
+        rexp = r'fpar\.(.{9})\.(mean|max|min|cov)\.*'
     elif fnameformat == 'calyearly':
         title = "{:04d} Calendar Year (Average, Minumum, Maximum)".format(year)
-        rexp = r'fpar\.(.{4})\.(mean|max|min|cv)\.*'
+        rexp = r'fpar\.(.{4})\.(mean|max|min|cov)\.*'
     elif fnameformat == 'monthly':
         title = "{} (Long-term Monthly Average, Minimum, Maximum)".format(month)
-        rexp = r'fpar\.(.{2})\.(mean|max|min|cv)\.*'
+        rexp = r'fpar\.(.{2})\.(mean|max|min|cov)\.*'
 
     log.info("{} {}".format(fnameformat, title))
 
