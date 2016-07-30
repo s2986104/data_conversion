@@ -132,9 +132,9 @@ def raster_chunking_stats(imlist):
     # covarr = np.zeros((rows, cols))
 
     # Define chunk size
-    chunk_size = 256  # 1024
-    xBSize = chunk_size * 4
-    yBSize = chunk_size * 4
+    xBSize, yBSize = dss[0].GetRasterBand(1).GetBlockSize()
+    xBSize = xBSize * 4
+    yBSize = yBSize * 4
 
     # Reads rasters in in chunks to minimise memory load
     for y in range(0, rows, yBSize):
@@ -187,6 +187,8 @@ def calc_cov(dsfiles):
     result = np.zeros((ysize, xsize), dtype=np.float32)
     # build buffer array for blocked reading (assume same block size for all datasets, and only one band)
     x_block_size, y_block_size = datasets[0].GetRasterBand(1).GetBlockSize()
+    x_block_size = x_block_size * 4
+    y_block_size = y_block_size * 4
     #import pdb; pdb.set_trace()
     for i in range(0, ysize, y_block_size):
         # determine block height to read
