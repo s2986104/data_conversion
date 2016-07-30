@@ -209,10 +209,6 @@ def calc_cov(dsfiles):
                                                 win_xsize=cols, win_ysize=rows)
                 for ds in datasets))
 
-            inarr = np.zeros((rows, cols, len(datasets)), dtype=np.int16)
-            for idx, ds in enumerate(datasets):
-                inarr[:,:,idx] = ds.GetRasterBand(1).ReadAsArray(xoff=j, yoff=i,
-                                                                 win_xsize=cols, win_ysize=rows)
             # calculate coefficient of variance across datasets (axis 2)
             result[i:i+inarr.shape[0], j:j+inarr.shape[1]] = stats.variation(inarr, axis=2)
 
