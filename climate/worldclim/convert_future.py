@@ -90,6 +90,66 @@ GEOTIFF_PATTERN = re.compile(
     re.VERBOSE
 )
 
+
+LAYER_MAP = {
+    'bioclim_01.tif': 'B01',
+    'bioclim_02.tif': 'B02',
+    'bioclim_03.tif': 'B03',
+    'bioclim_04.tif': 'B04',
+    'bioclim_05.tif': 'B05',
+    'bioclim_06.tif': 'B06',
+    'bioclim_07.tif': 'B07',
+    'bioclim_08.tif': 'B08',
+    'bioclim_09.tif': 'B09',
+    'bioclim_10.tif': 'B10',
+    'bioclim_11.tif': 'B11',
+    'bioclim_12.tif': 'B12',
+    'bioclim_13.tif': 'B13',
+    'bioclim_14.tif': 'B14',
+    'bioclim_15.tif': 'B15',
+    'bioclim_16.tif': 'B16',
+    'bioclim_17.tif': 'B17',
+    'bioclim_18.tif': 'B18',
+    'bioclim_19.tif': 'B19',
+    'prec_01.tif': 'PR1',
+    'prec_02.tif': 'PR2',
+    'prec_03.tif': 'PR3',
+    'prec_04.tif': 'PR4',
+    'prec_05.tif': 'PR5',
+    'prec_06.tif': 'PR6',
+    'prec_07.tif': 'PR7',
+    'prec_08.tif': 'PR8',
+    'prec_09.tif': 'PR9',
+    'prec_10.tif': 'PR10',
+    'prec_11.tif': 'PR11',
+    'prec_12.tif': 'PR12',
+    'tmax_01.tif': 'TX1',
+    'tmax_02.tif': 'TX2',
+    'tmax_03.tif': 'TX3',
+    'tmax_04.tif': 'TX4',
+    'tmax_05.tif': 'TX5',
+    'tmax_06.tif': 'TX6',
+    'tmax_07.tif': 'TX7',
+    'tmax_08.tif': 'TX8',
+    'tmax_09.tif': 'TX9',
+    'tmax_10.tif': 'TX10',
+    'tmax_11.tif': 'TX11',
+    'tmax_12.tif': 'TX12',
+    'tmin_01.tif': 'TN1',
+    'tmin_02.tif': 'TN2',
+    'tmin_03.tif': 'TN3',
+    'tmin_04.tif': 'TN4',
+    'tmin_05.tif': 'TN5',
+    'tmin_06.tif': 'TN6',
+    'tmin_07.tif': 'TN7',
+    'tmin_08.tif': 'TN8',
+    'tmin_09.tif': 'TN9',
+    'tmin_10.tif': 'TN10',
+    'tmin_11.tif': 'TN11',
+    'tmin_12.tif': 'TN12',
+}
+
+
 def convert_filename(filename):
     geotiff_info = GEOTIFF_PATTERN.match(filename).groupdict()
     return "{0}_{1:02d}.tif".format(LAYER_TYPE_MAP[geotiff_info['layer_type']], int(geotiff_info['layer_num']))
@@ -140,7 +200,7 @@ def fix_geotiff(file_content):
         'gdal_translate -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'.format(infile, outfile)
     )
     if ret != 0:
-        raise Exception("can't gdal_translate {0} ({1})".format(srcfile, ret))
+        raise Exception("can't gdal_translate {0} ({1})".format(infile, ret))
     with open(outfile, 'rb') as f:
         new_file_content = f.read()
     shutil.rmtree(tmpdir)
@@ -172,7 +232,6 @@ def get_geotiff_str(itemname, file_content):
         return fixed_geotiff
 
 
-
 def add_source_files(destzip, destname, filenames):
     for filename in filenames:
         try:
@@ -193,7 +252,6 @@ def add_metadata(destzip, destname, metadata):
     )
 
 
-
 def create_metadata_json(destfile, gcm, rcp, year, res, files):
     with open(JSON_TEMPLATE, 'r') as template:
         meta = json.load(template)
@@ -211,12 +269,10 @@ def create_metadata_json(destfile, gcm, rcp, year, res, files):
         meta[u'emsc'] = RCP_MAP[rcp]
         meta[u'files'] = {}
         for fname in files:
-            m = GEOTIFF_PATTERN.match(fname)
             fpath = os.path.join(destfile, 'data', fname)
-            if m:
-                meta[u'files'][fpath] = {
-                    u'layer': layer_id(m.group('layer_type'), m.group('layer_num'))
-                }
+            meta[u'files'][fpath] = {
+                u'layer': LAYER_MAP[fname]
+            }
         return json.dumps(meta, indent=4)
 
 def layer_id(layer_type, layer_num):
