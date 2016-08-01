@@ -281,6 +281,7 @@ def layer_id(layer_type, layer_num):
         layer_num = '0' + layer_num
     return layer_prefix + layer_num
 
+
 def main(argv):
     if len(argv) != 3:
         print "Usage: {0} <srcdir> <destdir>".format(argv[0])
