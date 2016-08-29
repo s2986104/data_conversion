@@ -13,18 +13,18 @@ import zipfile
 JSON_TEMPLATE = "tas.template.json"
 
 SRC_FILE_MAP = {
-    'TASCLIM_A2_ECHAM5':    'TASCLIM_ECHAM5',
-    'TASCLIM_A2_GCM_MEAN': 'TASCLIM',
-    'TASCLIM_A2_GFDL-CM2.0': 'TASCLIM_GFDL-CM2.0',
-    'TASCLIM_A2_GFDL-CM2.1': 'TASCLIM_GFDL-CM2.1',
-    'TASCLIM_A2_MIROC3.2_MEDRES': 'TASCLIM_MIROC3.2_MEDRES',
-    'TASCLIM_A2_UKMO-HadCM3': 'TASCLIM_UKMO-HadCM3',
-    'TASCLIM_B1_ECHAM5':    'TASCLIM_ECHAM5',
-    'TASCLIM_B1_GCM_MEAN': 'TASCLIM',
-    'TASCLIM_B1_GFDL-CM2.0': 'TASCLIM_GFDL-CM2.0',
-    'TASCLIM_B1_GFDL-CM2.1': 'TASCLIM_GFDL-CM2.1',
-    'TASCLIM_B1_MIROC3.2_MEDRES': 'TASCLIM_MIROC3.2_MEDRES',
-    'TASCLIM_B1_UKMO-HadCM3': 'TASCLIM_UKMO-HadCM3'
+    'A2_ECHAM5':    'TASCLIM_ECHAM5',
+    'A2_GCM_MEAN': 'TASCLIM',
+    'A2_GFDL-CM2.0': 'TASCLIM_GFDL-CM2.0',
+    'A2_GFDL-CM2.1': 'TASCLIM_GFDL-CM2.1',
+    'A2_MIROC3.2_MEDRES': 'TASCLIM_MIROC3.2_MEDRES',
+    'A2_UKMO-HadCM3': 'TASCLIM_UKMO-HadCM3',
+    'B1_ECHAM5':    'TASCLIM_ECHAM5',
+    'B1_GCM_MEAN': 'TASCLIM',
+    'B1_GFDL-CM2.0': 'TASCLIM_GFDL-CM2.0',
+    'B1_GFDL-CM2.1': 'TASCLIM_GFDL-CM2.1',
+    'B1_MIROC3.2_MEDRES': 'TASCLIM_MIROC3.2_MEDRES',
+    'B1_UKMO-HadCM3': 'TASCLIM_UKMO-HadCM3'
 }
 
 
@@ -105,10 +105,10 @@ def main(argv):
         fname, ext = os.path.splitext(os.path.basename(srcdir))
 
         # Replace the short emsc with full emsc name
-        if fname.startswith('TASCLIM_A2_'):
-            dest_filename = fname.replace('TASCLIM_A2', 'TASCLIM_SRES-A2', 1)
-        elif fname.startswith('TASCLIM_B1_'):
-            dest_filename = fname.replace('TASCLIM_B1', 'TASCLIM_SRES-B1', 1)
+        if fname.startswith('A2_'):
+            dest_filename = fname.replace('A2', 'TASCLIM_SRES-A2', 1)
+        elif fname.startswith('B1_'):
+            dest_filename = fname.replace('B1', 'TASCLIM_SRES-B1', 1)
         else:
             dest_filename = fname
 
