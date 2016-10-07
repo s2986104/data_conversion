@@ -270,7 +270,7 @@ def write_metadatadotjson(ziproot, fnameformat, year=0, month=0):
     Returns: None.
     """
     if fnameformat == 'global':
-        title = "2000 to 2014 (Average, Minimum, Maximum)"
+        title = "2000 to 2014 (Average, Minimum, Maximum, Coefficient of Variation)"
         rexp = r'fpar\.(.{9})\.(mean|max|min|cov)\.*'
     elif fnameformat == 'growyearly':
         title = "{:04d} to {:04d} Growing Year (Average, Minumum, Maximum)".format(year, year + 1)
