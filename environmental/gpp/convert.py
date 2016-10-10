@@ -39,23 +39,43 @@ LAYER_MAP = {
 }
 
 
-def convert(filename, dest):
-    """convert .rst files to .tif in dest
+def set_nodata(filename, destdir, nodatavalue):
+    """ Convert file to geotiff format and set the NoDataValue.
     """
+    destpath = None
+    srcfile = os.path.splitext(os.path.basename(filename))[0].lower()
+    destfile = '{}.tif'.format(srcfile)
+    print "Setting NoDataValue for {}".format(filename)
+    destpath = os.path.join(destdir, destfile)
+    ret = os.system(
+        'gdal_translate -of GTiff {0} {1} -a_nodata {2}'.format(filename, destpath, nodatavalue)
+    )
+    if ret != 0:
+        raise Exception(
+            "Fail to gdal_translate {0} ({1})".format(filename, ret)
+        )
+    return destpath
+
+
+def convert(filename, dest, maskfile):
+    """Apply the mask and then convert .rst files to .tif in dest
+    """
+    destpath = None
     srcfile = os.path.splitext(os.path.basename(filename))[0].lower()
     destfile = '{}.tif'.format(srcfile)
     if destfile in LAYER_MAP:
         print "Converting {}".format(filename)
         destpath = os.path.join(dest, 'data', destfile)
         ret = os.system(
-            'gdal_translate -of GTiff {0} {1}'.format(filename, destpath)
+            'gdal_calc.py -A {0} -B {1} --outfile={2} --calc="A*B" --NoDataValue=-9999'.format(maskfile, filename, destpath)
         )
         if ret != 0:
             raise Exception(
-                "can't gdal_translate {0} ({1})".format(filename, ret)
+                "can't gdal_cal.py {0} ({1})".format(filename, ret)
             )
     else:
         print "Skipping {}".format(filename)
+    return destpath
 
 def gen_metadatajson(src, dest):
     """read metadata template and populate rest of fields
@@ -65,7 +85,10 @@ def gen_metadatajson(src, dest):
     md[u'files'] = {}
     for filename in glob.glob(os.path.join(dest, '*', '*.tif')):
         layer_id, time_range = LAYER_MAP[os.path.basename(filename)]
-        md[u'title'] = TITLE_TEMPLATE.format(time_range, FOLDERS[src])
+        subtitle = 'coefficient of variation' \
+                   if os.path.basename(filename) == 'gpp_summary_00_07_cov.tif' \
+                   else FOLDERS[src]
+        md[u'title'] = TITLE_TEMPLATE.format(time_range, subtitle)
         filename = filename[len(os.path.dirname(dest)):].lstrip('/')
         md[u'files'][filename] = {
             u'layer': layer_id,
@@ -172,8 +195,8 @@ def write_array_to_raster(outfile, dataset, template):
 
 def main(argv):
     ziproot = None
-    if len(argv) != 3:
-        print "Usage: {0} <srcdir> <destdir>".format(argv[0])
+    if len(argv) != 4:
+        print "Usage: {0} <srcdir> <destdir> <maskfile>".format(argv[0])
         sys.exit(1)
     src  = argv[1]
     srcfolder = os.path.basename(src)
@@ -181,41 +204,48 @@ def main(argv):
         print "Folder unknown, valid options are {}".format(', '.join(FOLDERS))
         return
     dest = argv[2]
+    maskfile_orig = argv[3]      # mask file to apply to dataset
+
+    # set nodatavalue to 0 for the mask file
+    maskfile = set_nodata(maskfile_orig, dest, 0)
+
     if srcfolder == 'gpp_maxmin_2000_2007':
         destfile = srcfolder.lower()
         try:
             ziproot = create_target_dir(dest, destfile)
             for srcfile in glob.glob(os.path.join(src, '*.[Rr][Ss][Tt]')):
-                convert(srcfile, ziproot)
+                convert(srcfile, ziproot, maskfile)
             gen_metadatajson(srcfolder, ziproot)
             zip_dataset(ziproot, dest)
         finally:
             if ziproot:
                 shutil.rmtree(ziproot)
     elif srcfolder == 'GPP_year_means_00_07':
-        for srcfile in glob.glob(os.path.join(src, '*.[Rr][Ss][Tt]')):
-            destfile = os.path.splitext(os.path.basename(srcfile))[0].lower()
-            try:
+        results = {}
+        try:
+            # Generated the masked dataset geotiff files
+            for srcfile in glob.glob(os.path.join(src, '*.[Rr][Ss][Tt]')):
+                destfile = os.path.splitext(os.path.basename(srcfile))[0].lower()
                 ziproot = create_target_dir(dest, destfile)
-                convert(srcfile, ziproot)
+                results[ziproot] = convert(srcfile, ziproot, maskfile)
                 gen_metadatajson(srcfolder, ziproot)
                 zip_dataset(ziproot, dest)
-            finally:
-                if ziproot:
-                    shutil.rmtree(ziproot)
-        # generate cov
-        dsfiles = glob.glob(os.path.join(src, '*.[Rr][Ss][Tt]'))
-        cov = calc_cov(dsfiles)
-        try:
+
+            # generate cov from the masked dataset files
+            dsfiles = [x for x in results.values() if x is not None]
+            cov = calc_cov(dsfiles)
+
             destfile = 'gpp_summary_00_07'
             ziproot = create_target_dir(dest, destfile)
-            write_array_to_raster(os.path.join(ziproot, 'data', destfile + '_cov.tif'), cov, dsfiles[0])
+            covfile = os.path.join(ziproot, 'data', destfile + '_cov.tif')
+            results[ziproot] = covfile
+            write_array_to_raster(covfile, cov, dsfiles[0])
             gen_metadatajson(srcfolder, ziproot)
             zip_dataset(ziproot, dest)
         finally:
-            if ziproot:
-                shutil.rmtree(ziproot)
-
+            # Delete all the temp directories
+            for tmpdir in results.keys():
+                shutil.rmtree(tmpdir)
 
 if __name__ == "__main__":
     main(sys.argv)
