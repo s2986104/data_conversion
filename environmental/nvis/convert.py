@@ -23,8 +23,8 @@ LAYER_MAP = {
 
 def gdal_translate(src, dest):
     """Use gdal_translate to copy file from src to dest"""
-    ret = os.system('gdal_translate -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'
-                    .format(src, dest))
+    ret = os.system('gdal_translate -of GTiff -a_srs epsg:4283 -a_ullr {2} -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'
+                    .format(src, dest, '109.518102 -8.139869 157.213422 -44.309277'))
     if ret != 0:
         raise Exception("can't gdal_translate {0} ({1})".format(src, ret))
 
