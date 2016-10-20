@@ -16,32 +16,38 @@ JSON_TEMPLATE = 'nvis.template.json'
 
 LAYER_MAP = {
     # NVIS Australian vegetation group
-    # source file, ('source fragment', dest filename)
-    'GRID_NVIS4_2_AUST_EXT_MVG.zip': ('aus4_2e_mvg.ovr', 'nvis_present_vegetation_groups.tif'),
-    'GRID_NVIS4_2_AUST_PRE_MVG.zip': ('aus4_2p_mvg.ovr', 'nvis_pre-1750_vegetation_groups.tif')
+    # source directory file, ('source fragment', dest filename)
+    'GRID_NVIS4_2_AUST_EXT_MVG': ('aus4_2e_mvg', 'nvis_present_vegetation_groups.tif'),
+    'GRID_NVIS4_2_AUST_PRE_MVG': ('aus4_2p_mvg', 'nvis_pre-1750_vegetation_groups.tif')
 }
 
 def gdal_translate(src, dest):
     """Use gdal_translate to copy file from src to dest"""
-    ret = os.system('gdal_translate -of GTiff -a_srs epsg:4283 -a_ullr {2} -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'
-                    .format(src, dest, '109.518102 -8.139869 157.213422 -44.309277'))
+    # gdal_translate does not include the RAT when -a_srs is specified.
+    # As a hack, 1st convert with -a_srs, then convert without -a_srs to generate the RAT file.
+    destfname = os.path.basename(dest)
+    destdir = os.path.dirname(dest)
+
+    ret = os.system('gdal_translate -of GTiff {0} {1}'.format(src, os.path.join(destdir, 'tempfilet1.tif')))
+    os.remove(os.path.join(destdir, 'tempfilet1.tif'))
+    ratfile = os.path.join(destdir, 'tempfilet1.tif.aux.xml')
+    
+    if ret != 0 or not os.path.isfile(ratfile):
+        raise Exception("fail to generate RAT file for {0} ({1})".format(src, ret))
+
+    ret = os.system('gdal_translate -of GTiff -a_srs epsg:3577 -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'
+                    .format(src, dest))
+    # rename RAT file generated
+    os.rename(ratfile, dest + '.aux.xml')
+
     if ret != 0:
         raise Exception("can't gdal_translate {0} ({1})".format(src, ret))
 
-def convert(filename, dest):
+def convert(src, dest):
     """convert .ovr files to .tif in dest
-    """
-    
-    basename = os.path.basename(filename)
-    if basename in LAYER_MAP:
-        src_fragment, destfile = LAYER_MAP[basename]
-
-        print "Converting {}".format(filename)
-        srcfile = os.path.splitext(basename)[0]
-        vsizip_src_dir = "/vsizip/" + os.path.join(filename, srcfile, src_fragment)
-        gdal_translate(vsizip_src_dir, os.path.join(dest, 'data', destfile))
-    else:
-        print "Skipping {}".format(filename)
+    """    
+    print "Converting {}".format(src)
+    gdal_translate(src, dest)
 
 def copy_metadatajson(dest):
     """read metadata template and populate rest of fields
@@ -68,7 +74,7 @@ def zip_dataset(ziproot, dest):
     zipdir = os.path.basename(ziproot)
     zipname = os.path.abspath(os.path.join(dest, zipdir + '.zip'))
     ret = os.system(
-        'cd {0}; zip -r {1} {2} -x *.aux.xml*'.format(workdir, zipname, zipdir)
+        'cd {0}; zip -r {1} {2}'.format(workdir, zipname, zipdir)
     )
     if ret != 0:
         raise Exception("can't zip {0} ({1})".format(ziproot, ret))
@@ -85,8 +91,10 @@ def main(argv):
     destfile = 'nvis_major_vegetation_groups'
     try:
         ziproot = create_target_dir(destdir, destfile)
-        for srcfile in glob.glob(os.path.join(srcdir, '*.zip')):
-            convert(srcfile, ziproot)
+        for datasrc in LAYER_MAP:
+            src_fragment, destfname = LAYER_MAP[datasrc]
+            src_path = os.path.abspath(os.path.join(srcdir, datasrc, src_fragment))
+            convert(src_path, os.path.join(ziproot, 'data', destfname))
         copy_metadatajson(ziproot)
         zip_dataset(ziproot, destdir)
     finally:
