@@ -212,6 +212,7 @@ def calc_cov(dsfiles):
             # calculate coefficient of variance across datasets (axis 2)
             result[i:i+inarr.shape[0], j:j+inarr.shape[1]] = stats.variation(inarr, axis=2)
 
+    result[result>1.0] = np.nan
     return result
 
 
