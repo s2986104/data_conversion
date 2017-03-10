@@ -10,7 +10,7 @@ import sys
 import re
 
 CURRENT_CITATION = u'"Hutchinson M, Kesteven J, Xu T (2014) Monthly climate data: ANUClimate 1.0, 0.01 degree, Australian Coverage, 1976-2005. Australian National University, Canberra, Australia. Made available by the Ecosystem Modelling and Scaling Infrastructure (eMAST, http://www.emast.org.au) of the Terrestrial Ecosystem Research Network (TERN, http://www.tern.org.au).'
-CURRENT_TITLE = u'Australia, current climate (1976-2005) , 30arcsec (~1km)'
+CURRENT_TITLE = u'ANUClim (Australia), Current Climate {month} (1976-2005) , 30arcsec (~1km)'
 JSON_TEMPLATE = 'anuclim.template.json'
 
 LAYER_MAP = {
@@ -76,7 +76,7 @@ LAYER_MAP = {
     'vapp_12.tif': 'mon_vapp12',
 }
 
-MONTH_LIST = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 SOURCE_DATASETS = [('tmax', 'tif'), ('tmin', 'tif'), ('prec', 'tif'), ('vapp', 'asc.gz'), ('evap', 'asc.gz')]
 
 def ungz(filename):
@@ -128,7 +128,7 @@ def gen_metadatajson(template, dest, month):
     md = json.load(open(template, 'r'))
     md[u'temporal_coverage'][u'start'] = u'1976'
     md[u'temporal_coverage'][u'end'] = u'2005'
-    md[u'title'] = CURRENT_TITLE
+    md[u'title'] = CURRENT_TITLE.format(month=month)
     md[u'acknowledgement'] = CURRENT_CITATION
     md[u'external_url'] = u'http://www.emast.org.au/our-infrastructure/observations/anuclimate_data/'
     md['genre'] = 'Climate'
@@ -143,7 +143,7 @@ def gen_metadatajson(template, dest, month):
 
     # Update layer info
     for filename in glob.glob(os.path.join(dest, '*', '*.tif')):
-        filename = filename[len(os.path.dirname(dest)):].lstrip('/')
+        filename = filename[len(dest):].lstrip('/')
 	md['files'][filename] = {
             'layer': LAYER_MAP[os.path.basename(filename)]
         }
@@ -176,7 +176,7 @@ def create_target_dir(destdir, resolution, month):
     """create zip folder structure in tmp location.
     return root folder
     """
-    basename = 'anuclim_{}_{}'.format(resolution, MONTH_LIST[month])
+    basename = 'anuclim_{}_{}'.format(resolution, MONTH_LIST[month][:3])
     root = os.path.join(destdir, basename)
     os.mkdir(root)
     os.mkdir(os.path.join(root, 'data'))
@@ -218,7 +218,7 @@ def main(argv):
         for month in range(0, 12):
             ziproot = create_target_dir(dest, '1km', month)
             convert(srcdir, ziproot, month+1)
-            gen_metadatajson(JSON_TEMPLATE, ziproot, month+1)
+            gen_metadatajson(JSON_TEMPLATE, ziproot, MONTH_LIST[month])
             zipbccvldataset(ziproot, dest)
     finally:
         # cleanup temp location
