@@ -143,7 +143,7 @@ def gen_metadatajson(template, dest, month):
 
     # Update layer info
     for filename in glob.glob(os.path.join(dest, '*', '*.tif')):
-        filename = filename[len(dest):].lstrip('/')
+        filename = filename[len(os.path.dirname(dest)):].lstrip('/')
 	md['files'][filename] = {
             'layer': LAYER_MAP[os.path.basename(filename)]
         }
@@ -190,11 +190,12 @@ def zipbccvldataset(ziproot, dest):
         workdir = os.path.dirname(ziproot)
         zipdir = os.path.basename(ziproot)
         os.chdir(workdir)
-        shutil.make_archive(zipdir, "zip", zipdir)
+        shutil.make_archive(zipdir, "zip", base_dir=zipdir)
         shutil.rmtree(zipdir)
-        os.chdir(pwd)
     except:
         raise Exception("can't zip {0}".format(ziproot))
+    finally:
+        os.chdir(pwd)
 
 
 def main(argv):
