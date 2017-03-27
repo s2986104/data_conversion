@@ -23,9 +23,15 @@
         	"current_monthly_Aug/data/tmin_01.tif": {
         		"layer": "TN1"
 		},
-        	"current_monthly_Aug/data/prec_01.tif": {
+        	"current_monthly_Aug/data/precSUM_01.tif": {
         		"layer": "PR1"
-		}
+		},
+        	"current_monthly_Aug/data/vapp_01.tif": {
+        		"layer": "mon_vapp1"
+		},
+        	"current_monthly_Aug/data/evap_01.tif": {
+        		"layer": "mon_evap1"
+		}		
 	},
 	"external_url": "http://www.emast.org.au/our-infrastructure/observations/anuclimate_data/",
 	"license": "Creative Commons Attribution 4.0 AU ihttp://creativecommons.org/licenses/by/4.0/",

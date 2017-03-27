@@ -14,18 +14,18 @@ CURRENT_TITLE = u'ANUClim (Australia), Current Climate {month} (1976-2005) , 30a
 JSON_TEMPLATE = 'anuclim.template.json'
 
 LAYER_MAP = {
-    'prec_01.tif': 'PR1',
-    'prec_02.tif': 'PR2',
-    'prec_03.tif': 'PR3',
-    'prec_04.tif': 'PR4',
-    'prec_05.tif': 'PR5',
-    'prec_06.tif': 'PR6',
-    'prec_07.tif': 'PR7',
-    'prec_08.tif': 'PR8',
-    'prec_09.tif': 'PR9',
-    'prec_10.tif': 'PR10',
-    'prec_11.tif': 'PR11',
-    'prec_12.tif': 'PR12',
+    'precSUM_01.tif': 'PR1',
+    'precSUM_02.tif': 'PR2',
+    'precSUM_03.tif': 'PR3',
+    'precSUM_04.tif': 'PR4',
+    'precSUM_05.tif': 'PR5',
+    'precSUM_06.tif': 'PR6',
+    'precSUM_07.tif': 'PR7',
+    'precSUM_08.tif': 'PR8',
+    'precSUM_09.tif': 'PR9',
+    'precSUM_10.tif': 'PR10',
+    'precSUM_11.tif': 'PR11',
+    'precSUM_12.tif': 'PR12',
     'tmax_01.tif': 'TX1',
     'tmax_02.tif': 'TX2',
     'tmax_03.tif': 'TX3',
@@ -77,7 +77,7 @@ LAYER_MAP = {
 }
 
 MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-SOURCE_DATASETS = [('tmax', 'tif'), ('tmin', 'tif'), ('prec', 'tif'), ('vapp', 'asc.gz'), ('evap', 'asc.gz')]
+SOURCE_DATASETS = [('tmax', 'tif'), ('tmin', 'tif'), ('precSUM', 'tif'), ('vapp', 'asc.gz'), ('evap', 'asc.gz')]
 
 def ungz(filename):
     """gunzip given filename.
@@ -208,7 +208,7 @@ def main(argv):
         srcdir = argv[1]
         dest = argv[2]
 
-        # source contains 5 zipped datasets: tmax, tmin, prec, vapp, eval. unzip them.
+        # source contains 5 zipped datasets: tmax, tmin, precSUM, vapp, eval. unzip them.
         source_dirs = []
         for filename, _ in SOURCE_DATASETS:
             srcfile = os.path.join(srcdir, filename + '.zip')
