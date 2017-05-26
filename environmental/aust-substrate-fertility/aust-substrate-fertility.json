@@ -1,0 +1,38 @@
+{
+    "bccvl_metadata_version": "2015-03-09-01",
+    "title": "Australian Substrate Fertility",
+    "genre": "Environmental",
+    "data_type": "Continuous",
+    "format": "GeoTIFF",
+    "resolution": "36 arcsec",
+    "geogcs": "GDA94",
+    "bounding_box": {
+        "top": " -9.0",
+        "right": "153.64",
+        "bottom": "-43.8",
+        "left": "112.0"
+    },
+    "temporal_coverage": {
+        "start": "",
+        "end": ""
+    },
+    "files": {
+        "australian_substrate_fertility/data/inherent_rock_fertility_index.tif": { "layer": "fert", "data_type": "discrete" },
+        "australian_substrate_fertility/data/mean_geological_age.tif": { "layer": "geollmeanage", "data_type": "continuous" },
+        "australian_substrate_fertility/data/pre-european_annual_soil_organic_carbon.tif": { "layer": "corg0", "data_type": "continuous" },
+        "australian_substrate_fertility/data/pre-european_soil_phosphorus.tif": { "layer": "ptotn0", "data_type": "continuous" }
+    },
+    "external_url": "",
+    "license": "Creative Commons Attribution 3.0 Australia Licence",
+    "acknowledgement": [ 
+        "These data build upon an original set of National environmental variables and metadata compiled by Dr Janet Stein of the ANU Fenner School (Stein 2008).",
+        "Data sources are acknowledged under Additional Metadata above. Geology, digital elevation model, topographic data, and Geophysics datasets were sourced from",
+        "Geoscience Australia. Terrain attributes were sourced from the ANU Fenner School. Soil attributes derived from the Atlas of Australian Soils were sourced",
+        "from the Australian Soil Resource Information System. Inherent rock fertility attributes were sourced from the ERIN unit of Department of Environment Water",
+        "Heritage and the Arts (DEWHA). For consistency with DEWHA requirements, the coast-expansion applied to the environmental data described here follows the",
+        "approach used by Mr Randal Storey (ERIN unit) for Maxent Modelling. This work was funded by DEWHA through Caring for our Country; a project lead by Dr",
+        "Simon Ferrier of CSIRO Entomology. Drs Mike Austin and Simon Ferrier contributed discussion which led to the generation of some of the indices",
+        "described here. Comments from Randal Storey improved this metadata description. Metadata level documentation of these data was supported the Atlas",
+        "of Living Australia’s Spatial Portal."
+    ]
+}
