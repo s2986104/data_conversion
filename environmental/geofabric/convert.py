@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os
+import os, sys
 import os.path
 import glob
 import json
@@ -8,31 +8,36 @@ import shutil
 import sys
 import re
 import zipfile
+import argparse
+import numpy
+import traceback
+from osgeo import gdal, ogr
+from osgeo.gdalconst import *
 
 
 JSON_TEMPLATE = "geofabric.template.json"
-JSON_TEMPLATE_ATTR = "geofabric_attr.template.json"
-
-cats = [('SH_Network.gdb.zip', 'catchment', 'ahgfcatchment'), 
-        ('SH_Network.gdb.zip' , 'stream', 'ahgfnetworkstream')]
+CATCHMENT_RASTER = 'NationalCatchmentBoundariesRaster1.tif'
+STREAM_RASTER = 'DEMDerivedStreamsRaster1.tif'
+ATTRIBUTE_FILE = "stream_attributesv1.1.5.gdb.zip"
+NODATA_VALUE = -99999
 
 layers = {
-    'catchment': [('stream_attributesv1.1.5.gdb.zip', 'climate', 'climate_lut', u'Climate Data from 9" DEM of Australia version 3 (2008), ANUCLIM (Fenner School)'), 
-                  ('stream_attributesv1.1.5.gdb.zip', 'vegetation', 'veg_lut', u'NVIS Major Vegetation sub-groups version 3.1'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'substrate', 'substrate_lut', u'Surface geology of Australia 1:1M'), 
-                  ('stream_attributesv1.1.5.gdb.zip', 'terrain', 'terrain_lut', u'Terrain Data from 9" DEM of Australia version 3 (2008)'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'landuse', 'landuse_lut', u'Catchment Scale Land Use Mapping for Australia Update (CLUM Update 04/09)'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'population', 'landuse_lut', u'ABS Population density within 2006 Australian Standard Geographic Classification census collector districts'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'npp', 'npp_lut', u'Net Primary Production (pre-1788)'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'rdi', 'rdi_geodata2_lut', u'River Disturbance Indeces and Factors')],
-    'stream':    [('stream_attributesv1.1.5.gdb.zip', 'climate', 'climate_lut', u'Climate Data from 9" DEM of Australia version 3 (2008), ANUCLIM (Fenner School)'), 
-                  ('stream_attributesv1.1.5.gdb.zip', 'vegetation', 'veg_lut', u'NVIS Major Vegetation sub-groups version 3.1'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'substrate', 'substrate_lut', u'Surface geology of Australia 1:1M'), 
-                  ('stream_attributesv1.1.5.gdb.zip', 'terrain', 'terrain_lut', u'Terrain Data from 9" DEM of Australia version 3 (2008)'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'landuse', 'landuse_lut', u'Catchment Scale Land Use Mapping for Australia Update (CLUM Update 04/09)'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'population', 'landuse_lut', u'ABS Population density within 2006 Australian Standard Geographic Classification census collector districts'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'network', 'network_lut', u'Stream Network from AusHydro version 1.1.6'),
-                  ('stream_attributesv1.1.5.gdb.zip', 'connectivity', 'connectivity_lut', u'Stream Connectivity from AusHydro version 1.1.6')]
+    'catchment': [(CATCHMENT_RASTER, 'climate', 'climate_lut', u'Climate Data from 9" DEM of Australia version 3 (2008), ANUCLIM (Fenner School)'), 
+                  (CATCHMENT_RASTER, 'vegetation', 'veg_lut', u'NVIS Major Vegetation sub-groups version 3.1'),
+                  (CATCHMENT_RASTER, 'substrate', 'substrate_lut', u'Surface geology of Australia 1:1M'), 
+                  (CATCHMENT_RASTER, 'terrain', 'terrain_lut', u'Terrain Data from 9" DEM of Australia version 3 (2008)'),
+                  (CATCHMENT_RASTER, 'landuse', 'landuse_lut', u'Catchment Scale Land Use Mapping for Australia Update (CLUM Update 04/09)'),
+                  (CATCHMENT_RASTER, 'population', 'landuse_lut', u'ABS Population density within 2006 Australian Standard Geographic Classification census collector districts'),
+                  (CATCHMENT_RASTER, 'npp', 'npp_lut', u'Net Primary Production (pre-1788)'),
+                  (CATCHMENT_RASTER, 'rdi', 'rdi_geodata2_lut', u'River Disturbance Indeces and Factors')],
+    'stream':    [(STREAM_RASTER, 'climate', 'climate_lut', u'Climate Data from 9" DEM of Australia version 3 (2008), ANUCLIM (Fenner School)'), 
+                  (STREAM_RASTER, 'vegetation', 'veg_lut', u'NVIS Major Vegetation sub-groups version 3.1'),
+                  (STREAM_RASTER, 'substrate', 'substrate_lut', u'Surface geology of Australia 1:1M'), 
+                  (STREAM_RASTER, 'terrain', 'terrain_lut', u'Terrain Data from 9" DEM of Australia version 3 (2008)'),
+                  (STREAM_RASTER, 'landuse', 'landuse_lut', u'Catchment Scale Land Use Mapping for Australia Update (CLUM Update 04/09)'),
+                  (STREAM_RASTER, 'population', 'landuse_lut', u'ABS Population density within 2006 Australian Standard Geographic Classification census collector districts'),
+                  (STREAM_RASTER, 'network', 'network_lut', u'Stream Network from AusHydro version 1.1.6'),
+                  (STREAM_RASTER, 'connectivity', 'connectivity_lut', u'Stream Connectivity from AusHydro version 1.1.6')]
 }
 
 # Attributes for dataset
@@ -84,147 +89,149 @@ attributes = {
 }
 
 
-
-def create_target_dir(basename):
+def create_target_dir(destdir, destfile):
     """create zip folder structure in tmp location.
     return root folder
     """
-    tmpdir = tempfile.mkdtemp(prefix=basename)
-    os.mkdir(os.path.join(tmpdir, basename))
-    os.mkdir(os.path.join(tmpdir, basename, 'data'))
-    os.mkdir(os.path.join(tmpdir, basename, 'bccvl'))
-    return tmpdir
+    root = os.path.join(destdir, destfile)
+    os.mkdir(root)
+    os.mkdir(os.path.join(root, 'data'))
+    os.mkdir(os.path.join(root, 'bccvl'))
+    return root
 
-def gen_metadatajson(template, ziproot, basename, baselayer, attrlayer, dbfilename):
+def update_metadatajson(dest, description, boundtype, layername):
     """read metadata template and populate rest of fields
-    and write to ziproot + '/bccvl/metadata.json'
+    and write to dest + '/bccvl/metadata.json'
     """
-    md = json.load(open(template, 'r'))
-
-    base_filename, baselyrname, basetable = baselayer
-    attr_filename, layername, attrtable, attrdesc = attrlayer
-        
-    # update dataset info
-    resolution = '9 arcsec'
-    if layername == 'climate':
-        md['title'] = 'Geofabric climate dataset ({cat}) {resolution} (2008)'.format(cat=baselyrname, resolution=resolution)
-        md['resolution'] = resolution
-
-    else:
-        md['title'] = md['title'].format(layername=layername, cat=baselyrname)
-    md['descriptions'] = attrdesc
-
-    # TODO: Shapefile has a max column length of 10 characters.
-    # The layername is the new table name which is same as basename
-    md['layers'] = ["{bfname}-{cat}.{afname}-{layername}.{attr}".format( 
-            bfname=base_filename, cat=basetable, afname=dbfilename, layername=basename, attr=attr)
-            for attr in truncate_name(attributes[baselyrname][layername])]
-    md['foreignKey'] = "segmentno"
-    md['base_filename'] = base_filename
-    md['attribute_filename'] = dbfilename
-
-    mdfile = open(os.path.join(ziproot, basename, 'bccvl', 'metadata.json'), 'w')
+    md = json.load(open(JSON_TEMPLATE, 'r'))
+    lyrname = 'Current Climate' if layername == 'climate' else layername.title()
+    md['title'] = 'Geofabric Australia, {layername} dataset ({boundtype}), (2008), 9 arcsec (250 m)'.format(layername=lyrname, boundtype=boundtype)
+    md['descriptions'] = description
+    md['genre'] = "Climate" if layername == 'climate' else 'Environmental'
+    mdfile = open(os.path.join(dest, 'bccvl', 'metadata.json'), 'w')
     json.dump(md, mdfile, indent=4)
     mdfile.close()
 
-def ogr_extract(attrfile, attrtable, attrlist, dest):
-    """Use ogr2ogr to extract relevant attributes from src file to dest"""
-    # The new table will have the same name as the output file
-    sqlcmd = 'select segmentno, {attributes} from {attrtable}'.format(attributes=','.join(attrlist), attrtable=attrtable)
-    ret = os.system('ogr2ogr -f "ESRI Shapefile" {outfile} {attrfile} {attrtable} -sql "{select}"'.format(
-                    outfile=dest, attrfile=attrfile, attrtable=attrtable, select=sqlcmd))
+def zip_dataset(ziproot, dest):
+    workdir = os.path.dirname(ziproot)
+    zipdir = os.path.basename(ziproot)
+    zipname = os.path.abspath(os.path.join(dest, zipdir + '.zip'))
+    ret = os.system(
+        'cd {0}; zip -r {1} {2}'.format(workdir, zipname, zipdir)
+    )
     if ret != 0:
-        raise Exception("can't extract attributes '{0}' from '{1}' ({2})".format(','.join(attrlist), attrtable, ret))
+        raise Exception("can't zip {0} ({1})".format(ziproot, ret))
 
-def convert(srcdir, ziproot, basename, baselayer, attrlayer, destfilename):
-    """Extract relevant attributes from the attribute table, and save it as Shapefile
-    """
-    # attribute file
-    attrfile = os.path.join(srcdir, attrlayer[0])
-    attrlist = attributes.get(baselayer[1], {}).get(attrlayer[1], [])
-    ogr_extract(attrfile, attrlayer[2], attrlist, os.path.join(ziproot, basename, 'data', destfilename))
+def get_attribute(attrname, tablename, attrgdbfile):
+    # Extract the attribute values from the attribute table
+    sqlcmd = "select segmentno, {attrname} from {tablename}".format(attrname=attrname, tablename=tablename)
+    attDriver = ogr.GetDriverByName("OpenFileGDB")
+    attDataSource = attDriver.Open(attrgdbfile, 0)
+    attLayer = attDataSource.ExecuteSQL(sqlcmd)
+    valueType = attLayer.GetLayerDefn().GetFieldDefn(1).GetType()   # 0 = integer
 
+    # Loop through to make an attribute dict
+    values = {}
+    for feature in attLayer:
+        segmentno = feature.GetField(0)
+        value = feature.GetField(1)
+        values[segmentno] = value
+    return (valueType, values)
 
-def zipbccvldataset(ziproot, destdir, basename):
-    zipname = os.path.abspath(os.path.join(destdir, basename + '.zip'))
-    cwd = os.getcwd()
-    os.chdir(ziproot)
-    zipdir(basename, zipname)
-    os.chdir(cwd)
+def extractAsGeotif(rasterLayer, bandData, attrname, tablename, attrgdbfile, outfilename):
+    # Get the attribute values and type (i.e. 0 = integer)
+    dtype, values = get_attribute(attrname, tablename, attrgdbfile)
+    pixel_dtype = GDT_Int32 if dtype == 0 else GDT_Float32
+    value_dtype = numpy.int32 if dtype == 0 else numpy.float32
 
-def zipdir(path, zipfilename):
+    # Create dataset for the layer output
+    driver = rasterLayer.GetDriver()
+    rows = rasterLayer.RasterYSize
+    cols = rasterLayer.RasterXSize
+
     try:
-        zipf = zipfile.ZipFile(zipfilename, 'w', zipfile.ZIP_DEFLATED)
-        # zipf is zipfile handle
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                zipf.write(os.path.join(root, file))
-    except Exception as e:
-        raise Exception("can't zip {0}: {1}".format(ziproot, str(e)))
-    finally:
-        zipf.close()
+        outData = None
+        outDataset = driver.Create(outfilename, cols, rows, 1, pixel_dtype, ['COMPRESS=LZW', 'TILED=YES'])
+        if outDataset is None:
+            raise Exception('Could not create {}'.format(outfilename))
 
-def truncate_name(namelist, maxchar=10):
-    # Truncate the field names as during the conversion from gdb to shapefile would using ogr2ogr.
-    # TODO: Check this work for all cases
-    truncatedList = [name[:maxchar] for name in namelist]
-    for i in range(len(truncatedList)):
-        index = [i]
-        for j in range(len(truncatedList)):
-            if i != j and truncatedList[j] == truncatedList[i]:
-                index.append(j)
-        # Change name again; the last 2 character is _{digit}
-        if len(index) > 1:
-            for k in range(1, len(index)):
-                tname = truncatedList[index[k]][:(maxchar-2)] + "_{}".format(k)
-                truncatedList[index[k]] = tname
-    return truncatedList
+        #outData = numpy.full((rows, cols), NODATA_VALUE, dtype=value_dtype)
+        mapfunc = numpy.vectorize(values.get, otypes=[value_dtype])
+        outData = mapfunc(bandData, NODATA_VALUE)
+        del values
+
+        # write the data
+        outBand = outDataset.GetRasterBand(1)
+        outBand.WriteArray(outData, 0, 0)
+
+        # flush data to disk, set the NoData value and calculate stats
+        outBand.FlushCache()
+        outBand.SetNoDataValue(NODATA_VALUE)
+
+        # georeference the image and set the projection
+        outDataset.SetGeoTransform(rasterLayer.GetGeoTransform())
+        outDataset.SetProjection(rasterLayer.GetProjection())
+    finally:
+        # Release dataset
+        if outDataset:
+            outDataset = None
+        if outData is not None:
+            del outData
+
 
 def main(argv):
     ziproot = None
     srcdir = None
+    parser = argparse.ArgumentParser(description='Convert Geofabric datasets in gdb to geotif format')
+    parser.add_argument('srcdir', type=str, help='source directory')
+    parser.add_argument('destdir', type=str, help='output directory')
+    parser.add_argument('--type', type=str, choices=['catchment', 'stream'], help='boundary type')
+    parser.add_argument('--table', type=str, help='table name i.e. climate')
+    params = vars(parser.parse_args(argv[1:]))
+    srcdir = params.get('srcdir')
+    destdir = params.get('destdir')
+    boundtypes = [params.get('type')] if params.get('type') is not None else ['catchment', 'stream']
+    table = params.get('table', None)
+
     try:
-        if len(argv) != 3:
-            print "Usage: {0} <srczip> <destdir>".format(argv[0])
-            sys.exit(1)
-        srcdir = argv[1]
-        destdir = argv[2]
+        for boundtype in boundtypes:
+            for rasterfile, layername, tablename, description in layers[boundtype]:
+                if table and layername != table:
+                    continue
 
-        # Geospatial item as zip file
-        basefilename = 'SH_Network.gdb.zip'
-        base_dir = 'geofabric_geospatial.gdb'   # gdb file
-        ziproot = create_target_dir(base_dir)
+                # Create a dataset for each boundary type and associated table
+                try:
+                    destfile = 'geofabric_{}_{}'.format(boundtype, layername)
+                    ziproot = create_target_dir(destdir, destfile)
 
-        # Copy file to the data directory
-        shutil.copy(os.path.join(srcdir, basefilename), os.path.join(ziproot, base_dir, 'data'))
-        shutil.copy(JSON_TEMPLATE, os.path.join(ziproot, base_dir, 'bccvl', 'metadata.json'))
+                    # Open the catchmen/stream boundary raster layer
+                    rasterLayer = gdal.Open(os.path.join(srcdir, rasterfile))
+                    if rasterLayer is None:
+                        raise Exception('Could not open file {}'.format(rasterfile))
 
-        zipbccvldataset(ziproot, destdir, base_dir)
-        if ziproot:
-            shutil.rmtree(ziproot)
+                    # read in the band data and get info about it
+                    band1 = rasterLayer.GetRasterBand(1)
+                    rows = rasterLayer.RasterYSize
+                    cols = rasterLayer.RasterXSize
+                    bandData = band1.ReadAsArray(0, 0, cols, rows)
 
-        # Generate Geofabric attribute dataset as zip file
-        for baselayer in cats:
-            for attrlayer in layers[baselayer[1]]:
-                base_dir = '{baselayer}_{attrlayer}'.format(baselayer=baselayer[1], attrlayer=attrlayer[1])
-                shpfilename = base_dir + '.dbf'  # shape file
-                ziproot = create_target_dir(base_dir)
+                    # For each attribute in the table, create a layer geotif file 
+                    for attrname in attributes[boundtype].get(layername, {}):
+                        attr_gdbfilename = os.path.join(srcdir, ATTRIBUTE_FILE)
+                        outfilename = os.path.join(ziproot, "data", "{}_{}_{}.tif".format(boundtype, layername, attrname))
+                        print("generating {} ...".format(outfilename))
+                        extractAsGeotif(rasterLayer, bandData, attrname, tablename, attr_gdbfilename, outfilename)
 
-                # Extract the layer from attribute file and save as Shapefile
-                convert(srcdir, ziproot, base_dir, baselayer, attrlayer, shpfilename)
-
-                # Generate metadata
-                gen_metadatajson(JSON_TEMPLATE_ATTR, ziproot, base_dir, baselayer, attrlayer, shpfilename)
-                zipbccvldataset(ziproot, destdir, base_dir)
-                if ziproot:
-                    shutil.rmtree(ziproot)
+                    # Update metada file and zip out the dataset
+                    update_metadatajson(ziproot, description, boundtype, layername)
+                    zip_dataset(ziproot, destdir)
+                finally:
+                    # delete temp directory for the dataset
+                    if ziproot and os.path.exists(ziproot):
+                        shutil.rmtree(ziproot)
     except Exception as e:
+        traceback.print_exc()
         print "Fail to convert: ", e
-    finally:
-        # cleanup temp location
-        if ziproot and os.path.exists(ziproot):
-            shutil.rmtree(ziproot)
-
 
 if __name__ == '__main__':
     main(sys.argv)

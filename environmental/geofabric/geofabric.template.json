@@ -4,13 +4,14 @@
     "description": "",
     "genre": "Environmental",
     "data_type": "Continuous",
-    "format": "GDB",
+    "format": "GeoTIFF",
+    "resolution": "9 arcsec",
     "geogcs": "WGS84",
     "bounding_box": {
-        "top": "-9.1975000",
-        "right": "112.9225000",
-        "bottom": "-43.7400000",
-        "left": "-153.6375000"
+        "top": "-9.1000000",
+        "right": "154.0000000",
+        "bottom": "-43.7425000",
+        "left": "112.9000000"
     },
     "temporal_coverage": {
         "start": "2008",
