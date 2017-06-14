@@ -21,7 +21,7 @@ STREAM_RASTER = 'DEMDerivedStreamsRaster1.tif'
 ATTRIBUTE_FILE = "stream_attributesv1.1.5.gdb.zip"
 NODATA_VALUE = -99999
 
-layers = {
+GEOFABRIC_LAYERS = {
     'catchment': [(CATCHMENT_RASTER, 'climate', 'climate_lut', u'Climate Data from 9" DEM of Australia version 3 (2008), ANUCLIM (Fenner School)'), 
                   (CATCHMENT_RASTER, 'vegetation', 'veg_lut', u'NVIS Major Vegetation sub-groups version 3.1'),
                   (CATCHMENT_RASTER, 'substrate', 'substrate_lut', u'Surface geology of Australia 1:1M'), 
@@ -41,7 +41,7 @@ layers = {
 }
 
 # Attributes for dataset
-attributes = {
+GEOFABRIC_ATTRIBUTES = {
     'catchment': {
         'climate': ['catannrad', 'catanntemp', 'catcoldmthmin', 'cathotmthmax', 'catannrain', 'catdryqrain', 
                     'catwetqrain', 'catwarmqrain', 'catcoldqrain', 'catcoldqtemp', 'catdryqtemp', 'catwetqtemp',
@@ -88,6 +88,261 @@ attributes = {
     }
 }
 
+# BCCVL layer vocabularies
+BCCVL_LAYER_TYPES = {
+    # climate types
+    'catannrad' : 'B20',
+    'catanntemp' : 'B01',
+    'catcoldmthmin' : 'B06',
+    'cathotmthmax' : 'B05',
+    'catannrain' : 'B12',
+    'catdryqrain' : 'B17',
+    'catwetqrain' : 'B16',
+    'catwarmqrain' : 'B18',
+    'catcoldqrain' : 'B19',
+    'catcoldqtemp' : 'B11',
+    'catdryqtemp' : 'B09',
+    'catwetqtemp' : 'B08',
+    'catanngromega' : 'megathermgrowindex',
+    'catanngromeso' : 'mesothermgrowindex',
+    'catanngromicro' : 'microthermgrowindex',
+    'catgromegaseas' : 'megaseasongrowindex',
+    'catgromesoseas' : 'mesoseasongrowindex',
+    'catgromicroseas' : 'microseasongrowindex',
+    'caterosivity' : 'rainerosivityfactor',
+    'suberosivity' : 'rainerosivityfactor',
+    'strannrad' : 'B20',
+    'stranntemp' : 'B01',
+    'strcoldmthmin' : 'B06',
+    'strhotmthmax' : 'B05',
+    'strcoldqtemp' : 'B11',
+    'strdryqtemp' : 'B09',
+    'strwetqtemp' : 'B08',
+    'strannrain' : 'B12',
+    'strdryqrain' : 'B17',
+    'strwetqrain' : 'B16',
+    'strwarmqrain' : 'B18',
+    'strcoldqrain' : 'B19',
+    'stranngromega' : 'megathermgrowindex',
+    'stranngromeso' : 'mesothermgrowindex',
+    'stranngromicro' : 'microthermgrowindex',
+    'strgromegaseas' : 'megaseasongrowindex',
+    'strgromesoseas' : 'mesoseasongrowindex',
+    'strgromicroseas' : 'microseasongrowindex',
+    # substrate types
+    'cat_carbnatesed' : 'carbonatesedimentrock',
+    'cat_igneous' : 'igneousrock',
+    'cat_metamorph' : 'metamorphicrock',
+    'cat_oldrock' : 'oldbedrock',
+    'cat_othersed' : 'othersedimentrock',
+    'cat_sedvolc' : 'mixedsedimentigneousrock',
+    'cat_silicsed' : 'siliciclasticrock',
+    'cat_unconsoldted' : 'unconsolidatedrock',
+    'cat_a_ksat' : 'sathydraulicconductivity',
+    'cat_solpawhc' : 'WaterHoldCapacity',
+    'str_carbnatesed' : 'carbonatesedimentrock',
+    'str_igneous' : 'igneousrock',
+    'str_metamorph' : 'metamorphicrock',
+    'str_oldrock' : 'oldbedrock',
+    'str_othersed' : 'othersedimentrock',
+    'str_sedvolc' : 'mixedsedimentigneousrock',
+    'str_silicsed' : 'siliciclasticrock',
+    'str_unconsoldted' : 'unconsolidatedrock',
+    'str_a_ksat' : 'sathydraulicconductivity',
+    'str_claya' : 'clayAhorizon',
+    'str_clayb' : 'clayBhorizon',
+    'str_sanda' : 'sandAhorizon',
+    # terrain types
+    'catarea' : 'areatotal',
+    'catareadiv' : 'areadivided',
+    'catelemax' : 'elevationmax',
+    'catelemean' : 'elevationmean',
+    'catrelief' : 'relief',
+    'catslope' : 'slope',
+    'catstorage' : 'storage',
+    'elongratio' : 'elongationratio',
+    'reliefratio' : 'reliefratio',
+    'subarea' : '',
+    'subelemax' : '',
+    'subelemean' : '',
+    'subslope' : '',
+    'subslope.gt.10' : '',
+    'subslope.gt.30' : '',
+    'strahler' : 'strahlerorder',
+    'strelemax' : 'segelevationmax',
+    'strelemean' : 'segelevationmean',
+    'strelemin' : 'segelevationmin',
+    'valleyslope' : 'segslope',
+    'downavgslp' : 'downstreamslope',
+    'downmaxslp' : 'downstreamslopemax',
+    'upsdist' : 'sourcedistance',
+    'd2outlet' : 'outletdistance',
+    'aspect' : 'localaspect',
+    'confinement' : 'confinement',
+    # vegetation types
+    'catbare_ext' : 'bareextant',
+    'catforests_ext' : 'forestcover',
+    'catgrasses_ext' : 'grasscover',
+    'catnodata_ext' : 'nodataextant',
+    'catwoodlands_ext' : 'woodlandcover',
+    'catshrubs_ext' : 'shrubcover',
+    'catbare_nat' : 'naturallybare',
+    'catforests_nat' : 'natforestcover',
+    'catgrasses_nat' : 'natgrasscover',
+    'catnodata_nat' : 'natnodata',
+    'catshrubs_nat' : 'natshrubcover',
+    'catwoodlands_nat' : 'natwoodlandcover',
+    'strbare_ext' : 'bareextant',
+    'strforests_ext' : 'forestcover',
+    'strgrasses_ext' : 'grasscover',
+    'strnodata_ext' : 'nodataextant',
+    'strwoodlands_ext' : 'woodlandcover',
+    'strshrubs_ext' : 'shrubcover',
+    'strbare_nat' : 'naturallybare',
+    'strforests_nat' : 'natforestcover',
+    'strgrasses_nat' : 'natgrasscover',
+    'strnodata_nat' : 'natnodata',
+    'strwoodlands_nat' : 'natwoodlandcover',
+    'strshrubs_nat' : 'natshrubcover',
+    # NPP types
+    'nppbaseann' : 'npp00', 
+    'nppbase1' : 'npp01',   
+    'nppbase2' : 'npp02',   
+    'nppbase3' : 'npp03',   
+    'nppbase4' : 'npp04',   
+    'nppbase5' : 'npp05',   
+    'nppbase6' : 'npp06',   
+    'nppbase7' : 'npp07',   
+    'nppbase8' : 'npp08',   
+    'nppbase9' : 'npp09',   
+    'nppbase10' : 'npp10',  
+    'nppbase11' : 'npp11',  
+    'nppbase12' : 'npp12',  
+    # Landuse types (including population)
+    'cat_mod' : 'modifiedland',
+    'cat_irr' : 'irrigatedland',
+    'cat_aqu' : 'aquaculture',
+    'cat_intan' : 'animalproduction',
+    'cat_intpl' : 'plantproduction',
+    'cat_pest' : 'pestherbicidesused',
+    'cat_fert' : 'fertilzerused',
+    'cat_forstry' : 'forestryland',
+    'cat_mining' : 'miningland',
+    'cat_urban' : 'urbanland',
+    'cat_drainage' : 'irridrainageland',
+    'cat_artimp' : 'artficialimpoundment',
+    'cat_road' : 'roadland',
+    'sub_mod' : 'modifiedland',
+    'sub_irr' : 'irrigatedland',
+    'sub_aqu' : 'aquaculture',
+    'sub_intan' : 'animalproduction',
+    'sub_intpl' : 'plantproduction',
+    'sub_pest' : 'pestherbicidesused',
+    'sub_fert' : 'fertilzerused',
+    'sub_for' : 'forestryland',
+    'sub_min' : 'miningland',
+    'sub_urb' : 'urbanland',
+    'sub_drain' : 'irridrainageland',
+    'sub_artimp' : 'artficialimpoundment',
+    'sub_road' : 'roadland',
+    'str_mod' : 'modifiedland',
+    'str_irr' : 'irrigatedland',
+    'str_aqu' : 'aquaculture',
+    'str_intan' : 'animalproduction',
+    'str_intpl' : 'plantproduction',
+    'str_pest' : 'pestherbicidesused',
+    'str_fert' : 'fertilzerused',
+    'str_forstry' : 'forestryland',
+    'str_mining' : 'miningland',
+    'str_urban' : 'urbanland',
+    'str_drainage' : 'irridrainageland',
+    'str_artimp' : 'artficialimpoundment',
+    'str_road' : 'roadland',
+    'catpopmax' : 'popdensitymean',
+    'catpopmean' : 'popdensitymax',
+    'catpop_gt_1' : 'popdensitygter1',
+    'catpop_gt_10' : 'popdensitygter10',
+    'subpopmean' : 'popdensitymean',
+    'subpopmax' : 'popdensitymax',
+    'subpop_gt_1' : 'popdensitygter1',
+    'subpop_gt_10' : 'popdensitygter10',
+    'strpopmean' : 'popdensitymean',
+    'strpopmax' : 'popdensitymax',
+    'strpop_gt_1' : 'popdensitygter1',
+    'strpop_gt_10' : 'popdensitygter10',
+    # RDI types
+    'cdi' : 'catdisturbindex',
+    'scdi' : 'subcatdisturbindex',
+    'sfrdi' : 'segflowdisturbindex',
+    'frdi' : 'flowregimedisturbindex',
+    'rdi' : 'riverdisturbindex',
+    'ef' : 'extindsrcptfactor',
+    'luf' : 'landusefactor',
+    'lbf' : 'leveebankfactor',
+    'nwisf' : 'nwisettlefactor',
+    'gdsf' : 'geodatasettlefactor',
+    'sdsf' : 'otherdatasettlefactor',
+    'sf' : 'maxsettlefactor',
+    'nwiif' : 'nwiinffactor',
+    'gdif' : 'geodatainffactor',
+    'if' : 'maxinffactor',
+    'nwiimf' : 'nwiimpfactor',
+    'gdimf' : 'geodataimpfactor',
+    'imf' : 'maximpfactor',
+    'nwifdf' : 'nwidiverfactor',
+    'gdfdf' : 'geodatadiverfactor',
+    'fdf' : 'maxdiverfactor',
+    'sdif' : 'sdif',
+    'nwief' : 'nwief',
+    'gdef' : 'gdef',
+    'sdef' : 'sdef',
+    'sdimf' : 'sdimf',
+    'sdfdf' : 'sdfdf',
+    # Connectivity types
+    'conlen' : 'barfreelengmin',
+    'conlenres' : 'barfreelengresv',
+    'conlendam' : 'barfreelengdam',
+    'totlen' : 'totalcatlength',
+    'dupreservr' : 'maxupstbffplengres',
+    'd2reservor' : 'unrestdowndistres',
+    'distupdamw' : 'maxupstbffplengdam',
+    'd2damwall' : 'unrestdowndistdam',
+    'artfbarier' : 'barrierupdownstr',
+    'barrierdown' : 'barrierdownstr',
+    'barrierup' : 'barrierupstr',
+    'cliffdown' : 'cliffupstr',
+    'cliffup' : 'cliffupstr',
+    'waterfall' : 'waterfallflow',
+    'wfalldown' : 'waterfallupstr',
+    'waterfallup' : 'waterfalldownstr',
+    # Network types
+    'strdensity' : 'strdensity',
+    'lakes' : 'lakeportion',
+    'springs' : 'springportion',
+    'watcrsarea' : 'watercourseportion',
+    'waterholes' : 'waterholeportion',
+    'wateryness' : 'waterynessind',
+    'rchlen' : 'strsegmentleng',
+    'no_waterholes' : 'waterholecount',
+    'no_springs' : 'springcount',
+    'km_waterholes' : 'waterholedensity',
+    'km_springs' : 'springdensity',
+    'a_lakes' : 'lakearea',
+    'km_lakes' : 'lakedensity',
+    'a_wcourse' : 'watercoursearea',
+    'km_wcourse' : 'watercoursedensity',
+}
+
+def geotif_output_filename(destdir, boundtype, layername, attrname):
+    return os.path.join(destdir, "data", "{}_{}_{}.tif".format(boundtype, layername, attrname))
+
+def getDataType(rasterfile):
+    rasterLayer = gdal.Open(rasterfile)
+    if rasterLayer is None:
+        raise Exception('Could not open file {}'.format(rasterfile))
+    dtype = rasterLayer.GetRasterBand(1).DataType
+    rasterLayer = None
+    return dtype
 
 def create_target_dir(destdir, destfile):
     """create zip folder structure in tmp location.
@@ -99,15 +354,31 @@ def create_target_dir(destdir, destfile):
     os.mkdir(os.path.join(root, 'bccvl'))
     return root
 
-def update_metadatajson(dest, description, boundtype, layername):
+def generate_metadatajson(dest, description, boundtype, layername, updatemd=False):
     """read metadata template and populate rest of fields
     and write to dest + '/bccvl/metadata.json'
     """
     md = json.load(open(JSON_TEMPLATE, 'r'))
     lyrname = 'Current Climate' if layername == 'climate' else layername.title()
     md['title'] = 'Geofabric Australia, {layername} dataset ({boundtype}), (2008), 9 arcsec (250 m)'.format(layername=lyrname, boundtype=boundtype)
-    md['descriptions'] = description
+    md['description'] = description
     md['genre'] = "Climate" if layername == 'climate' else 'Environmental'
+
+    # Add in the layer information. Unzip existing zip dataset if update metadata only
+    if updatemd:
+        unzip_dataset(dest, os.path.dirname(dest.strip('/')))
+
+    filesmd = {}
+    for attrname in GEOFABRIC_ATTRIBUTES[boundtype].get(layername, {}):
+        full_pathname = geotif_output_filename(dest, boundtype, layername, attrname)
+        zip_pathname = geotif_output_filename(os.path.basename(dest.strip('/')), boundtype, layername, attrname)
+        dtype = getDataType(full_pathname)
+        filesmd[zip_pathname] = { 
+            "layer": BCCVL_LAYER_TYPES[attrname], 
+            "data_type": "discrete" if dtype == GDT_Int32 else "continuous" 
+        }
+    md['files'] = filesmd
+
     mdfile = open(os.path.join(dest, 'bccvl', 'metadata.json'), 'w')
     json.dump(md, mdfile, indent=4)
     mdfile.close()
@@ -121,6 +392,29 @@ def zip_dataset(ziproot, dest):
     )
     if ret != 0:
         raise Exception("can't zip {0} ({1})".format(ziproot, ret))
+
+def unzip_dataset(ziproot, dest):
+    workdir = os.path.dirname(ziproot)
+    zipdir = os.path.basename(ziproot)
+    zipname = os.path.abspath(os.path.join(dest, zipdir + '.zip'))
+    ret = os.system(
+        'cd {0}; unzip -o {1}'.format(workdir, zipname)
+    )
+    if ret != 0:
+        raise Exception("can't unzip {0} ({1})".format(zipname, ret))
+
+def update_dataset_file(ziproot, dest, datapath=os.path.join('bccvl', 'metadata.json')):
+    workdir = os.path.dirname(ziproot)
+    zipdir = os.path.basename(ziproot)
+    zipname = os.path.abspath(os.path.join(dest, zipdir + '.zip'))
+
+    # Replace the specified file of the zip dataset
+    print "Updating {0} with {1}".format(ziproot, datapath)
+    ret = os.system(
+        'cd {0}; zip -m {1} {2}'.format(workdir, zipname, os.path.join(zipdir, datapath))
+    )
+    if ret != 0:
+        raise Exception("can't update {0} with {1} ({2})".format(zipname, datapath, ret))
 
 def get_attribute(attrname, tablename, attrgdbfile):
     # Extract the attribute values from the attribute table
@@ -141,8 +435,8 @@ def get_attribute(attrname, tablename, attrgdbfile):
 def extractAsGeotif(rasterLayer, bandData, attrname, tablename, attrgdbfile, outfilename):
     # Get the attribute values and type (i.e. 0 = integer)
     dtype, values = get_attribute(attrname, tablename, attrgdbfile)
-    pixel_dtype = GDT_Int32 if dtype == 0 else GDT_Float32
-    value_dtype = numpy.int32 if dtype == 0 else numpy.float32
+    pixel_dtype = GDT_Int32 if dtype == ogr.OFTInteger else GDT_Float32
+    value_dtype = numpy.int32 if dtype == ogr.OFTInteger else numpy.float32
 
     # Create dataset for the layer output
     driver = rasterLayer.GetDriver()
@@ -187,15 +481,17 @@ def main(argv):
     parser.add_argument('destdir', type=str, help='output directory')
     parser.add_argument('--type', type=str, choices=['catchment', 'stream'], help='boundary type')
     parser.add_argument('--table', type=str, help='table name i.e. climate')
+    parser.add_argument('--updatemd', action='store_true', help='update metadata file')
     params = vars(parser.parse_args(argv[1:]))
     srcdir = params.get('srcdir')
     destdir = params.get('destdir')
     boundtypes = [params.get('type')] if params.get('type') is not None else ['catchment', 'stream']
     table = params.get('table', None)
-
+    updmd = params.get('updatemd', False)
+    
     try:
         for boundtype in boundtypes:
-            for rasterfile, layername, tablename, description in layers[boundtype]:
+            for rasterfile, layername, tablename, description in GEOFABRIC_LAYERS[boundtype]:
                 if table and layername != table:
                     continue
 
@@ -204,27 +500,36 @@ def main(argv):
                     destfile = 'geofabric_{}_{}'.format(boundtype, layername)
                     ziproot = create_target_dir(destdir, destfile)
 
-                    # Open the catchmen/stream boundary raster layer
-                    rasterLayer = gdal.Open(os.path.join(srcdir, rasterfile))
-                    if rasterLayer is None:
-                        raise Exception('Could not open file {}'.format(rasterfile))
+                    # generating geotif files if update metadata is not speciedied
+                    if not updmd:
+                        # Open the catchmen/stream boundary raster layer
+                        rasterLayer = gdal.Open(os.path.join(srcdir, rasterfile))
+                        if rasterLayer is None:
+                            raise Exception('Could not open file {}'.format(rasterfile))
 
-                    # read in the band data and get info about it
-                    band1 = rasterLayer.GetRasterBand(1)
-                    rows = rasterLayer.RasterYSize
-                    cols = rasterLayer.RasterXSize
-                    bandData = band1.ReadAsArray(0, 0, cols, rows)
+                        # read in the band data and get info about it
+                        band1 = rasterLayer.GetRasterBand(1)
+                        rows = rasterLayer.RasterYSize
+                        cols = rasterLayer.RasterXSize
+                        bandData = band1.ReadAsArray(0, 0, cols, rows)
 
-                    # For each attribute in the table, create a layer geotif file 
-                    for attrname in attributes[boundtype].get(layername, {}):
-                        attr_gdbfilename = os.path.join(srcdir, ATTRIBUTE_FILE)
-                        outfilename = os.path.join(ziproot, "data", "{}_{}_{}.tif".format(boundtype, layername, attrname))
-                        print("generating {} ...".format(outfilename))
-                        extractAsGeotif(rasterLayer, bandData, attrname, tablename, attr_gdbfilename, outfilename)
+                        # For each attribute in the table, create a layer geotif file 
+                        for attrname in GEOFABRIC_ATTRIBUTES[boundtype].get(layername, {}):
+                            attr_gdbfilename = os.path.join(srcdir, ATTRIBUTE_FILE)
+                            outfilename = geotif_output_filename(ziproot, boundtype, layername, attrname)
+                            print("generating {} ...".format(outfilename))
+                            extractAsGeotif(rasterLayer, bandData, attrname, tablename, attr_gdbfilename, outfilename)
 
-                    # Update metada file and zip out the dataset
-                    update_metadatajson(ziproot, description, boundtype, layername)
-                    zip_dataset(ziproot, destdir)
+                        # Close the raster layer
+                        rasterLayer = None
+
+                    # generate metada file and zip out/update the dataset
+                    generate_metadatajson(ziproot, description, boundtype, layername, updmd)
+                    if updmd:
+                        # Replace metadata file in the zipped dataset
+                        update_dataset_file(ziproot, destdir, os.path.join('bccvl', 'metadata.json'))
+                    else:
+                        zip_dataset(ziproot, destdir)
                 finally:
                     # delete temp directory for the dataset
                     if ziproot and os.path.exists(ziproot):
