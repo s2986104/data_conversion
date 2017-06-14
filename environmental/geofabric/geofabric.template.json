@@ -14,8 +14,8 @@
         "left": "112.9000000"
     },
     "temporal_coverage": {
-        "start": "2008",
-        "end": "2008"
+        "start": "",
+        "end": ""
     },
         "files": {
         "geofabric_catchment_climate/data/catchment_climate_catannrad.tif": { "layer": "B20", "data_type": "continuous" },

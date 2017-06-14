@@ -360,7 +360,7 @@ def generate_metadatajson(dest, description, boundtype, layername, updatemd=Fals
     """
     md = json.load(open(JSON_TEMPLATE, 'r'))
     lyrname = 'Current Climate' if layername == 'climate' else layername.title()
-    md['title'] = 'Geofabric Australia, {layername} dataset ({boundtype}), (2008), 9 arcsec (250 m)'.format(layername=lyrname, boundtype=boundtype)
+    md['title'] = 'Freshwater {boundtype} Data (Australia), {layername}, 9 arcsec (~250 m)'.format(layername=lyrname, boundtype=boundtype.title())
     md['description'] = description
     md['genre'] = "Climate" if layername == 'climate' else 'Environmental'
 
