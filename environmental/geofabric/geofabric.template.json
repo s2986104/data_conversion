@@ -19,7 +19,7 @@
     },
         "files": {
         "geofabric_catchment_climate/data/catchment_climate_catannrad.tif": { "layer": "B20", "data_type": "continuous" },
-        "geofabric_catchment_climate/data/catchment_climate_catannremp.tif": { "layer": "B01", "data_type": "continuous" },
+        "geofabric_catchment_climate/data/catchment_climate_catannremp.tif": { "layer": "B01", "data_type": "continuous" }
     },
     "external_url": "http://www.bom.gov.au/water/geofabric",
     "license": "CC BY 3.0 AU",
