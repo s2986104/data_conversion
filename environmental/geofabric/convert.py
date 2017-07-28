@@ -429,6 +429,9 @@ def get_attribute(attrname, tablename, attrgdbfile):
     for feature in attLayer:
         segmentno = feature.GetField(0)
         value = feature.GetField(1)
+        # Replacing -99 with nodatavalue
+        if value == -99.0:
+            value = NODATA_VALUE
         values[segmentno] = value
     return (valueType, values)
 
@@ -449,7 +452,6 @@ def extractAsGeotif(rasterLayer, bandData, attrname, tablename, attrgdbfile, out
         if outDataset is None:
             raise Exception('Could not create {}'.format(outfilename))
 
-        #outData = numpy.full((rows, cols), NODATA_VALUE, dtype=value_dtype)
         mapfunc = numpy.vectorize(values.get, otypes=[value_dtype])
         outData = mapfunc(bandData, NODATA_VALUE)
         del values
