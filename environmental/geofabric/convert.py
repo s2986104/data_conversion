@@ -310,7 +310,7 @@ BCCVL_LAYER_TYPES = {
     'artfbarier' : 'barrierupdownstr',
     'barrierdown' : 'barrierdownstr',
     'barrierup' : 'barrierupstr',
-    'cliffdown' : 'cliffupstr',
+    'cliffdown' : 'cliffdownstr',
     'cliffup' : 'cliffupstr',
     'waterfall' : 'waterfallflow',
     'wfalldown' : 'waterfallupstr',
@@ -373,9 +373,12 @@ def generate_metadatajson(dest, description, boundtype, layername, updatemd=Fals
         full_pathname = geotif_output_filename(dest, boundtype, layername, attrname)
         zip_pathname = geotif_output_filename(os.path.basename(dest.strip('/')), boundtype, layername, attrname)
         dtype = getDataType(full_pathname)
+        data_type = "continuous"
+        if dtype == GDT_Int32 and BCCVL_LAYER_TYPES[attrname] not in ['watercoursearea', 'lakearea', 'springcount', 'waterholecount']:
+            data_type = "discrete"
         filesmd[zip_pathname] = { 
             "layer": BCCVL_LAYER_TYPES[attrname], 
-            "data_type": "discrete" if dtype == GDT_Int32 else "continuous" 
+            "data_type": data_type
         }
     md['files'] = filesmd
 
