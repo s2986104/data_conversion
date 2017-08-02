@@ -16,6 +16,7 @@ from osgeo.gdalconst import *
 
 
 JSON_TEMPLATE = "geofabric.template.json"
+RAT_XML_TEMPLATE = "geofabric.rat.xml"
 CATCHMENT_RASTER = 'NationalCatchmentBoundariesRaster1.tif'
 STREAM_RASTER = 'DEMDerivedStreamsRaster1.tif'
 ATTRIBUTE_FILE = "stream_attributesv1.1.5.gdb.zip"
@@ -375,7 +376,12 @@ def generate_metadatajson(dest, description, boundtype, layername, updatemd=Fals
         dtype = getDataType(full_pathname)
         data_type = "continuous"
         if dtype == GDT_Int32 and BCCVL_LAYER_TYPES[attrname] not in ['watercoursearea', 'lakearea', 'springcount', 'waterholecount']:
-            data_type = "discrete"
+            data_type = "categorical"
+
+        if BCCVL_LAYER_TYPES[attrname] in ['barrierdownstr', 'barrierupdownstr', 'barrierupstr', \
+                'cliffdownstr', 'cliffupstr', 'waterfalldownstr', 'waterfallflow', 'waterfallupstr']:
+            data_type = "categorical"
+
         filesmd[zip_pathname] = { 
             "layer": BCCVL_LAYER_TYPES[attrname], 
             "data_type": data_type
@@ -427,6 +433,10 @@ def get_attribute(attrname, tablename, attrgdbfile):
     attLayer = attDataSource.ExecuteSQL(sqlcmd)
     valueType = attLayer.GetLayerDefn().GetFieldDefn(1).GetType()   # 0 = integer
 
+    # Check whether to include RAT aux.xml file
+    include_rat = BCCVL_LAYER_TYPES[attrname] in ['barrierdownstr', 'barrierupdownstr', 'barrierupstr', \
+            'cliffdownstr', 'cliffupstr', 'waterfalldownstr', 'waterfallflow', 'waterfallupstr']
+
     # Loop through to make an attribute dict
     values = {}
     for feature in attLayer:
@@ -436,11 +446,11 @@ def get_attribute(attrname, tablename, attrgdbfile):
         if value == -99.0:
             value = NODATA_VALUE
         values[segmentno] = value
-    return (valueType, values)
+    return (valueType, values, include_rat)
 
 def extractAsGeotif(rasterLayer, bandData, attrname, tablename, attrgdbfile, outfilename):
     # Get the attribute values and type (i.e. 0 = integer)
-    dtype, values = get_attribute(attrname, tablename, attrgdbfile)
+    dtype, values, include_rat = get_attribute(attrname, tablename, attrgdbfile)
     pixel_dtype = GDT_Int32 if dtype == ogr.OFTInteger else GDT_Float32
     value_dtype = numpy.int32 if dtype == ogr.OFTInteger else numpy.float32
 
@@ -448,6 +458,9 @@ def extractAsGeotif(rasterLayer, bandData, attrname, tablename, attrgdbfile, out
     driver = rasterLayer.GetDriver()
     rows = rasterLayer.RasterYSize
     cols = rasterLayer.RasterXSize
+
+    if include_rat:
+        shutil.copyfile(RAT_XML_TEMPLATE, outfilename + ".aux.xml")
 
     try:
         outData = None
