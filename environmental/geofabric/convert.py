@@ -379,7 +379,7 @@ def generate_metadatajson(dest, description, boundtype, layername, updatemd=Fals
             data_type = "categorical"
 
         if BCCVL_LAYER_TYPES[attrname] in ['barrierdownstr', 'barrierupdownstr', 'barrierupstr', \
-                'cliffdownstr', 'cliffupstr', 'waterfalldownstr', 'waterfallflow', 'waterfallupstr']:
+                'cliffdownstr', 'cliffupstr', 'waterfalldownstr', 'waterfallflow', 'waterfallupstr', 'leveebankfactor']:
             data_type = "categorical"
 
         filesmd[zip_pathname] = { 
@@ -435,7 +435,7 @@ def get_attribute(attrname, tablename, attrgdbfile):
 
     # Check whether to include RAT aux.xml file
     include_rat = BCCVL_LAYER_TYPES[attrname] in ['barrierdownstr', 'barrierupdownstr', 'barrierupstr', \
-            'cliffdownstr', 'cliffupstr', 'waterfalldownstr', 'waterfallflow', 'waterfallupstr']
+            'cliffdownstr', 'cliffupstr', 'waterfalldownstr', 'waterfallflow', 'waterfallupstr', 'leveebankfactor']
 
     # Loop through to make an attribute dict
     values = {}
