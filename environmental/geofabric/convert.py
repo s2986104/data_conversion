@@ -19,6 +19,7 @@ JSON_TEMPLATE = "geofabric.template.json"
 CATCHMENT_RASTER = 'NationalCatchmentBoundariesRaster1.tif'
 STREAM_RASTER = 'DEMDerivedStreamsRaster1.tif'
 ATTRIBUTE_FILE = "stream_attributesv1.1.5.gdb.zip"
+RDI_ATTRIBUTE_FILE = "stream_attributesv1.1.7.gdb.zip"
 NODATA_VALUE = -99999
 
 GEOFABRIC_LAYERS = {
@@ -526,7 +527,7 @@ def main(argv):
 
                         # For each attribute in the table, create a layer geotif file 
                         for attrname in GEOFABRIC_ATTRIBUTES[boundtype].get(layername, {}):
-                            attr_gdbfilename = os.path.join(srcdir, ATTRIBUTE_FILE)
+                            attr_gdbfilename = os.path.join(srcdir, RDI_ATTRIBUTE_FILE if layername == 'rdi' else ATTRIBUTE_FILE)
                             outfilename = geotif_output_filename(ziproot, boundtype, layername, attrname)
                             print("generating {} ...".format(outfilename))
                             extractAsGeotif(rasterLayer, bandData, attrname, tablename, attr_gdbfilename, outfilename)
