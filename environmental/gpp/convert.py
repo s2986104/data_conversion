@@ -183,6 +183,12 @@ def write_array_to_raster(outfile, dataset, template):
     outdata.SetProjection(templateds.GetProjection())
     outdata.SetGeoTransform(templateds.GetGeoTransform())
 
+    # assume value 0 is due to nodatavalue, set it to -9999.
+    dataset[dataset==0] = -9999
+
+    # Set the nodatavalue
+    outdata.GetRasterBand(1).SetNoDataValue(-9999)
+
     # write data to file
     outdata.GetRasterBand(1).WriteArray(dataset)
 
