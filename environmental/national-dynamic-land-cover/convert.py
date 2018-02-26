@@ -179,6 +179,7 @@ def convert_dataset(zipfile, destdir):
             # attach RAT if we have one
             if rat is not None:
                 band.SetDefaultRAT(rat)
+            newds.FlushCache()
             # add metadata.json
             gen_metadatajson(JSON_TEMPLATE, ziproot)
     except Exception as e:
@@ -197,10 +198,17 @@ def main(argv):
         tmpdest = None
         try:
             basename, _ = os.path.splitext(dataset)
-            _, basename = basename.split('-')
-            basename = 'ndlc_{}'.format(basename)
+            _, basename1 = basename.split('-')
+            basename = 'ndlc_{}'.format(basename1)
 
             tmpdest = convert_dataset(dataset, basename)
+
+	    # Remove RAT file generated, except for DLCDv1_Class
+            if basename1 != 'DLCDv1_Class':
+            	ratfile = os.path.join(tmpdest, basename, 'data', basename1 + '.tif.aux.xml')
+            	if os.path.exists(ratfile):
+	       	    os.remove(ratfile)
+
             # ziproot = temdest/basename
             zip_dataset(os.path.join(tmpdest, basename),
                         destfolder)
