@@ -11,8 +11,10 @@ import re
 from collections import namedtuple
 import calendar
 from osgeo import gdal, ogr
+import numpy as np
 
 JSON_TEMPLATE = 'bccvl_national-dynamic-land-cover-dataset-2014090101.json'
+REDUCED_RAT   = 'bccvl_national-dynamic-land-cover-rat-reduced.tif.aux.xml'
 
 # this column map has been handcrafted,
 # info can be read from source file with ogrinfo -a l DLCDv1_Class.tif.vat.dbf
@@ -146,7 +148,32 @@ def get_rat_from_vat(filename):
                 # skip all unmappable field types
                 skip += 1
     return rat
+def reclassify(tiffname, class_map, destfile):
+    driver=gdal.GetDriverByName('GTiff')
+    tiffile = gdal.Open(tiffname)
+    band = tiffile.GetRasterBand(1)
+    data = band.ReadAsArray()
 
+    # reclassification
+    for newval, list_vals in class_map.items():
+        for i in list_vals:
+            data[data==i] = newval
+
+    # create new file
+    file2 = driver.Create(destfile, tiffile.RasterXSize , tiffile.RasterYSize , 1)
+    file2.GetRasterBand(1).WriteArray(data)
+    nodata = band.GetNoDataValue()
+    file2.GetRasterBand(1).SetNoDataValue(nodata)
+
+    # spatial ref system
+    proj = tiffile.GetProjection()
+    georef = tiffile.GetGeoTransform()
+    file2.SetProjection(proj)
+    file2.SetGeoTransform(georef)
+    file2.FlushCache()
+
+    # copy the RAT file for the reduced DLCDv1_Class
+    shutil.copy(REDUCED_RAT, destfile + '.aux.xml')
 
 def convert_dataset(zipfile, destdir):
     srctmpdir = dsttmpdir = ziproot = None
@@ -180,6 +207,13 @@ def convert_dataset(zipfile, destdir):
             if rat is not None:
                 band.SetDefaultRAT(rat)
             newds.FlushCache()
+
+            # add the reduced classification dataset for DLCDv1_Class
+            if tiffile.find('DLCDv1_Class') >= 0:
+                new_tiffile = os.path.splitext(tifbase)[0] + '_Reduced.tif'
+                class_map = {1: range(1,11), 2: range(11,24), 3: range(24,31), 4: range(31,33), 5: range(33,35)}
+                reclassify(tiffile, class_map, os.path.join(ziproot, 'data', new_tiffile))
+
             # add metadata.json
             gen_metadatajson(JSON_TEMPLATE, ziproot)
     except Exception as e:
@@ -203,7 +237,7 @@ def main(argv):
 
             tmpdest = convert_dataset(dataset, basename)
 
-	    # Remove RAT file generated, except for DLCDv1_Class
+	        # Remove RAT file generated, except for DLCDv1_Class
             if basename1 != 'DLCDv1_Class':
             	ratfile = os.path.join(tmpdest, basename, 'data', basename1 + '.tif.aux.xml')
             	if os.path.exists(ratfile):
