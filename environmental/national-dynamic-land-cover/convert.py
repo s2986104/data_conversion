@@ -16,6 +16,22 @@ import numpy as np
 JSON_TEMPLATE = 'bccvl_national-dynamic-land-cover-dataset-2014090101.json'
 REDUCED_RAT   = 'bccvl_national-dynamic-land-cover-rat-reduced.tif.aux.xml'
 
+# Dataset layers
+DATASET_INFO = {
+    'ndlc_DLCDv1_Class': {
+       'title': "Australia, Dynamic Land Cover (2000-2008), 9 arcsec (~250 m)",
+       'data_type': "categorical",
+       'external_url': 'https://data.gov.au/dataset/1556b944-731c-4b7f-a03e-14577c7e68db',
+       'fileglob': 'Scene01-DLCDv1_Class.zip'
+    },
+    'ndlc_trend_evi': {
+        'title': 'Australia, Enhanced Vegetation Index (2000-2008), 9 arcsec (~250 m)',
+        'data_type': "continuous",
+        'external_url': 'https://data.gov.au/dataset/f6951ba7-8968-4f64-9d38-1ed1a25785a0',
+        'fileglob': 'Scene01-trend_evi_*.zip'
+    }
+}
+
 # this column map has been handcrafted,
 # info can be read from source file with ogrinfo -a l DLCDv1_Class.tif.vat.dbf
 USAGE_MAP = {
@@ -44,7 +60,7 @@ TYPE_MAP = {
 }
 
 
-def gen_metadatajson(src, dest):
+def gen_metadatajson(dsname, src, dest):
     """read metadata template and populate rest of fields
     and write to dest + '/bccvl/metadata.json'
     """
@@ -55,7 +71,11 @@ def gen_metadatajson(src, dest):
     #     <name>:
     #       layer: DLCDv1_Class
 
+    dsinfo = DATASET_INFO[dsname]
     md = json.load(open(src, 'r'))
+    md['title'] = dsinfo['title']
+    md['data_type'] = dsinfo['data_type']
+    md['external_url'] = dsinfo['external_url']
     md[u'files'] = {}
     for filename in glob.glob(os.path.join(dest, '*', '*.tif')):
         base = os.path.basename(filename)
@@ -175,76 +195,78 @@ def reclassify(tiffname, class_map, destfile):
     # copy the RAT file for the reduced DLCDv1_Class
     shutil.copy(REDUCED_RAT, destfile + '.aux.xml')
 
-def convert_dataset(zipfile, destdir):
-    srctmpdir = dsttmpdir = ziproot = None
-    try:
-        srctmpdir = unzip_dataset(zipfile)
-        dsttmpdir = tempfile.mkdtemp()
-        ziproot = create_target_dir(dsttmpdir, destdir)
-        # find all tif files in srctmpdir:
-        for tiffile in glob.glob(os.path.join(srctmpdir, '*.tif')):
-            # do we have an associated .vat.dbf?
-            ratfile = '{}.vat.dbf'.format(tiffile)
-            rat = None
-            if os.path.exists(ratfile):
-                rat = get_rat_from_vat(ratfile)
-            # open dataset
-            ds = gdal.Open(tiffile)
-            # create new dataset in ziproot/data
-            driver = ds.GetDriver()
-            tifbase = os.path.basename(tiffile)
-            newds = driver.CreateCopy(os.path.join(ziproot, 'data', tifbase),
-                                      ds, strict=0,
-                                      options=['TILED=YES',
-                                               'COMPRESS=LZW',
-                                               'PROFILE=GDALGeoTIFF'
-                                               ]
-            )
-            # generate band stats
-            band = newds.GetRasterBand(1)
-            band.ComputeStatistics(False)
-            # attach RAT if we have one
-            if rat is not None:
-                band.SetDefaultRAT(rat)
-            newds.FlushCache()
 
-            # add the reduced classification dataset for DLCDv1_Class
-            if tiffile.find('DLCDv1_Class') >= 0:
-                new_tiffile = os.path.splitext(tifbase)[0] + '_Reduced.tif'
-                class_map = {1: range(1,11), 2: range(11,24), 3: range(24,31), 4: range(31,33), 5: range(33,35)}
-                reclassify(tiffile, class_map, os.path.join(ziproot, 'data', new_tiffile))
+def convert_dataset(srcfolder, dsname):
 
-            # add metadata.json
-            gen_metadatajson(JSON_TEMPLATE, ziproot)
-    except Exception as e:
-        print "Error:", e
-    finally:
-        if srctmpdir:
-            shutil.rmtree(srctmpdir)
+    # Get the layers from the zip files
+    destdir = dsname
+    dsglob = DATASET_INFO[dsname].get('fileglob')
+    dsttmpdir = tempfile.mkdtemp()
+    ziproot = create_target_dir(dsttmpdir, destdir)
+    for zipfile in glob.glob(os.path.join(srcfolder, dsglob)):
+        try:
+            print "converting ", dsname, zipfile
+            srctmpdir = unzip_dataset(zipfile)
+            
+            # find all tif files in srctmpdir:
+            for tiffile in glob.glob(os.path.join(srctmpdir, '*.tif')):
+                # do we have an associated .vat.dbf?
+                ratfile = '{}.vat.dbf'.format(tiffile)
+                rat = None
+                if os.path.exists(ratfile):
+                    rat = get_rat_from_vat(ratfile)
+                # open dataset
+                ds = gdal.Open(tiffile)
+                # create new dataset in ziproot/data
+                driver = ds.GetDriver()
+                tifbase = os.path.basename(tiffile)
+                newds = driver.CreateCopy(os.path.join(ziproot, 'data', tifbase),
+                                          ds, strict=0,
+                                          options=['TILED=YES',
+                                                   'COMPRESS=LZW',
+                                                   'PROFILE=GDALGeoTIFF'
+                                                   ]
+                )
+                # generate band stats
+                band = newds.GetRasterBand(1)
+                band.ComputeStatistics(False)
+                # attach RAT if we have one
+                if rat is not None:
+                    band.SetDefaultRAT(rat)
+                newds.FlushCache()
+
+                # add the reduced classification dataset for DLCDv1_Class dataset
+                if tiffile.find('DLCDv1_Class') >= 0:
+                    new_tiffile = os.path.splitext(tifbase)[0] + '_Reduced.tif'
+                    class_map = {1: range(1,11), 2: range(11,24), 3: range(24,31), 4: range(31,33), 5: range(33,35)}
+                    reclassify(tiffile, class_map, os.path.join(ziproot, 'data', new_tiffile))
+        except Exception as e:
+            print "Error:", e
+        finally:
+            if srctmpdir:
+                shutil.rmtree(srctmpdir)
+
+    # add metadata.json for the dataset
+    gen_metadatajson(dsname, JSON_TEMPLATE, ziproot)
+
     return dsttmpdir
-
 
 def main(argv):
     srcfolder = 'source/web_data_20140825'
     destfolder = 'bccvl'
 
-    for dataset in glob.glob(os.path.join(srcfolder, 'Scene01-*.zip')):
-        tmpdest = None
+    tmpdest = None
+    for dsname in DATASET_INFO.keys():
         try:
-            basename, _ = os.path.splitext(dataset)
-            _, basename1 = basename.split('-')
-            basename = 'ndlc_{}'.format(basename1)
+            tmpdest = convert_dataset(srcfolder, dsname)
 
-            tmpdest = convert_dataset(dataset, basename)
+            # Remove RAT file for vegetation index dataset
+            if dsname == 'ndlc_trend_evi':
+                for ratfile in glob.glob(os.path.join(tmpdest, dsname, 'data', '*.tif.aux.xml')):
+                    os.remove(ratfile)
 
-	        # Remove RAT file generated, except for DLCDv1_Class
-            if basename1 != 'DLCDv1_Class':
-            	ratfile = os.path.join(tmpdest, basename, 'data', basename1 + '.tif.aux.xml')
-            	if os.path.exists(ratfile):
-	       	    os.remove(ratfile)
-
-            # ziproot = temdest/basename
-            zip_dataset(os.path.join(tmpdest, basename),
+            # ziproot = tmpdest/dsname
+            zip_dataset(os.path.join(tmpdest, dsname),
                         destfolder)
         finally:
             if tmpdest:
