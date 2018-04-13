@@ -7,6 +7,7 @@ import json
 import tempfile
 import shutil
 import sys
+import argparse
 import re
 from collections import namedtuple
 import calendar
@@ -15,96 +16,134 @@ import numpy as np
 
 JSON_TEMPLATE = 'bccvl_marine-template-2017v2.json'
 
+# Layer Depth
+LAYER_DEPTH = ['Surface']
+
 # Dataset layers
 DATASET_INFO = {
-    'Present.Surface.Temperature': {
-       'title': "Global Marine Surface Data, Water Temperature (2000-2014), 5 arcmin (~10 km)",
+    'Surface.Temperature': {
+       'title': "Global Marine Surface Data, Water Temperature {0}, 5 arcmin (~10 km)",
        'data_type': "continuous"
     },
-    'Present.Surface.Salinity': {
-        'title': 'Global Marine Surface Data, Water Salinity (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Salinity': {
+        'title': 'Global Marine Surface Data, Water Salinity {0}, 5 arcmin (~10 km)',
         'data_type': "continuous"
     },
-    'Present.Surface.Current.Velocity': {
-        'title': 'Global Marine Surface Data, Currents Velocity (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Current.Velocity': {
+        'title': 'Global Marine Surface Data, Currents Velocity {0}, 5 arcmin (~10 km)',
         'data_type': "continuous"
     },
-    'Present.Surface.Ice.thickness': {
-        'title': 'Global Marine Surface Data, Ice Thickness (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Ice.thickness': {
+        'title': 'Global Marine Surface Data, Ice Thickness {0}, 5 arcmin (~10 km)',
         'data_type': "continuous"
     },
-    'Present.Surface.Ice.cover': {
-        'title': 'Global Marine Surface Data, Sea Ice Concentration (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Ice.cover': {
+        'title': 'Global Marine Surface Data, Sea Ice Concentration {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Diffuse.attenuation': {
-        'title': 'Global Marine Surface Data, Diffuse Attenuation (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Diffuse.attenuation': {
+        'title': 'Global Marine Surface Data, Diffuse Attenuation {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Cloud.cover': {
-        'title': 'Global Marine Surface Data, Cloud Cover (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Cloud.cover': {
+        'title': 'Global Marine Surface Data, Cloud Cover {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Nitrate': {
-        'title': 'Global Marine Surface Data, Nitrate (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Nitrate': {
+        'title': 'Global Marine Surface Data, Nitrate {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Phosphate': {
-        'title': 'Global Marine Surface Data, Phosphate (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Phosphate': {
+        'title': 'Global Marine Surface Data, Phosphate {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Silicate': {
-        'title': 'Global Marine Surface Data, Silicate (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Silicate': {
+        'title': 'Global Marine Surface Data, Silicate {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Dissolved.oxygen': {
-        'title': 'Global Marine Surface Data, Dissolved Molecular Oxygen (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Dissolved.oxygen': {
+        'title': 'Global Marine Surface Data, Dissolved Molecular Oxygen {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Iron': {
-        'title': 'Global Marine Surface Data, Iron (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Iron': {
+        'title': 'Global Marine Surface Data, Iron {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Calcite': {
-        'title': 'Global Marine Surface Data, Calcite (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Calcite': {
+        'title': 'Global Marine Surface Data, Calcite {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Chlorophyll': {
-        'title': 'Global Marine Surface Data, Chlorophyll (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Chlorophyll': {
+        'title': 'Global Marine Surface Data, Chlorophyll {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Phytoplankton': {
-        'title': 'Global Marine Surface Data, Phytoplankton (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Phytoplankton': {
+        'title': 'Global Marine Surface Data, Phytoplankton {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Primary.productivity': {
-        'title': 'Global Marine Surface Data, Primary Productivity (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Primary.productivity': {
+        'title': 'Global Marine Surface Data, Primary Productivity {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.pH': {
-        'title': 'Global Marine Surface Data, pH (2000-2014), 5 arcmin (~10 km)',
+    'Surface.pH': {
+        'title': 'Global Marine Surface Data, pH {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     },
-    'Present.Surface.Par': {
-        'title': 'Global Marine Surface Data, Photosynthetically Available Radiation (2000-2014), 5 arcmin (~10 km)',
+    'Surface.Par': {
+        'title': 'Global Marine Surface Data, Photosynthetically Available Radiation {0}, 5 arcmin (~10 km)',
         'data_type': "continuous",
     }
 }
 
+# Layer period
+LAYER_PERIOD = {
+    'current': {
+        'period': '2000-2014',
+        'scenerio': ['na'],
+        'source': 'source/Marine.Present.Surface.tif',
+        'variables': DATASET_INFO.keys()
+    },
+    '2050': {
+        'period': '2040-2050',
+        'scenerio': ['RCP26', 'RCP45', 'RCP60', 'RCP85'],
+        'source': 'source/Marine.Future.Surface.tif',
+        'variables': ['Surface.Temperature', 'Surface.Salinity', 'Surface.Current.Velocity', 'Surface.Ice.thickness']
+    },
+    '2100': {
+        'period': '2090-2100',
+        'scenerio': ['RCP26', 'RCP45', 'RCP60', 'RCP85'],
+        'source': 'source/Marine.Future.Surface.tif',
+        'variables': ['Surface.Temperature', 'Surface.Salinity', 'Surface.Current.Velocity', 'Surface.Ice.thickness']
+    }
+}
 
-def gen_metadatajson(dsname, src, dest):
+
+def gen_metadatajson(dsid, src, dest, scenerio, period, layer_depth='Surface'):
     """read metadata template and populate rest of fields
-    and write to dest + '/bccvl/metadata.json'
+       and write to dest + '/bccvl/metadata.json'
     """
-
-    dsinfo = DATASET_INFO[dsname]
+    dsinfo = DATASET_INFO[dsid]
     md = json.load(open(src, 'r'))
-    md['title'] = dsinfo['title']
+    if period == 'current':
+        period_str = '({0})'.format(LAYER_PERIOD[period].get('period'))
+        md['temporal_coverage'] = {'start': '2000', 'end': '2014'}
+    else:
+        sc = re.match("([a-z]+)([0-9]+)", scenerio, re.I).groups()
+        period_str = '({0}), {1}'.format(LAYER_PERIOD[period].get('period'), " ".join(sc))
+        start = '2040' if period == '2050' else '2090'
+        md['temporal_coverage'] = {'start': start, 'end': period}
+
+    md['title'] = dsinfo['title'].format(period_str)
     md['data_type'] = dsinfo['data_type']
     md[u'files'] = {}
     for filename in glob.glob(os.path.join(dest, '*', '*.tif')):
         base = os.path.basename(filename)
         base, _ = os.path.splitext(base)
+
+        # get rid of the preceding characters to get the layer id
+        pos = base.find(layer_depth)
+        if pos > 0:
+            base = base[pos:]
 
         layer_id = base
         filename = filename[len(os.path.dirname(dest)):].lstrip('/')
@@ -158,7 +197,7 @@ def unzip_dataset(dsfile):
 
 
 
-def convert_dataset(srcfolder, dsname):
+def convert_dataset(srcfolder, dsname, dsid, scenerio, period):
 
     # Get the layers from the zip files
     destdir = dsname
@@ -196,24 +235,37 @@ def convert_dataset(srcfolder, dsname):
                 shutil.rmtree(srctmpdir)
 
     # add metadata.json for the dataset
-    gen_metadatajson(dsname, JSON_TEMPLATE, ziproot)
+    gen_metadatajson(dsid, JSON_TEMPLATE, ziproot, scenerio, period)
     return dsttmpdir
 
 def main(argv):
-    srcfolder = 'source/Marine.Present.Surface.tif'
+    parser = argparse.ArgumentParser(description='Convert Global Marine datasets')
+    parser.add_argument('--period', type=str, choices=['current', '2050', '2100'], help='dataset period')
+    params = vars(parser.parse_args(argv[1:]))
+    period_list = [params.get('period')] if params.get('type') is not None else ['current', '2050', '2100']
+
     destfolder = 'bccvl'
 
     tmpdest = None
-    for dsname in DATASET_INFO.keys():
-        try:
-            tmpdest = convert_dataset(srcfolder, dsname)
+    for period in period_list:
+        srcfolder = LAYER_PERIOD[period].get('source')
+        for scenerio in LAYER_PERIOD[period].get('scenerio'):
+            header = 'Present' if period == 'current' else '{0}.{1}'.format(period, scenerio)
+            for dsid in LAYER_PERIOD[period].get('variables'):
+                # dataset filename
+                dsname = "{0}.{1}".format(header, dsid)
+                print dsname, scenerio, header, srcfolder, period
+                try:
+                    tmpdest = convert_dataset(srcfolder, dsname, dsid, scenerio, period)
 
-            # ziproot = tmpdest/dsname
-            zip_dataset(os.path.join(tmpdest, dsname),
-                        destfolder)
-        finally:
-            if tmpdest:
-                shutil.rmtree(tmpdest)
+                    print tmpdest
+
+                    # ziproot = tmpdest/dsname
+                    zip_dataset(os.path.join(tmpdest, dsname),
+                                destfolder)
+                finally:
+                    if tmpdest:
+                        shutil.rmtree(tmpdest)
 
 
 if __name__ == "__main__":
