@@ -242,7 +242,7 @@ def main(argv):
     parser = argparse.ArgumentParser(description='Convert Global Marine datasets')
     parser.add_argument('--period', type=str, choices=['current', '2050', '2100'], help='dataset period')
     params = vars(parser.parse_args(argv[1:]))
-    period_list = [params.get('period')] if params.get('type') is not None else ['current', '2050', '2100']
+    period_list = [params.get('period')] if params.get('period') is not None else ['current', '2050', '2100']
 
     destfolder = 'bccvl'
 
