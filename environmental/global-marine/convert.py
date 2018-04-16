@@ -128,8 +128,16 @@ def gen_metadatajson(dsid, src, dest, scenerio, period, layer_depth='Surface'):
         period_str = '({0})'.format(LAYER_PERIOD[period].get('period'))
         md['temporal_coverage'] = {'start': '2000', 'end': '2014'}
     else:
-        sc = re.match("([a-z]+)([0-9]+)", scenerio, re.I).groups()
-        period_str = '({0}), {1}'.format(LAYER_PERIOD[period].get('period'), " ".join(sc))
+        sc = scenerio
+        if scenerio == 'RCP26':
+            sc = 'RCP 2.6'
+        elif scenerio == 'RCP45':
+            sc = 'RCP 4.5'
+        elif scenerio == 'RCP85':
+            sc = 'RCP 8.5'
+        elif scenerio == 'RCP60':
+            sc = 'RCP 6.0'
+        period_str = '({0}), {1}'.format(LAYER_PERIOD[period].get('period'), sc)
         start = '2040' if period == '2050' else '2090'
         md['temporal_coverage'] = {'start': start, 'end': period}
 
