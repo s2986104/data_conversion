@@ -118,15 +118,16 @@ LAYER_PERIOD = {
 }
 
 
-def gen_metadatajson(dsid, src, dest, scenerio, period, layer_depth='Surface'):
+def gen_metadatajson(src, dest, scenerio, period, dsinfo=None, layer_depth='Surface'):
     """read metadata template and populate rest of fields
        and write to dest + '/bccvl/metadata.json'
     """
-    dsinfo = DATASET_INFO[dsid]
     md = json.load(open(src, 'r'))
     if period == 'current':
-        period_str = '({0})'.format(LAYER_PERIOD[period].get('period'))
+        period_str = '{0}'.format(LAYER_PERIOD[period].get('period'))
         md['temporal_coverage'] = {'start': '2000', 'end': '2014'}
+        md['title'] = dsinfo['title'].format(period_str)
+        md['data_type'] = dsinfo['data_type']
     else:
         sc = scenerio
         if scenerio == 'RCP26':
@@ -137,12 +138,13 @@ def gen_metadatajson(dsid, src, dest, scenerio, period, layer_depth='Surface'):
             sc = 'RCP 8.5'
         elif scenerio == 'RCP60':
             sc = 'RCP 6.0'
-        period_str = '({0}), {1}'.format(LAYER_PERIOD[period].get('period'), sc)
+        period_str = '{0}, {1}'.format(LAYER_PERIOD[period].get('period'), sc)
         start = '2040' if period == '2050' else '2090'
         md['temporal_coverage'] = {'start': start, 'end': period}
+        md['title'] = 'Global Marine Surface Data, {0}, 5 arcmin (~10 km)'.format(period_str)
+        md['data_type'] = 'continuous'
 
-    md['title'] = dsinfo['title'].format(period_str)
-    md['data_type'] = dsinfo['data_type']
+    
     md[u'files'] = {}
     for filename in glob.glob(os.path.join(dest, '*', '*.tif')):
         base = os.path.basename(filename)
@@ -203,16 +205,9 @@ def unzip_dataset(dsfile):
         raise
     return tmpdir
 
-
-
-def convert_dataset(srcfolder, dsname, dsid, scenerio, period):
-
-    # Get the layers from the zip files
-    destdir = dsname
-    dsglob = dsname + '*.zip'
-    dsttmpdir = tempfile.mkdtemp()
-    ziproot = create_target_dir(dsttmpdir, destdir)
+def _conver_dataset(dsname, srcfolder, dsglob, ziproot):
     for zipfile in glob.glob(os.path.join(srcfolder, dsglob)):
+        srctmpdir = None
         try:
             print "converting ", dsname, zipfile
             srctmpdir = unzip_dataset(zipfile)
@@ -242,8 +237,32 @@ def convert_dataset(srcfolder, dsname, dsid, scenerio, period):
             if srctmpdir:
                 shutil.rmtree(srctmpdir)
 
+
+def convert_dataset(srcfolder, dsname, dsid, scenerio, period):
+    # Get the layers from the zip files and cobert current layers
+    destdir = dsname
+    dsglob = dsname + '*.zip'
+    dsttmpdir = tempfile.mkdtemp()
+    ziproot = create_target_dir(dsttmpdir, destdir)
+    _conver_dataset(dsname, srcfolder, dsglob, ziproot)
+
     # add metadata.json for the dataset
-    gen_metadatajson(dsid, JSON_TEMPLATE, ziproot, scenerio, period)
+    gen_metadatajson(JSON_TEMPLATE, ziproot, scenerio, period, DATASET_INFO[dsid])
+    return dsttmpdir
+
+def convert_future_dataset(srcfolder, destdir, scenerio, period, header):
+    # Convert and combine all future layers that belong to a emsc and time period.
+    dsttmpdir = tempfile.mkdtemp()
+    ziproot = create_target_dir(dsttmpdir, destdir)
+
+    # convert future tiff file and store in data directory
+    for dsid in LAYER_PERIOD[period].get('variables'):
+        dsname = '{0}.{1}'.format(header, dsid)
+        dsglob = dsname + '*.zip'
+        _conver_dataset(dsname, srcfolder, dsglob, ziproot)
+
+    # add metadata.json for the dataset
+    gen_metadatajson(JSON_TEMPLATE, ziproot, scenerio, period)
     return dsttmpdir
 
 def main(argv):
@@ -258,18 +277,34 @@ def main(argv):
     for period in period_list:
         srcfolder = LAYER_PERIOD[period].get('source')
         for scenerio in LAYER_PERIOD[period].get('scenerio'):
-            header = 'Present' if period == 'current' else '{0}.{1}'.format(period, scenerio)
-            for dsid in LAYER_PERIOD[period].get('variables'):
-                # dataset filename
-                dsname = "{0}.{1}".format(header, dsid)
-                print dsname, scenerio, header, srcfolder, period
+            if period == 'current':
+                header = 'Present'
+                for dsid in LAYER_PERIOD[period].get('variables'):
+                    # dataset filename
+                    dsname = "{0}.{1}".format(header, dsid)
+                    print dsname, scenerio, header, srcfolder, period
+                    try:
+                        tmpdest = convert_dataset(srcfolder, dsname, dsid, scenerio, period)
+
+                        print tmpdest
+
+                        # ziproot = tmpdest/dsname
+                        zip_dataset(os.path.join(tmpdest, dsname),
+                                    destfolder)
+                    finally:
+                        if tmpdest:
+                            shutil.rmtree(tmpdest)
+            else:
+                header = '{0}.{1}'.format(period, scenerio)
+                print scenerio, period, srcfolder
                 try:
-                    tmpdest = convert_dataset(srcfolder, dsname, dsid, scenerio, period)
+                    destdir = "GlobalMarineSurfaceData.{0}".format(header)
+                    tmpdest = convert_future_dataset(srcfolder, destdir, scenerio, period, header)
 
                     print tmpdest
 
-                    # ziproot = tmpdest/dsname
-                    zip_dataset(os.path.join(tmpdest, dsname),
+                    # ziproot = tmpdest/destdir
+                    zip_dataset(os.path.join(tmpdest, destdir),
                                 destfolder)
                 finally:
                     if tmpdest:
