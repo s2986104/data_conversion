@@ -215,7 +215,7 @@ def get_scale_factor(itemname):
         return '0.1'
     elif info['layer_type'] == 'bi' and info['layer_num'] in bioclim_temp_layers:
         return '0.1'
-    elif info['layer_type'] == 'bi' and info['layer_num'] in ['3']:
+    elif info['layer_type'] == 'bi' and info['layer_num'] in ['3', '15']:
         return '0.01'
     elif info['layer_type'] == 'bi' and info['layer_num'] in ['4']:
         return '0.001'

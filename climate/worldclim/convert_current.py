@@ -164,7 +164,7 @@ SCALE_FACTORS = {
   'bioclim_01': '0.1',   'bioclim_02': '0.1', 'bioclim_03': '0.01',
   'bioclim_04': '0.001', 'bioclim_05': '0.1', 'bioclim_06': '0.1',
   'bioclim_07': '0.1',   'bioclim_08': '0.1', 'bioclim_09': '0.1',
-  'bioclim_10': '0.1',   'bioclim_11': '0.1'}
+  'bioclim_10': '0.1',   'bioclim_11': '0.1', 'bioclim_15': '0.01'}
 # All layers in tmin, tmax, tmean are temperature layers
 for l in ["{}_{:02d}".format(x,y) for x in ['tmin','tmax','tmean'] for y in range(1,13)]:
     SCALE_FACTORS[l] = '0.1'
