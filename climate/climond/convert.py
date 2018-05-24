@@ -8,6 +8,7 @@ import shutil
 import sys
 import re
 import zipfile
+import time
 
 
 JSON_TEMPLATE = "climond.template.json"
@@ -31,6 +32,24 @@ def gdal_translate(src, dest):
     if ret != 0:
         raise Exception("can't gdal_translate {0} ({1})".format(src, ret))
 
+def scale(src, factor, tmpdir):
+    print "scaling {0} by a factor {1}".format(src, factor)
+    tmpdest = os.path.join(tmpdir, 'tmpfile_scale.tif')
+    cmd = 'gdal_calc.py -A {outfile} --calc="A*{scale}" --co="COMPRESS=LZW" --co="TILED=YES" --outfile {destfile} --type "Float64"'.format(
+                outfile=src,
+                scale=factor,
+                destfile=tmpdest)
+    ret = os.system(cmd)
+    if ret != 0:
+        raise Exception("COMMAND '{}' failed.".format(cmd))
+
+    """Use gdal_translate to recompute statistic"""
+    ret = os.system('gdal_translate -of GTiff -stats -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'
+                    .format(tmpdest, src))
+    if ret != 0:
+        raise Exception("can't gdal_translate to compute statstics {0} ({1})".format(src, ret))
+
+
 def convert(srcdir, ziproot, basename, filename, year):
     """copy all files and convert if necessary to zip preparation dir.
     """
@@ -44,8 +63,13 @@ def convert(srcdir, ziproot, basename, filename, year):
             # Current climate data
             vsizip_src_dir = "/vsizip/" + os.path.join(srcdir, 'CLIMOND_{0:02d}.tif'.format(layer))
         # just copy all the files
-        destfile = 'CLIMOND_{0:02d}.tif'.format(layer)
-        gdal_translate(vsizip_src_dir, os.path.join(ziproot, basename, 'data', destfile))
+        destfname = 'CLIMOND_{0:02d}.tif'.format(layer)
+        destfile = os.path.join(ziproot, basename, 'data', destfname)
+        gdal_translate(vsizip_src_dir, destfile)
+
+        # scale B04 by a factor of 100
+        if layer == 4:
+            scale(destfile, 100.0, ziproot)
 
 
 def gen_metadatajson(template, ziproot, basename, year):
@@ -57,7 +81,7 @@ def gen_metadatajson(template, ziproot, basename, year):
     # Update the title, and year of temporal_coverage
     if year is None:
         # Current climate dataset
-        year = '1975 (current)'
+        year = '1975-2005 (current)'
         start_year = 1961
         md['title'] = md['title'].format(year=year)
     else:
@@ -65,6 +89,12 @@ def gen_metadatajson(template, ziproot, basename, year):
         md['title'] = md['title'].format(year=year)
     md['temporal_coverage']['start'] = str(start_year)
     md['temporal_coverage']['end'] = str(start_year + 29)
+    md['bounding_box'] = {
+        "top": "-9.005",
+        "right": "153.9950000",
+        "bottom": "-43.7450000",
+        "left": "112.8950000"
+    }
 
     # update layer info
     md['files'] = {}
@@ -109,7 +139,21 @@ def main(argv):
         else:
             dest_filename = fname
 
-        zf = zipfile.ZipFile(srcdir)
+        tries = 0
+        # Make sure file is online
+        while True:
+            try:
+                tries += 1
+                zf = zipfile.ZipFile(srcdir)
+                print "File {0} is online".format(srcdir)
+                break
+            except Exception as e:
+                if tries > 10:
+                    print "Fail to make file {0} online!!".format(srcdir)
+                    break
+                print "Waiting for file {0} to be online ...".format(srcdir)
+                time.sleep(60)
+
         if dest_filename.startswith('CLIMOND_CURRENT'):
             # Current climate dataset        
             base_dir = dest_filename
