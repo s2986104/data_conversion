@@ -7,6 +7,7 @@ import shutil
 import sys
 import re
 import zipfile
+import time
 
 
 JSON_TEMPLATE = "narclim.template.json"
@@ -22,6 +23,40 @@ def create_target_dir(basename):
     os.mkdir(os.path.join(tmpdir, basename, 'bccvl'))
     return tmpdir
 
+def read_zipfile(zipname):
+    zipf = None
+    tries = 0
+    # Make sure file is online
+    while True:
+        try:
+            tries += 1
+            zipf = zipfile.ZipFile(zipname, 'r')
+            print "File {0} is online".format(zipname)
+            break
+        except Exception as e:
+            if tries > 10:
+                print "Fail to make file {0} online!!".format(zipname)
+                raise Exception("Fail to make file {0} online!!".format(zipname))
+            print "Waiting for file {0} to be online ...".format(zipname)
+            time.sleep(60)
+    return zipf
+
+def scale(src, factor, tmpdir):
+    print "scaling {0} by a factor {1}".format(src, factor)
+    tmpdest = os.path.join(tmpdir, 'tmpfile_scale.tif')
+    cmd = 'gdal_calc.py -A {outfile} --calc="A*{scale}" --co="COMPRESS=LZW" --co="TILED=YES" --outfile {destfile} --type "Float64"'.format(
+                outfile=src,
+                scale=factor,
+                destfile=tmpdest)
+    ret = os.system(cmd)
+    if ret != 0:
+        raise Exception("COMMAND '{}' failed.".format(cmd))
+
+    """Use gdal_translate to recompute statistic"""
+    ret = os.system('gdal_translate -of GTiff -stats -co "COMPRESS=LZW" -co "TILED=YES" {0} {1}'
+                    .format(tmpdest, src))
+    if ret != 0:
+        raise Exception("can't gdal_translate to compute statstics {0} ({1})".format(src, ret))
 
 def gdal_translate(src, dest):
     """Use gdal_translate to copy file from src to dest"""
@@ -34,13 +69,19 @@ def convert(srczip, ziproot, basename):
     """copy all files and convert if necessary to zip preparation dir.
     """
 
-    zf = zipfile.ZipFile(srczip)
+    zf = read_zipfile(srczip)
     for filename in zf.namelist():
         vsizip_src_dir = "/vsizip/" + os.path.join(srczip, filename)
         parts = os.path.basename(filename).split('_')
         # just copy all the files
-        destfile = 'NARCLIM_{0}'.format(parts[-1])
-        gdal_translate(vsizip_src_dir, os.path.join(ziproot, basename, 'data', destfile))
+        destfname = 'NARCLIM_{0}'.format(parts[-1])
+        destfile = os.path.join(ziproot, basename, 'data', destfname)
+        gdal_translate(vsizip_src_dir, destfile)
+
+        # Scale the layer 15
+        if parts[-1] == "15":
+            scale(destfile, 0.01, ziproot)
+    zf.close()
 
 
 def gen_metadatajson(template, ziproot, basename, year, resolution):
