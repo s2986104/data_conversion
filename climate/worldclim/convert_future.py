@@ -8,11 +8,13 @@ import zipfile
 import itertools
 import tempfile
 import shutil
+import time
+import argparse
 
 JSON_TEMPLATE = 'worldclim.template.json'
 TITLE_TEMPLATE = u'WorldClim Future Projection using {gcm} {rcp} at {res} ({year})'
 
-TMPDIR = os.getenv("BCCVL_TMP", "/mnt/playground/")
+TMPDIR = os.getenv("BCCVL_TMP", "/mnt/workdir/")
 
 ## Lookups for metadata construction
 #  Details taken from:
@@ -157,14 +159,14 @@ def convert_filename(filename):
 
 def potential_converts(source):
     potentials = itertools.product(
-        GCM_MAP, RCP_MAP, YEAR_MAP, RESOLUTION_MAP
+        GCM_MAP, RCP_MAP, YEAR_MAP, RESOLUTION_MAP, LAYER_TYPE_MAP
     )
-    for gcm, rcp, year, res in potentials:
-        source_filter = '{gcm}{rcp}*{year}.zip'.format(**locals())
+    for gcm, rcp, year, res, ltype in potentials:
+        source_filter = '{gcm}{rcp}{ltype}{year}.zip'.format(**locals())
         source_path = os.path.join(source, res, source_filter)
         source_files = glob.glob(source_path)
         if source_files:
-            yield gcm, rcp, year, res, source_files
+            yield gcm, rcp, year, res, ltype, source_files
 
 def convert_geotiff_temperature(itemname, file_content, scale):
     tmpdir = tempfile.mkdtemp(dir=TMPDIR)
@@ -231,13 +233,31 @@ def get_geotiff_str(itemname, file_content):
     else:
         return fixed_geotiff
 
+def read_zipfile(zipname):
+    zipf = None
+    tries = 0
+    # Make sure file is online
+    while True:
+        try:
+            tries += 1
+            zipf = zipfile.ZipFile(zipname, 'r')
+            print "File {0} is online".format(zipname)
+            break
+        except Exception as e:
+            if tries > 10:
+                print "Fail to make file {0} online!!".format(zipname)
+                raise Exception("Fail to make file {0} online!!".format(zipname))
+            print "Waiting for file {0} to be online ...".format(zipname)
+            time.sleep(60)
+    return zipf
+
 
 def add_source_files(destzip, destname, filenames):
     for filename in filenames:
         try:
-            srczip = zipfile.ZipFile(filename, 'r')
-        except zipfile.BadZipfile:
-            print "Unable to handle '{}' as zip".format(filename)
+            srczip = read_zipfile(filename)
+        except Exception:
+            print "Unable to read '{}' as zip".format(filename)
             continue
         for itemname in (item.filename for item in srczip.filelist):
             geotiff_str = get_geotiff_str(itemname, srczip.read(itemname))
@@ -283,11 +303,20 @@ def layer_id(layer_type, layer_num):
 
 
 def main(argv):
-    if len(argv) != 3:
-        print "Usage: {0} <srcdir> <destdir>".format(argv[0])
-        sys.exit(1)
-    src  = argv[1] # TODO: check src exists and is zip?
-    dest = argv[2] # TODO: check dest exists
+    parser = argparse.ArgumentParser(description='Convert WorldClim future datasets')
+    parser.add_argument('srcdir', type=str, help='source directory')
+    parser.add_argument('destdir', type=str, help='output directory')
+    parser.add_argument('--dstype', type=str, choices=LAYER_TYPE_MAP.keys(), help='dataset type')
+    parser.add_argument('--gcm', type=str, choices=GCM_MAP.keys(), help='General Circulation Model')
+    parser.add_argument('--rcp', type=str, choices=RCP_MAP.keys(), help='Representative Concentration Pathways')
+    parser.add_argument('--year', type=str, choices=YEAR_MAP.keys(), help='year')
+    params = vars(parser.parse_args(argv[1:]))
+    src = params.get('srcdir')
+    dest = params.get('destdir')
+    dstypes = [params.get('dstype')] if params.get('dstype') is not None else LAYER_TYPE_MAP.keys()
+    gcm_list = [params.get('gcm')] if params.get('gcm') is not None else GCM_MAP.keys()
+    rcp_list = [params.get('rcp')] if params.get('rcp') is not None else RCP_MAP.keys()
+    year_list = [params.get('year')] if params.get('year') is not None else YEAR_MAP.keys()
 
     # fail if destination exists but is not a directory
     if os.path.exists(os.path.abspath(dest)) and not os.path.isdir(os.path.abspath(dest)):
@@ -302,9 +331,10 @@ def main(argv):
             print "Failed to create directory at {}.".format(os.path.abspath(dest))
             sys.exit(os.EX_IOERR)
 
-    for gcm, rcp, year, res, files in potential_converts(src):
+    for gcm, rcp, year, res, layer, files in potential_converts(src):
+        if layer not in dstypes or gcm not in gcm_list or rcp not in rcp_list or year not in year_list:
+            continue
         for f in files:
-            layer = f[-8:-6]
             destname = '{gcm}_{rcp}_{year}_{res}_{layer}'.format(
                 gcm = GCM_MAP[gcm],
                 rcp = RCP_MAP[rcp],
@@ -313,6 +343,7 @@ def main(argv):
                 layer = LAYER_TYPE_MAP[layer],
             )
             destfile = os.path.join(dest, destname + '.zip')
+
             with zipfile.ZipFile(destfile, 'w', allowZip64=True) as zip:
                 add_source_files(zip, destname, [f,])
                 metadata = create_metadata_json(destname, gcm, rcp, year, res,

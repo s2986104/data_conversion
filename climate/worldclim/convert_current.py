@@ -8,8 +8,10 @@ import tempfile
 import shutil
 import sys
 import re
+import time
+import argparse
 
-TMPDIR = os.getenv("BCCVL_TMP", "/mnt/playground/")
+TMPDIR = os.getenv("BCCVL_TMP", "/mnt/workdir/")
 
 JSON_TEMPLATE = 'worldclim.template.json'
 TITLE_TEMPLATE = u'WorldClim Current Conditions (1950-2000) at {}'
@@ -199,9 +201,21 @@ def ungz(filename):
 def unpack(zipname, path):
     """unpack zipfile to path
     """
-    zipf = zipfile.ZipFile(zipname, 'r')
+    tries = 0
+    # Make sure file is online
+    while True:
+        try:
+            tries += 1
+            zipf = zipfile.ZipFile(zipname, 'r')
+            print "File {0} is online".format(zipname)
+            break
+        except Exception as e:
+            if tries > 10:
+                print "Fail to make file {0} online!!".format(zipname)
+                raise Exception("Fail to make file {0} online!!".format(zipname))
+            print "Waiting for file {0} to be online ...".format(zipname)
+            time.sleep(60)
     zipf.extractall(path)
-
 
 def convert(filename, folder, dest):
     """convert .asc.gz files in folder to .tif in dest
@@ -311,11 +325,15 @@ def zipbccvldataset(ziproot, dest):
 
 def main(argv):
     ziproot = None
-    if len(argv) != 3:
-        print "Usage: {0} <srcdir> <destdir>".format(argv[0])
-        sys.exit(1)
-    src = argv[1]  # TODO: check src exists and is zip?
-    dest = argv[2]
+
+    parser = argparse.ArgumentParser(description='Convert WorldClim current datasets')
+    parser.add_argument('srcdir', type=str, help='source directory')
+    parser.add_argument('destdir', type=str, help='output directory')
+    parser.add_argument('--dstype', type=str, choices=LAYER_TYPE_MAP.keys(), help='dataset type')
+    params = vars(parser.parse_args(argv[1:]))
+    src = params.get('srcdir')
+    dest = params.get('destdir')
+    dstypes = [params.get('dstype')] if params.get('dstype') is not None else LAYER_TYPE_MAP.keys()
 
     # fail if destination exists but is not a directory
     if os.path.exists(
@@ -336,6 +354,8 @@ def main(argv):
         # sorting isn't important, it just forces it to
         # hit the smallest dataset first for testing
         for prefix in LAYER_TYPE_MAP.keys():
+            if prefix not in dstypes:
+                continue
             destfile = 'worldclim_{}_{}'.format(res, LAYER_TYPE_MAP[prefix])
             try:
                 ziproot = create_target_dir(dest, destfile)
