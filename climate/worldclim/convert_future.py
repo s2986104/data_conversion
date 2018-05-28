@@ -233,7 +233,7 @@ def get_geotiff_str(itemname, file_content):
     else:
         return fixed_geotiff
 
-def read_zipfile(zipname):
+def open_zipfile(zipname):
     zipf = None
     tries = 0
     # Make sure file is online
@@ -251,20 +251,38 @@ def read_zipfile(zipname):
             time.sleep(60)
     return zipf
 
+def read_zipfile(srczip, fname):
+    ret = None
+    tries = 0
+    # Make sure file is online
+    while True:
+        try:
+            tries += 1
+            ret = srczip.read(fname)
+            print "File {0} is online".format(fname)
+            break
+        except IOError as e:
+            if tries > 10:
+                print "Fail to read file {0} from zip file!!".format(fname)
+                raise Exception("Fail to read file {0} from zip file!!".format(fname))
+            print "Waiting for file {0} to be read online ...".format(fname)
+            time.sleep(90)
+    return ret
+
 
 def add_source_files(destzip, destname, filenames):
     for filename in filenames:
         try:
-            srczip = read_zipfile(filename)
+            srczip = open_zipfile(filename)
         except Exception:
             print "Unable to read '{}' as zip".format(filename)
             continue
         for itemname in (item.filename for item in srczip.filelist):
-            geotiff_str = get_geotiff_str(itemname, srczip.read(itemname))
+            geotiff_str = get_geotiff_str(itemname, read_zipfile(srczip, itemname))
             destzip.writestr(
                 os.path.join(destname, 'data', convert_filename(itemname)), geotiff_str
             )
-
+        srczip.close()
 
 def add_metadata(destzip, destname, metadata):
     destzip.writestr(
@@ -310,6 +328,7 @@ def main(argv):
     parser.add_argument('--gcm', type=str, choices=GCM_MAP.keys(), help='General Circulation Model')
     parser.add_argument('--rcp', type=str, choices=RCP_MAP.keys(), help='Representative Concentration Pathways')
     parser.add_argument('--year', type=str, choices=YEAR_MAP.keys(), help='year')
+    parser.add_argument('--res', type=str, choices=RESOLUTION_MAP.keys(), help='resolution')
     params = vars(parser.parse_args(argv[1:]))
     src = params.get('srcdir')
     dest = params.get('destdir')
@@ -317,6 +336,7 @@ def main(argv):
     gcm_list = [params.get('gcm')] if params.get('gcm') is not None else GCM_MAP.keys()
     rcp_list = [params.get('rcp')] if params.get('rcp') is not None else RCP_MAP.keys()
     year_list = [params.get('year')] if params.get('year') is not None else YEAR_MAP.keys()
+    res_list = [params.get('res')] if params.get('res') is not None else RESOLUTION_MAP.keys()
 
     # fail if destination exists but is not a directory
     if os.path.exists(os.path.abspath(dest)) and not os.path.isdir(os.path.abspath(dest)):
@@ -332,7 +352,7 @@ def main(argv):
             sys.exit(os.EX_IOERR)
 
     for gcm, rcp, year, res, layer, files in potential_converts(src):
-        if layer not in dstypes or gcm not in gcm_list or rcp not in rcp_list or year not in year_list:
+        if layer not in dstypes or gcm not in gcm_list or rcp not in rcp_list or year not in year_list or res not in res_list:
             continue
         for f in files:
             destname = '{gcm}_{rcp}_{year}_{res}_{layer}'.format(

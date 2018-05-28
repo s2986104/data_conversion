@@ -11,12 +11,13 @@ import time
 
 
 JSON_TEMPLATE = "narclim.template.json"
+TMPDIR = os.getenv("BCCVL_TMP", "/mnt/workdir/")
 
 def create_target_dir(basename):
     """create zip folder structure in tmp location.
     return root folder
     """
-    tmpdir = "tmp_{}".format(basename)
+    tmpdir = os.path.join(TMPDIR, "tmp_{}".format(basename))
     os.makedirs(tmpdir)
     os.mkdir(os.path.join(tmpdir, basename))
     os.mkdir(os.path.join(tmpdir, basename, 'data'))
@@ -177,7 +178,7 @@ def convert_file(srczip, destdir):
 def main(argv):
     srcdir = None
     if len(argv) != 3:
-        print "Usage: {0} <srczip> <destdir>".format(argv[0])
+        print "Usage: {0} <srcdir> <destdir>".format(argv[0])
         sys.exit(1)
     srcdir = argv[1]
     destdir = argv[2]
