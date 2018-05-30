@@ -80,7 +80,7 @@ def convert(srczip, ziproot, basename):
         gdal_translate(vsizip_src_dir, destfile)
 
         # Scale the layer 15
-        if parts[-1] == "15":
+        if parts[-1] == "15.tif":
             scale(destfile, 0.01, ziproot)
     zf.close()
 
