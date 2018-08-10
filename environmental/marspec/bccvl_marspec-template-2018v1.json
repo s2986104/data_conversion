@@ -1,0 +1,24 @@
+{
+	"bccvl_metadata_version": "2014-09-01-01",
+	"title": "Global Marine Data, Bathymetry (1955-2010), 5 arcmin (~10 km)",
+	"genre": "Environmental",
+	"data_type": "continuous",
+	"format": "GeoTIFF",
+	"resolution": "5 arcmin",
+	"geogcs": "WGS84",
+	"bounding_box": {
+		"top": "90.0",
+		"right": "180.0",
+		"bottom": "-90.0",
+		"left": "-180.0"
+	},
+	"temporal_coverage": {
+		"start": "2000", 
+		"end": "2014"
+	}, 
+	"dataset_version": "v2 (2017)",
+	"external_url": "http://marspec.weebly.com/modern-data.html",
+	"license": "CC-BY Attribution 4.0",
+	"acknowledgement": ["Sbrocco, E. J. and Barber, P. H. (2013) MARSPEC: Ocean climate layers for marine spatial ecology. Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1", 
+	"Becker, J. J., D. T. Sandwell, W. H. F. Smith, J. Braud, B. Binder, J. Depner, D. Fabre, J. Factor, S. Ingalls, S-H. Kim, R. Ladner, K. Marks, S. Nelson, A. Pharaoh, R. Trimmer, J. Von Rosenberg, G. Wallace, and P. Weatherall. 2009. Global Bathymetry and Elevation Data at 30 Arc Seconds Resolution: SRTM30_PLUS. Marine Geodesy 32:355–371."]
+}
