@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding: latin-1
 import os
 import os.path
 import zipfile
@@ -269,59 +268,12 @@ def convert_future_dataset(srcfolder, destdir, scenerio, period, header):
 def main(argv):
     parser = argparse.ArgumentParser(description='Convert Global Marine datasets')
     parser.add_argument('--period', type=str, choices=['current', '2050', '2100'], help='dataset period')
-    parser.add_argument('--bathymetry', type=str, help='bathymetry dataset')
     params = vars(parser.parse_args(argv[1:]))
     period_list = [params.get('period')] if params.get('period') is not None else ['current', '2050', '2100']
-    bathymetry = params.get('bathymetry')
 
     destfolder = 'bccvl'
 
     tmpdest = None
-
-    if bathymetry:
-        srcfolder = 'source/bathymetry'
-        period = '1955-2010'
-        dsname = 'bathymetry_5m'
-        try:
-            #tmpdest = convert_dataset(srcfolder, dsname, dsid, scenerio, period)
-
-            destdir = dsname
-            dsglob = dsname + '*.zip'
-            tmpdest = tempfile.mkdtemp()
-            ziproot = create_target_dir(tmpdest, destdir)
-            _conver_dataset(dsname, srcfolder, dsglob, ziproot)
-            print tmpdest
-
-            # add metadata.json for the dataset
-            # gen_metadatajson(JSON_TEMPLATE, ziproot, scenerio, period)
-            md = json.load(open(JSON_TEMPLATE, 'r'))
-            md['temporal_coverage'] = {'start': '1955', 'end': '2010'}
-            md['title'] = 'Global Marine Data, Bathymetry (1955-2010), 5 arcmin (~10 km)'
-            md['data_type'] = 'continuous'
-            md['dataset_version'] = 'v1 (2012)'
-            md['external_url'] = 'http://marspec.weebly.com/modern-data.html'
-            md['acknowledgement'] = ['Sbrocco, E. J. and Barber, P. H. (2013) MARSPEC: Ocean climate layers for marine spatial ecology. Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1', 
-                                     'Becker, J. J., D. T. Sandwell, W. H. F. Smith, J. Braud, B. Binder, J. Depner, D. Fabre, J. Factor, S. Ingalls, S-H. Kim, R. Ladner, K. Marks, S. Nelson, A. Pharaoh, R. Trimmer, J. Von Rosenberg, G. Wallace, and P. Weatherall. 2009. Global Bathymetry and Elevation Data at 30 Arc Seconds Resolution: SRTM30_PLUS. Marine Geodesy 32:355–371.']
-            
-            md[u'files'] = {}
-            for filename in glob.glob(os.path.join(ziproot, '*', '*.tif')):
-                filename = filename[len(os.path.dirname(ziproot)):].lstrip('/')
-                md[u'files'][filename] = {
-                    u'layer': 'Depth',
-                }   
-            mdfile = open(os.path.join(ziproot, 'bccvl', 'metadata.json'), 'w')
-            json.dump(md, mdfile, indent=4)
-            mdfile.close()
-
-            # ziproot = tmpdest/dsname
-            zip_dataset(os.path.join(tmpdest, dsname),
-                        destfolder)
-
-        finally:
-            if tmpdest:
-                shutil.rmtree(tmpdest)
-        return
-
     for period in period_list:
         srcfolder = LAYER_PERIOD[period].get('source')
         for scenerio in LAYER_PERIOD[period].get('scenerio'):
