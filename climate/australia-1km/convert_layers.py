@@ -10,25 +10,25 @@ import re
 import time
 
 LAYER_MD = {
-    'bioclim_01.tif': ('bio01', 'annual mean temperature', 'degree_Celsius', None),
-    'bioclim_02.tif': ('bio02', 'mean diurnal temperature range', 'degree_Celsius', None),
-    'bioclim_03.tif': ('bio03', 'isothermality', None, None),
-    'bioclim_04.tif': ('bio04', 'temperature seasonality', 'degree_Celsius', None),
-    'bioclim_05.tif': ('bio05', 'max temperature of warmest week', 'degree_Celsius', None),
-    'bioclim_06.tif': ('bio06', 'min temperature of coldest week', 'degree_Celsius', None),
-    'bioclim_07.tif': ('bio07', 'temperature annual range', 'degree_Celsius', None),
-    'bioclim_08.tif': ('bio08', 'mean temperature of wettest quarter', 'degree_Celsius', None),
-    'bioclim_09.tif': ('bio09', 'mean temperature of driest quarter', 'degree_Celsius', None),
-    'bioclim_10.tif': ('bio10', 'mean temperature of warmest quarter', 'degree_Celsius', None),
-    'bioclim_11.tif': ('bio11', 'mean temperature of coldest quarter', 'degree_Celsius', None),
-    'bioclim_12.tif': ('bio12', 'annual precipitation', 'millimeter', None),
-    'bioclim_13.tif': ('bio13', 'precipitation of wettest week', 'millimeter', None),
-    'bioclim_14.tif': ('bio14', 'precipitation of driest week', 'millimeter', None),
-    'bioclim_15.tif': ('bio15', 'precipitation seasonality', 'millimeter', None),
-    'bioclim_16.tif': ('bio16', 'precipitation of wettest quarter', 'millimeter', None),
-    'bioclim_17.tif': ('bio17', 'precipitation of driest quarter', 'millimeter', None),
-    'bioclim_18.tif': ('bio18', 'precipitation of warmest quarter', 'millimeter', None),
-    'bioclim_19.tif': ('bio19', 'precipitation of coldest quarter', 'millimeter', None)
+    'bioclim_01.tif': ('B01', 'annual mean temperature', 'degree_Celsius', None),
+    'bioclim_02.tif': ('B02', 'mean diurnal temperature range', 'degree_Celsius', None),
+    'bioclim_03.tif': ('B03', 'isothermality', None, None),
+    'bioclim_04.tif': ('B04', 'temperature seasonality', 'degree_Celsius', None),
+    'bioclim_05.tif': ('B05', 'max temperature of warmest week', 'degree_Celsius', None),
+    'bioclim_06.tif': ('B06', 'min temperature of coldest week', 'degree_Celsius', None),
+    'bioclim_07.tif': ('B07', 'temperature annual range', 'degree_Celsius', None),
+    'bioclim_08.tif': ('B08', 'mean temperature of wettest quarter', 'degree_Celsius', None),
+    'bioclim_09.tif': ('B09', 'mean temperature of driest quarter', 'degree_Celsius', None),
+    'bioclim_10.tif': ('B10', 'mean temperature of warmest quarter', 'degree_Celsius', None),
+    'bioclim_11.tif': ('B11', 'mean temperature of coldest quarter', 'degree_Celsius', None),
+    'bioclim_12.tif': ('B12', 'annual precipitation', 'millimeter', None),
+    'bioclim_13.tif': ('B13', 'precipitation of wettest week', 'millimeter', None),
+    'bioclim_14.tif': ('B14', 'precipitation of driest week', 'millimeter', None),
+    'bioclim_15.tif': ('B15', 'precipitation seasonality', 'millimeter', None),
+    'bioclim_16.tif': ('B16', 'precipitation of wettest quarter', 'millimeter', None),
+    'bioclim_17.tif': ('B17', 'precipitation of driest quarter', 'millimeter', None),
+    'bioclim_18.tif': ('B18', 'precipitation of warmest quarter', 'millimeter', None),
+    'bioclim_19.tif': ('B19', 'precipitation of coldest quarter', 'millimeter', None)
 }
 
 
@@ -53,13 +53,13 @@ def unpack(zipname, path):
 
 def get_emsc_str(emsc):
     if emsc == 'RCP3PD':
-	return 'RCP 2.6'
+	   return 'RCP 2.6'
     if emsc == 'RCP6':
-	return 'RCP 6.0'
+	   return 'RCP 6.0'
     if emsc == 'RCP45':
-	return 'RCP 4.5'
+	   return 'RCP 4.5'
     if emsc == 'RCP85':
-	return 'RCP 8.5'
+	   return 'RCP 8.5'
     return emsc
 
 
