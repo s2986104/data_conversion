@@ -268,16 +268,13 @@ def create_target_dir(destdir, srcfile, rcp, gcm, year, res, lyr_type):
     """create zip folder structure in tmp location.
     return root folder
     """
-    if os.path.basename(srcfile) == 'current.zip':
-        dirname = 'current_{year}'.format(year='1976-2005')
-    else:
-        dirname = '{rcp}_{gcm}_{year}_{res}_{type}'.format(
-            rcp = get_emsc_str(RCP_MAP[rcp]).replace(' ', ''),
-            gcm = GCM_MAP[gcm],
-            year = YEAR_MAP[year],
-            res = res,
-            type = LAYER_TYPE_MAP[lyr_type],
-        )
+    dirname = '{rcp}_{gcm}_{year}_{res}_{type}'.format(
+        rcp = get_emsc_str(RCP_MAP[rcp]).replace(' ', ''),
+        gcm = GCM_MAP[gcm],
+        year = YEAR_MAP[year],
+        res = res,
+        type = LAYER_TYPE_MAP[lyr_type],
+    )
 
     root = os.path.join(destdir, dirname)
     os.mkdir(root)
@@ -317,13 +314,17 @@ def main(argv):
     for gcm, rcp, year, res, layer, files in potential_converts(src):
         if layer not in dstypes or gcm not in gcm_list or rcp not in rcp_list or year not in year_list or res not in res_list:
             continue
+
         for srczipf in files:
             srctmpdir = unzip_dataset(srczipf)
 
             # Create a dest directory for the datasets
             ziproot = create_target_dir(dest, srczipf, rcp, gcm, year, res, layer)
-
             convert(srctmpdir, ziproot)
+
+            if srctmpdir:
+                shutil.rmtree(srctmpdir)
+
 
 if __name__ == "__main__":
     main(sys.argv)
