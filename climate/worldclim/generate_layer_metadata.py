@@ -9,28 +9,23 @@ import shutil
 import sys
 import re
 
-CURRENT_CITATION = u'Jones, D. A., Wang, W., & Fawcett, R. (2009). High-quality spatial climate data-sets for Australia. Australian Meteorological and Oceanographic Journal, 58(4), 233.'
-CURRENT_TITLE = u'Australia, Current Climate (1976-2005), 2.5 arcmin (~5 km)'
-FUTURE_TITLE = u'Australia, Climate Projection, {resolution}'
-JSON_TEMPLATE = 'bccvl_australia_5km.template.json'
-SWIFT_CONTAINER= 'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/australia_5km_layers'
+CURRENT_TITLE = u'WorldClim Current Conditions (1950-2000), {resolution}'
+FUTURE_TITLE = u'WorldClim, Climate Projection, {resolution}'
+JSON_TEMPLATE = 'worldclim.template.json'
+SWIFT_CONTAINER= 'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/worldclim_layers'
 
-EMSC_TITLE = { 
-        "RCP2.6": "RCP3PD",
-        "RCP4.5": "RCP45",
-        "RCP6.0": "RCP6.0",
-        "RCP8.5": "RCP85",
-        "SRESA1B": "SRESA1B",
-        "SRESA1FI": "SRESA1FI",
-       "SRESA2": "SRESA2",
-       "SRESB1": "SRESB1",
-       "SRESB2": "SRESB2"
+
+RESOLUTION = {
+    '30s': '30 arcsec',
+    '2-5m': '2.5 arcmin',
+    '5m': '5 arcmin',
+    '10m': '10 arcmin'
 }
 
 layermds = []   # for layer md
 datasetmds = []     # for dataset md
 
-def gen_metadatajson(template, datadir, swiftcontainer, resolution):
+def gen_metadatajson(template, datadir, swiftcontainer):
     """read metadata template and populate rest of fields
     and write to metadata.json'
     """
@@ -40,26 +35,30 @@ def gen_metadatajson(template, datadir, swiftcontainer, resolution):
     # parse info from filename
     # check for future climate dataset:
     md = json.load(open(template, 'r'))
-    del md['files']
 
     if 'current' in datadir.lower():
         md[u'genre'] = 'DataGenreCC'
     else:
         md[u'genre'] = 'DataGenreFC'
-    md[u'resolution'] = resolution
 
-    m = re.match(r'([\w.]*)_([\w-]*)_(\d*)', base)
+    m = re.match(r'([\w.]*)_([\w-]*)_(\d*)_([\w-]*)_(\w*)', base)
     if m:
         md[u'temporal_coverage'][u'start'] = unicode(m.group(3))
         md[u'temporal_coverage'][u'end'] = unicode(m.group(3))
-        md[u'emsc'] = unicode(m.group(1))
-        md[u'gcm'] = unicode(m.group(2))
+        md[u'emsc'] = unicode(m.group(2))
+        md[u'gcm'] = unicode(m.group(1))
+        md[u'resolution'] = RESOLUTION[m.group(4)]  #30s, 2-5m, 5m, 10m
+        md[u'type'] = m.group(5)    # i.e. bioclim, prec, tmax, tmin,
     else:
         # can only be current
-        md[u'temporal_coverage'][u'start'] = u'1976'
-        md[u'temporal_coverage'][u'end'] = u'2005'
-        md[u'acknowledgement'] = CURRENT_CITATION
-        md[u'external_url'] = u''
+        m = re.match(r'(\w*)_([\w-]*)_(\w*)', base)
+        if m:
+            md[u'temporal_coverage'][u'start'] = u'1950'
+            md[u'temporal_coverage'][u'end'] = u'2000'
+            md[u'resolution'] = RESOLUTION[m.group(2)]
+            md[u'type'] = m.group(3)    # i.e. bioclim, prec, tmax, tmin, alt
+        else:
+            raise Exception("Fail to parse ", base)
 
     layers = []     # layers for dataset md
     # layer specific metadata
@@ -82,7 +81,7 @@ def gen_dataset_metadata(template, category, genre, resolution):
     ds_md[u'external_url'] = md[u'external_url']
     ds_md[u'license'] = md[u'license']
     ds_md[u'bounding_box'] = md[u'bounding_box']
-    ds_md[u'layers'] = [ lyr['url'] for lyr in layermds if lyr['genre'] == genre ]
+    ds_md[u'layers'] = [ lyr['url'] for lyr in layermds if lyr['genre'] == genre and lyr['resolution'] == resolution ]
     if genre == 'DataGenreFC':
         ds_md[u'title'] = FUTURE_TITLE.format(resolution=resolution)
     else:
@@ -96,22 +95,27 @@ def main(argv):
         sys.exit(1)
     srcdir = argv[1]
 
-    category = u"climate"
-    resolution = u"2.5 arcmin"
-    for dataset in glob.glob(os.path.join(srcdir, '*')):
-        gen_metadatajson(JSON_TEMPLATE, dataset, SWIFT_CONTAINER, resolution)
-
+    resolution = '5 arcmin'
+    resol = [key for key in RESOLUTION.keys() if RESOLUTION[key] == resolution]
+    print "Resolution = ", resol
+    category = ["climate", "topography"]
+    for subdir in ('current-layers', 'future-layers'):
+        for dataset in glob.glob(os.path.join(srcdir, subdir, '*_' + resol[0] + '_*')):
+            print "Processing ", dataset
+            gen_metadatajson(JSON_TEMPLATE, dataset, SWIFT_CONTAINER)
+    
     for genre in ("DataGenreCC", "DataGenreFC"):
         dsmd = gen_dataset_metadata(JSON_TEMPLATE, category, genre, resolution)
         if dsmd:
             datasetmds.append(dsmd)
 
     # save layer metadata to file
-    with open(os.path.join(srcdir, 'layer_metadata.json'), 'w') as mdfile:
+    prefix = 'worldclim_' + resolution.replace(' ', '')
+    with open(os.path.join(srcdir, prefix + '_layer_metadata.json'), 'w') as mdfile:
         json.dump({"type": "layer", "data": layermds}, mdfile, indent=4)
 
     # save dataset metadata to file
-    with open(os.path.join(srcdir, 'dataset_metadata.json'), 'w') as dsmdfile:
+    with open(os.path.join(srcdir, prefix + '_dataset_metadata.json'), 'w') as dsmdfile:
         json.dump({"type": "dataset", "data": datasetmds}, dsmdfile, indent=4)
 
     # save collection
