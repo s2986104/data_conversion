@@ -64,12 +64,13 @@ def gen_metadatajson(template, datadir, swiftcontainer):
     # layer specific metadata
     for filename in glob.glob(os.path.join(datadir, '*.tif')):
         filename = os.path.basename(filename)
-        md[u'filename'] = unicode(filename)
-        md[u'url'] = unicode(os.path.join(swiftcontainer, base, filename))
-        md[u'layer'] = unicode(filename[len(base)+1:-4])
-        md[u'data_type'] = md['data_type']    # This should be specific to layers i.e. in md['files']
-        layers.append(md['url'])
-        layermds.append(md)
+        md2 = md.copy()
+        md2[u'filename'] = unicode(filename)
+        md2[u'url'] = unicode(os.path.join(swiftcontainer, base, filename))
+        md2[u'layer'] = unicode(filename[len(base)+1:-4])
+        md2[u'data_type'] = md['data_type']    # This should be specific to layers i.e. in md['files']
+        layers.append(md2['url'])
+        layermds.append(md2)
 
 def gen_dataset_metadata(template, category, genre, resolution):
     md = json.load(open(template, 'r'))
