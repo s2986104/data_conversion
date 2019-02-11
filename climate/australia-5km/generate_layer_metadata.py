@@ -10,6 +10,8 @@ from osgeo import gdal, osr
 import tqdm
 
 
+# TODO: add mimetype somehwere?
+
 CATEGORY = 'climate'
 RESOLUTION = '2.5 arcmin'
 CURRENT_CITATION = (
@@ -17,8 +19,8 @@ CURRENT_CITATION = (
     'climate data-sets for Australia. Australian Meteorological and '
     'Oceanographic Journal, 58(4), 233.'
 )
-CURRENT_TITLE = 'Australia, Current Climate (1976-2005), 2.5 arcmin (~5 km)'
-FUTURE_TITLE = 'Australia, Climate Projection, {resolution}'
+CURRENT_TITLE = 'Australia, Current Climate (1976-2005), {resolution} (~5 km)'.format(resolution=RESOLUTION)
+FUTURE_TITLE = 'Australia, Climate Projection, {resolution}'.format(resolution=RESOLUTION)
 FUTURE_ACKNOWLEDGEMENT = (
     'Vanderwal, Jeremy. (2012). All future climate layers for Australia - 5km '
     'resolution. James Cook University. [Data files] '
@@ -203,7 +205,7 @@ def get_cov_range_alternates(ds, url):
                 "shape": [band.YSize, band.XSize],
                 "dmgr:band": 1,
                 "dmgr:offset": band.GetOffset(),
-                "dmgr:Scale": band.GetScale(),
+                "dmgr:scale": band.GetScale(),
                 "dmgr:missingValue": band.GetNoDataValue(),
                 "dmgr:min": band.GetMinimum(),
                 "dmgr:max": band.GetMaximum(),
@@ -365,10 +367,10 @@ def gen_dataset_metadata(genre):
     }
     # ds_md[u'bounding_box'] = md[u'bounding_box']
     # ds_md[u'layers'] = [ lyr['url'] for lyr in layermds if lyr['genre'] == genre ]
-    # if genre == 'DataGenreFC':
-    #     ds_md[u'title'] = FUTURE_TITLE.format(resolution=resolution)
-    # else:
-    #     ds_md[u'title'] = CURRENT_TITLE.format(resolution=resolution)
+    if genre == 'DataGenreFC':
+        ds_md['title'] = FUTURE_TITLE
+    else:
+        ds_md['title'] = CURRENT_TITLE
     return ds_md
 
 
