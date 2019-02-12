@@ -82,7 +82,7 @@ def gen_uuid(cov):
             ''.join([
                 kind, 'australia-5km', md['genre'],
                 ''.join(sorted(cov['parameters'].keys())),
-                md['emsc'], md['gcm'], md['year']
+                md['emsc'], md['gcm'], str(md['year'])
             ])
         )
     return str(uid)
@@ -243,6 +243,10 @@ def get_dataset_cov_domain_axes(coverages, aggs):
         # collect all values for this agg
         values = {c['bccvl:metadata'][agg] for c in coverages}
         axes[agg] = {"values": sorted(values)}
+        # special handling for years
+        if agg == 'year':
+            bounds = {tuple(c['bccvl:metadata']['year_range']) for c in coverages}
+            axes[agg]['bounds'] = [item for sublist in bounds for item in sublist]
     return axes
 
 
@@ -323,27 +327,23 @@ def gen_coverage_metadata(tifffile, swiftcontainer):
     md = {}
     ds = gdal.Open(tifffile)
     dsmd = ds.GetMetadata()
+    years = dsmd['year_range'].split('-')
     if 'emission_scenario' in dsmd:
         # Future Climate
         md['genre'] = 'DataGenreFC'
-        md['temporal_coverage'] = {
-            'start': dsmd['year'],
-            'end': dsmd['year'],
-        }
         # TODO: we have tied the attribute name to the axis name ...
         #       maybe we should rethink how we name axes, and potentially give
         #       them different names than the attribute
         md['emsc'] = dsmd['emission_scenario']
         md['gcm'] = dsmd['general_circulation_models']
-        md['year'] = dsmd['year']
+        md['year'] = int(dsmd['year'])
+        md['year_range'] = [int(years[0]), int(years[1])]
         # TODO: external url?, acknowledgement?
     else:
         # Current Climate
         md['genre'] = 'DataGenreCC'
-        md['temporal_coverage'] = {
-            'start': dsmd['year'].split('-')[0],
-            'end': dsmd['year'].split('-')[1],
-        }
+        md['year'] = int(dsmd['year'])
+        md['year_range'] = [int(years[0]), int(years[1])]
         md['acknowledgement'] = CURRENT_CITATION
         md['external_url'] = ''
     md['resolution'] = RESOLUTION
