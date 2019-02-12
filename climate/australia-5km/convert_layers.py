@@ -165,12 +165,12 @@ def gdal_options(srcurl, destfilename, destdir):
     options += ['-co', 'PREDICTOR={}'.format(md['predictor'])]
     if os.path.basename(destdir).startswith("current_"):
         _, year = os.path.basename(destdir).split('_')
-        options += ['-mo', 'year={}'.format(year)]
+        options += ['-mo', 'year_range={}'.format(year)]
     else:
         emsc, gcms, year = os.path.basename(destdir).split('_')
         options += ['-mo', 'emission_scenario={}'.format(emsc)]
         options += ['-mo', 'general_circulation_models={}'.format(gcms.upper())]
-        options += ['-mo', 'year={}'.format(year)]
+        options += ['-mo', 'year_range={}-{}'.format(year, year)]
     # set CRS
     options += ['-a_srs', 'EPSG:4326']
     return options
