@@ -39,6 +39,30 @@ SWIFT_CONTAINER = (
     'australia_5km_layers'
 )
 
+COLLECTION = {
+    "_type": "Collection",
+    "uuid": "1db9e574-2f14-11e9-b0ea-0242ac110002",
+    "title": "Australia current and future climate data",
+    "description": "Current and future climate data for the Australian continent\n\nGeographic extent: Australia\nYear range: 1976-2005, 2015-2085\nResolution: 30 arcsec (~1 km), 2.5 arcmin (~5 km)\nData layers: B01-19",
+    "rights": "CC-BY Attribution 3.0",
+    "landingPage": "See <a href=\"https://research.jcu.edu.au/researchdata/default/detail/a06a78f553e1452bcf007231f6204f04/\">https://research.jcu.edu.au/researchdata/default/detail/a06a78f553e1452bcf007231f6204f04/</a>",
+    "attribution": ["Vanderwal, Jeremy. (2012). All future climate layers for Australia - 5km resolution. James Cook University."],
+    "subjects": ["Current datasets", "Future datasets"],
+    "categories": ["climate"],
+    "datasets": [
+        # {
+        #     "uuid": "8f6e3ea5-1caf-5562-a580-aa23bbe7c975",
+        #     "title": "Australia, Current Climate (1976-2005), 2.5 arcmin (~5 km)"
+        # },
+        # {
+        #     "uuid": "fecc0b23-4199-5b49-ac6c-45c3c1249f3e",
+        #     "title": "Australia, Climate Projection, 2.5 arcmin"
+        # }
+    ],
+
+    "BCCDataGenre": ["DataGenreCC", "DataGenreFC"]
+}
+
 
 GDAL_JSON_TYPE_MAP = {
     gdal.GDT_Unknown: "undefined",
@@ -465,6 +489,16 @@ def main():
     # save all the data
     with open(os.path.join(opts.srcdir, 'datasets.json'), 'w') as mdfile:
         json.dump(datasets, mdfile, indent=2)
+
+    print("Write collection.json")
+    with open(os.path.join(opts.srcdir, 'collection.json'), 'w') as mdfile:
+        # add datasets
+        for ds in datasets:
+            COLLECTION['datasets'].append({
+                "uuid": ds['bccvl:metadata']['uuid'],
+                "title": ds['bccvl:metadata']['title']
+            })
+        json.dump([COLLECTION], mdfile, indent=2)
 
 
 if __name__ == "__main__":
