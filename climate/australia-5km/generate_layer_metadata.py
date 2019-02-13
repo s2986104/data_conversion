@@ -379,7 +379,7 @@ def gen_coverage_metadata(tifffile, swiftcontainer):
     return md
 
 
-def gen_dataset_metadata(genre):
+def gen_dataset_metadata(genre, coverages):
     ds_md = {
         'category': CATEGORY,
         'genre': genre,
@@ -387,14 +387,15 @@ def gen_dataset_metadata(genre):
         'acknowledgement': FUTURE_ACKNOWLEDGEMENT,
         'external_url': FUTURE_EXTERNAL_URL,
         'license': FUTURE_LICENSE,
-
     }
-    # ds_md[u'bounding_box'] = md[u'bounding_box']
-    # ds_md[u'layers'] = [ lyr['url'] for lyr in layermds if lyr['genre'] == genre ]
+    # collect some bits of metadata from data
     if genre == 'DataGenreFC':
         ds_md['title'] = FUTURE_TITLE
     else:
         ds_md['title'] = CURRENT_TITLE
+        # all coverages have the same year and year_range
+        ds_md['year'] = coverages[0]['bccvl:metadata']['year']
+        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
     return ds_md
 
 
@@ -479,7 +480,7 @@ def main():
         )
         aggs = [] if genre == 'DataGenreCC' else ['emsc', 'gcm', 'year']
         coverage = gen_dataset_coverage(subset, aggs)
-        md = gen_dataset_metadata(genre)
+        md = gen_dataset_metadata(genre, subset)
         coverage['bccvl:metadata'] = md
         coverage['bccvl:metadata']['extent_wgs84'] = get_extent(coverage)
         coverage['bccvl:metadata']['uuid'] = gen_uuid(coverage)
