@@ -270,7 +270,7 @@ def get_dataset_cov_domain_axes(coverages, aggs):
         # special handling for years
         if agg == 'year':
             bounds = {tuple(c['bccvl:metadata']['year_range']) for c in coverages}
-            axes[agg]['bounds'] = [item for sublist in bounds for item in sublist]
+            axes[agg]['bounds'] = [item for sublist in sorted(bounds) for item in sublist]
     return axes
 
 
