@@ -112,26 +112,26 @@ VAR_DEFS = {
 }
 
 
-LAYER_MD = {
-    'bioclim_01.tif': {'var': 'bioclim_01', 'predictor': '3'},
-    'bioclim_02.tif': {'var': 'bioclim_02', 'predictor': '3'},
-    'bioclim_03.tif': {'var': 'bioclim_03', 'predictor': '3'},
-    'bioclim_04.tif': {'var': 'bioclim_04', 'predictor': '3'},
-    'bioclim_05.tif': {'var': 'bioclim_05', 'predictor': '3'},
-    'bioclim_06.tif': {'var': 'bioclim_06', 'predictor': '3'},
-    'bioclim_07.tif': {'var': 'bioclim_07', 'predictor': '3'},
-    'bioclim_08.tif': {'var': 'bioclim_08', 'predictor': '3'},
-    'bioclim_09.tif': {'var': 'bioclim_09', 'predictor': '3'},
-    'bioclim_10.tif': {'var': 'bioclim_10', 'predictor': '3'},
-    'bioclim_11.tif': {'var': 'bioclim_11', 'predictor': '3'},
-    'bioclim_12.tif': {'var': 'bioclim_12', 'predictor': '3'},
-    'bioclim_13.tif': {'var': 'bioclim_13', 'predictor': '3'},
-    'bioclim_14.tif': {'var': 'bioclim_14', 'predictor': '3'},
-    'bioclim_15.tif': {'var': 'bioclim_15', 'predictor': '3'},
-    'bioclim_16.tif': {'var': 'bioclim_16', 'predictor': '3'},
-    'bioclim_17.tif': {'var': 'bioclim_17', 'predictor': '3'},
-    'bioclim_18.tif': {'var': 'bioclim_18', 'predictor': '3'},
-    'bioclim_19.tif': {'var': 'bioclim_19', 'predictor': '3'},
+GEO_TIFF_OPTS = {
+    'bioclim_01': {'predictor': '3'},
+    'bioclim_02': {'predictor': '3'},
+    'bioclim_03': {'predictor': '3'},
+    'bioclim_04': {'predictor': '3'},
+    'bioclim_05': {'predictor': '3'},
+    'bioclim_06': {'predictor': '3'},
+    'bioclim_07': {'predictor': '3'},
+    'bioclim_08': {'predictor': '3'},
+    'bioclim_09': {'predictor': '3'},
+    'bioclim_10': {'predictor': '3'},
+    'bioclim_11': {'predictor': '3'},
+    'bioclim_12': {'predictor': '3'},
+    'bioclim_13': {'predictor': '3'},
+    'bioclim_14': {'predictor': '3'},
+    'bioclim_15': {'predictor': '3'},
+    'bioclim_16': {'predictor': '3'},
+    'bioclim_17': {'predictor': '3'},
+    'bioclim_18': {'predictor': '3'},
+    'bioclim_19': {'predictor': '3'},
 }
 
 # map source file id's to our idea of RCP id's
@@ -148,32 +148,41 @@ def parse_filename(fname):
     """
     basename = os.path.basename(fname)
     basename, _ = os.path.splitext(basename)
-    emsc, gcms, year = basename.split('_')
-    return EMSC_MAP.get(emsc, emsc), gcms, year
+    parts = basename.split('_')
+    if len(parts) == 3:
+        # no variable ... e.g. when parsing zip file name or current
+        if parts[0] == 'current':
+            emsc, gcm, year, var = parts[0], parts[0], parts[1], parts[2]
+        else:
+            emsc, gcm, year = parts
+            var = ''
+    else:
+        # variable included in filename (e.g. dest filename)
+        emsc, gcm, year, var = parts
+    return EMSC_MAP.get(emsc, emsc), gcm, year, var.replace('-', '_')
 
 
 def gdal_options(srcurl, destfilename, destdir):
     # options to add metadata for the tiff file
-    md = LAYER_MD.get(destfilename)
-    if not md:
-        raise Exception("layer {0} is missing metadata".format(destfilename))
+    emsc, gcm, year, layerid = parse_filename(destfilename)
+    opts = GEO_TIFF_OPTS.get(layerid)
+    if not opts:
+        raise Exception("unknown layerid {} for {}".format(layerid, destfilename))
 
     options = ['-of', 'GTiff', '-co', 'TILED=YES']
     options += ['-co', 'COMPRESS=DEFLATE']
     # PREDICTOR=2 sholud only be used with integer continous data
     # PREDICTOR=3 for floating point data
-    options += ['-co', 'PREDICTOR={}'.format(md['predictor'])]
-    if os.path.basename(destdir).startswith("current_"):
-        _, year = os.path.basename(destdir).split('_')
+    options += ['-co', 'PREDICTOR={}'.format(opts['predictor'])]
+    if emsc == 'current':
         years = [int(x) for x in year.split('-')]
         options += ['-mo', 'year_range={}-{}'.format(years[0], years[1])]
         options += ['-mo', 'year={}'.format(int((years[1] - years[0] + 1 / 2) + years[0]))]
     else:
-        emsc, gcms, year = os.path.basename(destdir).split('_')
         year = int(year)
         years = [year - 4, year + 5]
         options += ['-mo', 'emission_scenario={}'.format(emsc)]
-        options += ['-mo', 'general_circulation_models={}'.format(gcms.upper())]
+        options += ['-mo', 'general_circulation_models={}'.format(gcm.upper())]
         options += ['-mo', 'year_range={}-{}'.format(years[0], years[1])]
         options += ['-mo', 'year={}'.format(year)]
     # set CRS
@@ -181,7 +190,7 @@ def gdal_options(srcurl, destfilename, destdir):
     return options
 
 
-def run_gdal(cmd, infile, outfile, md):
+def run_gdal(cmd, infile, outfile, layerid):
     tf, tfname = tempfile.mkstemp(suffix='.tif')
     try:
         ret = subprocess.run(
@@ -195,10 +204,10 @@ def run_gdal(cmd, infile, outfile, md):
         band = ds.GetRasterBand(1)
         # ensure band stats
         band.ComputeStatistics(False)
-        for key, value in VAR_DEFS[md['var']].items():
+        for key, value in VAR_DEFS[layerid].items():
             band.SetMetadataItem(key, value)
         # just for completeness
-        band.SetUnitType(VAR_DEFS[md['var']]['units'])
+        band.SetUnitType(VAR_DEFS[layerid]['units'])
         # band.SetScale(1.0)
         # band.SetOffset(0.0)
 
@@ -213,7 +222,7 @@ def run_gdal(cmd, infile, outfile, md):
                 '-co', 'TILED=YES',
                 '-co', 'COPY_SRC_OVERVIEWS=YES',
                 '-co', 'COMPRESS=DEFLATE',
-                '-co', 'PREDICTOR={}'.format(md['predictor']),
+                '-co', 'PREDICTOR={}'.format(GEO_TIFF_OPTS[layerid]['predictor']),
                 tfname,
                 outfile,
             ],
@@ -239,7 +248,12 @@ def convert(srcfile, destdir):
             if not zipinfo.filename.endswith('.asc'):
                 # skip non .asc files
                 continue
-            destfilename = os.path.basename(zipinfo.filename)[:-len('.asc')] + '.tif'
+            destfilename = (
+                os.path.basename(destdir) +
+                '_' +
+                os.path.basename(zipinfo.filename)[:-len('.asc')].replace('_', '-') +
+                '.tif'
+            )
             srcurl = '/vsizip/' + srcfile + '/' + zipinfo.filename
             gdaloptions = gdal_options(srcurl, destfilename, destdir)
             # output file name
@@ -247,7 +261,8 @@ def convert(srcfile, destdir):
             # run gdal translate
             cmd = ['gdal_translate']
             cmd.extend(gdaloptions)
-            results.append(pool.submit(run_gdal, cmd, srcurl, destpath, LAYER_MD.get(destfilename)))
+            _, _, _, layerid = parse_filename(destfilename)
+            results.append(pool.submit(run_gdal, cmd, srcurl, destpath, layerid))
 
     for result in tqdm.tqdm(futures.as_completed(results), desc=os.path.basename(srcfile), total=len(results)):
         if result.exception():
@@ -262,7 +277,7 @@ def create_target_dir(destdir, srcfile):
     if os.path.basename(srcfile) == 'current.zip':
         dirname = 'current_{year}'.format(year='1976-2005')
     else:
-        emsc, gcms, year = parse_filename(srcfile)
+        emsc, gcms, year, _ = parse_filename(srcfile)
         dirname = '{0}_{1}_{2}'.format(emsc, gcms, year).replace(' ', '')
     root = os.path.join(destdir, dirname)
     os.makedirs(root, exist_ok=True)
