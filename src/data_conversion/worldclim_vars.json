@@ -1,0 +1,32 @@
+{
+    "alt": {
+        "standard_name": "altitude",
+        "long_name": "Elevation (elevation above sea level)",
+        "units": "m",
+        "measure_type": "continuous"
+    },
+    "prec": {
+        "standard_name": "precipitation",
+        "long_name": "Average monthly precipitation",
+        "units": "mm",
+        "measure_type": "continuous"
+    },
+    "tmax": {
+        "standard_name": "temperature",
+        "long_name": "Average monthly maximum temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "tmin": {
+        "standard_name": "temperature",
+        "long_name": "Average monthly minimum temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "tmean": {
+        "standard_name": "temperature",
+        "long_name": "Average monthly mean temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    }
+}
