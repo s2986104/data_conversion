@@ -8,12 +8,13 @@ import sys
 import tempfile
 import zipfile
 import argparse
+import shutil
 
 from osgeo import gdal
 import tqdm
 
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
-
+from data_conversion.utils import ensure_directory, move_files
 
 # map source file id's to our idea of RCP id's
 EMSC_MAP = {
@@ -170,6 +171,9 @@ def parse_args():
                         help='source folder or source zip file.')
     parser.add_argument('destdir', action='store',
                         help='destination folder for converted tif files.')
+    parser.add_argument('--workdir', action='store',
+                        default='/mnt/workdir/australia-5km_work',
+                        help='folder to store working files before moving to final destination')
     return parser.parse_args()
 
 
@@ -180,12 +184,22 @@ def main():
         srcfiles = sorted(glob.glob(os.path.join(srcfile, '*.zip')))
     else:
         srcfiles = [srcfile]
-    dest = os.path.abspath(opts.destdir)
+
+    workdir = ensure_directory(opts.workdir)
+    dest = ensure_directory(opts.destdir)
     # unpack contains one destination datasets
     for srcfile in tqdm.tqdm(srcfiles):
-        targetdir = create_target_dir(dest, srcfile)
-        convert(srcfile, targetdir)
+        target_work_dir = create_target_dir(workdir, srcfile)
+        try:
+            # convert files into workdir
+            convert(srcfile, target_work_dir)
+            # move results to dest
+            target_dir = create_target_dir(dest, srcfile)
+            move_files(target_work_dir, target_dir)
+        finally:
+            # cleanup
+            shutil.rmtree(target_work_dir)
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
