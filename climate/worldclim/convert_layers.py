@@ -13,7 +13,7 @@ import subprocess
 from osgeo import gdal
 
 
-from data_conversion import VAR_DEFS, PREDICTORS
+from data_conversion.vocabs import VAR_DEFS, PREDICTORS
 
 
 EMSC_MAP = {
@@ -63,6 +63,15 @@ SCALES = {
 }
 
 
+# Worldclim current seems to be slightly off, we use this map to adjust it.
+GEO_TRANSFORM_PATCH = {
+    '10m': (-180.0, 0.16666666666666666, 0.0, 90.0, 0.0, -0.16666666666666666),
+    '2-5m': (-180.0, 0.041666666666667, 0.0, 90.0, 0.0, -0.041666666666667),
+    '5m': (-180.0, 0.083333333333333, 0.0, 90.0, 0.0, -0.083333333333333),
+    '30s': (-180.0, 0.008333333333333, 0.0, 90.0, 0.0, -0.008333333333333),
+}
+
+
 def parse_zip_filename(srcfile):
     # srcfile should be an absolute path name to a zip file in the source folder
     basename, _ = os.path.splitext(os.path.basename(srcfile))
@@ -76,7 +85,7 @@ def parse_zip_filename(srcfile):
     else:
         # it's future .. basedir is resolution
         gcm, emsc, var, year = re.findall(r'\w{2}', basename)
-        res = basedir
+        res = basedir.replace(".", '-')
         time_ = 'future'
         type_ = 'tif'
         year = 2000 + int(year)
@@ -104,6 +113,7 @@ def gdal_options(srcfile):
         options += ['-mo', 'general_circulation_models={}'.format(gcm.upper())]
         options += ['-mo', 'year_range={}-{}'.format(years[0], years[1])]
         options += ['-mo', 'year={}'.format(year)]
+    options += ['-mo', 'version=1.4']
     return options
 
 
@@ -143,7 +153,7 @@ def get_layer_id(lzid, filename):
     return layerid, month
 
 
-def run_gdal(cmd, infile, outfile, layerid):
+def run_gdal(cmd, infile, outfile, layerid, res):
     tf, tfname = tempfile.mkstemp(suffix='.tif')
     try:
         ret = subprocess.run(
@@ -154,6 +164,12 @@ def run_gdal(cmd, infile, outfile, layerid):
         ret.check_returncode()
         # add band metadata
         ds = gdal.Open(tfname, gdal.GA_Update)
+        # Patch GeoTransform ... at least worldclim current data is slightly off
+        ds.SetGeoTransform(GEO_TRANSFORM_PATCH[res])
+        # For some reason we have to flust the changes to geo transform immediately
+        # otherwise gdal forgets about it?
+        # TODO: check if setting ds = None fixes this as well?
+        ds.FlushCache()
         # adapt layerid from zip file to specific layer inside zip
         layerid, month = get_layer_id(layerid, os.path.basename(infile))
         if month:
@@ -178,8 +194,9 @@ def run_gdal(cmd, infile, outfile, layerid):
             '-co', 'PREDICTOR={}'.format(PREDICTORS[band.DataType]),
         ]
         # check crs
-        if not ds.GetProjection():
-            cmd.extend(['-a_srs', 'EPSG:4326'])
+        # Worldclim future datasets have incomplete projection information
+        # let's force it to a known proj info anyway
+        cmd.extend(['-a_srs', 'EPSG:4326'])
         # close dataset
         del band
         del ds
@@ -202,7 +219,7 @@ def convert(srcfile, destdir):
     # parse info from filename
     time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
 
-    pool = futures.ProcessPoolExecutor()
+    pool = futures.ProcessPoolExecutor(2)
     results = []
 
     with zipfile.ZipFile(srcfile) as srczip:
@@ -227,9 +244,11 @@ def convert(srcfile, destdir):
                     continue
                 srcurl = '/vsizip/' + srcfile + '/' + zipinfo.filename
             # format month if needed
-            file_part, month = get_layer_id(var, os.path.basename(zipinfo.filename.rstrip('/')))
+            layerid, month = get_layer_id(var, os.path.basename(zipinfo.filename.rstrip('/')))
+            # replace '_' in layerid to '-' for filename generation
+            file_part = layerid.replace('_', '-')
             if month is not None:
-                file_part = '{}_{:02d}'.format(file_part, month)
+                file_part = '{}-{:02d}'.format(file_part, month)
             destfilename = (
                 os.path.basename(destdir) +
                 '_' +
@@ -242,7 +261,8 @@ def convert(srcfile, destdir):
             # run gdal translate
             cmd = ['gdal_translate']
             cmd.extend(gdaloptions)
-            results.append(pool.submit(run_gdal, cmd, srcurl, destpath, var))
+            results.append(pool.submit(run_gdal, cmd, srcurl, destpath, var, res))
+            # run_gdal(cmd, srcurl, destpath, var, res)
 
     for result in tqdm.tqdm(futures.as_completed(results), desc=os.path.basename(srcfile), total=len(results)):
         if result.exception():

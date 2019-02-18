@@ -6,25 +6,25 @@
         "measure_type": "continuous"
     },
     "prec": {
-        "standard_name": "precipitation",
+        "standard_name": "precipitation_mean_month",
         "long_name": "Average monthly precipitation",
         "units": "mm",
         "measure_type": "continuous"
     },
     "tmax": {
-        "standard_name": "temperature",
+        "standard_name": "temperature_max_month",
         "long_name": "Average monthly maximum temperature",
         "units": "degree_Celsius",
         "measure_type": "continuous"
     },
     "tmin": {
-        "standard_name": "temperature",
+        "standard_name": "temperature_min_month",
         "long_name": "Average monthly minimum temperature",
         "units": "degree_Celsius",
         "measure_type": "continuous"
     },
     "tmean": {
-        "standard_name": "temperature",
+        "standard_name": "temperature_mean_month",
         "long_name": "Average monthly mean temperature",
         "units": "degree_Celsius",
         "measure_type": "continuous"

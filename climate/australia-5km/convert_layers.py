@@ -11,7 +11,7 @@ import zipfile
 from osgeo import gdal
 import tqdm
 
-from data_conversion import VAR_DEFS, PREDICTORS
+from data_conversion.vocabs import VAR_DEFS, PREDICTORS
 
 
 # map source file id's to our idea of RCP id's
