@@ -1,0 +1,150 @@
+{
+    "ACCESS1-0": {
+        "title": "",
+        "license": "non-commercial"
+    },
+    "BCC-CSM-1": {
+        "title": "",
+        "license": ""
+    },
+    "CCCMA-CGCM31": {
+        "title": "",
+        "license": ""
+    },
+    "CCSM4": {
+        "title": "",
+        "license": ""
+    },
+    "CCSR-MIROC32HI": {
+        "title": "",
+        "license": ""
+    },
+    "CCSR-MIROC32MED": {
+        "title": "",
+        "license": ""
+    },
+    "CESM1-CAM5-1-FV2": {
+        "title": "",
+        "license": ""
+    },
+    "CNRM-CM3": {
+        "title": "",
+        "license": ""
+    },
+    "CNRM-CM5": {
+        "title": "",
+        "license": ""
+    },
+    "CSIRO-MK30": {
+        "title": "",
+        "license": ""
+    },
+    "GFDL-CM20": {
+        "title": "",
+        "license": ""
+    },
+    "GFDL-CM21": {
+        "title": "",
+        "license": ""
+    },
+    "GFDL-CM3": {
+        "title": "",
+        "license": ""
+    },
+    "GFDL-ESM2G": {
+        "title": "",
+        "license": ""
+    },
+    "GISS-E2-R": {
+        "title": "",
+        "license": ""
+    },
+    "GISS-MODELEH": {
+        "title": "",
+        "license": ""
+    },
+    "GISS-MODELER": {
+        "title": "",
+        "license": ""
+    },
+    "HadGEM2-AO": {
+        "title": "",
+        "license": ""
+    },
+    "HadGEM2-CC": {
+        "title": "",
+        "license": ""
+    },
+    "HadGEM2-ES": {
+        "title": "",
+        "license": ""
+    },
+    "IAP-FGOALS10G": {
+        "title": "",
+        "license": ""
+    },
+    "INMCM4": {
+        "title": "",
+        "license": ""
+    },
+    "INM-CM30": {
+        "title": "",
+        "license": ""
+    },
+    "IPSL-CM4": {
+        "title": "",
+        "license": ""
+    },
+    "IPSL-CM5A-LR": {
+        "title": "",
+        "license": ""
+    },
+    "MIROC-ESM-CHEM": {
+        "title": "",
+        "license": "non-commercial"
+    },
+    "MIROC-ESM": {
+        "title": "",
+        "license": "non-commercial"
+    },
+    "MIROC5": {
+        "title": "",
+        "license": "non-commercial"
+    },
+    "MPI-ECHAM5": {
+        "title": "",
+        "license": ""
+    },
+    "MPI-ESM-LR": {
+        "title": "",
+        "license": ""
+    },
+    "MRI-CGCM232A": {
+        "title": "",
+        "license": ""
+    },
+    "MRI-CGCM3": {
+        "title": "",
+        "license": ""
+    },
+    "NCAR-CCSM30": {
+        "title": "",
+        "license": ""
+    },
+    "NCAR-PCM1": {
+        "title": "",
+        "license": ""
+    },
+    "NorESM1-M": {
+        "title": "",
+        "license": ""
+    },
+    "UKMO-HADCM3": {
+        "title": "",
+        "license": ""
+    },
+    "UKMO-HADGEM1": {
+        "title": "",
+        "license": ""
+    }
+}

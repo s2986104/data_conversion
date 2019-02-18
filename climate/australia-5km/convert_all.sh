@@ -1,6 +1,4 @@
 #!/bin/bash
 
-for file in source/*.zip ; do
-    echo "convert $file"
-    python convert.py $file bccvl
-done
+# python3 convert_layers.py ./source /mnt/workdir/australia-5km/bccvl/layers
+python3 convert_layers.py ./source bccvl

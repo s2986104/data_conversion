@@ -18,3 +18,4 @@ environmental/national-soil-grids/bccvl/
 environmental/vast/bccvl/
 climate/australian-water-availability-project/bccvl/Run26j/annual/logs/
 climate/australian-water-availability-project/bccvl/Run26j/annual/random_scripts/c
+*.egg-info

@@ -1,173 +1,184 @@
 #!/usr/bin/env python
+from concurrent import futures
+import glob
 import os
 import os.path
-import zipfile
-import glob
-import tempfile
-import shutil
+import subprocess
 import sys
-import re
-import time
+import tempfile
+import zipfile
 
-LAYER_MD = {
-    'bioclim_01.tif': ('B01', 'annual mean temperature', 'degree_Celsius', None),
-    'bioclim_02.tif': ('B02', 'mean diurnal temperature range', 'degree_Celsius', None),
-    'bioclim_03.tif': ('B03', 'isothermality', None, None),
-    'bioclim_04.tif': ('B04', 'temperature seasonality', 'degree_Celsius', None),
-    'bioclim_05.tif': ('B05', 'max temperature of warmest week', 'degree_Celsius', None),
-    'bioclim_06.tif': ('B06', 'min temperature of coldest week', 'degree_Celsius', None),
-    'bioclim_07.tif': ('B07', 'temperature annual range', 'degree_Celsius', None),
-    'bioclim_08.tif': ('B08', 'mean temperature of wettest quarter', 'degree_Celsius', None),
-    'bioclim_09.tif': ('B09', 'mean temperature of driest quarter', 'degree_Celsius', None),
-    'bioclim_10.tif': ('B10', 'mean temperature of warmest quarter', 'degree_Celsius', None),
-    'bioclim_11.tif': ('B11', 'mean temperature of coldest quarter', 'degree_Celsius', None),
-    'bioclim_12.tif': ('B12', 'annual precipitation', 'millimeter', None),
-    'bioclim_13.tif': ('B13', 'precipitation of wettest week', 'millimeter', None),
-    'bioclim_14.tif': ('B14', 'precipitation of driest week', 'millimeter', None),
-    'bioclim_15.tif': ('B15', 'precipitation seasonality', 'millimeter', None),
-    'bioclim_16.tif': ('B16', 'precipitation of wettest quarter', 'millimeter', None),
-    'bioclim_17.tif': ('B17', 'precipitation of driest quarter', 'millimeter', None),
-    'bioclim_18.tif': ('B18', 'precipitation of warmest quarter', 'millimeter', None),
-    'bioclim_19.tif': ('B19', 'precipitation of coldest quarter', 'millimeter', None)
+from osgeo import gdal
+import tqdm
+
+from data_conversion.vocabs import VAR_DEFS, PREDICTORS
+
+
+# map source file id's to our idea of RCP id's
+EMSC_MAP = {
+    'RCP3PD': 'RCP2.6',
+    'RCP6': 'RCP6.0',
+    'RCP45': 'RCP4.5',
+    'RCP85': 'RCP8.5',
 }
 
 
-def unpack(zipname, path):
-    """unpack zipfile to path
-    """
-    tries = 0
-    while True:
-        try:
-            tries += 1
-            zipf = zipfile.ZipFile(zipname, 'r')
-            zipf.extractall(path)
-            print "File {0} is online".format(zipname)
-            break
-        except Exception as e:
-            if tries > 10:
-                print "Fail to make file {0} online!!".format(zipname)
-                raise Exception("Error: File {0} is not online".format(zipname))
-            print "Waiting for file {0} to be online ...".format(zipname)
-            time.sleep(60)
-
-
-def get_emsc_str(emsc):
-    if emsc == 'RCP3PD':
-	   return 'RCP 2.6'
-    if emsc == 'RCP6':
-	   return 'RCP 6.0'
-    if emsc == 'RCP45':
-	   return 'RCP 4.5'
-    if emsc == 'RCP85':
-	   return 'RCP 8.5'
-    return emsc
-
-
-def parse_filename(fname):
+def parse_zip_filename(srcfile):
     """Parse filename of the format RCP85_ncar-pcm1_2015.zip to get emsc and gcm and year
     """
-    basename = os.path.basename(fname)
+    # this should always parse source file ... we know the dest file anyway
+    basename = os.path.basename(srcfile)
     basename, _ = os.path.splitext(basename)
-    emsc, gcms, year = basename.split('_')
-    return get_emsc_str(emsc), gcms, year
+    parts = basename.split('_')
 
-def metadata_options(filename, destdir):
-    # options to add metadata for the tiff file
-    md = LAYER_MD.get(filename)
-    if not md:
-        raise Exception("layer {0} is missing metadata".format(filename))
-
-    options = '-of GTiff -co "COMPRESS=LZW" -co "TILED=YES"'
-    if os.path.basename(destdir).startswith("current_"):
-        _, year =  os.path.basename(destdir).split('_')
-        emsc = gcms = None
+    if parts[0] == 'current':
+        emsc, gcm, year = parts[0], parts[0], '1976-2005'
     else:
-        emsc, gcms, year = os.path.basename(destdir).split('_')
+        emsc, gcm, year = parts
+    return EMSC_MAP.get(emsc, emsc), gcm, year
 
-    if emsc:
-        emsc = emsc.replace('RCP', 'RCP ')
-        options += ' -mo "emission_scenario={}"'.format(emsc)
-    if gcms:
-        options += ' -mo "general_circulation_models={}"'.format(gcms.upper())
-    if year:
-        options += ' -mo "year={}"'.format(year)
-    if md[0]:
-        options += ' -mo "standard_name={}"'.format(md[0])
-    if md[1]:
-        options += ' -mo "long_name={}"'.format(md[1])
-    if md[2]:
-        options += ' -mo "unit={}"'.format(md[2])
+
+def gdal_options(srcfile):
+    # options to add metadata for the tiff file
+    emsc, gcm, year = parse_zip_filename(srcfile)
+
+    options = ['-of', 'GTiff', '-co', 'TILED=YES']
+    options += ['-co', 'COMPRESS=DEFLATE', '-norat']
+    if emsc == 'current':
+        years = [int(x) for x in year.split('-')]
+        options += ['-mo', 'year_range={}-{}'.format(years[0], years[1])]
+        options += ['-mo', 'year={}'.format(int((years[1] - years[0] + 1 / 2) + years[0]))]
+    else:
+        year = int(year)
+        years = [year - 4, year + 5]
+        options += ['-mo', 'emission_scenario={}'.format(emsc)]
+        options += ['-mo', 'general_circulation_models={}'.format(gcm.upper())]
+        options += ['-mo', 'year_range={}-{}'.format(years[0], years[1])]
+        options += ['-mo', 'year={}'.format(year)]
     return options
 
-def convert(folder, dest):
+
+def get_layer_id(filename):
+    layerid = os.path.splitext(os.path.basename(filename))[0]
+    return layerid
+
+
+def run_gdal(cmd, infile, outfile, layerid):
+    tf, tfname = tempfile.mkstemp(suffix='.tif')
+    try:
+        ret = subprocess.run(
+            cmd + [infile, tfname],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        # raise an exception on error
+        ret.check_returncode()
+        # add band metadata
+        ds = gdal.Open(tfname, gdal.GA_Update)
+        band = ds.GetRasterBand(1)
+        # ensure band stats
+        band.ComputeStatistics(False)
+        for key, value in VAR_DEFS[layerid].items():
+            band.SetMetadataItem(key, value)
+        # just for completeness
+        band.SetUnitType(VAR_DEFS[layerid]['units'])
+        # band.SetScale(1.0)
+        # band.SetOffset(0.0)
+        ds.FlushCache()
+        # build command
+        cmd = [
+            'gdal_translate',
+            '-of', 'GTiff',
+            '-co', 'TILED=yes',
+            '-co', 'COPY_SRC_OVERVIEWS=YES',
+            '-co', 'COMPRESS=DEFLATE',
+            '-co', 'PREDICTOR={}'.format(PREDICTORS[band.DataType]),
+        ]
+        # check rs
+        if not ds.GetProjection():
+            cmd.extend(['-a_srs', 'EPSG:4326'])
+        # close dataset
+        del band
+        del ds
+        # gdal_translate once more to cloud optimise geotiff
+        cmd.extend([tfname, outfile])
+        ret = subprocess.run(
+            cmd,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        ret.check_returncode()
+    except Exception as e:
+        print('Error:', e)
+    finally:
+        os.remove(tfname)
+
+
+def convert(srcfile, destdir):
     """convert .asc.gz files in folder to .tif in dest
     """
 
-    for srcfile in glob.glob(os.path.join(folder, '*/*.asc')):
-        filename = os.path.basename(srcfile)[:-len('.asc')] + '.tif'
-        options = metadata_options(filename, dest)     
-        # dest filename = dirname_variablename.tif
-        dfilename = os.path.basename(dest) + '_' + LAYER_MD.get(filename)[0] + '.tif'
-        destfile = os.path.join(dest, dfilename) 
-        ret = os.system('gdal_translate {2} {0} {1}'.format(srcfile, 
-                                                            destfile, 
-                                                            options))
-        if ret != 0:
-            raise Exception("can't gdal_translate {0} ({1})".format(srcfile,
-                                                                    ret))
-        # Add factor and offset metedata to the band data
-        scale = LAYER_MD.get(filename)[3]
-        if scale is not None:
-            ret = os.system('gdal_edit.py -scale {0} -offset {1} {2}'.format(scale, 0, destfile))
-            if ret != 0:
-                raise Exception("can't gdal_edit.py {0} ({1})".format(destfile, scale))
+    pool = futures.ProcessPoolExecutor()
+    results = []
+    with zipfile.ZipFile(srcfile) as srczip:
+        for zipinfo in tqdm.tqdm(srczip.filelist, desc="build jobs"):
+            if zipinfo.is_dir():
+                # skip dir entries
+                continue
+            if not zipinfo.filename.endswith('.asc'):
+                # skip non .asc files
+                continue
 
-def unzip_dataset(dsfile):
-    """unzip source dataset and return unzip location
-    """
-    tmpdir = tempfile.mkdtemp()
-    try:
-        unpack(dsfile, tmpdir)
-    except:
-        shutil.rmtree(tmpdir)
-        raise
-    return tmpdir
+            layerid = get_layer_id(os.path.basename(zipinfo.filename))
+            destfilename = (
+                os.path.basename(destdir) +
+                '_' +
+                layerid.replace('_', '-') +
+                '.tif'
+            )
+            srcurl = '/vsizip/' + srcfile + '/' + zipinfo.filename
+            gdaloptions = gdal_options(srcfile)
+            # output file name
+            destpath = os.path.join(destdir, destfilename)
+            # run gdal translate
+            cmd = ['gdal_translate']
+            cmd.extend(gdaloptions)
+            results.append(pool.submit(run_gdal, cmd, srcurl, destpath, layerid))
+
+    for result in tqdm.tqdm(futures.as_completed(results), desc=os.path.basename(srcfile), total=len(results)):
+        if result.exception():
+            print("Job failed")
+            raise result.excption()
 
 
 def create_target_dir(destdir, srcfile):
     """create zip folder structure in tmp location.
     return root folder
     """
-    if os.path.basename(srcfile) == 'current.zip':
-        dirname = 'current_{year}'.format(year='1976-2005')
+    emsc, gcm, year = parse_zip_filename(srcfile)
+    if emsc == 'current':
+        dirname = 'current_{year}'.format(year=year)
     else:
-        emsc, gcms, year = parse_filename(srcfile)
-        dirname = '{0}_{1}_{2}'.format(emsc, gcms, year).replace(' ', '')
+        dirname = '{0}_{1}_{2}'.format(emsc, gcm, year).replace(' ', '')
     root = os.path.join(destdir, dirname)
-    os.mkdir(root)
+    os.makedirs(root, exist_ok=True)
     return root
 
 
 def main(argv):
-    ziproot = None
-    srctmpdir = None
+    if len(argv) != 3:
+        print("Usage: {0} <srczip> <destdir>".format(argv[0]))
+        print("       if <srczip> is a directory all zip files within will be converted.")
+        sys.exit(1)
+    srcfile = os.path.abspath(argv[1])
+    if os.path.isdir(srcfile):
+        srcfiles = sorted(glob.glob(os.path.join(srcfile, '*.zip')))
+    else:
+        srcfiles = [srcfile]
+    dest = os.path.abspath(argv[2])
+    # unpack contains one destination datasets
+    for srcfile in tqdm.tqdm(srcfiles):
+        targetdir = create_target_dir(dest, srcfile)
+        convert(srcfile, targetdir)
 
-    try:
-        if len(argv) != 3:
-            print "Usage: {0} <srczip> <destdir>".format(argv[0])
-            sys.exit(1)
-        srcfile = argv[1]
-        dest = argv[2]
-        # TODO: check src exists and is zip?
-        # TODO: check dest exists
-        srctmpdir = unzip_dataset(srcfile)
-        # unpack contains one destination datasets
-        ziproot = create_target_dir(dest, srcfile)
-        convert(srctmpdir, ziproot)
-    finally:
-        # cleanup temp location
-        if srctmpdir:
-            shutil.rmtree(srctmpdir)
 
 if __name__ == "__main__":
     main(sys.argv)

@@ -1,330 +1,321 @@
-import re
-import sys
-import glob
-import json
+#!/usr/bin/env python
 import os
 import os.path
 import zipfile
-import itertools
-import tempfile
-import shutil
-import time
+import glob
+import sys
+import re
 import argparse
+import tqdm
+from concurrent import futures
+import tempfile
+import subprocess
+from osgeo import gdal
 
-TMPDIR = os.getenv("BCCVL_TMP", "/mnt/workdir/")
 
-## Lookups for metadata construction
-#  Details taken from:
-#    http://www.worldclim.org/cmip5_10m
-#    http://www.worldclim.org/formats
+from data_conversion.vocabs import VAR_DEFS, PREDICTORS
 
-RESOLUTION_MAP = {
-    '30s': 'Resolution30s',
-    '2.5m': 'Resolution2_5m',
-    '5m': 'Resolution5m',
-    '10m': 'Resolution10m',
+
+EMSC_MAP = {
+    '26': 'RCP2.6',
+    '45': 'RCP4.5',
+    '60': 'RCP6.0',
+    '85': 'RCP8.5'
 }
 
-# global climate models (GCMs)
 GCM_MAP = {
-    'ac': 'ACCESS1-0',
-    'bc': 'BCC-CSM1-1',
+    'ac': 'ACCESS1-0',  # non-commercial
+    'bc': 'BCC-CSM-1',
     'cc': 'CCSM4',
     'ce': 'CESM1-CAM5-1-FV2',
     'cn': 'CNRM-CM5',
     'gf': 'GFDL-CM3',
     'gd': 'GFDL-ESM2G',
     'gs': 'GISS-E2-R',
-    'hd': 'HadGEM2-A0',
+    'hd': 'HadGEM2-AO',
     'hg': 'HadGEM2-CC',
     'he': 'HadGEM2-ES',
     'in': 'INMCM4',
     'ip': 'IPSL-CM5A-LR',
-    'mi': 'MIROC-ESM-CHEM',
-    'mr': 'MIROC-ESM',
-    'mc': 'MIROC5',
+    'mi': 'MIROC-ESM-CHEM',  # non-commercial
+    'mr': 'MIROC-ESM',  # non-commercial
+    'mc': 'MIROC5',  # non-commercial
     'mp': 'MPI-ESM-LR',
     'mg': 'MRI-CGCM3',
     'no': 'NorESM1-M',
 }
 
-# representative concentration pathways (RCPs)
-RCP_MAP = {
-    '26': 'RCP3PD',
-    '45': 'RCP4.5',
-    '60': 'RCP6',
-    '85': 'RCP8.5',
-}
-
-#VARIABLE_MAP = {
-#    'tn': 'Monthly Average Minimum Temperature',
-#    'tx': 'Monthly Average Maximum Temperature',
-#    'pr': 'Monthly Total Precipitation',
-#    'bi': 'Bioclim',
-#}
-
-LAYER_TYPE_MAP = {
-   'tn': 'tmin',
-   'tx': 'tmax',
-   'pr': 'prec',
-   'bi': 'bioclim',
+SCALES = {
+    'tmean': 0.1,
+    'tmin': 0.1,
+    'tmax': 0.1,
+    'bioclim_01': 0.1,
+    'bioclim_02': 0.1,
+    # 'bioclim_03': 0.1,
+    'bioclim_04': 0.1,
+    'bioclim_05': 0.1,
+    'bioclim_06': 0.1,
+    'bioclim_07': 0.1,
+    'bioclim_08': 0.1,
+    'bioclim_09': 0.1,
+    'bioclim_10': 0.1,
+    'bioclim_11': 0.1,
 }
 
 
-YEAR_MAP = {
-    '50': '2050',
-    '70': '2070',
-}
-
-##
-
-GEOTIFF_PATTERN = re.compile(
-    r"""
-    (?P<gcm>..)                 # GCM
-    (?P<rcp>[0-9][0-9])         # RCP
-    (?P<layer_type>..)          # Layer type
-    (?P<year>[0-9][0-9])        # Year
-    (?P<layer_num>[0-9][0-9]?)  # Layer no.
-    """,
-    re.VERBOSE
-)
-
-
-
-# Metadata for layers: variable/layer name, description, unit, scale factor
-LAYER_MD = {
-    'bioclim_01.tif': ('B01', 'annual mean temperature', 'degree_Celsius', 0.1),
-    'bioclim_02.tif': ('B02', 'mean diurnal temperature range', 'degree_Celsius', 0.1),
-    'bioclim_03.tif': ('B03', 'isothermality', None, 0.01),
-    'bioclim_04.tif': ('B04', 'temperature seasonality', 'degree_Celsius', 0.001),
-    'bioclim_05.tif': ('B05', 'max temperature of warmest week', 'degree_Celsius', 0.1),
-    'bioclim_06.tif': ('B06', 'min temperature of coldest week', 'degree_Celsius', 0.1),
-    'bioclim_07.tif': ('B07', 'temperature annual range', 'degree_Celsius', 0.1),
-    'bioclim_08.tif': ('B08', 'mean temperature of wettest quarter', 'degree_Celsius', 0.1),
-    'bioclim_09.tif': ('B09', 'mean temperature of driest quarter', 'degree_Celsius', 0.1),
-    'bioclim_10.tif': ('B10', 'mean temperature of warmest quarter', 'degree_Celsius', 0.1),
-    'bioclim_11.tif': ('B11', 'mean temperature of coldest quarter', 'degree_Celsius', 0.1),
-    'bioclim_12.tif': ('B12', 'annual precipitation', 'millimeter', None),
-    'bioclim_13.tif': ('B13', 'precipitation of wettest week', 'millimeter', None),
-    'bioclim_14.tif': ('B14', 'precipitation of driest week', 'millimeter', None),
-    'bioclim_15.tif': ('B15', 'precipitation seasonality', 'millimeter', 0.01),
-    'bioclim_16.tif': ('B16', 'precipitation of wettest quarter', 'millimeter', None),
-    'bioclim_17.tif': ('B17', 'precipitation of driest quarter', 'millimeter', None),
-    'bioclim_18.tif': ('B18', 'precipitation of warmest quarter', 'millimeter', None),
-    'bioclim_19.tif': ('B19', 'precipitation of coldest quarter', 'millimeter', None),
-    'prec_01.tif': ('PR01', 'average monthly precipitation (Jan)', 'millimeter', None),
-    'prec_02.tif': ('PR02', 'average monthly precipitation (Feb)', 'millimeter', None),
-    'prec_03.tif': ('PR03', 'average monthly precipitation (Mar)', 'millimeter', None),
-    'prec_04.tif': ('PR04', 'average monthly precipitation (Apr)', 'millimeter', None),
-    'prec_05.tif': ('PR05', 'average monthly precipitation (May)', 'millimeter', None),
-    'prec_06.tif': ('PR06', 'average monthly precipitation (Jun)', 'millimeter', None),
-    'prec_07.tif': ('PR07', 'average monthly precipitation (Jul)', 'millimeter', None),
-    'prec_08.tif': ('PR08', 'average monthly precipitation (Aug)', 'millimeter', None),
-    'prec_09.tif': ('PR09', 'average monthly precipitation (Sep)', 'millimeter', None),
-    'prec_10.tif': ('PR10', 'average monthly precipitation (Oct)', 'millimeter', None),
-    'prec_11.tif': ('PR11', 'average monthly precipitation (Nov)', 'millimeter', None),
-    'prec_12.tif': ('PR12', 'average monthly precipitation (Dec)', 'millimeter', None),
-    'tmax_01.tif': ('TX01', 'average monthly maximum temperature (Jan)', 'degree_Celsius', 0.1),
-    'tmax_02.tif': ('TX02', 'average monthly maximum temperature (Feb)', 'degree_Celsius', 0.1),
-    'tmax_03.tif': ('TX03', 'average monthly maximum temperature (Mar)', 'degree_Celsius', 0.1),
-    'tmax_04.tif': ('TX04', 'average monthly maximum temperature (Apr)', 'degree_Celsius', 0.1),
-    'tmax_05.tif': ('TX05', 'average monthly maximum temperature (May)', 'degree_Celsius', 0.1),
-    'tmax_06.tif': ('TX06', 'average monthly maximum temperature (Jun)', 'degree_Celsius', 0.1),
-    'tmax_07.tif': ('TX07', 'average monthly maximum temperature (Jul)', 'degree_Celsius', 0.1),
-    'tmax_08.tif': ('TX08', 'average monthly maximum temperature (Aug)', 'degree_Celsius', 0.1),
-    'tmax_09.tif': ('TX09', 'average monthly maximum temperature (Sep)', 'degree_Celsius', 0.1),
-    'tmax_10.tif': ('TX10', 'average monthly maximum temperature (Oct)', 'degree_Celsius', 0.1),
-    'tmax_11.tif': ('TX11', 'average monthly maximum temperature (Nov)', 'degree_Celsius', 0.1),
-    'tmax_12.tif': ('TX12', 'average monthly maximum temperature (Dec)', 'degree_Celsius', 0.1),
-    'tmin_01.tif': ('TN01', 'average monthly minimum temperature (Jan)', 'degree_Celsius', 0.1),
-    'tmin_02.tif': ('TN02', 'average monthly minimum temperature (Feb)', 'degree_Celsius', 0.1),
-    'tmin_03.tif': ('TN03', 'average monthly minimum temperature (Mar)', 'degree_Celsius', 0.1),
-    'tmin_04.tif': ('TN04', 'average monthly minimum temperature (Apr)', 'degree_Celsius', 0.1),
-    'tmin_05.tif': ('TN05', 'average monthly minimum temperature (May)', 'degree_Celsius', 0.1),
-    'tmin_06.tif': ('TN06', 'average monthly minimum temperature (Jun)', 'degree_Celsius', 0.1),
-    'tmin_07.tif': ('TN07', 'average monthly minimum temperature (Jul)', 'degree_Celsius', 0.1),
-    'tmin_08.tif': ('TN08', 'average monthly minimum temperature (Aug)', 'degree_Celsius', 0.1),
-    'tmin_09.tif': ('TN09', 'average monthly minimum temperature (Sep)', 'degree_Celsius', 0.1),
-    'tmin_10.tif': ('TN10', 'average monthly minimum temperature (Oct)', 'degree_Celsius', 0.1),
-    'tmin_11.tif': ('TN11', 'average monthly minimum temperature (Nov)', 'degree_Celsius', 0.1),
-    'tmin_12.tif': ('TN12', 'average monthly minimum temperature (Dec)', 'degree_Celsius', 0.1)
+# Worldclim current seems to be slightly off, we use this map to adjust it.
+GEO_TRANSFORM_PATCH = {
+    '10m': (-180.0, 0.16666666666666666, 0.0, 90.0, 0.0, -0.16666666666666666),
+    '2-5m': (-180.0, 0.041666666666667, 0.0, 90.0, 0.0, -0.041666666666667),
+    '5m': (-180.0, 0.083333333333333, 0.0, 90.0, 0.0, -0.083333333333333),
+    '30s': (-180.0, 0.008333333333333, 0.0, 90.0, 0.0, -0.008333333333333),
 }
 
 
-def unpack(zipname, path):
-    """unpack zipfile to path
-    """
-    tries = 0
-    while True:
-        try:
-            tries += 1
-            zipf = zipfile.ZipFile(zipname, 'r')
-            zipf.extractall(path)
-            print "File {0} is online".format(zipname)
-            break
-        except Exception as e:
-            if tries > 10:
-                print "Fail to make file {0} online!!".format(zipname)
-                raise Exception("Error: File {0} is not online".format(zipname))
-            print "Waiting for file {0} to be online ...".format(zipname)
-            time.sleep(60)
-
-
-def convert_filename(filename):
-    geotiff_info = GEOTIFF_PATTERN.match(filename).groupdict()
-    return "{0}_{1:02d}.tif".format(LAYER_TYPE_MAP[geotiff_info['layer_type']], int(geotiff_info['layer_num']))
-
-
-def potential_converts(source):
-    potentials = itertools.product(
-        GCM_MAP, RCP_MAP, YEAR_MAP, RESOLUTION_MAP, LAYER_TYPE_MAP
-    )
-    for gcm, rcp, year, res, ltype in potentials:
-        source_filter = '{gcm}{rcp}{ltype}{year}.zip'.format(**locals())
-        source_path = os.path.join(source, res, source_filter)
-        source_files = glob.glob(source_path)
-        if source_files:
-            yield gcm, rcp, year, res, ltype, source_files
-
-
-def get_emsc_str(emsc):
-    if emsc == 'RCP3PD':
-        return 'RCP 2.6'
-    if emsc == 'RCP6':
-        return 'RCP 6.0'
-    if emsc == 'RCP45':
-        return 'RCP 4.5'
-    if emsc == 'RCP85':
-        return 'RCP 8.5'
-    return emsc
-
-
-def metadata_options(filename, destdir):
-    # options to add metadata for the tiff file
-    md = LAYER_MD.get(filename)
-    if not md:
-        raise Exception("layer {0} is missing metadata".format(filename))
-
-    options = '-of GTiff -co "COMPRESS=LZW" -co "TILED=YES"'
-    if os.path.basename(destdir).startswith("current_"):
-        _, year =  os.path.basename(destdir).split('_')
-        emsc = gcms = None
+def parse_zip_filename(srcfile):
+    # srcfile should be an absolute path name to a zip file in the source folder
+    basename, _ = os.path.splitext(os.path.basename(srcfile))
+    basedir = os.path.basename(os.path.dirname(srcfile))
+    if basedir == 'current':
+        # it's a current file ... type_ = 'esri'
+        var, res, type_ = basename.split('_')
+        time_ = 'current'
+        gcm = emsc = None
+        year = int('1975')
     else:
-        emsc, gcms, year, res, dstype = os.path.basename(destdir).split('_')
+        # it's future .. basedir is resolution
+        gcm, emsc, var, year = re.findall(r'\w{2}', basename)
+        res = basedir.replace(".", '-')
+        time_ = 'future'
+        type_ = 'tif'
+        year = 2000 + int(year)
+        emsc = EMSC_MAP[emsc]
+        gcm = GCM_MAP[gcm]
+    return time_, gcm, emsc, year, var, res, type_
 
-    if emsc:
-        emsc = emsc.replace('RCP', 'RCP ')
-        options += ' -mo "emission_scenario={}"'.format(emsc)
-    if gcms:
-        options += ' -mo "general_circulation_models={}"'.format(gcms.upper())
-    if year:
-        options += ' -mo "year={}"'.format(year)
-    if md[0]:
-        options += ' -mo "standard_name={}"'.format(md[0])
-    if md[1]:
-        options += ' -mo "long_name={}"'.format(md[1])
-    if md[2]:
-        options += ' -mo "unit={}"'.format(md[2])
+
+def gdal_options(srcfile):
+    # options to add metadata for the tiff file
+    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+
+    options = ['-of', 'GTiff', '-co', 'TILED=YES']
+    options += ['-co', 'COMPRESS=DEFLATE', '-norat']
+    if time_ == 'current':
+        # worldclim current is over 30 year time span
+        years = [year - 14, year + 15]
+        options += ['-mo', 'year_range={}-{}'.format(years[0], years[1])]
+        options += ['-mo', 'year={}'.format(year)]
+    else:
+        year = int(year)
+        # worldclim future spans 10 years
+        years = [year - 9, year + 10]
+        options += ['-mo', 'emission_scenario={}'.format(emsc)]
+        options += ['-mo', 'general_circulation_models={}'.format(gcm.upper())]
+        options += ['-mo', 'year_range={}-{}'.format(years[0], years[1])]
+        options += ['-mo', 'year={}'.format(year)]
+    options += ['-mo', 'version=1.4']
     return options
 
 
-def convert(srcfolder, dest):
-    """convert .asc.gz files in folder to .tif in dest
-    """
+def get_layer_id(lzid, filename):
+    # lzid ... overall layerid from zip file
+    # fielname inside zip
+    # check month
+    month = None
+    if lzid in ('prec', 'tmin', 'tmax', 'tmean'):
+        # current other
+        layerid = lzid
+        month = int(filename.split('_')[1])
+    elif lzid == 'alt':
+        # current alt
+        layerid = lzid
+    elif lzid == 'bio':
+        # current dataset
+        layerid = 'bioclim_{:02d}'.format(int(filename.split('_')[1]))
+    elif lzid == 'bi':
+        # future
+        # last one or two digits befire '.tif' are bioclim number
+        layerid = 'bioclim_{:02d}'.format(int(filename[8:-4]))
+    elif lzid == 'pr':
+        # future
+        layerid = 'prec'
+        month = int(filename[8:-4])
+    elif lzid == 'tn':
+        # future
+        layerid = 'tmin'
+        month = int(filename[8:-4])
+    elif lzid == 'tx':
+        # future
+        layerid = 'tmax'
+        month = int(filename[8:-4])
+    else:
+        raise Exception('Unknown lzid {}'.fromat(lzid))
+    return layerid, month
 
-    for srcfile in glob.glob(os.path.join(srcfolder, '*.tif')):
-        layer_index = convert_filename(os.path.basename(srcfile))
-        options = metadata_options(layer_index, dest)     
-        # dest filename = dirname_variablename.tif
-        dfilename = os.path.basename(dest) + '_' + LAYER_MD.get(layer_index)[0] + '.tif'
-        destfile = os.path.join(dest, dfilename) 
-        ret = os.system('gdal_translate {2} {0} {1}'.format(srcfile, 
-                                                            destfile, 
-                                                            options))
-        if ret != 0:
-            raise Exception("can't gdal_translate {0} ({1})".format(srcfile,
-                                                                    ret))
-        # Add factor and offset metedata to the band data
-        scale = LAYER_MD.get(layer_index)[3]
-        if scale is not None:
-            ret = os.system('gdal_edit.py -scale {0} -offset {1} {2}'.format(scale, 0, destfile))
-            if ret != 0:
-                raise Exception("can't gdal_edit.py {0} ({1})".format(destfile, scale))
 
-
-def unzip_dataset(dsfile):
-    """unzip source dataset and return unzip location
-    """
-    tmpdir = tempfile.mkdtemp()
+def run_gdal(cmd, infile, outfile, layerid, res):
+    tf, tfname = tempfile.mkstemp(suffix='.tif')
     try:
-        unpack(dsfile, tmpdir)
-    except:
-        shutil.rmtree(tmpdir)
-        raise
-    return tmpdir
+        ret = subprocess.run(
+            cmd + [infile, tfname],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        # raise an exception on error
+        ret.check_returncode()
+        # add band metadata
+        ds = gdal.Open(tfname, gdal.GA_Update)
+        # Patch GeoTransform ... at least worldclim current data is slightly off
+        ds.SetGeoTransform(GEO_TRANSFORM_PATCH[res])
+        # For some reason we have to flust the changes to geo transform immediately
+        # otherwise gdal forgets about it?
+        # TODO: check if setting ds = None fixes this as well?
+        ds.FlushCache()
+        # adapt layerid from zip file to specific layer inside zip
+        layerid, month = get_layer_id(layerid, os.path.basename(infile))
+        if month:
+            ds.SetMetadataItem('month', str(month))
+        band = ds.GetRasterBand(1)
+        # ensure band stats
+        band.ComputeStatistics(False)
+        for key, value in VAR_DEFS[layerid].items():
+            band.SetMetadataItem(key, value)
+        # just for completeness
+        band.SetUnitType(VAR_DEFS[layerid]['units'])
+        band.SetScale(SCALES.get(layerid, 1))
+        # band.SetOffset(0.0)
+        ds.FlushCache()
+        # build cmd
+        cmd = [
+            'gdal_translate',
+            '-of', 'GTiff',
+            '-co', 'TILED=yes',
+            '-co', 'COPY_SRC_OVERVIEWS=YES',
+            '-co', 'COMPRESS=DEFLATE',
+            '-co', 'PREDICTOR={}'.format(PREDICTORS[band.DataType]),
+        ]
+        # check crs
+        # Worldclim future datasets have incomplete projection information
+        # let's force it to a known proj info anyway
+        cmd.extend(['-a_srs', 'EPSG:4326'])
+        # close dataset
+        del band
+        del ds
+        # gdal_translate once more to cloud optimise geotiff
+        cmd.extend([tfname, outfile])
+        ret = subprocess.run(
+            cmd,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        ret.check_returncode()
+    except Exception as e:
+        print('Error:', e)
+    finally:
+        os.remove(tfname)
 
 
-def create_target_dir(destdir, srcfile, rcp, gcm, year, res, lyr_type):
+def convert(srcfile, destdir):
+    """
+    """
+    # parse info from filename
+    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+
+    pool = futures.ProcessPoolExecutor(2)
+    results = []
+
+    with zipfile.ZipFile(srcfile) as srczip:
+        for zipinfo in tqdm.tqdm(srczip.filelist, desc="build jobs"):
+            if type_ == 'esri':
+                # we look for folders with a 'hdr.adf' file inside
+                if not zipinfo.is_dir():
+                    # ingore files
+                    continue
+                if zipinfo.filename + 'hdr.adf' not in srczip.namelist():
+                    # ignore this folder no data inside
+                    continue
+                # gdal doesn't like trailing slashes
+                srcurl = '/vsizip/' + srcfile + '/' + zipinfo.filename.rstrip('/')
+            else:
+                # there should be tiffs inside
+                if zipinfo.is_dir():
+                    # ignore folders
+                    continue
+                if not zipinfo.filename.endswith('.tif'):
+                    # ignore non tiff files
+                    continue
+                srcurl = '/vsizip/' + srcfile + '/' + zipinfo.filename
+            # format month if needed
+            layerid, month = get_layer_id(var, os.path.basename(zipinfo.filename.rstrip('/')))
+            # replace '_' in layerid to '-' for filename generation
+            file_part = layerid.replace('_', '-')
+            if month is not None:
+                file_part = '{}-{:02d}'.format(file_part, month)
+            destfilename = (
+                os.path.basename(destdir) +
+                '_' +
+                file_part +
+                '.tif'
+            )
+            gdaloptions = gdal_options(srcfile)
+            # output file name
+            destpath = os.path.join(destdir, destfilename)
+            # run gdal translate
+            cmd = ['gdal_translate']
+            cmd.extend(gdaloptions)
+            results.append(pool.submit(run_gdal, cmd, srcurl, destpath, var, res))
+            # run_gdal(cmd, srcurl, destpath, var, res)
+
+    for result in tqdm.tqdm(futures.as_completed(results), desc=os.path.basename(srcfile), total=len(results)):
+        if result.exception():
+            print("Job failed")
+            raise result.exception()
+
+    return
+
+
+def create_target_dir(destdir, srcfile):
     """create zip folder structure in tmp location.
     return root folder
     """
-    dirname = '{rcp}_{gcm}_{year}_{res}_{type}'.format(
-        rcp = get_emsc_str(RCP_MAP[rcp]).replace(' ', ''),
-        gcm = GCM_MAP[gcm],
-        year = YEAR_MAP[year],
-        res = res,
-        type = LAYER_TYPE_MAP[lyr_type],
-    )
-
-    root = os.path.join(destdir, dirname)
-    os.mkdir(root)
+    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+    if time_ == 'current':
+        dirname = '_'.join(('worldclim', res, var))
+    else:
+        dirname = '_'.join((emsc, gcm, str(year), res, var))
+    root = os.path.join(destdir, time_, dirname)
+    os.makedirs(root, exist_ok=True)
     return root
 
-def main(argv):
-    parser = argparse.ArgumentParser(description='Convert WorldClim future datasets')
-    parser.add_argument('srcdir', type=str, help='source directory')
+
+def main():
+    parser = argparse.ArgumentParser(description='Convert WorldClim current datasets')
+    parser.add_argument('srcdir', type=str, help='source file or directory. If directory all zip files will be converted')
     parser.add_argument('destdir', type=str, help='output directory')
-    parser.add_argument('--dstype', type=str, choices=LAYER_TYPE_MAP.keys(), help='dataset type')
-    parser.add_argument('--gcm', type=str, choices=GCM_MAP.keys(), help='General Circulation Model')
-    parser.add_argument('--rcp', type=str, choices=RCP_MAP.keys(), help='Representative Concentration Pathways')
-    parser.add_argument('--year', type=str, choices=YEAR_MAP.keys(), help='year')
-    parser.add_argument('--res', type=str, choices=RESOLUTION_MAP.keys(), help='resolution')
-    params = vars(parser.parse_args(argv[1:]))
-    src = params.get('srcdir')
-    dest = params.get('destdir')
-    dstypes = [params.get('dstype')] if params.get('dstype') is not None else LAYER_TYPE_MAP.keys()
-    gcm_list = [params.get('gcm')] if params.get('gcm') is not None else GCM_MAP.keys()
-    rcp_list = [params.get('rcp')] if params.get('rcp') is not None else RCP_MAP.keys()
-    year_list = [params.get('year')] if params.get('year') is not None else YEAR_MAP.keys()
-    res_list = [params.get('res')] if params.get('res') is not None else RESOLUTION_MAP.keys()
+    opts = parser.parse_args()
+
+    src = os.path.abspath(opts.srcdir)
+    dest = os.path.abspath(opts.destdir)
 
     # fail if destination exists but is not a directory
-    if os.path.exists(os.path.abspath(dest)) and not os.path.isdir(os.path.abspath(dest)):
-        print "Path {} exists and is not a directory.".format(os.path.abspath(dest))
+    if os.path.exists(dest) and not os.path.isdir(dest):
+        print("Path {} exists and is not a directory.".format(dest))
         sys.exit(os.EX_IOERR)
 
-    # try to create destination if it doesn't exist
-    if not os.path.isdir(os.path.abspath(dest)):
-        try:
-            os.makedirs(os.path.abspath(dest))
-        except Exception as e:
-            print "Failed to create directory at {}.".format(os.path.abspath(dest))
-            sys.exit(os.EX_IOERR)
+    # try to create estination if it doesn't exist
+    try:
+        os.makedirs(os.path.abspath(dest), exist_ok=True)
+    except Exception as e:
+        print("Failed to create directory at {}.".format(dest))
+        sys.exit(os.EX_IOERR)
 
-    for gcm, rcp, year, res, layer, files in potential_converts(src):
-        if layer not in dstypes or gcm not in gcm_list or rcp not in rcp_list or year not in year_list or res not in res_list:
-            continue
+    if os.path.isdir(src):
+        srcfiles = sorted(glob.glob(os.path.join(src, '**/*.zip'), recursive=True))
+    else:
+        srcfiles = [src]
 
-        for srczipf in files:
-            srctmpdir = unzip_dataset(srczipf)
-
-            # Create a dest directory for the datasets
-            ziproot = create_target_dir(dest, srczipf, rcp, gcm, year, res, layer)
-            convert(srctmpdir, ziproot)
-
-            if srctmpdir:
-                shutil.rmtree(srctmpdir)
+    for srcfile in tqdm.tqdm(srcfiles):
+        targetdir = create_target_dir(dest, srcfile)
+        convert(srcfile, targetdir)
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
