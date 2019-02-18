@@ -286,12 +286,20 @@ def create_target_dir(destdir, srcfile):
     return root
 
 
-def main():
+def parse_args():
     parser = argparse.ArgumentParser(description='Convert WorldClim current datasets')
-    parser.add_argument('srcdir', type=str, help='source file or directory. If directory all zip files will be converted')
-    parser.add_argument('destdir', type=str, help='output directory')
-    opts = parser.parse_args()
+    parser.add_argument('srcdir', action='store',
+                        help='source file or directory. If directory all zip files will be converted')
+    parser.add_argument('destdir', action='store',
+                        help='output directory')
+    parser.add_argument('--resolution', action='append',
+                        choices=['10m', '5m', '2.5m', '30s'],
+                        help='only convert files at specified resolution')
+    return parser.parse_args()
 
+
+def main():
+    opts = parse_args()
     src = os.path.abspath(opts.srcdir)
     dest = os.path.abspath(opts.destdir)
 
@@ -308,7 +316,15 @@ def main():
         sys.exit(os.EX_IOERR)
 
     if os.path.isdir(src):
-        srcfiles = sorted(glob.glob(os.path.join(src, '**/*.zip'), recursive=True))
+        if opts.resolution:
+            # Note: this regexp works only for the current naming scheme of worldclim 1.4 files
+            fmatch = re.compile(r'|'.join(opts.resolution))
+            srcfiles = sorted(
+                name for name in glob.glob(os.path.join(src, '**/*.zip'), recursive=True)
+                if fmatch.search(name)
+            )
+        else:
+            srcfiles = sorted(glob.glob(os.path.join(src, '**/*.zip'), recursive=True))
     else:
         srcfiles = [src]
 
