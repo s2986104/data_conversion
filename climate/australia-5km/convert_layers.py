@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+import argparse
 
 from osgeo import gdal
 import tqdm
@@ -163,17 +164,23 @@ def create_target_dir(destdir, srcfile):
     return root
 
 
-def main(argv):
-    if len(argv) != 3:
-        print("Usage: {0} <srczip> <destdir>".format(argv[0]))
-        print("       if <srczip> is a directory all zip files within will be converted.")
-        sys.exit(1)
-    srcfile = os.path.abspath(argv[1])
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('source', action='store',
+                        help='source folder or source zip file.')
+    parser.add_argument('destdir', action='store',
+                        help='destination folder for converted tif files.')
+    return parser.parse_args()
+
+
+def main():
+    opts = parse_args()
+    srcfile = os.path.abspath(opts.source)
     if os.path.isdir(srcfile):
         srcfiles = sorted(glob.glob(os.path.join(srcfile, '*.zip')))
     else:
         srcfiles = [srcfile]
-    dest = os.path.abspath(argv[2])
+    dest = os.path.abspath(opts.destdir)
     # unpack contains one destination datasets
     for srcfile in tqdm.tqdm(srcfiles):
         targetdir = create_target_dir(dest, srcfile)
