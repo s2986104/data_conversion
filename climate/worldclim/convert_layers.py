@@ -3,7 +3,7 @@ import os
 import os.path
 import zipfile
 import glob
-import sys
+import shutil
 import re
 import argparse
 import tqdm
@@ -14,6 +14,7 @@ from osgeo import gdal
 
 
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
+from data_conversion.utils import ensure_directory, move_files
 
 
 EMSC_MAP = {
@@ -282,8 +283,7 @@ def create_target_dir(destdir, srcfile):
     else:
         dirname = '_'.join((emsc, gcm, str(year), res, var))
     root = os.path.join(destdir, time_, dirname)
-    os.makedirs(root, exist_ok=True)
-    return root
+    return ensure_directory(root)
 
 
 def parse_args():
@@ -292,6 +292,9 @@ def parse_args():
                         help='source file or directory. If directory all zip files will be converted')
     parser.add_argument('destdir', action='store',
                         help='output directory')
+    parser.add_argument('--workdir', action='store',
+                        default='/mnt/workdir/worldclim_work',
+                        help='folder to store working files before moving to final destination')
     parser.add_argument('--resolution', action='append',
                         choices=['10m', '5m', '2.5m', '30s'],
                         help='only convert files at specified resolution')
@@ -301,19 +304,9 @@ def parse_args():
 def main():
     opts = parse_args()
     src = os.path.abspath(opts.srcdir)
-    dest = os.path.abspath(opts.destdir)
 
-    # fail if destination exists but is not a directory
-    if os.path.exists(dest) and not os.path.isdir(dest):
-        print("Path {} exists and is not a directory.".format(dest))
-        sys.exit(os.EX_IOERR)
-
-    # try to create estination if it doesn't exist
-    try:
-        os.makedirs(os.path.abspath(dest), exist_ok=True)
-    except Exception as e:
-        print("Failed to create directory at {}.".format(dest))
-        sys.exit(os.EX_IOERR)
+    workdir = ensure_directory(opts.workdir)
+    dest = ensure_directory(opts.destdir)
 
     if os.path.isdir(src):
         if opts.resolution:
@@ -329,8 +322,17 @@ def main():
         srcfiles = [src]
 
     for srcfile in tqdm.tqdm(srcfiles):
-        targetdir = create_target_dir(dest, srcfile)
-        convert(srcfile, targetdir)
+        target_work_dir = create_target_dir(workdir, srcfile)
+        try:
+            # convert files into workdir
+            convert(srcfile, target_work_dir)
+            # move results into destination
+            target_dir = create_target_dir(dest, srcfile)
+            move_files(target_work_dir, target_dir)
+        finally:
+            # cleanup target_work_dir
+            # TODO: this cleans only lowest level subdir, and leaves intermediary dirs
+            shutil.rmtree(target_work_dir)
 
 
 if __name__ == "__main__":
