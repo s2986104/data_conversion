@@ -6,11 +6,12 @@ import glob
 import shutil
 import re
 import argparse
-import tqdm
 from concurrent import futures
 import tempfile
 import subprocess
+
 from osgeo import gdal
+import tqdm
 
 
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
@@ -74,7 +75,9 @@ GEO_TRANSFORM_PATCH = {
 
 
 def parse_zip_filename(srcfile):
-    # srcfile should be an absolute path name to a zip file in the source folder
+    """
+    srcfile should be an absolute path name to a zip file in the source folder
+    """
     basename, _ = os.path.splitext(os.path.basename(srcfile))
     basedir = os.path.basename(os.path.dirname(srcfile))
     if basedir == 'current':
@@ -96,8 +99,10 @@ def parse_zip_filename(srcfile):
 
 
 def gdal_options(srcfile):
-    # options to add metadata for the tiff file
-    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+    """
+    options to add metadata for the tiff file
+    """
+    time_, gcm, emsc, year, _, _, _ = parse_zip_filename(srcfile)
 
     options = ['-of', 'GTiff', '-co', 'TILED=YES']
     options += ['-co', 'COMPRESS=DEFLATE', '-norat']
@@ -119,8 +124,10 @@ def gdal_options(srcfile):
 
 
 def get_layer_id(lzid, filename):
-    # lzid ... overall layerid from zip file
-    # fielname inside zip
+    """
+    lzid     ... overall layerid from zip file
+    filename ... inside zip
+    """
     # check month
     month = None
     if lzid in ('prec', 'tmin', 'tmax', 'tmean'):
@@ -150,12 +157,12 @@ def get_layer_id(lzid, filename):
         layerid = 'tmax'
         month = int(filename[8:-4])
     else:
-        raise Exception('Unknown lzid {}'.fromat(lzid))
+        raise Exception('Unknown lzid {}'.format(lzid))
     return layerid, month
 
 
 def run_gdal(cmd, infile, outfile, layerid, res):
-    tf, tfname = tempfile.mkstemp(suffix='.tif')
+    _, tfname = tempfile.mkstemp(suffix='.tif')
     try:
         ret = subprocess.run(
             cmd + [infile, tfname],
@@ -165,10 +172,11 @@ def run_gdal(cmd, infile, outfile, layerid, res):
         ret.check_returncode()
         # add band metadata
         ds = gdal.Open(tfname, gdal.GA_Update)
-        # Patch GeoTransform ... at least worldclim current data is slightly off
+        # Patch GeoTransform ... at least worldclim current data is
+        #                        slightly off
         ds.SetGeoTransform(GEO_TRANSFORM_PATCH[res])
-        # For some reason we have to flust the changes to geo transform immediately
-        # otherwise gdal forgets about it?
+        # For some reason we have to flust the changes to geo transform
+        # immediately otherwise gdal forgets about it?
         # TODO: check if setting ds = None fixes this as well?
         ds.FlushCache()
         # adapt layerid from zip file to specific layer inside zip
@@ -216,9 +224,10 @@ def run_gdal(cmd, infile, outfile, layerid, res):
 
 def convert(srcfile, destdir):
     """
+    convert all files within srcfile (it's a zip) into destdir
     """
     # parse info from filename
-    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+    _, _, _, _, var, res, type_ = parse_zip_filename(srcfile)
 
     pool = futures.ProcessPoolExecutor(2)
     results = []
@@ -270,14 +279,12 @@ def convert(srcfile, destdir):
             print("Job failed")
             raise result.exception()
 
-    return
-
 
 def create_target_dir(destdir, srcfile):
     """create zip folder structure in tmp location.
     return root folder
     """
-    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+    time_, gcm, emsc, year, var, res, _ = parse_zip_filename(srcfile)
     if time_ == 'current':
         dirname = '_'.join(('worldclim', res, var))
     else:
@@ -287,21 +294,39 @@ def create_target_dir(destdir, srcfile):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Convert WorldClim current datasets')
-    parser.add_argument('srcdir', action='store',
-                        help='source file or directory. If directory all zip files will be converted')
-    parser.add_argument('destdir', action='store',
-                        help='output directory')
-    parser.add_argument('--workdir', action='store',
-                        default='/mnt/workdir/worldclim_work',
-                        help='folder to store working files before moving to final destination')
-    parser.add_argument('--resolution', action='append',
-                        choices=['10m', '5m', '2.5m', '30s'],
-                        help='only convert files at specified resolution')
+    """
+    parse cli
+    """
+    parser = argparse.ArgumentParser(
+        description='Convert WorldClim current datasets'
+    )
+    parser.add_argument(
+        'srcdir', action='store',
+        help=('source file or directory. If directory all zip files '
+              'will be converted')
+    )
+    parser.add_argument(
+        'destdir', action='store',
+        help='output directory'
+    )
+    parser.add_argument(
+        '--workdir', action='store',
+        default='/mnt/workdir/worldclim_work',
+        help=('folder to store working files before moving to final '
+              'destination')
+    )
+    parser.add_argument(
+        '--resolution', action='append',
+        choices=['10m', '5m', '2.5m', '30s'],
+        help='only convert files at specified resolution'
+    )
     return parser.parse_args()
 
 
 def main():
+    """
+    main method
+    """
     opts = parse_args()
     src = os.path.abspath(opts.srcdir)
 
@@ -310,7 +335,8 @@ def main():
 
     if os.path.isdir(src):
         if opts.resolution:
-            # Note: this regexp works only for the current naming scheme of worldclim 1.4 files
+            # Note: this regexp works only for the current naming scheme of
+            #       worldclim 1.4 files
             fmatch = re.compile(r'|'.join(opts.resolution))
             srcfiles = sorted(
                 name for name in glob.glob(os.path.join(src, '**/*.zip'), recursive=True)
@@ -331,7 +357,8 @@ def main():
             move_files(target_work_dir, target_dir)
         finally:
             # cleanup target_work_dir
-            # TODO: this cleans only lowest level subdir, and leaves intermediary dirs
+            # TODO: this cleans only lowest level subdir, and leaves
+            #       intermediary dirs
             shutil.rmtree(target_work_dir)
 
 

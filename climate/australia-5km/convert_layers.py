@@ -4,7 +4,6 @@ import glob
 import os
 import os.path
 import subprocess
-import sys
 import tempfile
 import zipfile
 import argparse
@@ -26,7 +25,9 @@ EMSC_MAP = {
 
 
 def parse_zip_filename(srcfile):
-    """Parse filename of the format RCP85_ncar-pcm1_2015.zip to get emsc and gcm and year
+    """
+    Parse filename of the format RCP85_ncar-pcm1_2015.zip to get emsc and
+    gcm and year
     """
     # this should always parse source file ... we know the dest file anyway
     basename = os.path.basename(srcfile)
@@ -41,7 +42,9 @@ def parse_zip_filename(srcfile):
 
 
 def gdal_options(srcfile):
-    # options to add metadata for the tiff file
+    """
+    options to add metadata for the tiff file
+    """
     emsc, gcm, year = parse_zip_filename(srcfile)
 
     options = ['-of', 'GTiff', '-co', 'TILED=YES']
@@ -49,7 +52,11 @@ def gdal_options(srcfile):
     if emsc == 'current':
         years = [int(x) for x in year.split('-')]
         options += ['-mo', 'year_range={}-{}'.format(years[0], years[1])]
-        options += ['-mo', 'year={}'.format(int((years[1] - years[0] + 1 / 2) + years[0]))]
+        options += [
+            '-mo', 'year={}'.format(
+                int((years[1] - years[0] + 1 / 2) + years[0])
+            )
+        ]
     else:
         year = int(year)
         years = [year - 4, year + 5]
@@ -66,7 +73,7 @@ def get_layer_id(filename):
 
 
 def run_gdal(cmd, infile, outfile, layerid):
-    tf, tfname = tempfile.mkstemp(suffix='.tif')
+    _, tfname = tempfile.mkstemp(suffix='.tif')
     try:
         ret = subprocess.run(
             cmd + [infile, tfname],
@@ -143,9 +150,13 @@ def convert(srcfile, destdir):
             # run gdal translate
             cmd = ['gdal_translate']
             cmd.extend(gdaloptions)
-            results.append(pool.submit(run_gdal, cmd, srcurl, destpath, layerid))
+            results.append(
+                pool.submit(run_gdal, cmd, srcurl, destpath, layerid)
+            )
 
-    for result in tqdm.tqdm(futures.as_completed(results), desc=os.path.basename(srcfile), total=len(results)):
+    for result in tqdm.tqdm(futures.as_completed(results),
+                            desc=os.path.basename(srcfile),
+                            total=len(results)):
         if result.exception():
             print("Job failed")
             raise result.excption()
@@ -167,13 +178,20 @@ def create_target_dir(destdir, srcfile):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('source', action='store',
-                        help='source folder or source zip file.')
-    parser.add_argument('destdir', action='store',
-                        help='destination folder for converted tif files.')
-    parser.add_argument('--workdir', action='store',
-                        default='/mnt/workdir/australia-5km_work',
-                        help='folder to store working files before moving to final destination')
+    parser.add_argument(
+        'source', action='store',
+        help='source folder or source zip file.'
+    )
+    parser.add_argument(
+        'destdir', action='store',
+        help='destination folder for converted tif files.'
+    )
+    parser.add_argument(
+        '--workdir', action='store',
+        default='/mnt/workdir/australia-5km_work',
+        help=('folder to store working files before moving to final '
+              'destination')
+    )
     return parser.parse_args()
 
 
