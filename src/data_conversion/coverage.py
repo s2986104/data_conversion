@@ -84,16 +84,16 @@ def gen_coverage_uuid(cov, identifier):
     return str(uid)
 
 
-def gen_tif_coverage(tiffile, url):
+def gen_tif_coverage(tiffile, url, ratmap=None):
     ds = gdal.Open(tiffile)
-    return gen_cov_json(ds, url)
+    return gen_cov_json(ds, url, ratmap)
 
 
 def gen_dataset_coverage(coverages, aggs=[]):
     return {
         "type": "Coverage",
         "domain": get_dataset_cov_domain(coverages, aggs),
-        "parameters": gen_dataset_cov_parameters(coverages, aggs),
+        "parameters": gen_dataset_cov_parameters(coverages, aggs),      
         "ranges": {},
         "rangeAlternates": gen_dataset_cov_range_alternates(coverages, aggs)
     }
@@ -166,12 +166,46 @@ def gen_cov_domain(ds):
         "referencing": gen_cov_referencing(ds),
     }
 
+def gen_cov_categories(band, ratmap):
+    # generate categories from raster band's RAT
+    categories = []
+    categoryEncoding = {}
+    rat = band.GetDefaultRAT()
+    if rat and ratmap:
+        icolcount=rat.GetColumnCount()
+        cols=[]
+        for icol in range(icolcount):
+            cols.append(rat.GetNameOfCol(icol))
+        indexes = [cols.index(ratmap[key]) for key in ['id', 'label', 'value']]
 
-def gen_cov_parameters(ds):
+        #Write out each row.
+        irowcount = rat.GetRowCount()
+        for irow in range(irowcount):
+            values=[]
+            for icol in range(icolcount):
+                itype=rat.GetTypeOfCol(icol)
+                if itype==gdal.GFT_Integer:
+                    value=rat.GetValueAsInt(irow,icol)
+                elif itype==gdal.GFT_Real:
+                    value=rat.GetValueAsDouble(irow,icol)
+                else:
+                    value=rat.GetValueAsString(irow,icol)
+                values.append(value)
+            categories.append({
+                    'id': values[indexes[0]],
+                    'label': {
+                        "en": values[indexes[1]]
+                    }
+                })
+            categoryEncoding[values[indexes[0]]] = values[indexes[2]]
+    return categories, categoryEncoding
+
+def gen_cov_parameters(ds, ratmap=None):
     # All our datasets have only one band
     band = ds.GetRasterBand(1)
     bandmd = band.GetMetadata_Dict()
-    return {
+    categories, categoryEncoding = gen_cov_categories(band, ratmap)
+    parameters = {
         bandmd['standard_name']: {
             "type": "Parameter",
             # "id": bandmd['standard_name'], common identifier?
@@ -210,6 +244,10 @@ def gen_cov_parameters(ds):
             }
         }
     }
+    if categories:
+        parameters['categories'] = categories
+        parameters['categoryEncoding'] = categoryEncoding
+    return parameters
 
 
 def gen_cov_ranges(ds):
@@ -246,11 +284,11 @@ def gen_cov_range_alternates(ds, url):
     }
 
 
-def gen_cov_json(ds, url):
+def gen_cov_json(ds, url, ratmap=None):
     return {
         "type": "Coverage",
         "domain": gen_cov_domain(ds),
-        "parameters": gen_cov_parameters(ds),
+        "parameters": gen_cov_parameters(ds, ratmap),
         "ranges": gen_cov_ranges(ds),
         "rangeAlternates": gen_cov_range_alternates(ds, url)
     }

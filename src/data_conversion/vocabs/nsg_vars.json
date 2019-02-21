@@ -1,0 +1,32 @@
+{
+    "clay30": {
+        "standard_name": "clay30",
+        "long_name": "Clay content percentage 0-30 cm",
+        "units": "%",
+        "measure_type": "continuous"
+    },
+    "asc": {
+        "standard_name": "asc",
+        "long_name": "Australian Soil Classification",
+        "units": "soil class",
+        "measure_type": "categorical"
+    },
+    "pawc_1m": {
+        "standard_name": "pawc_1m",
+        "long_name": "Plant available water capacity 0-1 m",
+        "units": "mm",
+        "measure_type": "continuous"
+    },
+    "ph_0_30": {
+        "standard_name": "ph_0_30",
+        "long_name": "pH (Calcium Chloride 1:5) 0-30cm",
+        "units": "pH",
+        "measure_type": "continuous"
+    },
+    "bd30": {
+        "standard_name": "bd30",
+        "long_name": "Bulk density 0-30 cm",
+        "units": "Mg/m3",
+        "measure_type": "continuous"
+    }
+}
