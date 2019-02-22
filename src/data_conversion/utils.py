@@ -4,6 +4,7 @@ import os.path
 import shutil
 import gdal
 import time
+import subprocess
 
 
 # convert pixel to projection unit
@@ -59,3 +60,28 @@ def open_gdal_dataset(path):
         else:
             return ds
     return None
+
+
+def retry_run_cmd(cmd):
+    """Run CMD and retry if failed.
+
+    Runs the given command in a subprocess and retries it if it fails.
+
+    raises an exception in case execution still fails.
+    """
+    attempts = 5
+    while attempts:
+        try:
+            ret = subprocess.run(
+                cmd,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+            ret.check_returncode()
+            return
+        except subprocess.CalledProcessError as e:
+            attempts -= 1
+            print("run cmd failed: {}. Try again in a minute. ({} attempts left)".format(e, attempts))
+            time.sleep(60)
+    # if we end up here, then the cmd did not succeed
+    raise Exception('Subprocess {} failed.'.format(cmd))
+
