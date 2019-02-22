@@ -245,8 +245,8 @@ def gen_cov_parameters(ds, ratmap=None):
         }
     }
     if categories:
-        parameters['categories'] = categories
-        parameters['categoryEncoding'] = categoryEncoding
+        parameters[bandmd['standard_name']]['observedProperty']['categories'] = categories
+        parameters[bandmd['standard_name']]['categoryEncoding'] = categoryEncoding
     return parameters
 
 
