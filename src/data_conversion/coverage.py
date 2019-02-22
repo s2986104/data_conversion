@@ -3,7 +3,7 @@ import uuid
 
 from osgeo import gdal, osr
 
-from data_conversion.utils import transform_pixel
+from data_conversion.utils import transform_pixel, open_gdal_dataset
 
 
 GDAL_JSON_TYPE_MAP = {
@@ -35,7 +35,7 @@ def gen_tif_metadata(tiffile, srcdir, swiftcontainer):
     """read metadata from tiffile
     """
     md = {}
-    ds = gdal.Open(tiffile)
+    ds = open_gdal_dataset(tiffile)
     dsmd = ds.GetMetadata()
     if 'emission_scenario' in dsmd:
         # Future Climate
@@ -85,7 +85,7 @@ def gen_coverage_uuid(cov, identifier):
 
 
 def gen_tif_coverage(tiffile, url, ratmap=None):
-    ds = gdal.Open(tiffile)
+    ds = open_gdal_dataset(tiffile)
     return gen_cov_json(ds, url, ratmap)
 
 
@@ -93,7 +93,7 @@ def gen_dataset_coverage(coverages, aggs=[]):
     return {
         "type": "Coverage",
         "domain": get_dataset_cov_domain(coverages, aggs),
-        "parameters": gen_dataset_cov_parameters(coverages, aggs),      
+        "parameters": gen_dataset_cov_parameters(coverages, aggs),
         "ranges": {},
         "rangeAlternates": gen_dataset_cov_range_alternates(coverages, aggs)
     }
