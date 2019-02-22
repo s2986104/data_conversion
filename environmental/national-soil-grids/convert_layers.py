@@ -1,11 +1,12 @@
 #!/usr/bin/env python
+import argparse
 from concurrent import futures
 import glob
 import os
 import os.path
-import sys
 import tempfile
 import zipfile
+import shutil
 
 from osgeo import gdal
 import tqdm
@@ -13,16 +14,18 @@ import tqdm
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
 from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 
+
 LAYERINFO = {
-    'clay30': ('clay30',2011),
+    'clay30': ('clay30', 2011),
     'asc': ('asc', 2012),
     'pawc_1m': ('pawc_1m', 2014),
     'ph': ('ph_0_30', 2014),
     'bd30': ('bd30', 2011)
 }
 
+
 def gdal_options(srcfile, year):
-    # options to add metadata for the tiff file 
+    # options to add metadata for the tiff file
 
     options = ['-of', 'GTiff', '-co', 'TILED=YES']
     options += ['-co', 'COMPRESS=DEFLATE', '--config', 'GDAL_PAM_MODE', 'PAM']
@@ -90,7 +93,7 @@ def convert(srcfile, destdir):
             esrifname = '/'.join([fname, 'hdr.adf'])
         else:
             esrifname = '/'.join([fname, layerid, 'hdr.adf'])
-        for zipinfo in tqdm.tqdm(srczip.filelist, desc="build jobs"):   
+        for zipinfo in tqdm.tqdm(srczip.filelist, desc="build jobs"):
             if zipinfo.is_dir():
                 # skip dir entries
                 continue
@@ -128,22 +131,53 @@ def create_target_dir(destdir, srcfile):
     return root
 
 
-def main(argv):
-    if len(argv) != 3:
-        print("Usage: {0} <srczip> <destdir>".format(argv[0]))
-        print("       if <srczip> is a directory all zip files within will be converted.")
-        sys.exit(1)
-    srcfile = os.path.abspath(argv[1])
-    if os.path.isdir(srcfile):
-        srcfiles = sorted(glob.glob(os.path.join(srcfile, '*.zip')))
+def parse_args():
+    """
+    parse cli
+    """
+    parser = argparse.ArgumentParser(
+        description='Convert National SoilGrids datasets'
+    )
+    parser.add_argument(
+        'srcdir', action='store',
+        help=('source file or directory. If directory all zip files '
+              'will be converted')
+    )
+    parser.add_argument(
+        'destdir', action='store',
+        help='output directory'
+    )
+    parser.add_argument(
+        '--workdir', action='store',
+        default='/mnt/workdir/worldclim_work',
+        help=('folder to store working files before moving to final '
+              'destination')
+    )
+    return parser.parse_args()
+
+
+def main():
+    opts = parse_args()
+    srcdir = os.path.abspath(opts.srcdir)
+
+    workdir = ensure_directory(opts.workdir)
+    dest = ensure_directory(opts.destdir)
+
+    if os.path.isdir(srcdir):
+        srcfiles = sorted(glob.glob(os.path.join(srcdir, '*.zip')))
     else:
-        srcfiles = [srcfile]
-    dest = os.path.abspath(argv[2])
+        srcfiles = [srcfiles]
+
     # unpack contains one destination datasets
     for srcfile in tqdm.tqdm(srcfiles):
-        targetdir = create_target_dir(dest, srcfile)
-        convert(srcfile, targetdir)
+        target_work_dir = create_target_dir(workdir, srcfile)
+        try:
+            convert(srcfile, target_work_dir)
+            target_dir = create_target_dir(dest, srcfile)
+            move_files(target_work_dir, target_dir)
+        finally:
+            shutil.rmtree(target_work_dir)
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
