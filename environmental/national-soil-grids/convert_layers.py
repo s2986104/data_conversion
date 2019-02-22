@@ -3,7 +3,6 @@ from concurrent import futures
 import glob
 import os
 import os.path
-import subprocess
 import sys
 import tempfile
 import zipfile
@@ -12,6 +11,7 @@ from osgeo import gdal
 import tqdm
 
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
+from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 
 LAYERINFO = {
     'clay30': ('clay30',2011),
@@ -39,12 +39,7 @@ def get_layer_id(filename):
 def run_gdal(cmd, infile, outfile, layerid):
     tf, tfname = tempfile.mkstemp(suffix='.tif')
     try:
-        ret = subprocess.run(
-            cmd + [infile, tfname],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        # raise an exception on error
-        ret.check_returncode()
+        retry_run_cmd(cmd + [infile, tfname])
         # add band metadata
         ds = gdal.Open(tfname, gdal.GA_Update)
         band = ds.GetRasterBand(1)
@@ -75,11 +70,7 @@ def run_gdal(cmd, infile, outfile, layerid):
         del ds
         # gdal_translate once more to cloud optimise geotiff
         cmd.extend([tfname, outfile])
-        ret = subprocess.run(
-            cmd,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        ret.check_returncode()
+        retry_run_cmd(cmd)
     except Exception as e:
         print('Error:', e)
     finally:

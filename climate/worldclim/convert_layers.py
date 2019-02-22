@@ -8,14 +8,13 @@ import re
 import argparse
 from concurrent import futures
 import tempfile
-import subprocess
 
 from osgeo import gdal
 import tqdm
 
 
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
-from data_conversion.utils import ensure_directory, move_files
+from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 
 
 EMSC_MAP = {
@@ -164,12 +163,7 @@ def get_layer_id(lzid, filename):
 def run_gdal(cmd, infile, outfile, layerid, res):
     _, tfname = tempfile.mkstemp(suffix='.tif')
     try:
-        ret = subprocess.run(
-            cmd + [infile, tfname],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        # raise an exception on error
-        ret.check_returncode()
+        retry_run_cmd(cmd + [infile, tfname])
         # add band metadata
         ds = gdal.Open(tfname, gdal.GA_Update)
         # Patch GeoTransform ... at least worldclim current data is
@@ -211,11 +205,7 @@ def run_gdal(cmd, infile, outfile, layerid, res):
         del ds
         # gdal_translate once more to cloud optimise geotiff
         cmd.extend([tfname, outfile])
-        ret = subprocess.run(
-            cmd,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        ret.check_returncode()
+        retry_run_cmd(cmd)
     except Exception as e:
         print('Error:', e)
     finally:

@@ -3,7 +3,6 @@ from concurrent import futures
 import glob
 import os
 import os.path
-import subprocess
 import tempfile
 import zipfile
 import argparse
@@ -13,7 +12,7 @@ from osgeo import gdal
 import tqdm
 
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
-from data_conversion.utils import ensure_directory, move_files
+from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 
 # map source file id's to our idea of RCP id's
 EMSC_MAP = {
@@ -75,13 +74,10 @@ def get_layer_id(filename):
 def run_gdal(cmd, infile, outfile, layerid):
     _, tfname = tempfile.mkstemp(suffix='.tif')
     try:
-        ret = subprocess.run(
-            cmd + [infile, tfname],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        # raise an exception on error
-        ret.check_returncode()
+        retry_run_cmd(cmd + [infile, tfname])
         # add band metadata
+        # this is our temporary geo tiff, we should be able to open that
+        # without problems
         ds = gdal.Open(tfname, gdal.GA_Update)
         band = ds.GetRasterBand(1)
         # ensure band stats
@@ -110,11 +106,7 @@ def run_gdal(cmd, infile, outfile, layerid):
         del ds
         # gdal_translate once more to cloud optimise geotiff
         cmd.extend([tfname, outfile])
-        ret = subprocess.run(
-            cmd,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        ret.check_returncode()
+        retry_run_cmd(cmd)
     except Exception as e:
         print('Error:', e)
     finally:
