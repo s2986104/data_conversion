@@ -226,21 +226,21 @@ def gen_cov_parameters(ds, ratmap=None):
                 # "categoryEncoding": {  # optional if there are categories
                 #     "<category.id>": <int>|[<int>, <int>,...]
                 # }
-                "unit": {  # categories don't have units
-                    # TODO: maybe switch to UCUM units?
-                    # There is no id for udunits
-                    # "id": "",  # optional
-                    # We have no label for udunits (yet)
-                    # "label": {"en": ""},  # at least label or symbol is
-                    #          required
-                    # We have udunits, for which there is no type url,
-                    #    so we use the string version of symbol
-                    "symbol": bandmd['units'],  # can be a string
-                    # "symbol": {    # or an object
-                    #     "value": "",
-                    #     "type": "",
-                    # }
-                }
+            },
+            "unit": {  # categories don't have units
+                # TODO: maybe switch to UCUM units?
+                # There is no id for udunits
+                # "id": "",  # optional
+                # We have no label for udunits (yet)
+                # "label": {"en": ""},  # at least label or symbol is
+                #          required
+                # We have udunits, for which there is no type url,
+                #    so we use the string version of symbol
+                "symbol": bandmd['units'],  # can be a string
+                # "symbol": {    # or an object
+                #     "value": "",
+                #     "type": "",
+                # }
             }
         }
     }
