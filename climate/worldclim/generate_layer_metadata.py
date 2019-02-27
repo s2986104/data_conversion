@@ -106,6 +106,7 @@ def gen_dataset_metadata(dsdef, coverages, resolution):
     return ds_md
 
 
+# TODO: duplicate in australia-5km/generate_metadata_layers
 def match_coverage(cov, attrs):
     # used to filter set of coverages
     md = cov['bccvl:metadata']

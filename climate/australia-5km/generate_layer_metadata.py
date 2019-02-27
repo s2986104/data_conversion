@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 import argparse
+import copy
 import glob
+import itertools
 import json
 import os
 import os.path
+import re
 
 import tqdm
 
@@ -22,30 +25,54 @@ from data_conversion.coverage import (
 
 CATEGORY = 'climate'
 RESOLUTION = '2.5 arcmin'
-CURRENT_CITATION = (
-    'Jones, D. A., Wang, W., & Fawcett, R. (2009). High-quality spatial '
-    'climate data-sets for Australia. Australian Meteorological and '
-    'Oceanographic Journal, 58(4), 233.'
-)
-CURRENT_TITLE = 'Australia, Current Climate (1976-2005), {resolution} (~5 km)'.format(resolution=RESOLUTION)
-FUTURE_TITLE = 'Australia, Climate Projection, {resolution}'.format(resolution=RESOLUTION)
-FUTURE_ACKNOWLEDGEMENT = (
-    'Vanderwal, Jeremy. (2012). All future climate layers for Australia - 5km '
-    'resolution. James Cook University. [Data files] '
-    'jcu.edu.au/tdh/collection/633b4ccd-2e78-459d-963c-e43d3c8a5ca1'
-)
-FUTURE_EXTERNAL_URL = (
-    'http://wallaceinitiative.org/climate_2012/tdhtools/Search/'
-    'DataDownload.php?coverage=australia-5km'
-)
-FUTURE_LICENSE = (
-    'Creative Commons Attribution 3.0 AU '
-    'http://creativecommons.org/licenses/by/3.0/au'
-)
 SWIFT_CONTAINER = (
     'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
     'australia_5km_layers'
 )
+
+RESOLUTIONS = {  # udunits arc_minute / arcmin, UCUM/UOM: min_arc
+    '2.5 arcmin': '2.5 arcmim (~5km)',
+}
+
+DATASETS = [
+    # current
+    {
+        # bio
+        'title': 'Australia, Current Climate (1976-2005), {resolution}',
+        'acknowledgement': (
+            'Jones, D. A., Wang, W., & Fawcett, R. (2009). High-quality spatial '
+            'climate data-sets for Australia. Australian Meteorological and '
+            'Oceanographic Journal, 58(4), 233.'
+        ),
+        'filter': {
+            'genre': 'DataGenreCC'
+        },
+        'aggs': [],
+    },
+    {
+        'title': 'Australia, Climate Projection, {emsc} based on {gcm}, {resolution} - {year}',
+        'acknowledgement': (
+            'Vanderwal, Jeremy. (2012). All future climate layers for Australia - 5km '
+            'resolution. James Cook University. [Data files] '
+            'jcu.edu.au/tdh/collection/633b4ccd-2e78-459d-963c-e43d3c8a5ca1'
+        ),
+        'external_url': (
+            'http://wallaceinitiative.org/climate_2012/tdhtools/Search/'
+            'DataDownload.php?coverage=australia-5km'
+        ),
+        'license': (
+            'Creative Commons Attribution 3.0 AU '
+            'http://creativecommons.org/licenses/by/3.0/au'
+        ),
+        'filter': {
+            'genre': 'DataGenreFC',
+            'gcm': None,
+            'emsc': None,
+            'year': None
+        },
+        'aggs': [],
+    }
+]
 
 COLLECTION = {
     "_type": "Collection",
@@ -72,24 +99,53 @@ COLLECTION = {
 }
 
 
-def gen_dataset_metadata(genre, coverages):
+def gen_dataset_metadata(dsdef, coverages, **kw):
     ds_md = {
         'category': CATEGORY,
-        'genre': genre,
+        'genre': kw['genre'],
         'resolution': RESOLUTION,
-        'acknowledgement': FUTURE_ACKNOWLEDGEMENT,
-        'external_url': FUTURE_EXTERNAL_URL,
-        'license': FUTURE_LICENSE,
+        'acknowledgement': dsdef.get('acknowledgment'),
+        'external_url': dsdef.get('external_url'),
+        'license': dsdef.get('license'),
+        # TODO: format title
+        'title': dsdef['title'].format(resolution=RESOLUTIONS[RESOLUTION], **kw)
     }
     # collect some bits of metadata from data
-    if genre == 'DataGenreFC':
-        ds_md['title'] = FUTURE_TITLE
-    else:
-        ds_md['title'] = CURRENT_TITLE
+    if dsdef['filter']['genre'] == 'DataGenreCC':
         # all coverages have the same year and year_range
         ds_md['year'] = coverages[0]['bccvl:metadata']['year']
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
+    if dsdef['filter'].get('year'):
+        # this is future?
+        ds_md['gcm'] = dsdef['filter']['gcm']
+        ds_md['emsc'] = dsdef['filter']['emsc']
+        ds_md['year'] = coverages[0]['bccvl:metadata']['year']
+        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
     return ds_md
+
+
+# TODO: duplicate in worldclim/generate_metadata_layers
+def match_coverage(cov, attrs):
+    # used to filter set of coverages
+    md = cov['bccvl:metadata']
+    for attr, value in attrs.items():
+        if isinstance(value, re.Pattern):
+            if not value.match(md[attr]):
+                return False
+            continue
+        if value is None:
+            # attr should not be there
+            if attr in md:
+                return False
+            continue
+        if value == '*':
+            # attr should be there
+            if attr not in md:
+                return False
+            continue
+        if md.get(attr) != attrs[attr]:
+            return False
+    return True
 
 
 def parse_args():
@@ -141,21 +197,51 @@ def main():
 
     print("Generate datasets.json")
     datasets = []
+    # collect all emscs, gcms, and years from coverages
+    GCMS = sorted({cov['bccvl:metadata']['gcm'] for cov in coverages if 'gcm' in cov['bccvl:metadata']})
+    EMSCS = sorted({cov['bccvl:metadata']['emsc'] for cov in coverages if 'emsc' in cov['bccvl:metadata']})
+    YEARS = sorted({cov['bccvl:metadata']['year'] for cov in coverages if 'emsc' in cov['bccvl:metadata']})
     # generate datasets for db import
-    for genre in ("DataGenreCC", "DataGenreFC"):
-        # filter coverages by genre and build coverage aggregation over all
-        # remaining coverages
-        subset = list(filter(
-            lambda x: x['bccvl:metadata']['genre'] == genre,
-            coverages)
-        )
-        aggs = [] if genre == 'DataGenreCC' else ['emsc', 'gcm', 'year']
-        coverage = gen_dataset_coverage(subset, aggs)
-        md = gen_dataset_metadata(genre, subset)
-        md['extent_wgs84'] = get_coverage_extent(coverage)
-        coverage['bccvl:metadata'] = md
-        coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-5km')
-        datasets.append(coverage)
+    for dsdef in DATASETS:
+        # make a copy so that we can modify the filters
+        dsdef = copy.deepcopy(dsdef)
+        cov_filter = dsdef['filter']
+        if cov_filter['genre'] == 'DataGenreCC':
+            # current
+            subset = list(filter(
+                lambda x: match_coverage(x, cov_filter),
+                coverages
+            ))
+            if not subset:
+                print("No Data matched for {}".format(cov_filter))
+                continue
+            coverage = gen_dataset_coverage(subset, dsdef['aggs'])
+            md = gen_dataset_metadata(dsdef, subset, genre=cov_filter['genre'])
+            md['extent_wgs84'] = get_coverage_extent(coverage)
+            coverage['bccvl:metadata'] = md
+            coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-5km')
+            datasets.append(coverage)
+        else:
+            # future
+            for gcm, emsc, year in itertools.product(GCMS, EMSCS, YEARS):
+                cov_filter.update({
+                    'gcm': gcm,
+                    'emsc': emsc,
+                    'year': year
+                })
+                subset = list(filter(
+                    lambda x: match_coverage(x, cov_filter),
+                    coverages
+                ))
+                if not subset:
+                    print("No Data matched for {}".format(cov_filter))
+                    continue
+                coverage = gen_dataset_coverage(subset, dsdef['aggs'])
+                md = gen_dataset_metadata(dsdef, subset, gcm=gcm, emsc=emsc, year=year, genre=cov_filter['genre'])
+                md['extent_wgs84'] = get_coverage_extent(coverage)
+                coverage['bccvl:metadata'] = md
+                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-5km')
+                datasets.append(coverage)
 
     print("Write datasets.json")
     # save all the data

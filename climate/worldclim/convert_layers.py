@@ -3,17 +3,18 @@ import os
 import os.path
 import zipfile
 import glob
-import sys
+import shutil
 import re
 import argparse
-import tqdm
 from concurrent import futures
 import tempfile
-import subprocess
+
 from osgeo import gdal
+import tqdm
 
 
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
+from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 
 
 EMSC_MAP = {
@@ -73,7 +74,9 @@ GEO_TRANSFORM_PATCH = {
 
 
 def parse_zip_filename(srcfile):
-    # srcfile should be an absolute path name to a zip file in the source folder
+    """
+    srcfile should be an absolute path name to a zip file in the source folder
+    """
     basename, _ = os.path.splitext(os.path.basename(srcfile))
     basedir = os.path.basename(os.path.dirname(srcfile))
     if basedir == 'current':
@@ -95,8 +98,10 @@ def parse_zip_filename(srcfile):
 
 
 def gdal_options(srcfile):
-    # options to add metadata for the tiff file
-    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+    """
+    options to add metadata for the tiff file
+    """
+    time_, gcm, emsc, year, _, _, _ = parse_zip_filename(srcfile)
 
     options = ['-of', 'GTiff', '-co', 'TILED=YES']
     options += ['-co', 'COMPRESS=DEFLATE', '-norat']
@@ -118,8 +123,10 @@ def gdal_options(srcfile):
 
 
 def get_layer_id(lzid, filename):
-    # lzid ... overall layerid from zip file
-    # fielname inside zip
+    """
+    lzid     ... overall layerid from zip file
+    filename ... inside zip
+    """
     # check month
     month = None
     if lzid in ('prec', 'tmin', 'tmax', 'tmean'):
@@ -149,25 +156,21 @@ def get_layer_id(lzid, filename):
         layerid = 'tmax'
         month = int(filename[8:-4])
     else:
-        raise Exception('Unknown lzid {}'.fromat(lzid))
+        raise Exception('Unknown lzid {}'.format(lzid))
     return layerid, month
 
 
 def run_gdal(cmd, infile, outfile, layerid, res):
-    tf, tfname = tempfile.mkstemp(suffix='.tif')
+    _, tfname = tempfile.mkstemp(suffix='.tif')
     try:
-        ret = subprocess.run(
-            cmd + [infile, tfname],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        # raise an exception on error
-        ret.check_returncode()
+        retry_run_cmd(cmd + [infile, tfname])
         # add band metadata
         ds = gdal.Open(tfname, gdal.GA_Update)
-        # Patch GeoTransform ... at least worldclim current data is slightly off
+        # Patch GeoTransform ... at least worldclim current data is
+        #                        slightly off
         ds.SetGeoTransform(GEO_TRANSFORM_PATCH[res])
-        # For some reason we have to flust the changes to geo transform immediately
-        # otherwise gdal forgets about it?
+        # For some reason we have to flust the changes to geo transform
+        # immediately otherwise gdal forgets about it?
         # TODO: check if setting ds = None fixes this as well?
         ds.FlushCache()
         # adapt layerid from zip file to specific layer inside zip
@@ -202,11 +205,7 @@ def run_gdal(cmd, infile, outfile, layerid, res):
         del ds
         # gdal_translate once more to cloud optimise geotiff
         cmd.extend([tfname, outfile])
-        ret = subprocess.run(
-            cmd,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        ret.check_returncode()
+        retry_run_cmd(cmd)
     except Exception as e:
         print('Error:', e)
     finally:
@@ -215,9 +214,10 @@ def run_gdal(cmd, infile, outfile, layerid, res):
 
 def convert(srcfile, destdir):
     """
+    convert all files within srcfile (it's a zip) into destdir
     """
     # parse info from filename
-    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+    _, _, _, _, var, res, type_ = parse_zip_filename(srcfile)
 
     pool = futures.ProcessPoolExecutor(2)
     results = []
@@ -269,52 +269,87 @@ def convert(srcfile, destdir):
             print("Job failed")
             raise result.exception()
 
-    return
-
 
 def create_target_dir(destdir, srcfile):
     """create zip folder structure in tmp location.
     return root folder
     """
-    time_, gcm, emsc, year, var, res, type_ = parse_zip_filename(srcfile)
+    time_, gcm, emsc, year, var, res, _ = parse_zip_filename(srcfile)
     if time_ == 'current':
         dirname = '_'.join(('worldclim', res, var))
     else:
         dirname = '_'.join((emsc, gcm, str(year), res, var))
     root = os.path.join(destdir, time_, dirname)
-    os.makedirs(root, exist_ok=True)
-    return root
+    return ensure_directory(root)
+
+
+def parse_args():
+    """
+    parse cli
+    """
+    parser = argparse.ArgumentParser(
+        description='Convert WorldClim current datasets'
+    )
+    parser.add_argument(
+        'srcdir', action='store',
+        help=('source file or directory. If directory all zip files '
+              'will be converted')
+    )
+    parser.add_argument(
+        'destdir', action='store',
+        help='output directory'
+    )
+    parser.add_argument(
+        '--workdir', action='store',
+        default='/mnt/workdir/worldclim_work',
+        help=('folder to store working files before moving to final '
+              'destination')
+    )
+    parser.add_argument(
+        '--resolution', action='append',
+        choices=['10m', '5m', '2.5m', '30s'],
+        help='only convert files at specified resolution'
+    )
+    return parser.parse_args()
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Convert WorldClim current datasets')
-    parser.add_argument('srcdir', type=str, help='source file or directory. If directory all zip files will be converted')
-    parser.add_argument('destdir', type=str, help='output directory')
-    opts = parser.parse_args()
-
+    """
+    main method
+    """
+    opts = parse_args()
     src = os.path.abspath(opts.srcdir)
-    dest = os.path.abspath(opts.destdir)
 
-    # fail if destination exists but is not a directory
-    if os.path.exists(dest) and not os.path.isdir(dest):
-        print("Path {} exists and is not a directory.".format(dest))
-        sys.exit(os.EX_IOERR)
-
-    # try to create estination if it doesn't exist
-    try:
-        os.makedirs(os.path.abspath(dest), exist_ok=True)
-    except Exception as e:
-        print("Failed to create directory at {}.".format(dest))
-        sys.exit(os.EX_IOERR)
+    workdir = ensure_directory(opts.workdir)
+    dest = ensure_directory(opts.destdir)
 
     if os.path.isdir(src):
-        srcfiles = sorted(glob.glob(os.path.join(src, '**/*.zip'), recursive=True))
+        if opts.resolution:
+            # Note: this regexp works only for the current naming scheme of
+            #       worldclim 1.4 files
+            fmatch = re.compile(r'|'.join(opts.resolution))
+            srcfiles = sorted(
+                name for name in glob.glob(os.path.join(src, '**/*.zip'), recursive=True)
+                if fmatch.search(name)
+            )
+        else:
+            srcfiles = sorted(glob.glob(os.path.join(src, '**/*.zip'), recursive=True))
     else:
         srcfiles = [src]
 
     for srcfile in tqdm.tqdm(srcfiles):
-        targetdir = create_target_dir(dest, srcfile)
-        convert(srcfile, targetdir)
+        target_work_dir = create_target_dir(workdir, srcfile)
+        try:
+            # convert files into workdir
+            convert(srcfile, target_work_dir)
+            # move results into destination
+            target_dir = create_target_dir(dest, srcfile)
+            move_files(target_work_dir, target_dir)
+        finally:
+            # cleanup target_work_dir
+            # TODO: this cleans only lowest level subdir, and leaves
+            #       intermediary dirs
+            shutil.rmtree(target_work_dir)
 
 
 if __name__ == "__main__":

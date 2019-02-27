@@ -5,7 +5,7 @@ if ! swift auth > /dev/null ; then
     exit 1
 fi
 
-SRCDIR="/mnt/workdir/australia-5km/bccvl/layers"
+SRCDIR="bccvl/layers"
 CONTAINER="australia_5km_layers"
 
 export RCLONE_CONFIG_REMOTE_TYPE=swift

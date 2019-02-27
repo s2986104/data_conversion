@@ -3,7 +3,7 @@ import uuid
 
 from osgeo import gdal, osr
 
-from data_conversion.utils import transform_pixel
+from data_conversion.utils import transform_pixel, open_gdal_dataset
 
 
 GDAL_JSON_TYPE_MAP = {
@@ -35,7 +35,7 @@ def gen_tif_metadata(tiffile, srcdir, swiftcontainer):
     """read metadata from tiffile
     """
     md = {}
-    ds = gdal.Open(tiffile)
+    ds = open_gdal_dataset(tiffile)
     dsmd = ds.GetMetadata()
     if 'emission_scenario' in dsmd:
         # Future Climate
@@ -84,9 +84,9 @@ def gen_coverage_uuid(cov, identifier):
     return str(uid)
 
 
-def gen_tif_coverage(tiffile, url):
-    ds = gdal.Open(tiffile)
-    return gen_cov_json(ds, url)
+def gen_tif_coverage(tiffile, url, ratmap=None):
+    ds = open_gdal_dataset(tiffile)
+    return gen_cov_json(ds, url, ratmap)
 
 
 def gen_dataset_coverage(coverages, aggs=[]):
@@ -166,12 +166,46 @@ def gen_cov_domain(ds):
         "referencing": gen_cov_referencing(ds),
     }
 
+def gen_cov_categories(band, ratmap):
+    # generate categories from raster band's RAT
+    categories = []
+    categoryEncoding = {}
+    rat = band.GetDefaultRAT()
+    if rat and ratmap:
+        icolcount=rat.GetColumnCount()
+        cols=[]
+        for icol in range(icolcount):
+            cols.append(rat.GetNameOfCol(icol))
+        indexes = [cols.index(ratmap[key]) for key in ['id', 'label', 'value']]
 
-def gen_cov_parameters(ds):
+        #Write out each row.
+        irowcount = rat.GetRowCount()
+        for irow in range(irowcount):
+            values=[]
+            for icol in range(icolcount):
+                itype=rat.GetTypeOfCol(icol)
+                if itype==gdal.GFT_Integer:
+                    value=rat.GetValueAsInt(irow,icol)
+                elif itype==gdal.GFT_Real:
+                    value=rat.GetValueAsDouble(irow,icol)
+                else:
+                    value=rat.GetValueAsString(irow,icol)
+                values.append(value)
+            categories.append({
+                    'id': values[indexes[0]],
+                    'label': {
+                        "en": values[indexes[1]]
+                    }
+                })
+            categoryEncoding[values[indexes[0]]] = values[indexes[2]]
+    return categories, categoryEncoding
+
+def gen_cov_parameters(ds, ratmap=None):
     # All our datasets have only one band
     band = ds.GetRasterBand(1)
     bandmd = band.GetMetadata_Dict()
-    return {
+    categories, categoryEncoding = gen_cov_categories(band, ratmap)
+    parameters = {
         bandmd['standard_name']: {
             "type": "Parameter",
             # "id": bandmd['standard_name'], common identifier?
@@ -192,24 +226,28 @@ def gen_cov_parameters(ds):
                 # "categoryEncoding": {  # optional if there are categories
                 #     "<category.id>": <int>|[<int>, <int>,...]
                 # }
-                "unit": {  # categories don't have units
-                    # TODO: maybe switch to UCUM units?
-                    # There is no id for udunits
-                    # "id": "",  # optional
-                    # We have no label for udunits (yet)
-                    # "label": {"en": ""},  # at least label or symbol is
-                    #          required
-                    # We have udunits, for which there is no type url,
-                    #    so we use the string version of symbol
-                    "symbol": bandmd['units'],  # can be a string
-                    # "symbol": {    # or an object
-                    #     "value": "",
-                    #     "type": "",
-                    # }
-                }
+            },
+            "unit": {  # categories don't have units
+                # TODO: maybe switch to UCUM units?
+                # There is no id for udunits
+                # "id": "",  # optional
+                # We have no label for udunits (yet)
+                # "label": {"en": ""},  # at least label or symbol is
+                #          required
+                # We have udunits, for which there is no type url,
+                #    so we use the string version of symbol
+                "symbol": bandmd['units'],  # can be a string
+                # "symbol": {    # or an object
+                #     "value": "",
+                #     "type": "",
+                # }
             }
         }
     }
+    if categories:
+        parameters[bandmd['standard_name']]['observedProperty']['categories'] = categories
+        parameters[bandmd['standard_name']]['categoryEncoding'] = categoryEncoding
+    return parameters
 
 
 def gen_cov_ranges(ds):
@@ -246,11 +284,11 @@ def gen_cov_range_alternates(ds, url):
     }
 
 
-def gen_cov_json(ds, url):
+def gen_cov_json(ds, url, ratmap=None):
     return {
         "type": "Coverage",
         "domain": gen_cov_domain(ds),
-        "parameters": gen_cov_parameters(ds),
+        "parameters": gen_cov_parameters(ds, ratmap),
         "ranges": gen_cov_ranges(ds),
         "rangeAlternates": gen_cov_range_alternates(ds, url)
     }
