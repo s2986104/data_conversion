@@ -8,6 +8,7 @@ import shutil
 import sys
 import re
 import time
+import argparse
 from datetime import datetime
 
 LAYER_MD = {
@@ -95,11 +96,15 @@ def metadata_options(md, year):
         options += ' -mo "unit={}"'.format(md[2])
     return options
 
-def convert(folder, dest):
+def convert(folder, dest, only_year=None):
     """convert .flt files in folder to .tif in dest
     """
     # only interested in annual data
-    for srcfile in glob.glob(os.path.join(folder, '*/*/*/*ann*.flt')):
+    glob_filename = '*/*/*/*ann*.flt' 
+    if only_year is not None:
+        glob_filename = '*/*/*/*ann*{}*.flt'.format(only_year)
+
+    for srcfile in glob.glob(os.path.join(folder, glob_filename)):
         filename = os.path.basename(srcfile)[:-len('.flt')] + '.tif'
         md, year = get_md(filename)
         if md is None:
@@ -148,30 +153,41 @@ def create_target_dir(destdir, srcfile):
 
 
 def main(argv):
+    LAYER_TYPES = ['FWDis', 'FWE', 'FWLch2', 'FWPT', 'FWRun', 'FWSoil', 'FWTra', 'FWWater', 'PhiE', 'PhiH', 'Precip', 'SolarMJ', 'TempMax', 'TempMin', 'WRel1', 'WRel1End', 'WRel2', 'WRel2End']
+    parser = argparse.ArgumentParser(description='Convert AWAP layers')
+    parser.add_argument('srcdir', type=str, help='source directory')
+    parser.add_argument('destdir', type=str, help='output directory')
+    parser.add_argument('--dstype', type=str, choices=LAYER_TYPES, help='layer type')
+    parser.add_argument('--year', type=int, help='year')
+    params = vars(parser.parse_args(argv[1:]))
+    import pdb; pdb.set_trace()
+    srcdir = params.get('srcdir')
+    destdir = params.get('destdir')
+    year = params.get('year')
+    dstypes = LAYER_TYPES if params.get('dstype') is None else [params.get('dstype')]
+
     ziproot = None
     srctmpdir = None
 
-    if len(argv) != 3:
-        print "Usage: {0} <srczip> <destdir>".format(argv[0])
-        sys.exit(1)
-    srcdir = argv[1]
-    dest = argv[2]
-    for srcfile in glob.glob(os.path.join(srcdir, '*/*.zip')):
-        try:
-            # TODO: check src exists and is zip?
-            # TODO: check dest exists
-            srctmpdir = unzip_dataset(srcfile)
-            # unpack contains one destination datasets
-            ziproot = create_target_dir(dest, srcfile)
-            convert(srctmpdir, ziproot)
-            if srctmpdir:
-                shutil.rmtree(srctmpdir)
-        except Exception as e:
-            # cleanup temp location
-            if srctmpdir:
-                shutil.rmtree(srctmpdir)
+    for dstype in LAYER_TYPES:
+        if dstype not in dstypes:
+            continue
+        for srcfile in glob.glob(os.path.join(srcdir, dstype, '*.zip')):
+            try:
+                # TODO: check src exists and is zip?
+                # TODO: check destdir exists
+                srctmpdir = unzip_dataset(srcfile)
+                # unpack contains one destination datasets
+                ziproot = create_target_dir(destdir, srcfile)
+                convert(srctmpdir, ziproot, year)
+                if srctmpdir:
+                    shutil.rmtree(srctmpdir)
+            except Exception as e:
+                # cleanup temp location
+                if srctmpdir:
+                    shutil.rmtree(srctmpdir)
 
-            print("Error: Cannot convert {}".format(srcfile))
+                print("Error: Cannot convert {}".format(srcfile))
 
 if __name__ == "__main__":
     main(sys.argv)
