@@ -109,6 +109,7 @@ def run_gdal(cmd, infile, outfile, layerid):
         retry_run_cmd(cmd)
     except Exception as e:
         print('Error:', e)
+        raise e
     finally:
         os.remove(tfname)
 
