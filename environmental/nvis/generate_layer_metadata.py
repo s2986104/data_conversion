@@ -21,35 +21,40 @@ from data_conversion.coverage import (
 # TODO: add mimetype somehwere?
 
 CATEGORY = 'environmental'
-RESOLUTION = '9 arcsec (~250 m)'
-CURRENT_CITATION = (
-    'National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, '
-    'endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep).'
-)
-CURRENT_TITLE = 'Australia, National Soil Grids (2012), {resolution} (~250 m)'.format(resolution=RESOLUTION)
+RESOLUTION = '3 arcsec'
+CURRENT_TITLE = 'Australia, Major Vegetation Groups (2016), {resolution} (~90 m)'.format(resolution=RESOLUTION)
 EXTERNAL_URL = (
-    'http://www.asris.csiro.au/themes/NationalGrids.html'
+    'http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system/data-products'
 )
 LICENSE = (
-    'Creative Commons Attribution 3.0 AU '
-    'http://creativecommons.org/licenses/by/3.0/au'
+    'Creative Commons Attribution 3.0 AU'
+    'http://creativecommons.org/licenses/by/3.0/AU'
 )
-ACKNOWLEDGEMENT = (
-    "CSIRO Land and Water"
-)
+ACKNOWLEDGEMENT = ', \n'.join((
+        "Environment and Planning Directorate, ACT",
+        "Office of Environment and Heritage, NSW",
+        "Department of Land Resource Management, Northern Territory",
+        "Queensland Herbarium, Department of Science, Information Technology and Innovation",
+        "Department for Environment, Water and Natural Resources, South Australia",
+        "Department of Primary Industries, Parks, Water and Environment, Tasmania",
+        "Department of Environment, Land, Water and Planning, Victoria",
+        "Department of Agriculture and Food, Western Australia",
+        "Geoscience Australia"
+))
 SWIFT_CONTAINER = (
     'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-    'national_soil_grids'
+    'nvis'
 )
+
 
 COLLECTION = {
     "_type": "Collection",
-    "uuid": "1e7eb0c57-33f1-11e9-bbab-acde48001122",
-    "title": "National Soil Grids Australia",
-    "description": "Soil classification and attributes\n\nGeographic extent: Australia\nYear range: 2012\nResolution: 9 arcsec (~250 m)\nData layers: Soil classification, Bulk density, Clay content, Plant available water capacity, pH",
+    "uuid": "1943f7b3a-3bbc-11e9-90ae-acde48001122",
+    "title": "Australian Major Vegetation Groups",
+    "description": "Type and distribution of Australia's native vegetation\n\nGeographic extent: Australia\nYear range: 2016\nResolution: 3 arcsec (~90 m)\nData layers: Australian Major Vegetation Groups, pre-1750 and present",
     "rights": "CC-BY Attribution 3.0",
-    "landingPage": "See <a href=\"http://www.asris.csiro.au/themes/NationalGrids.html\">http://www.asris.csiro.au/themes/NationalGrids.html</a>",
-    "attribution": ["National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep)."],
+    "landingPage": "See <a href=\"http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system/data-products\">http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system/data-products</a>",
+    "attribution": ["This raster product is modelled from data originally supplied by the states and territories. The department acknowledges the following departments/organisations: Environment and Planning Directorate, ACT, Office of Environment and Heritage, NSW, Department of Land Resource Management, Northern Territory, Queensland Herbarium, Department of Science, Information Technology and Innovation, Department for Environment, Water and Natural Resources, South Australia, Department of Primary Industries, Parks, Water and Environment, Tasmania, Department of Environment, Land, Water and Planning, Victoria, Department of Agriculture and Food, Western Australia, Geoscience Australia"],
     "subjects": ["Current datasets"],
     "categories": ["environmental"],
     "datasets": [
@@ -122,9 +127,9 @@ def main():
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 md['resolution'] = RESOLUTION
                 if md['genre'] == 'DataGenreCC':
-                    md['acknowledgement'] = CURRENT_CITATION
+                    md['acknowledgement'] = ACKNOWLEDGEMENT
                 coverage['bccvl:metadata'] = md
-                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'national_soil_grids')
+                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'nvis')
                 coverages.append(coverage)
             except Exception as e:
                 print('Failed to generate metadata for:', tiffile, e)
@@ -154,7 +159,7 @@ def main():
         md = gen_dataset_metadata(genre, subset)
         md['extent_wgs84'] = get_coverage_extent(coverage)
         coverage['bccvl:metadata'] = md
-        coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'national_soil_grids')
+        coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'nvis')
         datasets.append(coverage)
 
     print("Write datasets.json")
