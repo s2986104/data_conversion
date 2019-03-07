@@ -23,38 +23,40 @@ from data_conversion.coverage import (
 
 # TODO: add mimetype somehwere?
 
-DATASETNAME = 'accuclim'
+DATASETNAME = 'anuclim'
 CATEGORY = 'climate'
-RESOLUTION = '9 arcsec'
+RESOLUTION = '30 arcsec'
 SWIFT_CONTAINER = (
     'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-    'accuclim'
+    'anuclim'
 )
 
 RESOLUTIONS = {  # udunits arc_minute / arcmin, UCUM/UOM: min_arc
-    '9 arcsec': '9 arcsec (~250m)',
+    '30 arcsec': '30 arcsec (~1km)',
 }
 
 ACKNOWLEDGEMENT = (
-            'Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013) '
-            'Improved spatial estimates of climate predict patchier species distributions. '
-            'Diversity and Distributions, 19 (9). pp. 1106-1113.'
+            'Hutchinson M, Kesteven J, Xu T (2014) Monthly climate data: ANUClimate 1.0, '
+            '0.01 degree, Australian Coverage, 1976-2005. Australian National University, '
+            'Canberra, Australia. Made available by the Ecosystem Modelling and Scaling '
+            'Infrastructure (eMAST, http://www.emast.org.au) of the Terrestrial Ecosystem '
+            'Research Network (TERN, http://www.tern.org.au).'
 )
 
 DATASETS = [
     # current
     {
         # bio
-        'title': 'accuCLIM (Wet Tropics Australia), 30-year average either side of ({year}), {resolution}',
+        'title': 'ANUClim (Australia), Current Climate {month}, (1976-2005), {resolution}',
         'acknowledgement': ACKNOWLEDGEMENT,
-        'external_url': 'https://researchdata.ands.org.au/accuclim-30-year-heritage-area/654267',
+        'external_url': 'https://researchdata.ands.org.au/anuclimate-collection/983248',
         'license': (
-            'Creative Commons Attribution 3.0 AU '
-            'http://creativecommons.org/licenses/by/3.0/au'
+            'Creative Commons Attribution 4.0'
+            'https://creativecommons.org/licenses/by/4.0/'
         ),
         'filter': {
             'genre': 'DataGenreCC',
-            'year': None
+            'month': None
         },
         'aggs': [], 
     }
@@ -62,12 +64,12 @@ DATASETS = [
 
 COLLECTION = {
     "_type": "Collection",
-    "uuid": "1db9e574-2f14-11e9-b0ea-0242ac110002",
-    "title": "ACCUclim climate data",
-    "description": "A set of 7 temperature variables for the Wet Tropics area in north-east Australia\n\nGeographic extent: Wet Tropics, Australia\nYear range: 1950-2015\nResolution: 9 arcsec (~250 m)\nData layers: B01-07",
-    "rights": "CC-BY Attribution 3.0",
-    "landingPage": "https://researchdata.ands.org.au/accuclim-30-year-heritage-area/654267",
-    "attribution": ["Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013) Improved spatial estimates of climate predict patchier species distributions. Diversity and Distributions, 19 (9). pp. 1106-1113."],
+    "uuid": "d75094b7-0eac-4176-accb-d5a23f5d4b4d",
+    "title": "ANUclim climate data",
+    "description": "Monthly climate data for the Australian continent\n\nGeographic extent: Australia\nYear range: 1976-2005\nResolution: 30 arcsec (~1 km)\nData layers: Minimum/Maximum Temperature, Precipitation, Evaporation, Vapour Pressure",
+    "rights": "CC-BY Attribution 4.0",
+    "landingPage": "See <a href=\"https://researchdata.ands.org.au/anuclimate-collection/983248/\">https://researchdata.ands.org.au/anuclimate-collection/983248</a>",
+    "attribution": [ACKNOWLEDGEMENT],
     "subjects": ["Current datasets"],
     "categories": ["climate"],
     "datasets": [
@@ -159,8 +161,7 @@ def main():
                 coverage = gen_tif_coverage(tiffile, md['url'])
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 md['resolution'] = RESOLUTION
-                if md['genre'] == 'DataGenreCC':
-                    md['acknowledgement'] = ACKNOWLEDGEMENT
+                md['acknowledgement'] = ACKNOWLEDGEMENT
                 coverage['bccvl:metadata'] = md
                 coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, DATASETNAME)
                 coverages.append(coverage)
@@ -177,32 +178,33 @@ def main():
 
     print("Generate datasets.json")
     datasets = []
-    # collect all years from coverages
-    YEARS = sorted({cov['bccvl:metadata']['year'] for cov in coverages if 'year' in cov['bccvl:metadata']})
+    # collect all months from coverages
+    MONTHS = sorted({cov['bccvl:metadata']['month'] for cov in coverages if 'month' in cov['bccvl:metadata']})
     # generate datasets for db import
     for dsdef in DATASETS:
         # make a copy so that we can modify the filters
         dsdef = copy.deepcopy(dsdef)
         cov_filter = dsdef['filter']
-        if cov_filter['genre'] == 'DataGenreCC':
-            # current
-            for year in YEARS:
-                cov_filter.update({
-                    'year': year
-                })
-                subset = list(filter(
-                    lambda x: match_coverage(x, cov_filter),
-                    coverages
-                ))
-                if not subset:
-                    print("No Data matched for {}".format(cov_filter))
-                    continue
-                coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-                md = gen_dataset_metadata(dsdef, subset, genre=cov_filter['genre'])
-                md['extent_wgs84'] = get_coverage_extent(coverage)
-                coverage['bccvl:metadata'] = md
-                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, DATASETNAME)
-                datasets.append(coverage)
+        if cov_filter['genre'] != 'DataGenreCC':
+            continue
+        # current datasets defined by month
+        for month in MONTHS:
+            cov_filter.update({
+                'month': month
+            })
+            subset = list(filter(
+                lambda x: match_coverage(x, cov_filter),
+                coverages
+            ))
+            if not subset:
+                print("No Data matched for {}".format(cov_filter))
+                continue
+            coverage = gen_dataset_coverage(subset, dsdef['aggs'])
+            md = gen_dataset_metadata(dsdef, subset, genre=cov_filter['genre'])
+            md['extent_wgs84'] = get_coverage_extent(coverage)
+            coverage['bccvl:metadata'] = md
+            coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, DATASETNAME)
+            datasets.append(coverage)
 
     print("Write datasets.json")
     # save all the data
