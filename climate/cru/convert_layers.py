@@ -92,7 +92,7 @@ def convert(srcfile, destdir):
                 continue
 
             layerid, year = get_layer_id(os.path.basename(zipinfo.filename))
-            destfilename = 'accuclim_{}_{}.tif'.format(layerid, year) 
+            destfilename = 'cruclim_{}_{}.tif'.format(layerid, year) 
             srcurl = '/vsizip/' + srcfile + '/' + zipinfo.filename
             gdaloptions = gdal_options(srcfile, year)
             # output file name
@@ -100,6 +100,7 @@ def convert(srcfile, destdir):
             # run gdal translate
             cmd = ['gdal_translate']
             cmd.extend(gdaloptions)
+            run_gdal(cmd, srcurl, destpath, layerid)
             results.append(
                 pool.submit(run_gdal, cmd, srcurl, destpath, layerid)
             )
@@ -116,7 +117,7 @@ def create_target_dir(destdir, srcfile):
     """create zip folder structure in tmp location.
     return root folder
     """
-    dirname = 'accuClim'
+    dirname = 'cruclim'
     root = os.path.join(destdir, dirname)
     os.makedirs(root, exist_ok=True)
     return root

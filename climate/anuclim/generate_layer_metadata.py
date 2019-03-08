@@ -200,7 +200,7 @@ def main():
                 print("No Data matched for {}".format(cov_filter))
                 continue
             coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-            md = gen_dataset_metadata(dsdef, subset, genre=cov_filter['genre'])
+            md = gen_dataset_metadata(dsdef, subset, month=month, genre=cov_filter['genre'])
             md['extent_wgs84'] = get_coverage_extent(coverage)
             coverage['bccvl:metadata'] = md
             coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, DATASETNAME)

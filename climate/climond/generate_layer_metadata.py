@@ -46,7 +46,7 @@ DATASETS = [
     # current
     {
         # bio
-        'title': 'CliMond (global), current climate {year}, {resolution}',
+        'title': 'CliMond (global), current climate (1961 - 1990), {resolution}',
         'acknowledgement': ACKNOWLEDGEMENT,
         'external_url': 'https://www.climond.org/ClimateData.aspx',
         'license': (

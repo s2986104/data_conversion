@@ -23,38 +23,40 @@ from data_conversion.coverage import (
 
 # TODO: add mimetype somehwere?
 
-DATASETNAME = 'accuclim'
+DATASETNAME = 'cruclim'
 CATEGORY = 'climate'
-RESOLUTION = '9 arcsec'
+RESOLUTION = '30 arcmin'
 SWIFT_CONTAINER = (
     'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-    'accuclim'
+    'cruclim'
 )
 
 RESOLUTIONS = {  # udunits arc_minute / arcmin, UCUM/UOM: min_arc
-    '9 arcsec': '9 arcsec (~250m)',
+    '30 arcmin': '30 arcmin (~50km)',
 }
 
 ACKNOWLEDGEMENT = (
-            'Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013) '
-            'Improved spatial estimates of climate predict patchier species distributions. '
-            'Diversity and Distributions, 19 (9). pp. 1106-1113.'
+            'University of East Anglia Climatic Research Unit; Harris, I.C.; '
+            'Jones, P.D. (2015): CRU TS3.23: Climatic Research Unit (CRU) '
+            'Time-Series (TS) Version 3.23 of High Resolution Gridded Data '
+            'of Month-by-month Variation in Climate (Jan. 1901- Dec. 2014). '
+            'Centre for Environmental Data Analysis, 09 November 2015. '
+            'doi:10.5285/4c7fdfa6-f176-4c58-acee-683d5e9d2ed5.'
 )
 
 DATASETS = [
     # current
     {
         # bio
-        'title': 'accuCLIM (Wet Tropics Australia), 30-year average either side of ({year}), {resolution}',
+        'title': 'CRUclim (global), current climate (1976-2005), {resolution}',
         'acknowledgement': ACKNOWLEDGEMENT,
-        'external_url': 'https://researchdata.ands.org.au/accuclim-30-year-heritage-area/654267',
+        'external_url': 'http://www.ceda.ac.uk/',
         'license': (
-            'Creative Commons Attribution 3.0 AU '
-            'http://creativecommons.org/licenses/by/3.0/au'
+            'Open Government Licence for Public Sector Information (UK) '
+            'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
         ),
         'filter': {
-            'genre': 'DataGenreCC',
-            'year': None
+            'genre': 'DataGenreCC'
         },
         'aggs': [], 
     }
@@ -62,12 +64,12 @@ DATASETS = [
 
 COLLECTION = {
     "_type": "Collection",
-    "uuid": "1db9e574-2f14-11e9-b0ea-0242ac110002",
-    "title": "ACCUclim climate data",
-    "description": "A set of 7 temperature variables for the Wet Tropics area in north-east Australia\n\nGeographic extent: Wet Tropics, Australia\nYear range: 1950-2015\nResolution: 9 arcsec (~250 m)\nData layers: B01-07",
-    "rights": "CC-BY Attribution 3.0",
-    "landingPage": "https://researchdata.ands.org.au/accuclim-30-year-heritage-area/654267",
-    "attribution": ["Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013) Improved spatial estimates of climate predict patchier species distributions. Diversity and Distributions, 19 (9). pp. 1106-1113."],
+    "uuid": "06d2de1c-559a-4e91-80ea-24aec53eca3f",
+    "title": "Alimatic Research Unit (CRU) climate data",
+    "description": "Global climate data from monthly observations collated by the University of East Anglia Climatic Research Unit",
+    "rights": "Open Government Licence for Public Sector Information (UK)",
+    "landingPage": "http://www.ceda.ac.uk/",
+    "attribution": [ACKNOWLEDGEMENT],
     "subjects": ["Current datasets"],
     "categories": ["climate"],
     "datasets": [
@@ -198,7 +200,7 @@ def main():
                     print("No Data matched for {}".format(cov_filter))
                     continue
                 coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-                md = gen_dataset_metadata(dsdef, subset, year=year, genre=cov_filter['genre'])
+                md = gen_dataset_metadata(dsdef, subset, genre=cov_filter['genre'])
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 coverage['bccvl:metadata'] = md
                 coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, DATASETNAME)

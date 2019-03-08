@@ -61,7 +61,7 @@ def get_layer_id(filename):
     # current dataset filename has 2 parts only
     parts = os.path.splitext(os.path.basename(filename))[0].split('_')
     layerid = 'bioclim_{}'.format(parts[1] if len(parts) == 2 else parts[3])
-    year = '1976' if len(parts) == 2 else parts[4]
+    year = '1975' if len(parts) == 2 else parts[4]
     return layerid, int(year)
 
 
