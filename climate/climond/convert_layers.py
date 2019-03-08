@@ -34,7 +34,7 @@ def parse_zip_filename(srcfile):
     if parts[1] == 'current':
         emsc, gcm = parts[1], parts[1]
     else:
-        emsc, gcm = parts[1], part[2]
+        emsc, gcm = parts[1], parts[2]
     return EMSC_MAP.get(emsc, emsc), gcm
 
 
@@ -60,8 +60,8 @@ def gdal_options(srcfile, year):
 def get_layer_id(filename):
     # current dataset filename has 2 parts only
     parts = os.path.splitext(os.path.basename(filename))[0].split('_')
-    layerid = 'bioclim_{}'.format(part[1] if len(parts) == 2 else part[3])
-    year = '1976' if len(parts) == 2 else part[4]
+    layerid = 'bioclim_{}'.format(parts[1] if len(parts) == 2 else parts[3])
+    year = '1976' if len(parts) == 2 else parts[4]
     return layerid, int(year)
 
 
@@ -175,7 +175,7 @@ def parse_args():
     )
     parser.add_argument(
         '--workdir', action='store',
-        default='/mnt/workdir/australia-5km_work',
+        default='/mnt/workdir/climond_work',
         help=('folder to store working files before moving to final '
               'destination')
     )

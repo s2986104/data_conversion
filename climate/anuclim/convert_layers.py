@@ -17,7 +17,7 @@ from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 YEAR = 1990
 SOURCEFILES = ['precSUM.zip', 'eval.zip', 'vapp.zip', 'tmax.zip', 'tmin.zip']
 LAYERINFO = {
-    'prec': 'MPREC',
+    'precSUM': 'MPREC',
     'eval': 'MEVAL',
     'vapp': 'MVAPP',
     'tmax': 'MTMAX',
@@ -146,7 +146,7 @@ def parse_args():
     )
     parser.add_argument(
         '--workdir', action='store',
-        default='/mnt/workdir/australia-5km_work',
+        default='/mnt/workdir/anuclim_work',
         help=('folder to store working files before moving to final '
               'destination')
     )
@@ -167,7 +167,7 @@ def main():
     try:
         target_work_dir = create_target_dir(workdir, srcfile)
         for srcfile in tqdm.tqdm(srcfiles):
-            if srcfiles not in SOURCEFILES:
+            if os.path.basename(srcfile) not in SOURCEFILES:
                 continue
             # convert files into workdir
             convert(srcfile, target_work_dir)
