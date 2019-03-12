@@ -21,7 +21,7 @@ def parse_zip_filename(srcfile):
     """
     basename, _ = os.path.splitext(os.path.basename(srcfile))
     basedir = os.path.basename(os.path.dirname(srcfile))
-    res = '36s' if basedir == 'NaRCIM_1km' else '9s'
+    res = '36s' if basedir == 'NaRCLIM_1km' else '9s'
     parts = basename.split('_')
     if parts[1] == 'baseline':
         # it's a current file
@@ -46,7 +46,7 @@ def gdal_options(srcfile):
     options += ['-mo', 'year_range={}-{}'.format(year-10, year+9)]
     options += ['-mo', 'year={}'.format(year)]
 
-    if gcm == 'current':
+    if gcm != 'current':
         options += ['-mo', 'emission_scenario={}'.format(emsc)]
         options += ['-mo', 'general_circulation_models={}'.format(gcm.upper())]
     return options
@@ -55,7 +55,7 @@ def gdal_options(srcfile):
 def get_layer_id(filename):
     fname = os.path.splitext(os.path.basename(filename))[0]
     _, _, layerid = fname.split('_')
-    return 'bioclim_{}'.format(layerid), int(year)
+    return 'bioclim_{}'.format(layerid)
 
 
 def run_gdal(cmd, infile, outfile, layerid):
@@ -164,12 +164,12 @@ def parse_args():
     )
     parser.add_argument(
         '--workdir', action='store',
-        default='/mnt/workdir/narclim',
+        default='/mnt/workdir/work_narclim',
         help=('folder to store working files before moving to final '
               'destination')
     )
     parser.add_argument(
-        '--resolution', action='append',
+        '--resolution', action='store',
         choices=['36s', '9s'],
         help='only convert files at specified resolution'
     )    
@@ -178,16 +178,12 @@ def parse_args():
 
 def main():
     opts = parse_args()
-    srcfile = os.path.abspath(opts.source)
-    if os.path.isdir(srcfile):
-        srcfiles = sorted(glob.glob(os.path.join(srcfile, '*.zip')))
-    else:
-        srcfiles = [srcfile]
+    src = os.path.abspath(opts.source)
 
     workdir = ensure_directory(opts.workdir)
     dest = ensure_directory(opts.destdir)
 
-    resdir = 'NaRCIM_1km' if opts.resolution == '36s' else 'NaRCIM_9s'
+    resdir = 'NaRCLIM_1km' if opts.resolution == '36s' else 'NaRCLIM_9s'
     if os.path.isdir(src):
         srcfiles = sorted(glob.glob(os.path.join(src, resdir, '*.zip')))
     else:

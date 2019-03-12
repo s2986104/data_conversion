@@ -112,5 +112,101 @@
         "long_name": "Bioclim 19: Precipitation of Coldest Quarter",
         "units": "mm",
         "measure_type": "continuous"
+    },
+    "bioclim_20": {
+        "standard_name": "bioclim_20",
+        "long_name": "Bioclim 20: Annual mean radiation",
+        "units": "W/m^2",
+        "measure_type": "continuous"
+    },
+    "bioclim_21": {
+        "standard_name": "bioclim_21",
+        "long_name": "Bioclim 21: Highest weekly radiation",
+        "units": "W/m^2",
+        "measure_type": "continuous"
+    },
+    "bioclim_22": {
+        "standard_name": "bioclim_22",
+        "long_name": "Bioclim 22: Lowest weekly radiation",
+        "units": "W/m^2",
+        "measure_type": "continuous"
+    },
+    "bioclim_23": {
+        "standard_name": "bioclim_23",
+        "long_name": "Bioclim 23: Radiation seasonality",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "bioclim_24": {
+        "standard_name": "bioclim_24",
+        "long_name": "Bioclim 24: Radiation of wettest quarter",
+        "units": "W/m^2",
+        "measure_type": "continuous"
+    },
+    "bioclim_25": {
+        "standard_name": "bioclim_25",
+        "long_name": "Bioclim 25: Radiation of driest quarter",
+        "units": "W/m^2",
+        "measure_type": "continuous"
+    },
+    "bioclim_26": {
+        "standard_name": "bioclim_26",
+        "long_name": "Bioclim 26: Radiation of warmest quarter",
+        "units": "W/m^2",
+        "measure_type": "continuous"
+    },
+    "bioclim_27": {
+        "standard_name": "bioclim_27",
+        "long_name": "Bioclim 27: Radiation of coldest quarter",
+        "units": "W/m^2",
+        "measure_type": "continuous"
+    },
+    "bioclim_28": {
+        "standard_name": "bioclim_28",
+        "long_name": "Bioclim 28: Annual mean moisture index",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "bioclim_29": {
+        "standard_name": "bioclim_29",
+        "long_name": "Bioclim 29: Highest weekly moisture index",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "bioclim_30": {
+        "standard_name": "bioclim_30",
+        "long_name": "Bioclim 30: Lowest weekly moisture index",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "bioclim_31": {
+        "standard_name": "bioclim_31",
+        "long_name": "Bioclim 31: Moisture index seasonality",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "bioclim_32": {
+        "standard_name": "bioclim_32",
+        "long_name": "Bioclim 32: Mean moisture index of wettest quarter",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "bioclim_33": {
+        "standard_name": "bioclim_33",
+        "long_name": "Bioclim 33: Mean moisture index of driest quarter",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "bioclim_34": {
+        "standard_name": "bioclim_34",
+        "long_name": "Bioclim 34: Mean moisture index of warmest quarter",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "bioclim_35": {
+        "standard_name": "bioclim_35",
+        "long_name": "Bioclim 35: Mean moisture index of coldest quarter",
+        "units": "1",
+        "measure_type": "continuous"
     }
 }
