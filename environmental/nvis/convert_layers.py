@@ -17,9 +17,9 @@ from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 
 LAYERINFO = {
     # NVIS Australian vegetation group
-    # source directory file, ('source fragment', year, dest filename)
-    'GRID_NVIS4_2_AUST_EXT_MVG': ('aus4_2e_mvg', 2016, 'nvis_present_vegetation_groups.tif'),
-    'GRID_NVIS4_2_AUST_PRE_MVG': ('aus4_2p_mvg', 2016, 'nvis_pre-1750_vegetation_groups.tif')
+    # source directory file, ('source fragment', year, dest filename, layerid)
+    'GRID_NVIS4_2_AUST_EXT_MVG': ('aus4_2e_mvg', 2016, 'nvis_present_vegetation_groups.tif', 'AMVG'),
+    'GRID_NVIS4_2_AUST_PRE_MVG': ('aus4_2p_mvg', 2016, 'nvis_pre-1750_vegetation_groups.tif', 'AMVG-1750')
 }
 
 
@@ -34,8 +34,8 @@ def gdal_options(srcfile, year):
 
 
 def get_layer_id(filename):
-    layerid = os.path.splitext(os.path.basename(filename))[0]
-    return layerid
+    fname = os.path.splitext(os.path.basename(filename))[0]
+    return LAYERINFO[fname]
 
 
 def run_gdal(cmd, infile, outfile, layerid):
@@ -86,8 +86,7 @@ def convert(srcfile, destdir):
     pool = futures.ProcessPoolExecutor()
     results = []
     with zipfile.ZipFile(srcfile) as srczip:
-        fname = get_layer_id(os.path.basename(srcfile))
-        srcfrag, year, destfname = LAYERINFO[fname]
+        srcfrag, year, destfname, layerid = get_layer_id(os.path.basename(srcfile))
         esrifname = '/'.join([fname, srcfrag, 'w001001.adf'])
         for zipinfo in tqdm.tqdm(srczip.filelist, desc="build jobs"):
             if zipinfo.is_dir():
