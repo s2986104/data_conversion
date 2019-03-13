@@ -11,8 +11,8 @@
         "units": "mm",
         "measure_type": "continuous"
     },
-    "MEVAL": {
-        "standard_name": "MEVAL",
+    "MEVAP": {
+        "standard_name": "MEVAP",
         "long_name": "Total Monthly Evaporation",
         "units": "mm",
         "measure_type": "continuous"

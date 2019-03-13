@@ -15,10 +15,10 @@ from data_conversion.vocabs import VAR_DEFS, PREDICTORS
 from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 
 YEAR = 1990
-SOURCEFILES = ['precSUM.zip', 'eval.zip', 'vapp.zip', 'tmax.zip', 'tmin.zip']
+SOURCEFILES = ['precSUM.zip', 'evap.zip', 'vapp.zip', 'tmax.zip', 'tmin.zip']
 LAYERINFO = {
     'precSUM': 'MPREC',
-    'eval': 'MEVAL',
+    'evap': 'MEVAP',
     'vapp': 'MVAPP',
     'tmax': 'MTMAX',
     'tmin': 'MTMIN'
@@ -100,12 +100,16 @@ def convert(srcfile, destdir):
                 # skip dir entries
                 continue
 
-            if not zipinfo.filename.endswith('tif'):
+            if not zipinfo.filename.endswith('tif') or \
+               not zipinfo.filename.endswith('gz'):
                 continue
 
             layerid, month = get_layer_id(os.path.basename(zipinfo.filename))
-            destfilename = 'anuclim_{}_{}.tif'.format(layerid.lower(), month) 
+            destfilename = 'anuclim_{}_{}.tif'.format(layerid.lower(), month)             
             srcurl = '/vsizip/' + srcfile + '/' + zipinfo.filename
+            if zipinfo.filename.endswith('gz'):
+                gzipfile = srczip.extract(zipinfo.filename, destdir)
+                srcurl = '/vsigzip/' + gzipfile
             gdaloptions = gdal_options(srcfile, month, YEAR)
             # output file name
             destpath = os.path.join(destdir, destfilename)
@@ -121,7 +125,14 @@ def convert(srcfile, destdir):
                             total=len(results)):
         if result.exception():
             print("Job failed")
-            raise result.excption()
+            # remove gz files if any
+            for gzf in glob.glob(os.path.join(destdir, '*.gz')):
+                os.remove(gzf)            
+            raise result.exception()
+
+    # remove gz files if any
+    for gzf in glob.glob(os.path.join(destdir, '*.gz')):
+        os.remove(gzf)
 
 
 def create_target_dir(destdir, srcfile):
