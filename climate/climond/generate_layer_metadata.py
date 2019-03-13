@@ -126,7 +126,7 @@ def match_coverage(cov, attrs):
     # used to filter set of coverages
     md = cov['bccvl:metadata']
     for attr, value in attrs.items():
-        if isinstance(value, re.Pattern):
+        if isinstance(value, re._pattern_type):
             if not value.match(md[attr]):
                 return False
             continue
