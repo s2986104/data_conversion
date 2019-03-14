@@ -30,7 +30,7 @@ def gdal_options(srcfile, year):
 def get_layer_id(filename):
     fname = os.path.splitext(os.path.basename(filename))[0]
     _, layerid, year = fname.split('_')
-    return 'bioclim_{}'.format(layerid), int(year)
+    return 'bioclim_{:02d}'.format(layerid), int(year)
 
 
 def run_gdal(cmd, infile, outfile, layerid):

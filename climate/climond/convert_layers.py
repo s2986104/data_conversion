@@ -20,6 +20,10 @@ EMSC_MAP = {
     'A2': 'SRES-A2'
 }
 
+SCALES = {
+    'bioclim_04': 100.0
+}
+
 
 def parse_zip_filename(srcfile):
     """
@@ -60,7 +64,7 @@ def gdal_options(srcfile, year):
 def get_layer_id(filename):
     # current dataset filename has 2 parts only
     parts = os.path.splitext(os.path.basename(filename))[0].split('_')
-    layerid = 'bioclim_{}'.format(parts[1] if len(parts) == 2 else parts[3])
+    layerid = 'bioclim_{:02d}'.format(parts[1] if len(parts) == 2 else parts[3])
     year = '1975' if len(parts) == 2 else parts[4]
     return layerid, int(year)
 
@@ -80,7 +84,7 @@ def run_gdal(cmd, infile, outfile, layerid):
             band.SetMetadataItem(key, value)
         # just for completeness
         band.SetUnitType(VAR_DEFS[layerid]['units'])
-        # band.SetScale(1.0)
+        band.SetScale(SCALES.get(layerid, 1))
         # band.SetOffset(0.0)
         ds.FlushCache()
         # build command

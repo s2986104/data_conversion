@@ -56,7 +56,7 @@ def get_layer_id(filename):
     """
     parts = os.path.splitext(os.path.basename(filename))[0].split('_')
     _, _, layerid, year = parts
-    return 'bioclim_{}'.format(layerid), int(year)
+    return 'bioclim_{:02d}'.format(layerid), int(year)
 
 
 def run_gdal(cmd, infile, outfile, layerid):

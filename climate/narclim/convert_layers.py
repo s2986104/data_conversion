@@ -14,6 +14,9 @@ import tqdm
 from data_conversion.vocabs import VAR_DEFS, PREDICTORS
 from data_conversion.utils import ensure_directory, move_files, retry_run_cmd
 
+SCALES = {
+    'bioclim_15': 0.1
+}
 
 def parse_zip_filename(srcfile):
     """
@@ -55,7 +58,7 @@ def gdal_options(srcfile):
 def get_layer_id(filename):
     fname = os.path.splitext(os.path.basename(filename))[0]
     _, _, layerid = fname.split('_')
-    return 'bioclim_{}'.format(layerid)
+    return 'bioclim_{:02d}'.format(layerid)
 
 
 def run_gdal(cmd, infile, outfile, layerid):
@@ -73,7 +76,7 @@ def run_gdal(cmd, infile, outfile, layerid):
             band.SetMetadataItem(key, value)
         # just for completeness
         band.SetUnitType(VAR_DEFS[layerid]['units'])
-        # band.SetScale(1.0)
+        band.SetScale(SCALES.get(layerid, 1))
         # band.SetOffset(0.0)
         ds.FlushCache()
         # build command
