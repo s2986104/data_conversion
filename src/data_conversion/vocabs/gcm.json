@@ -194,5 +194,17 @@
     "MIROC3.2-R3": {
         "title": "",
         "license": ""
+    },
+    "ECHAM5": {
+        "title": "",
+        "license": ""
+    },
+    "GCM-MEAN": {
+        "title": "",
+        "license": ""
+    },
+    "MIROC3.2-MEDRES": {
+        "title": "",
+        "license": ""
     }
 }

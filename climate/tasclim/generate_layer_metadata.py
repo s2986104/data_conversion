@@ -24,48 +24,51 @@ from data_conversion.coverage import (
 # TODO: add mimetype somehwere?
 
 
-DATASETNAME = 'narclim'
+DATASETNAME = 'tasclim'
 CATEGORY = 'climate'
 SWIFT_CONTAINER = (
     'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-    'narclim'
+    'tasclim'
 )
 
 RESOLUTIONS = {  # udunits arc_minute / arcmin, UCUM/UOM: min_arc
-    '36s': '36 arcsec',
-    '9s': '9 arcsec'
+    '6 arcmin': '6 arcmin (~12km)'
 }
 
 ACKNOWLEDGEMENT = (
-            'Evans JP, Ji F, Lee C, Smith P, Argueso D and Fita L (2014) Design of '
-            'a regional climate modelling projection ensemble experiment Geosci. '
-            'Model Dev., 7, 621-629'
+            'Corney, S. P., J. J. Katzfey, J. L. McGregor, M. R. Grose, J. C. Bennett, '
+            'C. J. White, G. K. Holz, S. Gaynor, and N. L. Bindoff, 2010: Climate '
+            'Futures for Tasmania: climate modelling. Antarctic Climate and Ecosystems '
+            'Cooperative Research Centre, Hobart, Tasmania.'
 )
 
 DATASETS = [
     # current
     {
         # bio
-        'title': 'South-East Australia Current Climate, (2000), {resolution}',
+        'title': 'Tasmania, Current Climate ({year}), ({emsc}) based on {gcm}, {resolution}'
         'acknowledgement': ACKNOWLEDGEMENT,
-        'external_url': 'https://climatedata.environment.nsw.gov.au/',
+        'external_url': 'http://www.dpac.tas.gov.au/__data/assets/pdf_file/0016/151126/CFT_-_Climate_Modelling_Summary.pdf',
         'license': (
-            'Creative Commons Attribution 4.0'
-            'https://creativecommons.org/licenses/by/4.0'
+            'Creative Commons Attribution 3.0 AU'
+            'https://creativecommons.org/licenses/by/3.0/au'
         ),
         'filter': {
-            'genre': 'DataGenreCC'
+            'genre': 'DataGenreCC',
+            'gcm': None,
+            'emsc': None,
+            'year': None
         },
         'aggs': [], 
     },
     {
         # bio
-        'title': 'South-East Australia Future Climate, ({year}), ({emsc}) based on {gcm}, {resolution}',
+        'title': 'Tasmania, Future Climate ({year}), ({emsc}) based on {gcm}, {resolution}',
         'acknowledgement': ACKNOWLEDGEMENT,
-        'external_url': 'https://climatedata.environment.nsw.gov.au/',
+        'external_url': 'http://www.dpac.tas.gov.au/__data/assets/pdf_file/0016/151126/CFT_-_Climate_Modelling_Summary.pdf',
         'license': (
-            'Creative Commons Attribution 4.0'
-            'https://creativecommons.org/licenses/by/4.0'
+            'Creative Commons Attribution 3.0 AU'
+            'https://creativecommons.org/licenses/by/3.0/au'
         ),
         'filter': {
             'genre': 'DataGenreFC',
@@ -79,11 +82,11 @@ DATASETS = [
 
 COLLECTION = {
     "_type": "Collection",
-    "uuid": "e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8",
-    "title": "NaRCLIM climate data",
-    "description": "Current and future climate data for south-east Australia\n\nGeographic extent: South-east Australia\nYear range: 1990-2010, 2030, 2070\nResolution: 36 arcsec (~1 km)\nData layers: B01-35",
-    "rights": "CC-BY Attribution 4.0",
-    "landingPage": "See <a href=\"https://climatedata.environment.nsw.gov.au/\">NSW Climate Data Portal</a>",
+    "uuid": "f33a8644-7d84-4574-a774-1bbf50da046e",
+    "title": "Climate Futures Tasmania (CFT) climate data",
+    "description": "Fine-scale current and future climate data for Tasmania\n\nGeographic extent: Tasmania (Australia)\nYear range: 1965-2100\nResolution: 6 arcmin (~12 km)\nData layers: B01-19",
+    "rights": "CC-BY Attribution 3.0 AU",
+    "landingPage": "See <a href=\"http://www.dpac.tas.gov.au/__data/assets/pdf_file/0016/151126/CFT_-_Climate_Modelling_Summary.pdf\">Climate Futures for Tasmania: climate modelling. Antarctic Climate and Ecosystems Cooperative Research Centre, Hobart, Tasmania</a>",
     "attribution": [ACKNOWLEDGEMENT],
     "subjects": ["Current datasets", "Future datasets"],
     "categories": ["climate"],
@@ -173,6 +176,11 @@ def main():
         for tiffile in tqdm.tqdm(tiffiles):
             try:
                 md = gen_tif_metadata(tiffile, opts.srcdir, SWIFT_CONTAINER)
+                # Current TasClim data layers have emission scenario and gcm,
+                # so need to update genre bases on year
+                if md['year'] < 2016:
+                    md['genre'] = 'DataGenreCC' 
+
                 coverage = gen_tif_coverage(tiffile, md['url'])
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 coverage['bccvl:metadata'] = md
@@ -201,12 +209,12 @@ def main():
         dsdef = copy.deepcopy(dsdef)
         for resolution in RESOLUTIONS:
             cov_filter = dsdef['filter']
-            # add resolution filter:
-            cov_filter['url'] = re.compile(r'https://.*/.*{}.*\.tif'.format(resolution))
-            if cov_filter['genre'] == 'DataGenreCC':
-                # current
-                # Add filter; Only want NaR_Extent current dataset
-                cov_filter['url'] = re.compile(r'https://.*/.*NaR_Extent.*{}.*\.tif'.format(resolution))
+            for gcm, emsc, year in itertools.product(GCMS, EMSCS, YEARS):
+                cov_filter.update({
+                    'gcm': gcm,
+                    'emsc': emsc,
+                    'year': year
+                })
                 subset = list(filter(
                     lambda x: match_coverage(x, cov_filter),
                     coverages
@@ -215,32 +223,11 @@ def main():
                     print("No Data matched for {}".format(cov_filter))
                     continue
                 coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-                md = gen_dataset_metadata(dsdef, subset, genre=cov_filter['genre'])
+                md = gen_dataset_metadata(dsdef, subset, resolution=resolution, gcm=gcm, emsc=emsc, year=year, genre=cov_filter['genre'])
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 coverage['bccvl:metadata'] = md
                 coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, DATASETNAME)
                 datasets.append(coverage)
-            else:
-                # future
-                for gcm, emsc, year in itertools.product(GCMS, EMSCS, YEARS):
-                    cov_filter.update({
-                        'gcm': gcm,
-                        'emsc': emsc,
-                        'year': year
-                    })
-                    subset = list(filter(
-                        lambda x: match_coverage(x, cov_filter),
-                        coverages
-                    ))
-                    if not subset:
-                        print("No Data matched for {}".format(cov_filter))
-                        continue
-                    coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-                    md = gen_dataset_metadata(dsdef, subset, gcm=gcm, emsc=emsc, year=year, genre=cov_filter['genre'])
-                    md['extent_wgs84'] = get_coverage_extent(coverage)
-                    coverage['bccvl:metadata'] = md
-                    coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, DATASETNAME)
-                    datasets.append(coverage)
 
     print("Write datasets.json")
     # save all the data
