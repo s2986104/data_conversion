@@ -1,0 +1,32 @@
+{
+    "MVAPP": {
+        "standard_name": "MVAPP",
+        "long_name": "Average Monthly Vapour Pressure",
+        "units": "HPa",
+        "measure_type": "continuous"
+    },
+    "MPREC": {
+        "standard_name": "PREC",
+        "long_name": "Average Monthly Precipitation",
+        "units": "mm",
+        "measure_type": "continuous"
+    },
+    "MEVAP": {
+        "standard_name": "MEVAP",
+        "long_name": "Total Monthly Evaporation",
+        "units": "mm",
+        "measure_type": "continuous"
+    },
+    "MTMAX": {
+        "standard_name": "MTMAX",
+        "long_name": "Average Monthly Maximum Temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "MTMIN": {
+        "standard_name": "MTMIN",
+        "long_name": "Average Monthly Minimum Temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    }
+}
