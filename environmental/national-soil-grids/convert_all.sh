@@ -1,3 +1,6 @@
 #!/bin/bash
 
-python3 convert_layers.py ./source bccvl
+
+BASEDIR="/mnt/collection/datasets/environmental/national_soil_grids"
+
+python3 convert_layers.py ${BASEDIR}/source ${BASEDIR}/layers

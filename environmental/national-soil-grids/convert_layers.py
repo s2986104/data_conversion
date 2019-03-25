@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import argparse
+from collections import namedtuple
 from concurrent import futures
 import glob
 import os
 import os.path
+import shutil
 import tempfile
 import zipfile
-import shutil
 
 from osgeo import gdal
 import tqdm
@@ -24,18 +25,30 @@ LAYERINFO = {
 }
 
 
-def gdal_options(srcfile, year):
-    # options to add metadata for the tiff file
+PARSE_RESULT = namedtuple(
+    'PARSE_RESULT',
+    ['layerid', 'year']
+)
+def parse_zip_filename(srcfile):
+    basename = os.path.basename(srcfile)
+    fname, _ = os.path.splitext(basename)
+    # layerid, year
+    return PARSE_RESULT(*LAYERINFO[fname.lower()])
 
+
+def gdal_options(srcfile):
+    # options to add metadata for the tiff file
+    _, year = parse_zip_filename(srcfile)
     options = ['-of', 'GTiff', '-co', 'TILED=YES']
-    options += ['-co', 'COMPRESS=DEFLATE', '--config', 'GDAL_PAM_MODE', 'PAM']
+    options += ['-co', 'COMPRESS=DEFLATE', '--config']
     options += ['-mo', 'year_range={}-{}'.format(year, year)]
     options += ['-mo', 'year={}'.format(year)]
     return options
 
 
+# get layer id from filename within zip file
 def get_layer_id(filename):
-    layerid = os.path.splitext(os.path.basename(filename))[0]
+    layerid = os.path.basename(os.path.dirname(filename))
     return layerid
 
 
@@ -63,7 +76,6 @@ def run_gdal(cmd, infile, outfile, layerid):
             '-co', 'COPY_SRC_OVERVIEWS=YES',
             '-co', 'COMPRESS=DEFLATE',
             '-co', 'PREDICTOR={}'.format(PREDICTORS[band.DataType]),
-            '--config', 'GDAL_PAM_MODE', 'PAM'
         ]
         # check rs
         if not ds.GetProjection():
@@ -76,6 +88,7 @@ def run_gdal(cmd, infile, outfile, layerid):
         retry_run_cmd(cmd)
     except Exception as e:
         print('Error:', e)
+        raise e
     finally:
         os.remove(tfname)
 
@@ -87,20 +100,14 @@ def convert(srcfile, destdir):
     pool = futures.ProcessPoolExecutor()
     results = []
     with zipfile.ZipFile(srcfile) as srczip:
-        fname = get_layer_id(os.path.basename(srcfile))
-        layerid, year = LAYERINFO[fname.lower()]
-        if layerid == 'asc':
-            esrifname = '/'.join([fname, 'hdr.adf'])
-        else:
-            esrifname = '/'.join([fname, layerid, 'hdr.adf'])
         for zipinfo in tqdm.tqdm(srczip.filelist, desc="build jobs"):
-            if zipinfo.is_dir():
-                # skip dir entries
+            if not zipinfo.filename.endswith('/hdr.adf'):
+                # skip non data dirs
                 continue
-            if zipinfo.filename != esrifname:
-                # skip non .asc files
+            layerid = get_layer_id(zipinfo.filename)
+            if layerid.endswith('_src'):
+                # skip xxx_src layers  ... we probably want them some day though
                 continue
-
             destfilename = (
                 os.path.basename(destdir) +
                 '_' +
@@ -108,7 +115,7 @@ def convert(srcfile, destdir):
                 '.tif'
             )
             srcurl = '/vsizip/' + srcfile + '/' + zipinfo.filename
-            gdaloptions = gdal_options(srcfile, year)
+            gdaloptions = gdal_options(srcfile)
             # output file name
             destpath = os.path.join(destdir, destfilename)
             # run gdal translate
@@ -119,7 +126,7 @@ def convert(srcfile, destdir):
     for result in tqdm.tqdm(futures.as_completed(results), desc=os.path.basename(srcfile), total=len(results)):
         if result.exception():
             print("Job failed")
-            raise result.excption()
+            raise result.exception()
 
 
 def create_target_dir(destdir, srcfile):
@@ -139,9 +146,8 @@ def parse_args():
         description='Convert National SoilGrids datasets'
     )
     parser.add_argument(
-        'srcdir', action='store',
-        help=('source file or directory. If directory all zip files '
-              'will be converted')
+        'source', action='store',
+        help=('source folder or source zip file.')
     )
     parser.add_argument(
         'destdir', action='store',
@@ -158,15 +164,14 @@ def parse_args():
 
 def main():
     opts = parse_args()
-    srcdir = os.path.abspath(opts.srcdir)
+    srcfile = os.path.abspath(opts.source)
+    if os.path.isdir(srcfile):
+        srcfiles = sorted(glob.glob(os.path.join(srcfile, '**', '*.zip'), recursive=True))
+    else:
+        srcfiles = [srcfile]
 
     workdir = ensure_directory(opts.workdir)
     dest = ensure_directory(opts.destdir)
-
-    if os.path.isdir(srcdir):
-        srcfiles = sorted(glob.glob(os.path.join(srcdir, '*.zip')))
-    else:
-        srcfiles = [srcfiles]
 
     # unpack contains one destination datasets
     for srcfile in tqdm.tqdm(srcfiles):

@@ -37,13 +37,7 @@ def gen_tif_metadata(tiffile, srcdir, swiftcontainer):
     md = {}
     ds = open_gdal_dataset(tiffile)
     dsmd = ds.GetMetadata()
-    if 'emission_scenario' in dsmd:
-        # Future Climate
-        md['genre'] = 'DataGenreFC'
-    else:
-        # Current Climate
-        md['genre'] = 'DataGenreCC'
-    # put all other known global tiff metadata into md
+    # put all known global tiff metadata into md
     # TODO: we have tied the attribute name to the axis name ... (emsc, gcm, etc...)
     #       maybe we should rethink how we name axes, and potentially give
     #       them different names than the attribute
@@ -60,6 +54,7 @@ def gen_tif_metadata(tiffile, srcdir, swiftcontainer):
             md[key] = value
 
     # build swift url:
+    # TODO: should we do this here? or in collection specific code?
     relpath = os.path.relpath(tiffile, srcdir)
     md['url'] = os.path.join(swiftcontainer, relpath)
     return md

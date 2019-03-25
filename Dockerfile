@@ -25,6 +25,13 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
 # && export C_INCLUDE_PATH=/usr/include/gdal \
 # && pip install --no-cache-dir GDAL==2.1.3
 
+# Install other stuff needed for supporting things
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get install -y --no-install-recommends gcc python3-dev \
+ && pip install python-openstackclient python-swiftclient \
+ && apt-get install -y --no-install-recommends unzip man-db \
+ && curl https://rclone.org/install.sh | bash
+
 WORKDIR /data_conversion
 
 # xarray? numpy? rasterio?

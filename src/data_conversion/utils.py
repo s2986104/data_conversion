@@ -1,10 +1,12 @@
 import glob
 import os
 import os.path
+import re
 import shutil
-import gdal
-import time
 import subprocess
+import time
+
+from osgeo import gdal
 
 
 # convert pixel to projection unit
@@ -85,3 +87,52 @@ def retry_run_cmd(cmd):
     # if we end up here, then the cmd did not succeed
     raise Exception('Subprocess {} failed.'.format(cmd))
 
+
+def check_file_online(fname):
+    """compares allocated block size against actual file size.
+
+    if blk size is 0, then file is offline
+    if blk size is lower than file size, then file is being brought online
+           and progress can be checked against changes to blk_size over time
+    if blk size >= file size then file should be online and ready.
+    """
+    # 
+    st = os.stat(fname)
+    # python reports number of blocks in 512 bytes
+    blk_size = st.st_blocks * 512
+    if blk_size == 0:
+        # no blocks allocated, file entirely offline
+        return False, blk_size, 'Offline'
+    elif blk_size < st.st_size:
+        # blocks take less space than file size, file is being brought online
+        # or has failed to come online :(
+        return False, blk_size, 'Partially Online'
+    elif blk_size > st.st_size:
+        # more blocks allocated thas file size, file is online
+        return True, blk_size, 'Online'
+
+
+def match_coverage(cov, attrs):
+    # used to filter set of coverages
+    md = cov['bccvl:metadata']
+    # check all filters attrs. if any of the filters does not match return False
+    for attr, value in attrs.items():
+        if isinstance(value, re.Pattern):
+            # if regexp does not match return False
+            if not value.match(md[attr]):
+                return False
+            continue
+        if value is None:
+            # None means attr should not be there
+            if attr in md:
+                return False
+            continue
+        if value == '*':
+            # attr should be there with any value, empty or None
+            if attr not in md:
+                return False
+            continue
+        if md.get(attr) != attrs[attr]:
+            # value must match exactly
+            return False
+    return True

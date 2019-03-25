@@ -17,21 +17,27 @@ from data_conversion.coverage import (
     gen_coverage_uuid,
     gen_dataset_coverage,
 )
-
-# TODO: need to add resolution to data.json metadata
-#       or just to dataset metadata ... probably more appropriate
+from data_conversion.utils import match_coverage
 
 # TODO: add mimetype somehwere?
 
 CATEGORY = 'climate'
-RESOLUTION = '2.5 arcmin'
 SWIFT_CONTAINER = (
     'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-    'australia_5km_layers'
+    'australia_layers'
 )
 
-RESOLUTIONS = {  # udunits arc_minute / arcmin, UCUM/UOM: min_arc
-    '2.5 arcmin': '2.5 arcmim (~5km)',
+RESOLUTIONS = {  # udunits arc_minute / arcmin, UCUM/UOM: name: min_arc, symb: '
+    '5km': {
+        'long': '2.5 arcmim (~5km)',
+        'short': '5km',
+        'arc': '2.5 arcmin'
+    },
+    '1km': {
+        'long': '30 arcsec (~1km)',
+        'short': '1km',
+        'arc': '30 arcsec'
+    }
 }
 
 DATASETS = [
@@ -68,7 +74,7 @@ DATASETS = [
             'genre': 'DataGenreFC',
             'gcm': None,
             'emsc': None,
-            'year': None
+            'year': None,
         },
         'aggs': [],
     }
@@ -85,30 +91,22 @@ COLLECTION = {
     "subjects": ["Current datasets", "Future datasets"],
     "categories": ["climate"],
     "datasets": [
-        # {
-        #     "uuid": "8f6e3ea5-1caf-5562-a580-aa23bbe7c975",
-        #     "title": "Australia, Current Climate (1976-2005), 2.5 arcmin (~5 km)"
-        # },
-        # {
-        #     "uuid": "fecc0b23-4199-5b49-ac6c-45c3c1249f3e",
-        #     "title": "Australia, Climate Projection, 2.5 arcmin"
-        # }
     ],
 
     "BCCDataGenre": ["DataGenreCC", "DataGenreFC"]
 }
 
 
-def gen_dataset_metadata(dsdef, coverages, **kw):
+def gen_dataset_metadata(dsdef, coverages, resolution, **kw):
     ds_md = {
         'category': CATEGORY,
         'genre': kw['genre'],
-        'resolution': RESOLUTION,
+        'resolution': RESOLUTIONS[resolution]['short'],
         'acknowledgement': dsdef.get('acknowledgment'),
         'external_url': dsdef.get('external_url'),
         'license': dsdef.get('license'),
         # TODO: format title
-        'title': dsdef['title'].format(resolution=RESOLUTIONS[RESOLUTION], **kw)
+        'title': dsdef['title'].format(resolution=RESOLUTIONS[resolution]['long'], **kw)
     }
     # collect some bits of metadata from data
     if dsdef['filter']['genre'] == 'DataGenreCC':
@@ -122,30 +120,6 @@ def gen_dataset_metadata(dsdef, coverages, **kw):
         ds_md['year'] = coverages[0]['bccvl:metadata']['year']
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
     return ds_md
-
-
-# TODO: duplicate in worldclim/generate_metadata_layers
-def match_coverage(cov, attrs):
-    # used to filter set of coverages
-    md = cov['bccvl:metadata']
-    for attr, value in attrs.items():
-        if isinstance(value, re.Pattern):
-            if not value.match(md[attr]):
-                return False
-            continue
-        if value is None:
-            # attr should not be there
-            if attr in md:
-                return False
-            continue
-        if value == '*':
-            # attr should be there
-            if attr not in md:
-                return False
-            continue
-        if md.get(attr) != attrs[attr]:
-            return False
-    return True
 
 
 def parse_args():
@@ -175,14 +149,23 @@ def main():
                                     recursive=True))
         for tiffile in tqdm.tqdm(tiffiles):
             try:
+                # format is /...../res/emsc_gcm_year/xxx.tif
+                resolution = os.path.basename(os.path.dirname(os.path.dirname(tiffile)))
+                # TODO: fetch data stats from tiff if available
                 md = gen_tif_metadata(tiffile, opts.srcdir, SWIFT_CONTAINER)
+                if 'emission_scenario' in md:
+                    # Future Climate
+                    md['genre'] = 'DataGenreFC'
+                else:
+                    # Current Climate
+                    md['genre'] = 'DataGenreCC'
                 coverage = gen_tif_coverage(tiffile, md['url'])
                 md['extent_wgs84'] = get_coverage_extent(coverage)
-                md['resolution'] = RESOLUTION
+                md['resolution'] = RESOLUTIONS[resolution]['short']
                 if md['genre'] == 'DataGenreCC':
-                    md['acknowledgement'] = CURRENT_CITATION
+                    md['acknowledgement'] = DATASETS[0]['acknowledgement']
                 coverage['bccvl:metadata'] = md
-                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-5km')
+                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-{}'.format(RESOLUTIONS[resolution]['short']))
                 coverages.append(coverage)
             except Exception as e:
                 print('Failed to generate metadata for:', tiffile, e)
@@ -203,32 +186,12 @@ def main():
     YEARS = sorted({cov['bccvl:metadata']['year'] for cov in coverages if 'emsc' in cov['bccvl:metadata']})
     # generate datasets for db import
     for dsdef in DATASETS:
-        # make a copy so that we can modify the filters
-        dsdef = copy.deepcopy(dsdef)
-        cov_filter = dsdef['filter']
-        if cov_filter['genre'] == 'DataGenreCC':
-            # current
-            subset = list(filter(
-                lambda x: match_coverage(x, cov_filter),
-                coverages
-            ))
-            if not subset:
-                print("No Data matched for {}".format(cov_filter))
-                continue
-            coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-            md = gen_dataset_metadata(dsdef, subset, genre=cov_filter['genre'])
-            md['extent_wgs84'] = get_coverage_extent(coverage)
-            coverage['bccvl:metadata'] = md
-            coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-5km')
-            datasets.append(coverage)
-        else:
-            # future
-            for gcm, emsc, year in itertools.product(GCMS, EMSCS, YEARS):
-                cov_filter.update({
-                    'gcm': gcm,
-                    'emsc': emsc,
-                    'year': year
-                })
+        for resolution in RESOLUTIONS.keys():
+            # make a copy so that we can modify the filters
+            dsdef = copy.deepcopy(dsdef)
+            cov_filter = dsdef['filter']
+            if cov_filter['genre'] == 'DataGenreCC':
+                # current
                 subset = list(filter(
                     lambda x: match_coverage(x, cov_filter),
                     coverages
@@ -237,12 +200,33 @@ def main():
                     print("No Data matched for {}".format(cov_filter))
                     continue
                 coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-                md = gen_dataset_metadata(dsdef, subset, gcm=gcm, emsc=emsc, year=year, genre=cov_filter['genre'])
+                md = gen_dataset_metadata(dsdef, subset, resolution, genre=cov_filter['genre'])
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 coverage['bccvl:metadata'] = md
-                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-5km')
+                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-{}'.format(RESOLUTIONS[resolution]['short']))
                 datasets.append(coverage)
-
+            else:
+                # future
+                for gcm, emsc, year in itertools.product(GCMS, EMSCS, YEARS):
+                    cov_filter.update({
+                        'gcm': gcm,
+                        'emsc': emsc,
+                        'year': year
+                    })
+                    subset = list(filter(
+                        lambda x: match_coverage(x, cov_filter),
+                        coverages
+                    ))
+                    if not subset:
+                        print("No Data matched for {}".format(cov_filter))
+                        continue
+                    coverage = gen_dataset_coverage(subset, dsdef['aggs'])
+                    md = gen_dataset_metadata(dsdef, subset, resolution, gcm=gcm, emsc=emsc, year=year, genre=cov_filter['genre'])
+                    md['extent_wgs84'] = get_coverage_extent(coverage)
+                    coverage['bccvl:metadata'] = md
+                    coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-{}'.format(RESOLUTIONS[resolution]['short']))
+                    datasets.append(coverage)
+    
     print("Write datasets.json")
     # save all the data
     with open(os.path.join(opts.srcdir, 'datasets.json'), 'w') as mdfile:

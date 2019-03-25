@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import copy
 import glob
 import json
 import os
@@ -14,33 +15,36 @@ from data_conversion.coverage import (
     gen_coverage_uuid,
     gen_dataset_coverage,
 )
-
-# TODO: need to add resolution to data.json metadata
-#       or just to dataset metadata ... probably more appropriate
+from data_conversion.utils import match_coverage
 
 # TODO: add mimetype somehwere?
 
 CATEGORY = 'environmental'
-RESOLUTION = '9 arcsec (~250 m)'
-CURRENT_CITATION = (
-    'National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, '
-    'endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep).'
-)
-CURRENT_TITLE = 'Australia, National Soil Grids (2012), {resolution} (~250 m)'.format(resolution=RESOLUTION)
-EXTERNAL_URL = (
-    'http://www.asris.csiro.au/themes/NationalGrids.html'
-)
-LICENSE = (
-    'Creative Commons Attribution 3.0 AU '
-    'http://creativecommons.org/licenses/by/3.0/au'
-)
-ACKNOWLEDGEMENT = (
-    "CSIRO Land and Water"
-)
 SWIFT_CONTAINER = (
     'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
     'national_soil_grids'
 )
+
+DATASETS = [
+    # only one dataset in nsg
+    {
+        'title': 'Australia, National Soil Grids (2012), 9 arsec (~250m)',
+        'acknowledgement': (
+            'National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, '
+            'endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep).'
+        ),
+        'year': 2012,
+        'license': (
+            'Creative Commons Attribution 3.0 AU '
+            'http://creativecommons.org/licenses/by/3.0/au'
+        ),
+        'external_url': 'http://www.asris.csiro.au/themes/NationalGrids.html',
+        'filter': {
+            'genre': 'DataGenreE',
+        },
+        'aggs': [],
+    }
+]
 
 COLLECTION = {
     "_type": "Collection",
@@ -53,14 +57,6 @@ COLLECTION = {
     "subjects": ["Current datasets"],
     "categories": ["environmental"],
     "datasets": [
-        # {
-        #     "uuid": "8f6e3ea5-1caf-5562-a580-aa23bbe7c975",
-        #     "title": "Australia, Current Climate (1976-2005), 2.5 arcmin (~5 km)"
-        # },
-        # {
-        #     "uuid": "fecc0b23-4199-5b49-ac6c-45c3c1249f3e",
-        #     "title": "Australia, Climate Projection, 2.5 arcmin"
-        # }
     ],
 
     "BCCDataGenre": ["DataGenreE"]
@@ -70,23 +66,20 @@ COLLECTION = {
 RAT_MAPPINGS = {'id': 'ASC_ORD', 'label': 'ASC_ORDER_NAME', 'value': 'VALUE'}
 
 
-def gen_dataset_metadata(genre, coverages):
+def gen_dataset_metadata(dsdef, coverages, **kw):
     ds_md = {
         'category': CATEGORY,
-        'genre': genre,
-        'resolution': RESOLUTION,
-        'acknowledgement': ACKNOWLEDGEMENT,
-        'external_url': EXTERNAL_URL,
-        'license': LICENSE,
+        'genre': kw['genre'],
+        'resolution': '9 arcsec (~250m)',
+        'acknowledgement': dsdef.get('acknowledgment'),
+        'external_url': dsdef.get('external_url'),
+        'license': dsdef.get('license'),
+        'title': dsdef.get('title'),
+        'year': dsdef.get('year'),
     }
-    # collect some bits of metadata from data
-    if genre == 'DataGenreFC':
-        ds_md['title'] = FUTURE_TITLE
-    else:
-        ds_md['title'] = CURRENT_TITLE
-        # all coverages have the same year and year_range
-        ds_md['year'] = coverages[0]['bccvl:metadata']['year']
-        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
+    # find min/max years in coverages and use as year_range
+    years = [cov['bccvl:metadata']['year'] for cov in coverages]
+    ds_md['year_range'] = [min(years), max(years)]
     return ds_md
 
 
@@ -118,11 +111,10 @@ def main():
         for tiffile in tqdm.tqdm(tiffiles):
             try:
                 md = gen_tif_metadata(tiffile, opts.srcdir, SWIFT_CONTAINER)
+                md['genre'] = 'DataGenreE'
                 coverage = gen_tif_coverage(tiffile, md['url'], ratmap=RAT_MAPPINGS)
                 md['extent_wgs84'] = get_coverage_extent(coverage)
-                md['resolution'] = RESOLUTION
-                if md['genre'] == 'DataGenreCC':
-                    md['acknowledgement'] = CURRENT_CITATION
+                md['resolution'] = '9 arcsec',
                 coverage['bccvl:metadata'] = md
                 coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'national_soil_grids')
                 coverages.append(coverage)
@@ -140,21 +132,22 @@ def main():
     print("Generate datasets.json")
     datasets = []
     # generate datasets for db import
-    for genre in ("DataGenreCC", "DataGenreFC"):
-        # filter coverages by genre and build coverage aggregation over all
-        # remaining coverages
+    for dsdef in DATASETS:
+        # copy filter to avoid modifying original
+        dsdef = copy.deepcopy(dsdef)
+        cov_filter = dsdef['filter']
         subset = list(filter(
-            lambda x: x['bccvl:metadata']['genre'] == genre,
-            coverages)
-        )
+            lambda x: match_coverage(x, cov_filter),
+            coverages
+        ))
         if not subset:
+            print("No Data matched for {}".format(cov_filter))
             continue
-        aggs = [] if genre == 'DataGenreCC' else ['emsc', 'gcm', 'year']
-        coverage = gen_dataset_coverage(subset, aggs)
-        md = gen_dataset_metadata(genre, subset)
+        coverage = gen_dataset_coverage(subset, dsdef['aggs'])
+        md = gen_dataset_metadata(dsdef, subset, genre=cov_filter['genre'])
         md['extent_wgs84'] = get_coverage_extent(coverage)
         coverage['bccvl:metadata'] = md
-        coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'australia-5km')
+        coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'national-soil-grids')
         datasets.append(coverage)
 
     print("Write datasets.json")

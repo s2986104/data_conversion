@@ -288,7 +288,7 @@ def parse_args():
     parse cli
     """
     parser = argparse.ArgumentParser(
-        description='Convert WorldClim current datasets'
+        description='Convert WorldClim datasets'
     )
     parser.add_argument(
         'srcdir', action='store',
