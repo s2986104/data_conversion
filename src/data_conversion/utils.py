@@ -39,6 +39,18 @@ def move_files(srcdir, destdir):
         shutil.move(fname, os.path.join(destdir, os.path.basename(fname)))
 
 
+def get_vsi_path(srcfile, archivepath=None):
+    if archivepath:
+        # assume srcfile is a zipfile
+        vsi_path = ''.join(('/vsizip/', srcfile, '/', archivepath))
+    else:
+        vsi_path = srcfile
+    # check if gzip?
+    if vsi_path.endswith('.gz'):
+        vsi_path = '/vsigzip/' + vsi_path
+    return vsi_path
+
+
 def open_gdal_dataset(path):
     """Open a GDAL dataset.
 
