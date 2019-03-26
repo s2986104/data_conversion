@@ -1,4 +1,5 @@
 import glob
+from itertools import product
 import os
 import os.path
 import re
@@ -148,3 +149,15 @@ def match_coverage(cov, attrs):
             # value must match exactly
             return False
     return True
+
+
+def product_dict(inp):
+    """
+    returns a product of dict of lists.
+    each iteration returns a dictionary with a new combination
+    of values
+    """
+    return (
+        dict(zip(inp.keys(), values))
+        for values in product(*inp.values())
+    )

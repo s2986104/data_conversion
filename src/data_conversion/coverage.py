@@ -72,7 +72,7 @@ def gen_coverage_uuid(cov, identifier):
         kind, identifier, md['genre'],
         ''.join(sorted(cov['parameters'].keys())),
     ]
-    for key in ('emsc', 'gcm', 'year', 'month'):
+    for key in ('emsc', 'gcm', 'rcm', 'year', 'month'):
         parts.append(str(md.get(key, '')))
 
     uid = uuid.uuid5(NAMESPACE_UUID, ''.join(parts))

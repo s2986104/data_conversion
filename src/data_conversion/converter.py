@@ -2,23 +2,33 @@ import argparse
 from concurrent import futures
 import copy
 import glob
+import json
 import os.path
 import shutil
 import tempfile
 import zipfile
 
 from osgeo import gdal
-import tqdm
+from tqdm import tqdm
 
-from data_conversion.vocabs import (
-    VAR_DEFS,
-    PREDICTORS,
+from data_conversion.coverage import (
+    gen_tif_metadata,
+    gen_tif_coverage,
+    get_coverage_extent,
+    gen_coverage_uuid,
+    gen_dataset_coverage,
 )
 from data_conversion.utils import (
     ensure_directory,
     get_vsi_path,
+    match_coverage,
     move_files,
     retry_run_cmd,
+    product_dict,
+)
+from data_conversion.vocabs import (
+    VAR_DEFS,
+    PREDICTORS,
 )
 
 
@@ -159,7 +169,7 @@ class BaseConverter(object):
         pool = futures.ProcessPoolExecutor(3)
         results = []
         with zipfile.ZipFile(srcfile) as srczip:
-            for zipinfo in tqdm.tqdm(srczip.filelist, desc="build jobs"):
+            for zipinfo in tqdm(srczip.filelist, desc="build jobs"):
                 if self.skip_zipinfo(zipinfo):
                     continue
 
@@ -184,11 +194,11 @@ class BaseConverter(object):
                     pool.submit(run_gdal, cmd, srcurl, destpath, parsed_md)
                 )
 
-        for result in tqdm.tqdm(futures.as_completed(results),
+        for result in tqdm(futures.as_completed(results),
                                 desc=os.path.basename(srcfile),
                                 total=len(results)):
             if result.exception():
-                print("Job failed")
+                tqdm.write("Job failed")
                 raise result.exception()
 
     def parse_args(self):
@@ -229,12 +239,12 @@ class BaseConverter(object):
         workdir = ensure_directory(opts.workdir)
         dest = ensure_directory(opts.destdir)
         # unpack contains one destination datasets
-        for srcfile in tqdm.tqdm(srcfiles):
+        for srcfile in tqdm(srcfiles):
             target_work_dir = self.create_target_dir(workdir, srcfile)
             try:
                 # TODO: skip not done anhywhere else
                 if opts.skipexisting and self.create_target_dir(dest, srcfile, check=True):
-                    tqdm.tqdm.write('Skip {}'.format(srcfile))
+                    tqdm.write('Skip {}'.format(srcfile))
                     continue
                 # convert files into workdir
                 self.convert(srcfile, target_work_dir)
@@ -246,3 +256,174 @@ class BaseConverter(object):
                 shutil.rmtree(target_work_dir)
 
 
+class BaseLayerMetadata(object):
+
+    # Dataset id/name for uuid namespace (may need parameter like resolution / version)
+    CATEGORY = None
+    SWIFT_CONTAINER = None
+    DATASETS = []
+    COLLECTION = {}
+    DATASET_ID = ''
+
+    def parse_filename(self, tiffile):
+        """
+        absolute path to tiffile, to allow info extract from full path.
+        """
+        return {}
+
+    def gen_dataset_metadata(self, dsdef, coverages):
+        """
+        build dataset metadata from dsdef and list of data coverages
+        """
+        return {}
+
+    def get_genre(self, md):
+        """
+        Determine genre based on metadata from tiffile.
+        """
+        if 'emsc' in md and 'gcm' in md:
+            # Future Climate
+            return 'DataGenreFC'
+        else:
+            # Current Climate
+            return 'DataGenreCC'
+
+    def get_rat_map(self, tiffile):
+        """
+        return a mapping for categories 'id', 'label', 'value' from rat column
+        """
+        return None
+
+    def cov_uuid(self, dscov):
+        """
+        Generate data/dataset uuid for dataset coverage
+        """
+        return gen_coverage_uuid(dscov, self.DATASET_ID)
+
+    def build_data(self, opts):
+        coverages = []
+        # generate all coverages inside source folder
+        tiffiles = sorted(
+            glob.glob(os.path.join(opts.srcdir, '**/*.tif'),
+                      recursive=True)
+        )
+        for tiffile in tqdm(tiffiles):
+            try:
+                # TODO: fetch data stats from tiff if available
+                # TODO: maybe re-order things here...
+                #       0. keep oerder metadata -> coverage (md could be used to improve coverage?)
+                #       1. gen md['url'] in separate step (no passing around of self.SWIFT_CONTAINER, and md['url'])
+                #       2. move decision about genre into method (maybe after gen coverage?)
+                md = gen_tif_metadata(tiffile, opts.srcdir, self.SWIFT_CONTAINER)
+                md.update(self.parse_filename(tiffile))
+                md['genre'] = self.get_genre(md)
+                # TODO: move this up and pass on full md
+                coverage = gen_tif_coverage(tiffile, md['url'], ratmap=self.get_rat_map(tiffile))
+                md['extent_wgs84'] = get_coverage_extent(coverage)
+                # TODO: the way we set acknowloedgement is weird here
+                if md['genre'] == 'DataGenreCC':
+                    md['acknowledgement'] = self.DATASETS[0]['acknowledgement']
+                # ony set md keys without leading '_'
+                coverage['bccvl:metadata'] = {key: val for (key,val) in md.items() if not key.startswith('_')}
+                coverage['bccvl:metadata']['uuid'] = self.cov_uuid(coverage)
+                coverages.append(coverage)
+            except Exception as e:
+                tqdm.write('Failed to generate metadata for: {}, {}'.format(tiffile, e))
+                raise
+        return coverages
+
+    def build_datasets(self, coverages):
+        datasets = []
+        for dsdef in tqdm(self.DATASETS):
+            # build sorted lists for all attribute filter with None
+            # (discriminators)
+            # 1. filter coverages by fixed set of filters
+            fixed_filter = {
+                key: value
+                for (key,value) in dsdef['filter'].items()
+                if value is not None
+            }
+            cov_subset = list(filter(
+                lambda x: match_coverage(x, fixed_filter),
+                coverages
+            ))
+            # 2. find all possible values for None filters
+            #    in filtered coverage subset
+            discriminators = {}
+            for key in dsdef['filter'].keys():
+                if dsdef['filter'][key] is not None:
+                    continue
+                discriminators[key] = sorted(
+                    {cov['bccvl:metadata'][key] for cov in cov_subset if key in cov['bccvl:metadata']}
+                )
+            # 3. all values collected, lets iterate over the product of them all
+            for comb in tqdm(list(product_dict(discriminators))):
+                # make a copy
+                dsdef2 = copy.deepcopy(dsdef)
+                # each comb is one combination of filter values
+                dsdef2['filter'].update(comb)
+                # generate data subset
+                subset = list(filter(
+                    lambda x: match_coverage(x, dsdef2['filter']),
+                    coverages
+                ))
+                if not subset:
+                    tqdm.write("No Data matched for {}".format(dsdef2['filter']))
+                    continue
+                coverage = gen_dataset_coverage(subset, dsdef2['aggs'])
+                md = self.gen_dataset_metadata(dsdef2, subset)
+                md['extent_wgs84'] = get_coverage_extent(coverage)
+                coverage['bccvl:metadata'] = md
+                coverage['bccvl:metadata']['uuid'] = self.cov_uuid(coverage)
+                datasets.append(coverage)
+
+        return datasets
+
+    def parse_args(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--force', action='store_true',
+                            help='Re generate data.json form tif files.')
+        parser.add_argument('srcdir')
+        return parser.parse_args()
+
+    def main(self):
+        # TODO: we need a mode to just update as existing json file without parsing
+        #       all tiff files. This would be useful to just update titles and
+        #       things.
+        #       could probably also be done in a separate one off script?
+        opts = self.parse_args()
+        opts.srcdir = os.path.abspath(opts.srcdir)
+
+        datajson = os.path.join(opts.srcdir, 'data.json')
+        tqdm.write("Generate data.json")
+        if not os.path.exists(datajson) or opts.force:
+            tqdm.write("Build data.json")
+            coverages = self.build_data(opts)
+            tqdm.write("Write data.json")
+            with open(datajson, 'w') as mdfile:
+                json.dump(coverages, mdfile, indent=2)
+        else:
+            tqdm.write("Use existing data.json")
+            coverages = json.load(open(datajson))
+
+
+        tqdm.write("Generate datasets.json")
+        datasets = self.build_datasets(coverages)
+        tqdm.write("Write datasets.json")
+        # save all the data
+        with open(os.path.join(opts.srcdir, 'datasets.json'), 'w') as mdfile:
+            json.dump(datasets, mdfile, indent=2)
+
+
+        tqdm.write("Write collection.json")
+        # TODO: only one collection so far
+        with open(os.path.join(opts.srcdir, 'collection.json'), 'w') as mdfile:
+            # add datasets
+            collection = copy.deepcopy(self.COLLECTION)
+            collection['datasets'] = []
+            for ds in datasets:
+                collection['datasets'].append({
+                    "uuid": ds['bccvl:metadata']['uuid'],
+                    "title": ds['bccvl:metadata']['title']
+                })
+            json.dump([collection], mdfile, indent=2)
