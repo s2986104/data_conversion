@@ -21,7 +21,11 @@ class TASCLimConverter(BaseConverter):
 
     def parse_filename(self, filename):
         parts = os.path.splitext(os.path.basename(filename))[0].split('_')
-        _, _, layerid, year = parts
+        if len(parts) > 4:
+            # special case for MIROC3.2_MEDRES which should be MIROC3.2-MEDRES
+            _, _, _, layerid, year = parts
+        else:
+            _, _, layerid, year = parts
         return {
             'layerid': 'bioclim_{:02d}'.format(int(layerid)),
             'year': int(year)
@@ -57,7 +61,10 @@ class TASCLimConverter(BaseConverter):
         return root
 
     def filter_srcfiles(self, srcfile):
-        return 'Metadata' not in srcfile
+        return (
+            'Metadata' not in srcfile and
+            'GCM_MEAN' not in srcfile  # skip files which are mean over all GCMs
+        )
 
 def main():
     converter = TASCLimConverter()

@@ -79,7 +79,6 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
 
     def parse_filename(self, tiffile):
         resolution = os.path.basename(os.path.dirname(os.path.dirname(tiffile)))
-        resolution = '36' if '1km' in resolution else '9'
         return {
             'resolution': RESOLUTIONS[resolution]['long']
         }
