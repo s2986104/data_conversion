@@ -25,6 +25,7 @@ GDAL_JSON_TYPE_MAP = {
 TIFF_MD_MAP = {
     'emission_scenario': 'emsc',
     'general_circulation_models': 'gcm',
+    'regional_climate_model': 'rcm',
 }
 
 
@@ -57,9 +58,25 @@ def gen_tif_metadata(tiffile, srcdir, swiftcontainer):
     # TODO: should we do this here? or in collection specific code?
     relpath = os.path.relpath(tiffile, srcdir)
     md['url'] = os.path.join(swiftcontainer, relpath)
+    # check if we use the GeoTiff driver
+    if ds.GetDriver().ShortName == 'GTiff':
+        # get list of auxilary files
+        auxfiles = set(ds.GetFileList()) - set([tiffile])
+        md['auxfiles'] = [
+            # TODO: should probably check for file type here
+            {
+                'type': 'PAMDataset',  # this is a auxilary metadata like RAT
+                # construct auxfile path relative to tiffile
+                'path': os.path.relpath(aux, os.path.dirname(tiffile))
+            }
+            for aux in auxfiles
+        ]
     return md
 
 
+# TODO: this should probably be customised per collection to make
+#       it easier to produce stable uuids
+#       or maybe jsut parameterise the fileds that go into the uuid?
 def gen_coverage_uuid(cov, identifier):
     # generate predictable uuid
     # kind + 'id' + genre + variable names + emsc + gcm + year + month
