@@ -6,7 +6,7 @@ if ! swift auth > /dev/null ; then
 fi
 
 SRCDIR="bccvl"
-CONTAINER="national_soil_grids"
+CONTAINER="national_soil_grids_layers"
 
 export RCLONE_CONFIG_REMOTE_TYPE=swift
 export RCLONE_CONFIG_REMOTE_ENV_AUTH=true

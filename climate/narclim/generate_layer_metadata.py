@@ -13,7 +13,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
     DATASET_ID = 'narclim-{res}'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'narclim'
+        'narclim_layers'
     )
 
     DATASETS = [
@@ -97,13 +97,13 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
         # all coverages have the same year and year_range
         ds_md['year'] = coverages[0]['bccvl:metadata']['year']
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
-        if ds_md['genre'] == 'DataGenreFC':
+
+        if dsdef['filter'].get('emsc'):
             ds_md['emsc'] = dsdef['filter']['emsc']
+        if dsdef['filter'].get('gcm'):
             ds_md['gcm'] = dsdef['filter']['gcm']
-            ds_md['rcm'] = dsdef['filter']['rcm']
-        else:
-            # current has emsc as well
-            ds_md['emsc'] = coverages[0]['bccvl:metadata']['emsc']
+        if dsdef['filter'].get('rcm'):
+            ds_md['gcm'] = dsdef['filter']['rcm']
         return ds_md
 
     def cov_uuid(self, dscov):

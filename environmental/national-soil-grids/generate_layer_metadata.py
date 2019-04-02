@@ -11,7 +11,7 @@ class NSGLayerMetadata(BaseLayerMetadata):
     DATASET_ID = 'national_soil_grids'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'national_soil_grids'
+        'national_soil_grids_layers'
     )
 
     DATASETS = [

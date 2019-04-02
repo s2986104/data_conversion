@@ -11,7 +11,7 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
     DATASET_ID = 'climond'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'climond'
+        'climond_layers'
     )
 
     DATASETS = [
@@ -93,16 +93,14 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
             )
         }
         # collect some bits of metadata from data
-        if dsdef['filter']['genre'] == 'DataGenreCC':
-            # all coverages have the same year and year_range
-            ds_md['year'] = coverages[0]['bccvl:metadata']['year']
-            ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
-        else:
-            # future
-            ds_md['gcm'] = dsdef['filter']['gcm']
+        # all coverages have the same year and year_range
+        ds_md['year'] = coverages[0]['bccvl:metadata']['year']
+        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
+
+        if dsdef['filter'].get('emsc'):
             ds_md['emsc'] = dsdef['filter']['emsc']
-            ds_md['year'] = coverages[0]['bccvl:metadata']['year']
-            ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
+        if dsdef['filter'].get('gcm'):
+            ds_md['gcm'] = dsdef['filter']['gcm']
         return ds_md
 
 

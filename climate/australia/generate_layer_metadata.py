@@ -103,16 +103,14 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             'title': dsdef['title'].format(**dsdef['filter'])
         }
         # collect some bits of metadata from data
-        if ds_md['genre'] == 'DataGenreCC':
-            # all coverages have the same year and year_range
-            ds_md['year'] = coverages[0]['bccvl:metadata']['year']
-            ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
-        if dsdef['filter'].get('year'):
-            # this is future?
-            ds_md['gcm'] = dsdef['filter']['gcm']
+        # all coverages have the same year and year_range
+        ds_md['year'] = coverages[0]['bccvl:metadata']['year']
+        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
+
+        if dsdef['filter'].get('emsc'):
             ds_md['emsc'] = dsdef['filter']['emsc']
-            ds_md['year'] = coverages[0]['bccvl:metadata']['year']
-            ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
+        if dsdef['filter'].get('gcm'):
+            ds_md['gcm'] = dsdef['filter']['gcm']
         return ds_md
 
     def cov_uuid(self, dscov):

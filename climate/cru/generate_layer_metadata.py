@@ -11,7 +11,7 @@ class CRULayerMetadata(BaseLayerMetadata):
     DATASET_ID = 'cruclim'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'cruclim'
+        'cruclim_layers'
     )
 
     DATASETS = [

@@ -10,7 +10,7 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
     DATASET_ID = 'anuclim'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'anuclim'
+        'anuclim_layers'
     )
 
     DATASETS = [
