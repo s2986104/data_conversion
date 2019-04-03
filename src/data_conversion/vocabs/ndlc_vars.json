@@ -1,12 +1,12 @@
 {
-    "DLCDv1_Class": {
-        "standard_name": "DLCDv1_Class",
+    "dlcdv1_class": {
+        "standard_name": "dlcdv1_class",
         "long_name": "Dynamic Land Cover - Original classification (34 classes)",
         "units": "land-cover category",
         "measure_type": "categorical"
     },
-    "DLCDv1_Class_Reduced": {
-        "standard_name": "DLCDv1_Class_Reduced",
+    "dlcdv1_class_reduced": {
+        "standard_name": "dlcdv1_class_reduced",
         "long_name": "Dynamic Land Cover - Reduced classification (5 classes)",
         "units": "land-cover category",
         "measure_type": "categorical"

@@ -32,7 +32,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'external_url': 'https://data.gov.au/dataset/ds-ga-a05f7893-0031-7506-e044-00144fdd4fa6',
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*DLCDv1-Class.*\.tif$')
+                'url': re.compile('^.*dlcdv1-class.*\.tif$')
             },
             'aggs': [],
         },

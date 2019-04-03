@@ -16,10 +16,10 @@ from data_conversion.converter import BaseConverter
 REDUCED_RAT   = 'bccvl_national-dynamic-land-cover-rat-reduced.tif.aux.xml'
 
 LAYERINFO = {
-    'Scene01-DLCDv1_Class.zip': ('DLCDv1_Class', 2004),
-    'Scene01-trend_evi_min.zip': ('trend_evi_min', 2004),
-    'Scene01-trend_evi_max.zip': ('trend_evi_max', 2004),
-    'Scene01-trend_evi_mean.zip': ('trend_evi_mean', 2004)
+    'scene01-dlcdv1_class.zip': ('dlcdv1_class', 2004),
+    'scene01-trend_evi_min.zip': ('trend_evi_min', 2004),
+    'scene01-trend_evi_max.zip': ('trend_evi_max', 2004),
+    'scene01-trend_evi_mean.zip': ('trend_evi_mean', 2004)
 }
 
 
@@ -36,7 +36,8 @@ class NDLCConverter(BaseConverter):
 
     # get layer id from filename within zip file
     def parse_filename(self, filename):
-        layerid = os.path.basename(filename)
+        basename = os.path.basename(filename).lower()
+        layerid, _ = os.path.splitext(basename)
         return {
             'layerid': layerid,
         }
@@ -54,7 +55,7 @@ class NDLCConverter(BaseConverter):
         options += ['-mo', 'year={}'.format(year)]
         return options
 
-    def reclassify(tiffname, class_map, destfile):
+    def reclassify(self.tiffname, class_map, destfile):
         driver=gdal.GetDriverByName('GTiff')
         tiffile = gdal.Open(tiffname)
         band = tiffile.GetRasterBand(1)
@@ -76,7 +77,7 @@ class NDLCConverter(BaseConverter):
         file2.SetGeoTransform(georef)
         file2.FlushCache()
 
-     def convert(self, srcfile, destdir):
+    def convert(self, srcfile, destdir):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
@@ -110,14 +111,14 @@ class NDLCConverter(BaseConverter):
                 )
 
                 # add reduced classification data layer for DLCDv1_Class
-                if zipinfo.filename.find('DLCDv1_Class.tif') >= 0:
+                if zipinfo.filename.find('dlcdv1_class.tif') >= 0:
                     class_map = {1: range(1,11), 2: range(11,24), 3: range(24,31), 4: range(31,33), 5: range(33,35)}
                     _, tfname = tempfile.mkstemp(suffix='.tif')
-                    reclassify(srcurl, class_map, tfname)
+                    self.reclassify(srcurl, class_map, tfname)
 
-                    reduced_md = {'layerid': 'DLCDv1_Class_Reduced', 'year': 2004}
+                    reduced_md = {'layerid': 'dlcdv1_class_reduced', 'year': 2004}
                     gdaloptions = self.gdal_options(reduced_md)
-                    reduced_destfilename = os.path.splitext(os.psth.basename(destfilename))[0] + '-Reduced.tif'
+                    reduced_destfilename = os.path.splitext(os.psth.basename(destfilename))[0] + '-reduced.tif'
                     destpath = os.path.join(destdir, reduced_destfilename)
 
                     # copy the RAT file for the reduced DLCDv1_Class
