@@ -1,0 +1,32 @@
+{
+    "DLCDv1_Class": {
+        "standard_name": "DLCDv1_Class",
+        "long_name": "Dynamic Land Cover - Original classification (34 classes)",
+        "units": "land-cover category",
+        "measure_type": "categorical"
+    },
+    "DLCDv1_Class_Reduced": {
+        "standard_name": "DLCDv1_Class_Reduced",
+        "long_name": "Dynamic Land Cover - Reduced classification (5 classes)",
+        "units": "land-cover category",
+        "measure_type": "categorical"
+    },
+    "trend_evi_min": {
+        "standard_name": "trend_evi_min",
+        "long_name": "Annual minimum Enhanced Vegetation Index (EVI) trend",
+        "units": "enhanced vegetation index",
+        "measure_type": "continuous"
+    },
+    "trend_evi_max": {
+        "standard_name": "trend_evi_max",
+        "long_name": "Annual maximum Enhanced Vegetation Index (EVI) trend",
+        "units": "enhanced vegetation index",
+        "measure_type": "continuous"
+    },
+    "trend_evi_mean": {
+        "standard_name": "trend_evi_mean",
+        "long_name": "Annual mean Enhanced Vegetation Index (EVI) trend",
+        "units": "enhanced vegetation index",
+        "measure_type": "continuous"
+    }
+}
