@@ -43,8 +43,8 @@
         <F>0</F>
         <F>0</F>
         <F>0</F>
+        <F>NV</F>
         <F>Non-vegetation, crops &amp; pasture</F>
-        <F></F>
       </Row>
       <Row index="1">
         <F>2</F>
@@ -52,8 +52,8 @@
         <F>0</F>
         <F>0</F>
         <F>0</F>
+        <F>HE</F>
         <F>Herbacious</F>
-        <F></F>
       </Row>
       <Row index="2">
         <F>3</F>
@@ -61,8 +61,8 @@
         <F>0</F>
         <F>0</F>
         <F>0</F>
+        <F>WS</F>
         <F>Woody shrubs</F>
-        <F></F>
       </Row>
       <Row index="3">
         <F>4</F>
@@ -70,8 +70,8 @@
         <F>0</F>
         <F>0</F>
         <F>1</F>
+        <F>FO</F>
         <F>Forest</F>
-        <F></F>
       </Row>
       <Row index="4">
         <F>5</F>
@@ -79,8 +79,8 @@
         <F>0</F>
         <F>0</F>
         <F>0</F>
+        <F>WL</F>
         <F>Woodland</F>
-        <F></F>
       </Row>
     </GDALRasterAttributeTable>
   </PAMRasterBand>
