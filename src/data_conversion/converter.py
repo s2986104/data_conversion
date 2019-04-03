@@ -359,7 +359,7 @@ class BaseLayerMetadata(object):
             # 3. all values collected, lets iterate over the product of them all
             for comb in tqdm(list(product_dict(discriminators))):
                 # make a copy
-                dsdef2 = copy.deepcopy(dsdef)
+                dsdef2 = copy.copy(dsdef)
                 # each comb is one combination of filter values
                 dsdef2['filter'].update(comb)
                 # generate data subset

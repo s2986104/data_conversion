@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os.path
-impore re
+import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS
@@ -108,7 +108,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
         return None
 
 def main():
-    gen = NSGLayerMetadata()
+    gen = NDLCLayerMetadata()
     gen.main()
 
 if __name__ == "__main__":
