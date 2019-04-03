@@ -3,6 +3,7 @@ from itertools import product
 import os
 import os.path
 import re
+import typing
 import shutil
 import subprocess
 import time
@@ -130,7 +131,7 @@ def match_coverage(cov, attrs):
     md = cov['bccvl:metadata']
     # check all filters attrs. if any of the filters does not match return False
     for attr, value in attrs.items():
-        if isinstance(value, re.Pattern):
+        if isinstance(value, typing.Pattern):
             # if regexp does not match return False
             if not value.match(md[attr]):
                 return False
