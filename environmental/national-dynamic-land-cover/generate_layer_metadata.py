@@ -99,7 +99,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
         return 'DataGenreE'
 
     def get_rat_map(self, tiffile):
-        if os.path.basename(tiffile) in ('ndlc-2004-250m_DLCDv1_Class.tif', 'ndlc-2004-250m_DLCDv1_Class_Reduced.tif'):
+        if os.path.basename(tiffile) in ('ndlc-2004-250m_dlcdv1-class.tif', 'ndlc-2004-250m_dlcdv1-class-reduced.tif'):
             return {
                 'id': 'ISO_CLASS',
                 'label': 'CLASSLABEL',

@@ -15,3 +15,5 @@ AWAP_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'awap_var
 NVIS_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'nvis_vars.json'), 'r'))
 
 NDLC_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'ndlc_vars.json'), 'r')) 
+
+VAST_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'vast_vars.json'), 'r')) 
