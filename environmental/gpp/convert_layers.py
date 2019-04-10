@@ -19,30 +19,31 @@ MASK_FILE = '/vsizip/{srcdir}/gpp_maxmin_2000_2007.zip/gpp_mask.rst'
 
 LAYER_INFO = {
     # gpp_maxmin_2000_2007
-    'gppyrmax_2000_07_molco2yr.rst':    ('gppmax', '2003'),
-    'gppyrmean_2000_07_molco2yr.rst':   ('gppmean', '2003'),
-    'gppyrmin_2000_07_molco2yr.rst':    ('gppmin', '2003'),
-    'gpp_summary_00_07_cov.rst':        ('gppcov', '2003'),
+    'gppyrmax_2000_07_molco2yr.rst':    ('gppmax', '2003', (2000, 2007)),
+    'gppyrmean_2000_07_molco2yr.rst':   ('gppmean', '2003', (2000, 2007)),
+    'gppyrmin_2000_07_molco2yr.rst':    ('gppmin', '2003', (2000, 2007)),
+    'gpp_maxmin_2000_2007_gppcov.rst':  ('gppcov', '2003', (2000, 2007)),
 
     # gpp_year_means2000_2007
-    'gppyr_2000_01_molco2m2yr_m.rst':   ('gppmean', '2000'),
-    'gppyr_2001_02_molco2m2yr_m.rst':   ('gppmean', '2001'),
-    'gppyr_2002_03_molco2m2yr_m.rst':   ('gppmean', '2002'),
-    'gppyr_2003_04_molco2m2yr_m.rst':   ('gppmean', '2003'),
-    'gppyr_2004_05_molco2m2yr_m.rst':   ('gppmean', '2004'),
-    'gppyr_2005_06_molco2m2yr_m.rst':   ('gppmean', '2005'),
-    'gppyr_2006_07_molco2m2yr_m.rst':   ('gppmean', '2006'),
+    'gppyr_2000_01_molco2m2yr_m.rst':   ('gppmean', '2000', None),
+    'gppyr_2001_02_molco2m2yr_m.rst':   ('gppmean', '2001', None),
+    'gppyr_2002_03_molco2m2yr_m.rst':   ('gppmean', '2002', None),
+    'gppyr_2003_04_molco2m2yr_m.rst':   ('gppmean', '2003', None),
+    'gppyr_2004_05_molco2m2yr_m.rst':   ('gppmean', '2004', None),
+    'gppyr_2005_06_molco2m2yr_m.rst':   ('gppmean', '2005', None),
+    'gppyr_2006_07_molco2m2yr_m.rst':   ('gppmean', '2006', None),
 }
 
 class GPPConverter(BaseConverter):
 
     # get layer id from filename within zip file
     def parse_filename(self, filename):
-        fname = os.path.basename(filename)
-        layerid, year = LAYER_INFO[fname]
+        fname = os.path.basename(filename).lower()
+        layerid, year, year_range = LAYER_INFO[fname]
         return {
             'layerid': layerid,
-            'year': year
+            'year': year,
+            'year_range': year_range
         }
 
     def target_dir(self, destdir, srcfile):
@@ -50,12 +51,28 @@ class GPPConverter(BaseConverter):
         root = os.path.join(destdir, 'gpp-1km', fname.lower())
         return root
 
+    def destfilename(self, destdir, md):
+        """
+        generate file name for output tif file.
+        """
+        return (
+            os.path.basename(destdir).lower() +
+            '_' +
+            md['year'] +
+            '_' +
+            md['layerid'].replace('_', '-') +
+            '.tif'
+        )
+
     def gdal_options(self, md):
         # options to add metadata for the tiff file
         year = md['year']
         options = ['-of', 'GTiff', '-co', 'TILED=YES']
-        options += ['-co', 'COMPRESS=DEFLATE', '--config']
-        options += ['-mo', 'year_range={}-{}'.format(year, year)]
+        options += ['-co', 'COMPRESS=DEFLATE']
+        yearmin = yearmax = year
+        if md['year_range']:
+            yearmin, yearmax = md['year_range']
+        options += ['-mo', 'year_range={}-{}'.format(yearmin, yearmax)]
         options += ['-mo', 'year={}'.format(year)]
         return options
 
@@ -69,6 +86,9 @@ class GPPConverter(BaseConverter):
         if not os.path.basename(zipinfo.filename).lower() in LAYER_INFO:
             return True
         return False
+
+    def filter_srcfiles(self, srcfile):
+        return os.path.basename(srcfile) in ('gpp_maxmin_2000_2007.zip', 'GPP_year_means2000_2007.zip') 
 
     def mask_file(self, filename, maskfile):
         """Apply the mask and then convert .rst files to .tif
@@ -180,7 +200,7 @@ class GPPConverter(BaseConverter):
 
                 parsed_md = copy.copy(parsed_zip_md)
                 parsed_md.update(
-                    self.parse_filename(zipinfo.filename.lower())
+                    self.parse_filename(zipinfo.filename)
                 )
                 # apply scale and offset
                 if parsed_md['layerid'] in self.SCALES:
@@ -195,10 +215,11 @@ class GPPConverter(BaseConverter):
                 mfile = MASK_FILE.format(srcdir=os.path.dirname(srcfile))
                 mfile = os.path.join(os.path.dirname(srcurl), mfile)
                 masked_tempfile = self.mask_file(srcurl, mfile)
+                tempfiles.append(masked_tempfile)
 
                 # output file name
                 destpath = os.path.join(destdir, destfilename)
-                if os.path.basename(srcfile) == 'GPP_year_means_00_07.zip':
+                if os.path.basename(srcfile) == 'GPP_year_means2000_2007.zip':
                     yrfiles.append(destpath)
 
                 # run gdal translate to attach metadata
@@ -226,12 +247,14 @@ class GPPConverter(BaseConverter):
         tempfiles = []
         if yrfiles:
             cov = self.calc_cov(yrfiles)
-            parsed_md = self.parse_filename('gpp_summary_00_07_cov.rst')            
-            covfilename = self.destfilename(destdir, parsed_md)
+            parsed_md = self.parse_filename('gpp_maxmin_2000_2007_gppcov.rst')     
+            gdaloptions = self.gdal_options(parsed_md)       
+            covfilename = 'gpp_maxmin_2000_2007_gppcov.tif'
 
             # write to a temp file
             covtempfile = os.path.join(tempfile.mkdtemp(), covfilename)
             self.write_array_to_raster(covtempfile, cov, yrfiles[0])
+            tempfiles.append(covtempfile)
 
             # output filename
             destpath = os.path.join(destdir, covfilename)
@@ -240,7 +263,7 @@ class GPPConverter(BaseConverter):
             cmd = ['gdal_translate']
             cmd.extend(gdaloptions)
             results.append(
-                pool.submit(run_gdal, cmd, masked_tempfile, destpath, parsed_md)
+                pool.submit(run_gdal, cmd, covtempfile, destpath, parsed_md)
             )
 
             for result in tqdm(futures.as_completed(results),
