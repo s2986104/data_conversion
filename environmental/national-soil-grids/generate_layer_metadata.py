@@ -7,7 +7,7 @@ from data_conversion.vocabs import RESOLUTIONS
 
 class NSGLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'environmental'
+    CATEGORY = 'substrate'
     DATASET_ID = 'national_soil_grids'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -17,7 +17,7 @@ class NSGLayerMetadata(BaseLayerMetadata):
     DATASETS = [
         # only one dataset in nsg
         {
-            'title': 'Australia, National Soil Grids (2012), {resolution}',
+            'title': 'Australia, Soil Grids (2012), {resolution}',
             'acknowledgement': (
                 'National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, '
                 'endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep).'
