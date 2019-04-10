@@ -27,7 +27,7 @@ class VASTConverter(BaseConverter):
         # options to add metadata for the tiff file
         year = md['year']
         options = ['-of', 'GTiff', '-co', 'TILED=YES']
-        options += ['-co', 'COMPRESS=DEFLATE', '--config']
+        options += ['-co', 'COMPRESS=DEFLATE']
         options += ['-mo', 'year_range={}-{}'.format(year, year)]
         options += ['-mo', 'year={}'.format(year)]
         return options

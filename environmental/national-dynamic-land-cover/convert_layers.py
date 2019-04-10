@@ -80,7 +80,7 @@ class NDLCConverter(BaseConverter):
         # options to add metadata for the tiff file
         year = md['year']
         options = ['-of', 'GTiff', '-co', 'TILED=YES']
-        options += ['-co', 'COMPRESS=DEFLATE', '--config']
+        options += ['-co', 'COMPRESS=DEFLATE']
         options += ['-mo', 'year_range={}-{}'.format(year-4, year+4)]
         options += ['-mo', 'year={}'.format(year)]
         if not md['layerid'] in ('dlcdv1_class', 'dlcdv1_class_reduced'):

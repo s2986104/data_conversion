@@ -8,7 +8,7 @@ from data_conversion.vocabs import RESOLUTIONS
 
 class NDLCLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'landcover'  # scientific type
+    CATEGORY = 'landcover'
     DATASET_ID = 'national-dynamic-land-cover'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'

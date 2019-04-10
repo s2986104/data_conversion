@@ -52,7 +52,7 @@ class GPPLayerMetadata(BaseLayerMetadata):
             'external_url': '',
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*gpp_year_means2000_2007.*\.tif$'),
+                'url': re.compile('^.*gpp_year_means2000_2007.*_gppmean\.tif$'),
                 'year': None
             },
             'aggs': [],
