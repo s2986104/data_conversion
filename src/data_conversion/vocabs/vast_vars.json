@@ -2,7 +2,7 @@
     "vastgridv2_1k": {
         "standard_name": "vastgridv2_1k",
         "long_name": "VAST classification",
-        "units": "VAST classification",
+        "units": "index",
         "measure_type": "categorical"
     }
 }
