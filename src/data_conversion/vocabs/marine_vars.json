@@ -23,14 +23,14 @@
         "units": "degree_Celsius",
         "measure_type": "continuous"
     },
-    "Surface.Temperature.Lt.max": {
-        "standard_name": "Surface.Temperature.Lt.max",
+    "Surface.Temperature.Lt.Max": {
+        "standard_name": "Surface.Temperature.Lt.Max",
         "long_name": "Maximum Water Temperature of Warmest Month",
         "units": "degree_Celsius",
         "measure_type": "continuous"
     },
-    "Surface.Temperature.Lt.min": {
-        "standard_name": "Surface.Temperature.Lt.min",
+    "Surface.Temperature.Lt.Min": {
+        "standard_name": "Surface.Temperature.Lt.Min",
         "long_name": "Minimum Water Temperature of Coldest Month",
         "units": "degree_Celsius",
         "measure_type": "continuous"
@@ -95,14 +95,14 @@
         "units": "m/s",
         "measure_type": "continuous"
     },
-    "Surface.Current.Velocity.Lt.max": {
-        "standard_name": "Surface.Current.Velocity.Lt.max",
+    "Surface.Current.Velocity.Lt.Max": {
+        "standard_name": "Surface.Current.Velocity.Lt.Max",
         "long_name": "Long term average of maximum currents velocity",
         "units": "m/s",
         "measure_type": "continuous"
     },
-    "Surface.Current.Velocity.Lt.min": {
-        "standard_name": "Surface.Current.Velocity.Lt.min",
+    "Surface.Current.Velocity.Lt.Min": {
+        "standard_name": "Surface.Current.Velocity.Lt.Min",
         "long_name": "Long term average of minimum currents velocity",
         "units": "m/s",
         "measure_type": "continuous"
