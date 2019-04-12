@@ -1,0 +1,542 @@
+{
+    "Surface.Temperature.Min": {
+        "standard_name": "Surface.Temperature.Min",
+        "long_name": "Minimum Water Temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "Surface.Temperature.Max": {
+        "standard_name": "Surface.Temperature.Max",
+        "long_name": "Maximum Water Temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "Surface.Temperature.Mean": {
+        "standard_name": "Surface.Temperature.Min",
+        "long_name": "Mean Water Temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "Surface.Temperature.Range": {
+        "standard_name": "Surface.Temperature.Range",
+        "long_name": "Range of Water Temperature",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "Surface.Temperature.Lt.max": {
+        "standard_name": "Surface.Temperature.Lt.max",
+        "long_name": "Maximum Water Temperature of Warmest Month",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "Surface.Temperature.Lt.min": {
+        "standard_name": "Surface.Temperature.Lt.min",
+        "long_name": "Minimum Water Temperature of Coldest Month",
+        "units": "degree_Celsius",
+        "measure_type": "continuous"
+    },
+    "Surface.Salinity.Min": {
+        "standard_name": "Surface.Salinity.Min",
+        "long_name": "Minimum Water Salinity",
+        "units": "Practical Salinity Scale",
+        "measure_type": "continuous"
+    },
+    "Surface.Salinity.Max": {
+        "standard_name": "Surface.Salinity.Max",
+        "long_name": "Maximum Water Salinity",
+        "units": "Practical Salinity Scale",
+        "measure_type": "continuous"
+    },
+    "Surface.Salinity.Mean": {
+        "standard_name": "Surface.Salinity.Mean",
+        "long_name": "Mean Water Salinity",
+        "units": "Practical Salinity Scale",
+        "measure_type": "continuous"
+    },
+    "Surface.Salinity.Range": {
+        "standard_name": "Surface.Salinity.Min",
+        "long_name": "Range of Water Salinity",
+        "units": "Practical Salinity Scale",
+        "measure_type": "continuous"
+    },
+    "Surface.Salinity.Lt.Min": {
+        "standard_name": "Surface.Salinity.Min",
+        "long_name": "Minimum Water Salinity of Freshest Month",
+        "units": "Practical Salinity Scale",
+        "measure_type": "continuous"
+    },
+    "Surface.Salinity.Lt.Max": {
+        "standard_name": "Surface.Salinity.Min",
+        "long_name": "Maximum Water Salinity of Saltiest Month",
+        "units": "Practical Salinity Scale",
+        "measure_type": "continuous"
+    },
+    "Surface.Current.Velocity.Min": {
+        "standard_name": "Surface.Current.Velocity.Min",
+        "long_name": "Minimum Currents Velocity",
+        "units": "m/s",
+        "measure_type": "continuous"
+    },
+    "Surface.Current.Velocity.Max": {
+        "standard_name": "Surface.Current.Velocity.Max",
+        "long_name": "Maximum Currents Velocity",
+        "units": "m/s",
+        "measure_type": "continuous"
+    },
+    "Surface.Current.Velocity.Mean": {
+        "standard_name": "Surface.Current.Velocity.Mean",
+        "long_name": "Mean Currents Velocity",
+        "units": "m/s",
+        "measure_type": "continuous"
+    },
+    "Surface.Current.Velocity.Range": {
+        "standard_name": "Surface.Current.Velocity.Range",
+        "long_name": "Range of Currents Velocity",
+        "units": "m/s",
+        "measure_type": "continuous"
+    },
+    "Surface.Current.Velocity.Lt.max": {
+        "standard_name": "Surface.Current.Velocity.Lt.max",
+        "long_name": "Long term average of maximum currents velocity",
+        "units": "m/s",
+        "measure_type": "continuous"
+    },
+    "Surface.Current.Velocity.Lt.min": {
+        "standard_name": "Surface.Current.Velocity.Lt.min",
+        "long_name": "Long term average of minimum currents velocity",
+        "units": "m/s",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.thickness.Min": {
+        "standard_name": "Surface.Ice.thickness.Min",
+        "long_name": "Minimum Ice Thickness",
+        "units": "m",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.thickness.Max": {
+        "standard_name": "Surface.Ice.thickness.Max",
+        "long_name": "Maximum Ice Thickness",
+        "units": "m",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.thickness.Mean": {
+        "standard_name": "Surface.Ice.thickness.Mean",
+        "long_name": "Mean Ice Thickness",
+        "units": "m",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.thickness.Range": {
+        "standard_name": "Surface.Ice.thickness.Range",
+        "long_name": "Range of Ice Thickness",
+        "units": "m",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.thickness.Lt.Max": {
+        "standard_name": "Surface.Ice.thickness.Lt.Max",
+        "long_name": "Long term average of maximum ice thickness",
+        "units": "m",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.thickness.Lt.Min": {
+        "standard_name": "Surface.Ice.thickness.Lt.Min",
+        "long_name": "Long term average of minimum ice thickness",
+        "units": "m",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.cover.Min": {
+        "standard_name": "Surface.Ice.cover.Min",
+        "long_name": "Minimum Sea Ice Concentration",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.cover.Max": {
+        "standard_name": "Surface.Ice.cover.Max",
+        "long_name": "Maximum Sea Ice Concentration",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.cover.Mean": {
+        "standard_name": "Surface.Ice.cover.Mean",
+        "long_name": "Mean Sea Ice Concentration",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.cover.Range": {
+        "standard_name": "Surface.Ice.cover.Range",
+        "long_name": "Range of Sea Ice Concentration",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.cover.Lt.Max": {
+        "standard_name": "Surface.Ice.cover.Lt.Max",
+        "long_name": "Long term average of maximum sea ice concentration",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "Surface.Ice.cover.Lt.Min": {
+        "standard_name": "Surface.Ice.cover.Lt.Min",
+        "long_name": "Long term average of minimum sea ice concentration",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "Surface.Diffuse.attenuation.Min": {
+        "standard_name": "Surface.Diffuse.attenuation.Min",
+        "long_name": "Minimum Diffuse Attenuation",
+        "units": "m-1",
+        "measure_type": "continuous"
+    },
+    "Surface.Diffuse.attenuation.Max": {
+        "standard_name": "Surface.Diffuse.attenuation.Max",
+        "long_name": "Maximum Diffuse Attenuation",
+        "units": "m-1",
+        "measure_type": "continuous"
+    },
+    "Surface.Diffuse.attenuation.Mean": {
+        "standard_name": "Surface.Diffuse.attenuation.Mean",
+        "long_name": "Mean Diffuse Attenuation",
+        "units": "m-1",
+        "measure_type": "continuous"
+    },
+    "Surface.Cloud.cover.Min": {
+        "standard_name": "Surface.Cloud.cover.Min",
+        "long_name": "Minimum Cloud Cover",
+        "units": "%",
+        "measure_type": "continuous"
+    },
+    "Surface.Cloud.cover.Max": {
+        "standard_name": "Surface.Cloud.cover.Max",
+        "long_name": "Maximum Cloud Cover",
+        "units": "%",
+        "measure_type": "continuous"
+    },
+    "Surface.Cloud.cover.Mean": {
+        "standard_name": "Surface.Cloud.cover.Mean",
+        "long_name": "Mean Cloud Cover",
+        "units": "%",
+        "measure_type": "continuous"
+    },
+    "Surface.Nitrate.Min": {
+        "standard_name": "Surface.Nitrate.Min",
+        "long_name": "Minimum Nitrate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Nitrate.Max": {
+        "standard_name": "Surface.Nitrate.Max",
+        "long_name": "Maximum Nitrate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Nitrate.Mean": {
+        "standard_name": "Surface.Nitrate.Mean",
+        "long_name": "Mean Nitrate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Nitrate.Range": {
+        "standard_name": "Surface.Nitrate.Range",
+        "long_name": "Range of Nitrate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Nitrate.Lt.Max": {
+        "standard_name": "Surface.Nitrate.Lt.Max",
+        "long_name": "Long term average of maximum nitrate concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Nitrate.Lt.Min": {
+        "standard_name": "Surface.Nitrate.Lt.Min",
+        "long_name": "Long term average of minimum nitrate concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phosphate.Min": {
+        "standard_name": "Surface.Phosphate.Min",
+        "long_name": "Minimum Phosphate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phosphate.Max": {
+        "standard_name": "Surface.Phosphate.Max",
+        "long_name": "Minimum Phosphate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phosphate.Mean": {
+        "standard_name": "Surface.Phosphate.Mean",
+        "long_name": "Mean Phosphate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phosphate.Range": {
+        "standard_name": "Surface.Phosphate.Range",
+        "long_name": "Range of Phosphate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phosphate.Lt.Max": {
+        "standard_name": "Surface.Phosphate.Lt.Max",
+        "long_name": "Long term average of maximum phosphate concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phosphate.Lt.Min": {
+        "standard_name": "Surface.Phosphate.Lt.Min",
+        "long_name": "Long term average of minimum phosphate concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Silicate.Min": {
+        "standard_name": "Surface.Silicate.Min",
+        "long_name": "Minimum Silicate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Silicate.Max": {
+        "standard_name": "Surface.Silicate.Max",
+        "long_name": "Maximum Silicate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Silicate.Mean": {
+        "standard_name": "Surface.Silicate.Mean",
+        "long_name": "Mean Silicate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Silicate.Range": {
+        "standard_name": "Surface.Silicate.Range",
+        "long_name": "Range of Silicate Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Silicate.Lt.Max": {
+        "standard_name": "Surface.Silicate.Lt.Max",
+        "long_name": "Long term average of maximum silicate concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Silicate.Lt.Min": {
+        "standard_name": "Surface.Silicate.Lt.Min",
+        "long_name": "Long term average of minimum silicate concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Dissolved.oxygen.Min": {
+        "standard_name": "Surface.Dissolved.oxygen.Min",
+        "long_name": "Minimum Oxygen Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Dissolved.oxygen.Max": {
+        "standard_name": "Surface.Dissolved.oxygen.Max",
+        "long_name": "Maximum Oxygen Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Dissolved.oxygen.Mean": {
+        "standard_name": "Surface.Dissolved.oxygen.Mean",
+        "long_name": "Mean Oxygen Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Dissolved.oxygen.Range": {
+        "standard_name": "Surface.Dissolved.oxygen.Range",
+        "long_name": "Range of Oxygen Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Dissolved.oxygen.Lt.Max": {
+        "standard_name": "Surface.Dissolved.oxygen.Lt.Max",
+        "long_name": "Long term average of maximum oxygen concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Dissolved.oxygen.Lt.Min": {
+        "standard_name": "Surface.Dissolved.oxygen.Lt.Min",
+        "long_name": "Long term average of minimum oxygen concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Iron.Min": {
+        "standard_name": "Surface.Iron.Min",
+        "long_name": "Minimum Iron Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Iron.Max": {
+        "standard_name": "Surface.Iron.Max",
+        "long_name": "Max Iron Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Iron.Mean": {
+        "standard_name": "Surface.Iron.Mean",
+        "long_name": "Mean Iron Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Iron.Range": {
+        "standard_name": "Surface.Iron.Range",
+        "long_name": "Range of Iron Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Iron.Lt.Max": {
+        "standard_name": "Surface.Iron.Lt.Max",
+        "long_name": "Long term average of maximum iron concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Iron.Lt.Min": {
+        "standard_name": "Surface.Iron.Lt.Min",
+        "long_name": "Long term average of minimum iron concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Calcite.Mean": {
+        "standard_name": "Surface.Calcite.Mean",
+        "long_name": "Mean Calcite Concentration",
+        "units": "mol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Chlorophyll.Min": {
+        "standard_name": "Surface.Chlorophyll.Min",
+        "long_name": "Minimum Chlorophyll A Concentration",
+        "units": "mg/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Chlorophyll.Max": {
+        "standard_name": "Surface.Chlorophyll.Max",
+        "long_name": "Maximum Chlorophyll A Concentration",
+        "units": "mg/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Chlorophyll.Mean": {
+        "standard_name": "Surface.Chlorophyll.Mean",
+        "long_name": "Mean Chlorophyll A Concentration",
+        "units": "mg/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Chlorophyll.Range": {
+        "standard_name": "Surface.Chlorophyll.Range",
+        "long_name": "Range of Chlorophyll A Concentration",
+        "units": "mg/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Chlorophyll.Lt.Max": {
+        "standard_name": "Surface.Chlorophyll.Lt.Max",
+        "long_name": "Long term average of maximum chlorophyll A concentration",
+        "units": "mg/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Chlorophyll.Lt.Min": {
+        "standard_name": "Surface.Chlorophyll.Lt.Min",
+        "long_name": "Long term average of minimum chlorophyll A concentration",
+        "units": "mg/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phytoplankton.Min": {
+        "standard_name": "Surface.Phytoplankton.Min",
+        "long_name": "Minimum Phytoplankton Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phytoplankton.Min": {
+        "standard_name": "Surface.Phytoplankton.Min",
+        "long_name": "Minimum Phytoplankton Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phytoplankton.Max": {
+        "standard_name": "Surface.Phytoplankton.Max",
+        "long_name": "Maximum Phytoplankton Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phytoplankton.Mean": {
+        "standard_name": "Surface.Phytoplankton.Mean",
+        "long_name": "Mean Phytoplankton Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phytoplankton.Range": {
+        "standard_name": "Surface.Phytoplankton.Range",
+        "long_name": "Range of Phytoplankton Concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phytoplankton.Lt.Max": {
+        "standard_name": "Surface.Phytoplankton.Lt.Max",
+        "long_name": "Long term average of maximum phytoplankton concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Phytoplankton.Lt.Min": {
+        "standard_name": "Surface.Phytoplankton.Lt.Min",
+        "long_name": "Long term average of minimum phytoplankton concentration",
+        "units": "umol/m3",
+        "measure_type": "continuous"
+    },
+    "Surface.Primary.Productivity.Min": {
+        "standard_name": "Surface.Primary.Productivity.Min",
+        "long_name": "Minimum Primary Productivity",
+        "units": "g/m3/day",
+        "measure_type": "continuous"
+    },
+    "Surface.Primary.Productivity.Max": {
+        "standard_name": "Surface.Primary.Productivity.Max",
+        "long_name": "Maximum Primary Productivity",
+        "units": "g/m3/day",
+        "measure_type": "continuous"
+    },
+    "Surface.Primary.Productivity.Mean": {
+        "standard_name": "Surface.Primary.Productivity.Mean",
+        "long_name": "Mean Primary Productivity",
+        "units": "g/m3/day",
+        "measure_type": "continuous"
+    },
+    "Surface.Primary.Productivity.Range": {
+        "standard_name": "Surface.Primary.Productivity.Range",
+        "long_name": "Range of Primary Productivity",
+        "units": "g/m3/day",
+        "measure_type": "continuous"
+    },
+    "Surface.Primary.Productivity.Lt.Max": {
+        "standard_name": "Surface.Primary.Productivity.Lt.Max",
+        "long_name": "Long term average of maximum primary productivity",
+        "units": "g/m3/day",
+        "measure_type": "continuous"
+    },
+    "Surface.Primary.Productivity.Lt.Min": {
+        "standard_name": "Surface.Primary.Productivity.Lt.Min",
+        "long_name": "Long term average of minimum primary productivity",
+        "units": "g/m3/day",
+        "measure_type": "continuous"
+    },
+    "Surface.Ph": {
+        "standard_name": "Surface.Ph",
+        "long_name": "Mean pH",
+        "units": "1",
+        "measure_type": "continuous"
+    },
+    "Surface.Par.Max": {
+        "standard_name": "Surface.Par.Max",
+        "long_name": "Maximum Photosynthetically Available Radiation",
+        "units": "E/m2/day",
+        "measure_type": "continuous"
+    },
+    "Surface.Par.Mean": {
+        "standard_name": "Surface.Par.Mean",
+        "long_name": "Mean Photosynthetically Available Radiation",
+        "units": "E/m2/day",
+        "measure_type": "continuous"
+    },
+    "Surface.Par.Mean": {
+        "standard_name": "Surface.Par.Mean",
+        "long_name": "Mean Photosynthetically Available Radiation",
+        "units": "E/m2/day",
+        "measure_type": "continuous"
+    }
+}

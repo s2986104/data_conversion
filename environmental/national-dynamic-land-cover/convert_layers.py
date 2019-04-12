@@ -95,7 +95,7 @@ class NDLCConverter(BaseConverter):
 
         # reclassification
         for newval, rangeval in class_map.items():
-            data[(data>=rangeval[0]) & (data<=rangeval[1])] = newval
+            data[(data >= angeval[0]) & (data <= rangeval[1])] = newval
 
         # create new file
         file2 = driver.Create(destfile, tiffile.RasterXSize , tiffile.RasterYSize , 1)

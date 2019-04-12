@@ -18,4 +18,6 @@ NDLC_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'ndlc_var
 
 VAST_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'vast_vars.json'), 'r')) 
 
-GPP_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'gpp_vars.json'), 'r')) 
+GPP_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'gpp_vars.json'), 'r'))
+
+MARINE_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'marine_vars.json'), 'r'))
