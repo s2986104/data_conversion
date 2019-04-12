@@ -1,13 +1,13 @@
 {
-    "AMVG": {
-        "standard_name": "AMVG",
-        "long_name": "Australian Major Vegetation Groups - present",
+    "amvg": {
+        "standard_name": "amvg",
+        "long_name": "Australian Major Vegetation Groups - Present",
         "units": "vegetation group class",
         "measure_type": "categorical"
     },
-    "AMVG-1750": {
-        "standard_name": "AMVG-1750",
-        "long_name": "Australian Major Vegetation Groups - pre-1750",
+    "amvg-1975": {
+        "standard_name": "amvg",
+        "long_name": "Australian Major Vegetation Groups - Pre-1975",
         "units": "vegetation group class",
         "measure_type": "categorical"
     }
