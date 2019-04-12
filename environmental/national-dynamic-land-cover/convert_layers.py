@@ -94,9 +94,8 @@ class NDLCConverter(BaseConverter):
         data = band.ReadAsArray()
 
         # reclassification
-        for newval, list_vals in class_map.items():
-            for i in list_vals:
-                data[data==i] = newval
+        for newval, rangeval in class_map.items():
+            data[(data>=rangeval[0]) & (data<=rangeval[1])] = newval
 
         # create new file
         file2 = driver.Create(destfile, tiffile.RasterXSize , tiffile.RasterYSize , 1)
@@ -216,7 +215,7 @@ class NDLCConverter(BaseConverter):
 
 
                     # Add reduced classification data layer for DLCDv1_Class
-                    class_map = {1: range(1,11), 2: range(11,24), 3: range(24,31), 4: range(31,33), 5: range(33,35)}
+                    class_map = {1: (1,10), 2: (11,23), 3: (24,30), 4: (31,32), 5: (33,34)}
                     _, tfname2 = tempfile.mkstemp(suffix='.tif')
                     self.reclassify(srcurl, class_map, tfname2)
 
