@@ -17,10 +17,10 @@ ACKNOWLEDGEMENT = (
 
 class GlobalMarineLayerMetadata(BaseLayerMetadata):
 
-    DATASET_ID = 'national_soil_grids'
+    DATASET_ID = 'global_marine'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'national_soil_grids_layers'
+        'global_marine'
     )
 
     DATASETS = [
@@ -96,7 +96,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         "title": "Global Marine Environmental Data (Bio-ORACLE)",
         "description": "Bio-ORACLE, v2: a suite of geophysical, biotic and environmental data layers for surface waters of marine realms for current and future time periods.\n\nGeographic extent: Global\nYear range: 2000-2014, 2040-2050, 2090-2100\nResolution: {resolution}\nData layers: 280 layers across 26 datasets, including water temperature, salinity, currents velocity and chlorophyll A concentration".format(resolution=RESOLUTIONS['300']['long']),
         "rights": "CC-BY Attribution 4.0",
-        "landingPage": "See <a hhttp://www.bio-oracle.org/\">http://www.bio-oracle.org/</a>",
+        "landingPage": "See <a http://www.bio-oracle.org/\">http://www.bio-oracle.org/</a>",
         "attribution": [
             "Tyberghein L, Verbruggen H, Pauly K, Troupin C, Mineur F, De Clerck O (2012) Bio-ORACLE: A global environmental dataset for marine species distribution modelling. Global Ecology and Biogeography, 21: 272–281.",
             "Assis J, Tyberghein L, Bosh S, Verbruggen H, Serrão EA, De Clerck O (2017) Bio-ORACLE v2.0: Extending marine data layers for bioclimatic modelling. Global Ecology and Biogeography, 27: 277-284."
@@ -113,9 +113,9 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
-        # find min/max years in coverages and use as year_range
+        # find year_range in coverages
         year_range = coverages[0]['bccvl:metadata']['year_range']
-        year_range = '{}-{}'.format(year_range[0], year_range[1])
+        year_range_str = '{}-{}'.format(year_range[0], year_range[1])
         ds_md = {
             'category': dsdef['category'],
             'genre': dsdef['filter']['genre'],
@@ -123,9 +123,13 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
             'license': dsdef.get('license'),
-            'year_range': year_range,
-            'title': dsdef.get('title').format(year_range=year_range, **dsdef['filter']),
+            'title': dsdef.get('title').format(year_range=year_range_str, **dsdef['filter']),
         }
+        ds_md['year'] = coverages[0]['bccvl:metadata']['year']
+        ds_md['year_range'] = year_range
+
+        if dsdef['filter'].get('emsc'):
+            ds_md['emsc'] = dsdef['filter']['emsc']
         return ds_md
 
     def get_genre(self, md):

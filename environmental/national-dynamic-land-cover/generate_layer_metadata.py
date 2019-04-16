@@ -90,9 +90,8 @@ class NDLCLayerMetadata(BaseLayerMetadata):
                 **dsdef['filter']
             ),
         }
-        # find min/max years in coverages and use as year_range
-        years = [cov['bccvl:metadata']['year'] for cov in coverages]
-        ds_md['year_range'] = [min(years), max(years)]
+        # find year_range from coverages
+        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
         return ds_md
 
     def get_genre(self, md):

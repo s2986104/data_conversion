@@ -1,0 +1,8 @@
+{
+    "Bathymetry": {
+        "standard_name": "Bathymetry",
+        "long_name": "Water depth in the ocean",
+        "units": "m",
+        "measure_type": "continuous"
+    }
+}
