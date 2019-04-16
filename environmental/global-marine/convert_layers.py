@@ -34,11 +34,11 @@ class GlobalMarineConverter(BaseConverter):
             parts = parts[1:]
             rcp = 'current'
         else:
-            rcp = parts[1]
+            rcp = parts[1].upper()
             parts = parts[2:]
 
         layerid = '.'.join([i.capitalize() for i in parts])
-
+        
         if rcp == 'RCP26':
             rcp = 'RCP2.6'
         elif rcp == 'RCP45':
@@ -53,12 +53,12 @@ class GlobalMarineConverter(BaseConverter):
             'layerid': layerid,
             'year': LAYERINFO[period]['year'],
             'year_range': LAYERINFO[period]['period'],
-            'emsc': rcp.upper(),
+            'emsc': rcp,
         }
 
     def target_dir(self, destdir, srcfile):
         fmd = self.parse_zip_filename(srcfile)
-        emsc = fmd['emsc'].replcae('.', '')
+        emsc = fmd['emsc'].replace('.', '')
         year = fmd['year']
         dirname = 'globalmarine_{0}_{1}'.format(emsc.lower(), year).replace(' ', '')
         root = os.path.join(destdir, dirname)

@@ -5,6 +5,15 @@ import re
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS
 
+ACKNOWLEDGEMENT = (
+    'Tyberghein L, Verbruggen H, Pauly K, Troupin C, Mineur F, De Clerck O (2012) Bio-ORACLE: '
+    'A global environmental dataset for marine species distribution modelling. Global Ecology '
+    'and Biogeography, 21: 272–281. \n'
+    'Assis J, Tyberghein L, Bosh S, Verbruggen H, Serrão EA, De Clerck O (2017) Bio-ORACLE v2.0: '
+    'Extending marine data layers for bioclimatic modelling. Global Ecology and Biogeography, 27: '
+    '277-284.'
+)
+
 
 class GlobalMarineLayerMetadata(BaseLayerMetadata):
 
@@ -13,20 +22,12 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
         'national_soil_grids_layers'
     )
-    ACKNOWLEDGEMENT = (
-        'Tyberghein L, Verbruggen H, Pauly K, Troupin C, Mineur F, De Clerck O (2012) Bio-ORACLE: '
-        'A global environmental dataset for marine species distribution modelling. Global Ecology '
-        'and Biogeography, 21: 272–281. \n'
-        'Assis J, Tyberghein L, Bosh S, Verbruggen H, Serrão EA, De Clerck O (2017) Bio-ORACLE v2.0: '
-        'Extending marine data layers for bioclimatic modelling. Global Ecology and Biogeography, 27: '
-        '277-284.'
-    )
 
     DATASETS = [
         # only one dataset in nsg
         {
-            'title': 'Global marine surface data, {variable} ({yearrange}), {resolution}'.format(variable=i[0], yearrange=i[4], resolution=RESOLUTIONS['300']['long'])
-            'acknowledgement': self.ACKNOWLEDGEMENT
+            'title': 'Global marine surface data, {variable} ({yearrange}), {resolution}'.format(variable=i[0], yearrange=i[4], resolution=RESOLUTIONS['300']['long']),
+            'acknowledgement': ACKNOWLEDGEMENT,
             'year': i[3],
             'license': (
                 'Creative Commons Attribution 4.0 '
@@ -39,8 +40,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             },
             'aggs': [],
             'category': i[2],
-        } 
-        for i in [
+        } for i in [
             ('Cloud Cover', 'Cloud.Cover', 'physical', 2007, '2000-2014'), 
             ('Diffuse Attenuation', 'Diffuse.Attenuation', 'physical', 2007, '2000-2014'), 
             ('Sea Ice Concentration', 'Ice.Cover', 'physical', 2007, '2000-2014'), 
@@ -52,7 +52,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             ('Calcite', 'Calcite', 'nutrients', 2007, '2000-2014'),
             ('Dissolved Molecular Oxygen', 'Dissolved.Oxygen', 'nutrients', 2007, '2000-2014'),
             ('Silicate', 'Silicate', 'nutrients', 2007, '2000-2014'),
-            ('Phosphate', 'Phosphate', 'nutrients', '2000-2014'),
+            ('Phosphate', 'Phosphate', 'nutrients', 2007, '2000-2014'),
             ('Nitrate', 'Nitrate', 'nutrients', 2007, '2000-2014'),
             ('Primary Productivity', 'Primary.Productivity', 'biochemical', 2007, '2000-2014'),
             ('Photosynthetically Available Radiation', 'Par', 'biochemical', 2007, '2000-2014'),
@@ -60,13 +60,14 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             ('Phytoplankton', 'Phytoplankton', 'biochemical', 2007, '2000-2014'),
             ('Chlorophyll', 'Chlorophyll', 'biochemical', 2007, '2000-2014')
         ]
-    ].extend([
+    ]
+
+    FUTURE_DATASETS = [
         {
-            'title': 'Global marine surface data, {variable} (year_range), (emsc), {resolution}'.format(
-                variable=i[0], resolution=RESOLUTIONS['300']['long']
-            ).replace('emsc', '{emsc}').replace('year_range', '{year_range}')
-            'acknowledgement': self.ACKNOWLEDGEMENT
-            'year': 2007,
+            'title': 'Global marine surface data, {variable} (year_range), emsc, {resolution}'.format(
+                    variable=i[0], resolution=RESOLUTIONS['300']['long']
+                ).replace('emsc', '{emsc}').replace('year_range', '{year_range}'),
+            'acknowledgement': ACKNOWLEDGEMENT,
             'license': (
                 'Creative Commons Attribution 4.0 '
                 'http://creativecommons.org/licenses/by/4.0'
@@ -74,20 +75,20 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'external_url': 'http://www.bio-oracle.org/',
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*RCP.*_Surface.{lid}.*\.tif$'.format(lid=i[1])),
+                'url': re.compile('^.*rcp.*_Surface.{lid}.*\.tif$'.format(lid=i[1])),
                 'emsc': None,
-                'year_range': None
+                'year': None
             },
             'aggs': [],
             'category': i[2],
         }
-        for i in [(
+        for i in [
             ('Water Temperature', 'Temperature', 'physical'),
             ('Water Salinity', 'Salinity', 'physical'),
             ('Ice Thickness', 'Ice.Thickness', 'physical'),
             ('Currents Velocity', 'Currents.Velocity', 'physical')
-        )]
-    ])
+        ]
+    ]
 
     COLLECTION = {
         "_type": "Collection",
@@ -112,6 +113,9 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
+        # find min/max years in coverages and use as year_range
+        year_range = coverages[0]['bccvl:metadata']['year_range']
+        year_range = '{}-{}'.format(year_range[0], year_range[1])
         ds_md = {
             'category': dsdef['category'],
             'genre': dsdef['filter']['genre'],
@@ -119,16 +123,16 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
             'license': dsdef.get('license'),
-            'year': dsdef.get('year'),
-            'title': dsdef.get('title').format(**dsdef['filter']),
+            'year_range': year_range,
+            'title': dsdef.get('title').format(year_range=year_range, **dsdef['filter']),
         }
-        # find min/max years in coverages and use as year_range
-        years = [cov['bccvl:metadata']['year'] for cov in coverages]
-        ds_md['year_range'] = [min(years), max(years)]
         return ds_md
 
     def get_genre(self, md):
         return 'DataGenreE'
+
+    def __init__(self):
+        self.DATASETS.extend(self.FUTURE_DATASETS)
 
 
 def main():
