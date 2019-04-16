@@ -107,110 +107,110 @@
         "units": "m/s",
         "measure_type": "continuous"
     },
-    "Surface.Ice.thickness.Min": {
-        "standard_name": "Surface.Ice.thickness.Min",
+    "Surface.Ice.Thickness.Min": {
+        "standard_name": "Surface.Ice.Thickness.Min",
         "long_name": "Minimum Ice Thickness",
         "units": "m",
         "measure_type": "continuous"
     },
-    "Surface.Ice.thickness.Max": {
-        "standard_name": "Surface.Ice.thickness.Max",
+    "Surface.Ice.Thickness.Max": {
+        "standard_name": "Surface.Ice.Thickness.Max",
         "long_name": "Maximum Ice Thickness",
         "units": "m",
         "measure_type": "continuous"
     },
-    "Surface.Ice.thickness.Mean": {
-        "standard_name": "Surface.Ice.thickness.Mean",
+    "Surface.Ice.Thickness.Mean": {
+        "standard_name": "Surface.Ice.Thickness.Mean",
         "long_name": "Mean Ice Thickness",
         "units": "m",
         "measure_type": "continuous"
     },
-    "Surface.Ice.thickness.Range": {
-        "standard_name": "Surface.Ice.thickness.Range",
+    "Surface.Ice.Thickness.Range": {
+        "standard_name": "Surface.Ice.Thickness.Range",
         "long_name": "Range of Ice Thickness",
         "units": "m",
         "measure_type": "continuous"
     },
-    "Surface.Ice.thickness.Lt.Max": {
-        "standard_name": "Surface.Ice.thickness.Lt.Max",
+    "Surface.Ice.Thickness.Lt.Max": {
+        "standard_name": "Surface.Ice.Thickness.Lt.Max",
         "long_name": "Long term average of maximum ice thickness",
         "units": "m",
         "measure_type": "continuous"
     },
-    "Surface.Ice.thickness.Lt.Min": {
-        "standard_name": "Surface.Ice.thickness.Lt.Min",
+    "Surface.Ice.Thickness.Lt.Min": {
+        "standard_name": "Surface.Ice.Thickness.Lt.Min",
         "long_name": "Long term average of minimum ice thickness",
         "units": "m",
         "measure_type": "continuous"
     },
-    "Surface.Ice.cover.Min": {
-        "standard_name": "Surface.Ice.cover.Min",
+    "Surface.Ice.Cover.Min": {
+        "standard_name": "Surface.Ice.Cover.Min",
         "long_name": "Minimum Sea Ice Concentration",
         "units": "1",
         "measure_type": "continuous"
     },
-    "Surface.Ice.cover.Max": {
-        "standard_name": "Surface.Ice.cover.Max",
+    "Surface.Ice.Cover.Max": {
+        "standard_name": "Surface.Ice.Cover.Max",
         "long_name": "Maximum Sea Ice Concentration",
         "units": "1",
         "measure_type": "continuous"
     },
-    "Surface.Ice.cover.Mean": {
-        "standard_name": "Surface.Ice.cover.Mean",
+    "Surface.Ice.Cover.Mean": {
+        "standard_name": "Surface.Ice.Cover.Mean",
         "long_name": "Mean Sea Ice Concentration",
         "units": "1",
         "measure_type": "continuous"
     },
-    "Surface.Ice.cover.Range": {
-        "standard_name": "Surface.Ice.cover.Range",
+    "Surface.Ice.Cover.Range": {
+        "standard_name": "Surface.Ice.Cover.Range",
         "long_name": "Range of Sea Ice Concentration",
         "units": "1",
         "measure_type": "continuous"
     },
-    "Surface.Ice.cover.Lt.Max": {
-        "standard_name": "Surface.Ice.cover.Lt.Max",
+    "Surface.Ice.Cover.Lt.Max": {
+        "standard_name": "Surface.Ice.Cover.Lt.Max",
         "long_name": "Long term average of maximum sea ice concentration",
         "units": "1",
         "measure_type": "continuous"
     },
-    "Surface.Ice.cover.Lt.Min": {
-        "standard_name": "Surface.Ice.cover.Lt.Min",
+    "Surface.Ice.Cover.Lt.Min": {
+        "standard_name": "Surface.Ice.Cover.Lt.Min",
         "long_name": "Long term average of minimum sea ice concentration",
         "units": "1",
         "measure_type": "continuous"
     },
-    "Surface.Diffuse.attenuation.Min": {
-        "standard_name": "Surface.Diffuse.attenuation.Min",
+    "Surface.Diffuse.Attenuation.Min": {
+        "standard_name": "Surface.Diffuse.Attenuation.Min",
         "long_name": "Minimum Diffuse Attenuation",
         "units": "m-1",
         "measure_type": "continuous"
     },
-    "Surface.Diffuse.attenuation.Max": {
-        "standard_name": "Surface.Diffuse.attenuation.Max",
+    "Surface.Diffuse.Attenuation.Max": {
+        "standard_name": "Surface.Diffuse.Attenuation.Max",
         "long_name": "Maximum Diffuse Attenuation",
         "units": "m-1",
         "measure_type": "continuous"
     },
-    "Surface.Diffuse.attenuation.Mean": {
-        "standard_name": "Surface.Diffuse.attenuation.Mean",
+    "Surface.Diffuse.Attenuation.Mean": {
+        "standard_name": "Surface.Diffuse.Attenuation.Mean",
         "long_name": "Mean Diffuse Attenuation",
         "units": "m-1",
         "measure_type": "continuous"
     },
-    "Surface.Cloud.cover.Min": {
-        "standard_name": "Surface.Cloud.cover.Min",
+    "Surface.Cloud.Cover.Min": {
+        "standard_name": "Surface.Cloud.Cover.Min",
         "long_name": "Minimum Cloud Cover",
         "units": "%",
         "measure_type": "continuous"
     },
-    "Surface.Cloud.cover.Max": {
-        "standard_name": "Surface.Cloud.cover.Max",
+    "Surface.Cloud.Cover.Max": {
+        "standard_name": "Surface.Cloud.Cover.Max",
         "long_name": "Maximum Cloud Cover",
         "units": "%",
         "measure_type": "continuous"
     },
-    "Surface.Cloud.cover.Mean": {
-        "standard_name": "Surface.Cloud.cover.Mean",
+    "Surface.Cloud.Cover.Mean": {
+        "standard_name": "Surface.Cloud.Cover.Mean",
         "long_name": "Mean Cloud Cover",
         "units": "%",
         "measure_type": "continuous"
@@ -323,38 +323,38 @@
         "units": "mol/m3",
         "measure_type": "continuous"
     },
-    "Surface.Dissolved.oxygen.Min": {
-        "standard_name": "Surface.Dissolved.oxygen.Min",
+    "Surface.Dissolved.Oxygen.Min": {
+        "standard_name": "Surface.Dissolved.Oxygen.Min",
         "long_name": "Minimum Oxygen Concentration",
         "units": "mol/m3",
         "measure_type": "continuous"
     },
-    "Surface.Dissolved.oxygen.Max": {
-        "standard_name": "Surface.Dissolved.oxygen.Max",
+    "Surface.Dissolved.Oxygen.Max": {
+        "standard_name": "Surface.Dissolved.Oxygen.Max",
         "long_name": "Maximum Oxygen Concentration",
         "units": "mol/m3",
         "measure_type": "continuous"
     },
-    "Surface.Dissolved.oxygen.Mean": {
-        "standard_name": "Surface.Dissolved.oxygen.Mean",
+    "Surface.Dissolved.Oxygen.Mean": {
+        "standard_name": "Surface.Dissolved.Oxygen.Mean",
         "long_name": "Mean Oxygen Concentration",
         "units": "mol/m3",
         "measure_type": "continuous"
     },
-    "Surface.Dissolved.oxygen.Range": {
-        "standard_name": "Surface.Dissolved.oxygen.Range",
+    "Surface.Dissolved.Oxygen.Range": {
+        "standard_name": "Surface.Dissolved.Oxygen.Range",
         "long_name": "Range of Oxygen Concentration",
         "units": "mol/m3",
         "measure_type": "continuous"
     },
-    "Surface.Dissolved.oxygen.Lt.Max": {
-        "standard_name": "Surface.Dissolved.oxygen.Lt.Max",
+    "Surface.Dissolved.Oxygen.Lt.Max": {
+        "standard_name": "Surface.Dissolved.Oxygen.Lt.Max",
         "long_name": "Long term average of maximum oxygen concentration",
         "units": "mol/m3",
         "measure_type": "continuous"
     },
-    "Surface.Dissolved.oxygen.Lt.Min": {
-        "standard_name": "Surface.Dissolved.oxygen.Lt.Min",
+    "Surface.Dissolved.Oxygen.Lt.Min": {
+        "standard_name": "Surface.Dissolved.Oxygen.Lt.Min",
         "long_name": "Long term average of minimum oxygen concentration",
         "units": "mol/m3",
         "measure_type": "continuous"

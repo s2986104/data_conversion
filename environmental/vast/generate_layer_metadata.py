@@ -6,7 +6,7 @@ from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS
 
 
-class NDLCLayerMetadata(BaseLayerMetadata):
+class VASTLayerMetadata(BaseLayerMetadata):
 
     CATEGORY = 'vegetation'  # scientific type
     DATASET_ID = 'vast'
@@ -88,7 +88,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
         return None
 
 def main():
-    gen = NDLCLayerMetadata()
+    gen = VASTLayerMetadata()
     gen.main()
 
 if __name__ == "__main__":

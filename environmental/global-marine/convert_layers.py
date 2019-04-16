@@ -20,7 +20,7 @@ LAYERINFO = {
     }
 }
 
-class MarineConverter(BaseConverter):
+class GlobalMarineConverter(BaseConverter):
 
     def parse_zip_filename(self, srcfile):
         # Get layer id from zip filename
@@ -39,19 +39,28 @@ class MarineConverter(BaseConverter):
 
         layerid = '.'.join([i.capitalize() for i in parts])
 
+        if rcp == 'RCP26':
+            rcp = 'RCP2.6'
+        elif rcp == 'RCP45':
+            rcp = 'RCP4.5'
+        elif rcp == 'RCP85':
+            rcp = 'RCP8.5'
+        elif rcp == 'RCP60':
+            rcp = 'RCP6.0'
+
         # layerid, year
         return {
             'layerid': layerid,
             'year': LAYERINFO[period]['year'],
             'year_range': LAYERINFO[period]['period'],
-            'emsc': rcp,
+            'emsc': rcp.upper(),
         }
 
     def target_dir(self, destdir, srcfile):
         fmd = self.parse_zip_filename(srcfile)
-        emsc = fmd['emsc']
+        emsc = fmd['emsc'].replcae('.', '')
         year = fmd['year']
-        dirname = 'globalmarine_{0}_{1}'.format(emsc, year).replace(' ', '')
+        dirname = 'globalmarine_{0}_{1}'.format(emsc.lower(), year).replace(' ', '')
         root = os.path.join(destdir, dirname)
         return root
 
@@ -75,7 +84,7 @@ class MarineConverter(BaseConverter):
 
 
 def main():
-    converter = MarineConverter()
+    converter = GlobalMarineConverter()
     converter.main()
 
 
