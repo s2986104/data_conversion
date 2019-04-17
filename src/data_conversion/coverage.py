@@ -82,9 +82,9 @@ def gen_coverage_uuid(cov, identifier):
     # kind + 'id' + genre + variable names + emsc + gcm + year + month
     # if any of these identifiers change, the uuid will be different
     md = cov['bccvl:metadata']
-    # determine if Data or Dataset
+    # determine if Data or Dataset; dataset has title, data do not have.
     # TODO: better detection of Dataset or not
-    kind = 'Data' if len(cov['parameters']) == 1 else 'Dataset'
+    kind = 'Data' if len(cov['parameters']) == 1 and 'title' not in cov['bccvl:metadata'] else 'Dataset'
     parts = [
         kind, identifier, md['genre'],
         ''.join(sorted(cov['parameters'].keys())),
