@@ -1,4 +1,9 @@
 {
+    "3": {
+        "long": "3 arcsec (~90m)",
+        "short": "90m",
+        "arc": "3 arcsec"
+    },
     "9": {
         "long": "9 arcsec (~250m)",
         "short": "250m",

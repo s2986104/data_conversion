@@ -23,3 +23,5 @@ GPP_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'gpp_vars.
 MARINE_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'marine_vars.json'), 'r'))
 
 MARSPEC_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'marspec_vars.json'), 'r'))
+
+AUSTOPO_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'austopo_vars.json'), 'r'))

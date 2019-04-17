@@ -1,0 +1,14 @@
+{
+    "mrrtf": {
+        "standard_name": "mrrtf",
+        "long_name": "Multi-resolution Ridge Top Flatness",
+        "units": "MrRTF index",
+        "measure_type": "categorical"
+    },
+    "mrvbf": {
+        "standard_name": "mrvbf",
+        "long_name": "Multi-resolution Valley Bottom Flatness",
+        "units": "MrVBF index",
+        "measure_type": "categorical"
+    }
+}
