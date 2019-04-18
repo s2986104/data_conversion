@@ -24,6 +24,11 @@
         "short": "5km",
         "arc": "2.5 arcmin"
     },
+    "180": {
+        "long": "3 arcmin (~5km)",
+        "short": "5km",
+        "arc": "3 arcmin"
+    },    
     "300": {
         "long": "5 arcmin (~10km)",
         "short": "10km",
