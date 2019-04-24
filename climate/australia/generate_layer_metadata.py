@@ -29,6 +29,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
                 'climate data-sets for Australia. Australian Meteorological and '
                 'Oceanographic Journal, 58(4), 233.'
             ),
+            'coluuid': '1db9e574-2f14-11e9-b0ea-0242ac110002',
             'filter': {
                 'genre': 'DataGenreCC',
                 'resolution': None,
@@ -50,6 +51,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU '
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
+            'coluuid': '1db9e574-2f14-11e9-b0ea-0242ac110002',
             'filter': {
                 'genre': 'DataGenreFC',
                 'gcm': None,

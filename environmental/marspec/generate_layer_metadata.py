@@ -29,6 +29,7 @@ class MarspecLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/4.0'
             ),
             'external_url': 'http://marspec.weebly.com/modern-data.html',
+            'coluuid': '2d8021b7-a971-4c9b-b194-37d1ff91a965',
             'filter': {
                 'genre': 'DataGenreE'
             },
@@ -37,21 +38,23 @@ class MarspecLayerMetadata(BaseLayerMetadata):
     ]
 
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "2d8021b7-a971-4c9b-b194-37d1ff91a965",
-        "title": "Global Marine Environmental Data (MARSPEC)",
-        "description": "Global ocean bathymetry data.\n\nGeographic extent: Global\nYear range: 1955-2010\nResolution: {resolution}\nData layers: Bathymetry".format(resolution=RESOLUTIONS['300']['long']),
-        "rights": "CC-BY Attribution 4.0",
-        "landingPage": "See <a http://marspec.weebly.com/modern-data.html\">http://marspec.weebly.com/modern-data.html</a>",
-        "attribution": [
-            "Sbrocco EJ, Barber PH (2013) MARSPEC: Ocean climate layers for marine spatial ecology. Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1"
-        ],
-        "subjects": ["Current datasets"],
-        "categories": ["environmental"],
-        "BCCDataGenre": ["DataGenreE"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "2d8021b7-a971-4c9b-b194-37d1ff91a965",
+            "title": "Global Marine Environmental Data (MARSPEC)",
+            "description": "Global ocean bathymetry data.\n\nGeographic extent: Global\nYear range: 1955-2010\nResolution: {resolution}\nData layers: Bathymetry".format(resolution=RESOLUTIONS['300']['long']),
+            "rights": "CC-BY Attribution 4.0",
+            "landingPage": "See <a http://marspec.weebly.com/modern-data.html\">http://marspec.weebly.com/modern-data.html</a>",
+            "attribution": [
+                "Sbrocco EJ, Barber PH (2013) MARSPEC: Ocean climate layers for marine spatial ecology. Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1"
+            ],
+            "subjects": ["Current datasets"],
+            "categories": ["environmental"],
+            "BCCDataGenre": ["DataGenreE"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

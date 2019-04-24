@@ -29,6 +29,7 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU '
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
+            'coluuid': '1db9e574-2f14-11e9-b0ea-0242ac110002',
             'filter': {
                 'genre': 'DataGenreCC',
                 'year': None
@@ -37,19 +38,21 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
         }
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "1db9e574-2f14-11e9-b0ea-0242ac110002",
-        "title": "ACCUclim climate data",
-        "description": "A set of 7 temperature variables for the Wet Tropics area in north-east Australia\n\nGeographic extent: Wet Tropics, Australia\nYear range: 1950-2015\nResolution: {resolution}\nData layers: B01-07".format(resolution=RESOLUTIONS['9']['long']),
-        "rights": "CC-BY Attribution 3.0",
-        "landingPage": "https://researchdata.ands.org.au/accuclim-30-year-heritage-area/654267",
-        "attribution": ["Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013) Improved spatial estimates of climate predict patchier species distributions. Diversity and Distributions, 19 (9). pp. 1106-1113."],
-        "subjects": ["Current datasets"],
-        "categories": ["climate"],
-        "BCCDataGenre": ["DataGenreCC"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "1db9e574-2f14-11e9-b0ea-0242ac110002",
+            "title": "ACCUclim climate data",
+            "description": "A set of 7 temperature variables for the Wet Tropics area in north-east Australia\n\nGeographic extent: Wet Tropics, Australia\nYear range: 1950-2015\nResolution: {resolution}\nData layers: B01-07".format(resolution=RESOLUTIONS['9']['long']),
+            "rights": "CC-BY Attribution 3.0",
+            "landingPage": "https://researchdata.ands.org.au/accuclim-30-year-heritage-area/654267",
+            "attribution": ["Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013) Improved spatial estimates of climate predict patchier species distributions. Diversity and Distributions, 19 (9). pp. 1106-1113."],
+            "subjects": ["Current datasets"],
+            "categories": ["climate"],
+            "BCCDataGenre": ["DataGenreCC"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

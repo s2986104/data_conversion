@@ -30,6 +30,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': 'https://data.gov.au/dataset/ds-ga-a05f7893-0031-7506-e044-00144fdd4fa6',
+            'coluuid': 'b735a408-473e-4080-be4c-9ee3628417dc',
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*dlcdv1-class.*\.tif$')
@@ -49,6 +50,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': 'https://data.gov.au/dataset/ds-ga-a05f7893-0031-7506-e044-00144fdd4fa6',
+            'coluuid': 'b735a408-473e-4080-be4c-9ee3628417dc',
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*trend-evi.*\.tif$')
@@ -57,19 +59,21 @@ class NDLCLayerMetadata(BaseLayerMetadata):
         }
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "b735a408-473e-4080-be4c-9ee3628417dc",
-        "title": "Australia Land Cover",
-        "description": "Comprehensive land cover data for Australia.\n\nGeographic extent: Australia\nYear range: 2000-2008\nResolution: {resolution}\nData layers: Dynamic Land Cover, Enhanced Vegetation Index (min, max, mean)".format(resolution=RESOLUTIONS['9']['long']),
-        "rights": "CC-BY Attribution 3.0",
-        "landingPage": "See <a href=\"http://www.ga.gov.au/scientific-topics/earth-obs/accessing-satellite-imagery/landcover/executive-summary\">http://www.ga.gov.au/scientific-topics/earth-obs/accessing-satellite-imagery/landcover/executive-summary</a>",
-        "attribution": ["Lymburner L, Tan P, Mueller N, Thackway R, Lewis A, Thankappan M, Randall L, Islam A, Senarath U (2011) The National Dynamic Land Cover Dataset (v1.0), Geoscience Australia, Canberra."],
-        "subjects": ["Current datasets"],
-        "categories": ["environmental"],
-        "BCCDataGenre": ["DataGenreE"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "b735a408-473e-4080-be4c-9ee3628417dc",
+            "title": "Australia Land Cover",
+            "description": "Comprehensive land cover data for Australia.\n\nGeographic extent: Australia\nYear range: 2000-2008\nResolution: {resolution}\nData layers: Dynamic Land Cover, Enhanced Vegetation Index (min, max, mean)".format(resolution=RESOLUTIONS['9']['long']),
+            "rights": "CC-BY Attribution 3.0",
+            "landingPage": "See <a href=\"http://www.ga.gov.au/scientific-topics/earth-obs/accessing-satellite-imagery/landcover/executive-summary\">http://www.ga.gov.au/scientific-topics/earth-obs/accessing-satellite-imagery/landcover/executive-summary</a>",
+            "attribution": ["Lymburner L, Tan P, Mueller N, Thackway R, Lewis A, Thankappan M, Randall L, Islam A, Senarath U (2011) The National Dynamic Land Cover Dataset (v1.0), Geoscience Australia, Canberra."],
+            "subjects": ["Current datasets"],
+            "categories": ["environmental"],
+            "BCCDataGenre": ["DataGenreE"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

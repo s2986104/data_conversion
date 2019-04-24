@@ -31,6 +31,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 4.0'
                 'https://creativecommons.org/licenses/by/4.0'
             ),
+            'coluuid': 'e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8',
             'filter': {
                 'genre': 'DataGenreCC',
                 'url': re.compile(r'https://.*/.*NaR-Extent.*\.tif'),
@@ -51,6 +52,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 4.0'
                 'https://creativecommons.org/licenses/by/4.0'
             ),
+            'coluuid': 'e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8',
             'filter': {
                 'genre': 'DataGenreFC',
                 'gcm': None,
@@ -63,19 +65,21 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
         }    
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8",
-        "title": "NaRCLIM climate data",
-        "description": "Current and future climate data for south-east Australia\n\nGeographic extent: South-east Australia\nYear range: 1990-2010, 2030, 2070\nResolution: 36 arcsec (~1km)\nData layers: B01-35",
-        "rights": "CC-BY Attribution 4.0",
-        "landingPage": "See <a href=\"https://climatedata.environment.nsw.gov.au/\">NSW Climate Data Portal</a>",
-        "attribution": DATASETS[0]['acknowledgement'],
-        "subjects": ["Current datasets", "Future datasets"],
-        "categories": ["climate"],
-        "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8",
+            "title": "NaRCLIM climate data",
+            "description": "Current and future climate data for south-east Australia\n\nGeographic extent: South-east Australia\nYear range: 1990-2010, 2030, 2070\nResolution: 36 arcsec (~1km)\nData layers: B01-35",
+            "rights": "CC-BY Attribution 4.0",
+            "landingPage": "See <a href=\"https://climatedata.environment.nsw.gov.au/\">NSW Climate Data Portal</a>",
+            "attribution": DATASETS[0]['acknowledgement'],
+            "subjects": ["Current datasets", "Future datasets"],
+            "categories": ["climate"],
+            "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         resolution = os.path.basename(os.path.dirname(os.path.dirname(tiffile)))

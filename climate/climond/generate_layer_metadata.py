@@ -30,6 +30,7 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU'
                 'https://creativecommons.org/licenses/by/3.0/au'
             ),
+            'coluuid': '9a865673-a8f1-4e05-9f4d-8b950b8206b9',
             'filter': {
                 'genre': 'DataGenreCC'
             },
@@ -49,6 +50,7 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU'
                 'https://creativecommons.org/licenses/by/3.0/au'
             ),
+            'coluuid': '9a865673-a8f1-4e05-9f4d-8b950b8206b9',
             'filter': {
                 'genre': 'DataGenreFC',
                 'gcm': None,
@@ -59,19 +61,21 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
         }    
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "9a865673-a8f1-4e05-9f4d-8b950b8206b9",
-        "title": "CliMond climate data",
-        "description": "Global current and future climate data\n\nGeographic extent: Global\nYear range: 1961-1990, 2030, 2050, 2070, 2090, 2100\nResolution: {resolution}\nData layers: B01-35".format(resolution=RESOLUTIONS['600']['long']),
-        "rights": "CC-BY Attribution 3.0 AU",
-        "landingPage": "See <a href=\"https://www.climond.org/ClimateData.aspx\">CliMond Climate Data</a>",
-        "attribution": DATASETS[0]['acknowledgement'],
-        "subjects": ["Current datasets", "Future datasets"],
-        "categories": ["climate"],
-        "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "9a865673-a8f1-4e05-9f4d-8b950b8206b9",
+            "title": "CliMond climate data",
+            "description": "Global current and future climate data\n\nGeographic extent: Global\nYear range: 1961-1990, 2030, 2050, 2070, 2090, 2100\nResolution: {resolution}\nData layers: B01-35".format(resolution=RESOLUTIONS['600']['long']),
+            "rights": "CC-BY Attribution 3.0 AU",
+            "landingPage": "See <a href=\"https://www.climond.org/ClimateData.aspx\">CliMond Climate Data</a>",
+            "attribution": DATASETS[0]['acknowledgement'],
+            "subjects": ["Current datasets", "Future datasets"],
+            "categories": ["climate"],
+            "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

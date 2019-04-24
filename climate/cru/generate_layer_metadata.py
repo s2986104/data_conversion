@@ -28,6 +28,7 @@ class CRULayerMetadata(BaseLayerMetadata):
                 'doi:10.5285/4c7fdfa6-f176-4c58-acee-683d5e9d2ed5.'
             ),
             'external_url': 'http://www.ceda.ac.uk/',
+            'coluuid': '06d2de1c-559a-4e91-80ea-24aec53eca3f',
             'license': (
                 'Open Government Licence for Public Sector Information (UK) '
                 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
@@ -39,19 +40,21 @@ class CRULayerMetadata(BaseLayerMetadata):
         }
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "06d2de1c-559a-4e91-80ea-24aec53eca3f",
-        "title": "Alimatic Research Unit (CRU) climate data",
-        "description": "Global climate data from monthly observations collated by the University of East Anglia Climatic Research Unit",
-        "rights": "Open Government Licence for Public Sector Information (UK)",
-        "landingPage": "http://www.ceda.ac.uk/",
-        "attribution": [DATASETS[0]['acknowledgement']],
-        "subjects": ["Current datasets"],
-        "categories": ["climate"],
-        "BCCDataGenre": ["DataGenreCC"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "06d2de1c-559a-4e91-80ea-24aec53eca3f",
+            "title": "Alimatic Research Unit (CRU) climate data",
+            "description": "Global climate data from monthly observations collated by the University of East Anglia Climatic Research Unit",
+            "rights": "Open Government Licence for Public Sector Information (UK)",
+            "landingPage": "http://www.ceda.ac.uk/",
+            "attribution": [DATASETS[0]['acknowledgement']],
+            "subjects": ["Current datasets"],
+            "categories": ["climate"],
+            "BCCDataGenre": ["DataGenreCC"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

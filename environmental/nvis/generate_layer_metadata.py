@@ -28,6 +28,7 @@ class NSGLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/4.0'
             ),
             'external_url': 'http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system',
+            'coluuid': '33876f6c-b196-4370-9950-ab2b8e6e328e',
             'filter': {
                 'genre': 'DataGenreE',
             },
@@ -35,19 +36,21 @@ class NSGLayerMetadata(BaseLayerMetadata):
         }
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "33876f6c-b196-4370-9950-ab2b8e6e328e",
-        "title": "Australia National Vegetation Information System (NVIS)",
-        "description": "Variety and distribution of Australia's native vegetation.\n\nGeographic extent: Australia\nVersion: 4.2\nResolution: {resolution}\nData layers: Australian Major Vegetation Groups, pre-1750 and present".format(resolution=RESOLUTIONS['9']['long']),
-        "rights": "CC-BY Attribution 4.0",
-        "landingPage": "See <a href=\"http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system\">http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system</a>",
-        "attribution": ["National Vegetation Information System V4.2 (C) Australian Government Department of the Environment and Energy 2016"],
-        "subjects": ["Current datasets"],
-        "categories": ["environmental"],
-        "BCCDataGenre": ["DataGenreE"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "33876f6c-b196-4370-9950-ab2b8e6e328e",
+            "title": "Australia National Vegetation Information System (NVIS)",
+            "description": "Variety and distribution of Australia's native vegetation.\n\nGeographic extent: Australia\nVersion: 4.2\nResolution: {resolution}\nData layers: Australian Major Vegetation Groups, pre-1750 and present".format(resolution=RESOLUTIONS['9']['long']),
+            "rights": "CC-BY Attribution 4.0",
+            "landingPage": "See <a href=\"http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system\">http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system</a>",
+            "attribution": ["National Vegetation Information System V4.2 (C) Australian Government Department of the Environment and Energy 2016"],
+            "subjects": ["Current datasets"],
+            "categories": ["environmental"],
+            "BCCDataGenre": ["DataGenreE"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

@@ -30,6 +30,7 @@ class VASTLayerMetadata(BaseLayerMetadata):
                 'Content supplied by third-parties is excluded from this license.'
             ),
             'external_url': 'http://data.daff.gov.au/anrdl/metadata_files/pa_vast_g9abll0032008_11a.xml',
+            'coluuid': 'ef493e7d-1b06-403b-844a-ca771622085a',
             'filter': {
                 'genre': 'DataGenreE'
             },
@@ -37,19 +38,21 @@ class VASTLayerMetadata(BaseLayerMetadata):
         }
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "ef493e7d-1b06-403b-844a-ca771622085a",
-        "title": "Australia Vegetation Assets, States and Transitions (VAST)",
-        "description": "Classification for Australian vegetation according to its degree of anthropogenic modification from a natural state.\n\nGeographic extent: Australia\nYear range: 2008\nResolution: {resolution}\nData layers: VAST classification".format(resolution=RESOLUTIONS['30']['long']),
-        "rights": "CC-BY Attribution 3.0",
-        "landingPage": "See <a href=\"http://data.daff.gov.au/anrdl/metadata_files/pa_vast_g9abll0032008_11a.xml\">http://data.daff.gov.au/anrdl/metadata_files/pa_vast_g9abll0032008_11a.xml</a>",
-        "attribution": ["Lesslie R, Thackway R, Smith J (2010) A national-level Vegetation Assets, States and Transitions (VAST) dataset for Australia (version 2), Bureau of Rural Sciences, Canberra."],
-        "subjects": ["Current datasets"],
-        "categories": ["environmental"],
-        "BCCDataGenre": ["DataGenreE"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "ef493e7d-1b06-403b-844a-ca771622085a",
+            "title": "Australia Vegetation Assets, States and Transitions (VAST)",
+            "description": "Classification for Australian vegetation according to its degree of anthropogenic modification from a natural state.\n\nGeographic extent: Australia\nYear range: 2008\nResolution: {resolution}\nData layers: VAST classification".format(resolution=RESOLUTIONS['30']['long']),
+            "rights": "CC-BY Attribution 3.0",
+            "landingPage": "See <a href=\"http://data.daff.gov.au/anrdl/metadata_files/pa_vast_g9abll0032008_11a.xml\">http://data.daff.gov.au/anrdl/metadata_files/pa_vast_g9abll0032008_11a.xml</a>",
+            "attribution": ["Lesslie R, Thackway R, Smith J (2010) A national-level Vegetation Assets, States and Transitions (VAST) dataset for Australia (version 2), Bureau of Rural Sciences, Canberra."],
+            "subjects": ["Current datasets"],
+            "categories": ["environmental"],
+            "BCCDataGenre": ["DataGenreE"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

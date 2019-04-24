@@ -7,7 +7,7 @@ from data_conversion.coverage import gen_coverage_uuid
 from data_conversion.vocabs import RESOLUTIONS
 
 
-class AwapLayerMetadata(BaseLayerMetadata):
+class GeofabricLayerMetadata(BaseLayerMetadata):
 
     # TODO: should we rather set the id in DATASETS list?
     #       category as well?
@@ -165,7 +165,7 @@ class AwapLayerMetadata(BaseLayerMetadata):
 
 
 def main():
-    gen = AwapLayerMetadata()
+    gen = GeofabricLayerMetadata()
     gen.main()
 
 if __name__ == "__main__":

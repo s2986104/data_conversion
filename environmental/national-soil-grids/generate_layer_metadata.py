@@ -28,6 +28,7 @@ class NSGLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': 'http://www.asris.csiro.au/themes/NationalGrids.html',
+            'coluuid': '1e7eb0c57-33f1-11e9-bbab-acde48001122',
             'filter': {
                 'genre': 'DataGenreE',
             },
@@ -35,19 +36,21 @@ class NSGLayerMetadata(BaseLayerMetadata):
         }
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "1e7eb0c57-33f1-11e9-bbab-acde48001122",
-        "title": "National Soil Grids Australia",
-        "description": "Soil classification and attributes\n\nGeographic extent: Australia\nYear range: 2012\nResolution: {resolution}\nData layers: Soil classification, Bulk density, Clay content, Plant available water capacity, pH".format(resolution=RESOLUTIONS['9']['long']),
-        "rights": "CC-BY Attribution 3.0",
-        "landingPage": "See <a href=\"http://www.asris.csiro.au/themes/NationalGrids.html\">http://www.asris.csiro.au/themes/NationalGrids.html</a>",
-        "attribution": ["National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep)."],
-        "subjects": ["Current datasets"],
-        "categories": ["environmental"],
-        "BCCDataGenre": ["DataGenreE"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "1e7eb0c57-33f1-11e9-bbab-acde48001122",
+            "title": "National Soil Grids Australia",
+            "description": "Soil classification and attributes\n\nGeographic extent: Australia\nYear range: 2012\nResolution: {resolution}\nData layers: Soil classification, Bulk density, Clay content, Plant available water capacity, pH".format(resolution=RESOLUTIONS['9']['long']),
+            "rights": "CC-BY Attribution 3.0",
+            "landingPage": "See <a href=\"http://www.asris.csiro.au/themes/NationalGrids.html\">http://www.asris.csiro.au/themes/NationalGrids.html</a>",
+            "attribution": ["National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep)."],
+            "subjects": ["Current datasets"],
+            "categories": ["environmental"],
+            "BCCDataGenre": ["DataGenreE"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

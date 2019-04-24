@@ -30,6 +30,7 @@ class TASClimLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU'
                 'https://creativecommons.org/licenses/by/3.0/au'
             ),
+            'coluuid': 'f33a8644-7d84-4574-a774-1bbf50da046e',
             'filter': {
                 'genre': 'DataGenreCC',
                 'gcm': None,
@@ -52,6 +53,7 @@ class TASClimLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU'
                 'https://creativecommons.org/licenses/by/3.0/au'
             ),
+            'coluuid': 'f33a8644-7d84-4574-a774-1bbf50da046e',
             'filter': {
                 'genre': 'DataGenreFC',
                 'gcm': None,
@@ -62,19 +64,21 @@ class TASClimLayerMetadata(BaseLayerMetadata):
         }    
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "f33a8644-7d84-4574-a774-1bbf50da046e",
-        "title": "Climate Futures Tasmania (CFT) climate data",
-        "description": "Fine-scale current and future climate data for Tasmania\n\nGeographic extent: Tasmania (Australia)\nYear range: 1965-2100\nResolution: 6 arcmin (~12 km)\nData layers: B01-19",
-        "rights": "CC-BY Attribution 3.0 AU",
-        "landingPage": "See <a href=\"http://www.dpac.tas.gov.au/__data/assets/pdf_file/0016/151126/CFT_-_Climate_Modelling_Summary.pdf\">Climate Futures for Tasmania: climate modelling. Antarctic Climate and Ecosystems Cooperative Research Centre, Hobart, Tasmania</a>",
-        "attribution": [DATASETS[0]['acknowledgement']],
-        "subjects": ["Current datasets", "Future datasets"],
-        "categories": ["climate"],
-        "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "f33a8644-7d84-4574-a774-1bbf50da046e",
+            "title": "Climate Futures Tasmania (CFT) climate data",
+            "description": "Fine-scale current and future climate data for Tasmania\n\nGeographic extent: Tasmania (Australia)\nYear range: 1965-2100\nResolution: 6 arcmin (~12 km)\nData layers: B01-19",
+            "rights": "CC-BY Attribution 3.0 AU",
+            "landingPage": "See <a href=\"http://www.dpac.tas.gov.au/__data/assets/pdf_file/0016/151126/CFT_-_Climate_Modelling_Summary.pdf\">Climate Futures for Tasmania: climate modelling. Antarctic Climate and Ecosystems Cooperative Research Centre, Hobart, Tasmania</a>",
+            "attribution": [DATASETS[0]['acknowledgement']],
+            "subjects": ["Current datasets", "Future datasets"],
+            "categories": ["climate"],
+            "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {

@@ -34,6 +34,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/4.0'
             ),
             'external_url': 'http://www.bio-oracle.org/',
+            'coluuid': '12aeac92c-77ff-4b44-8ae5-b26cb1c7ad58',
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*current_2007_Surface.{lid}.*\.tif$'.format(lid=i[1]))
@@ -73,6 +74,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/4.0'
             ),
             'external_url': 'http://www.bio-oracle.org/',
+            'coluuid': '12aeac92c-77ff-4b44-8ae5-b26cb1c7ad58',
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*rcp.*_Surface.{lid}.*\.tif$'.format(lid=i[1])),
@@ -90,22 +92,24 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         ]
     ]
 
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "12aeac92c-77ff-4b44-8ae5-b26cb1c7ad58",
-        "title": "Global Marine Environmental Data (Bio-ORACLE)",
-        "description": "Bio-ORACLE, v2: a suite of geophysical, biotic and environmental data layers for surface waters of marine realms for current and future time periods.\n\nGeographic extent: Global\nYear range: 2000-2014, 2040-2050, 2090-2100\nResolution: {resolution}\nData layers: 280 layers across 26 datasets, including water temperature, salinity, currents velocity and chlorophyll A concentration".format(resolution=RESOLUTIONS['300']['long']),
-        "rights": "CC-BY Attribution 4.0",
-        "landingPage": "See <a http://www.bio-oracle.org/\">http://www.bio-oracle.org/</a>",
-        "attribution": [
-            "Tyberghein L, Verbruggen H, Pauly K, Troupin C, Mineur F, De Clerck O (2012) Bio-ORACLE: A global environmental dataset for marine species distribution modelling. Global Ecology and Biogeography, 21: 272–281.",
-            "Assis J, Tyberghein L, Bosh S, Verbruggen H, Serrão EA, De Clerck O (2017) Bio-ORACLE v2.0: Extending marine data layers for bioclimatic modelling. Global Ecology and Biogeography, 27: 277-284."
-        ],
-        "subjects": ["Current datasets", "Future datasets"],
-        "categories": ["environmental"],
-        "BCCDataGenre": ["DataGenreE"],
-        "datasets": [],
-    }
+    COLLECTION = [
+        {
+            "_type": "Collection",
+            "uuid": "12aeac92c-77ff-4b44-8ae5-b26cb1c7ad58",
+            "title": "Global Marine Environmental Data (Bio-ORACLE)",
+            "description": "Bio-ORACLE, v2: a suite of geophysical, biotic and environmental data layers for surface waters of marine realms for current and future time periods.\n\nGeographic extent: Global\nYear range: 2000-2014, 2040-2050, 2090-2100\nResolution: {resolution}\nData layers: 280 layers across 26 datasets, including water temperature, salinity, currents velocity and chlorophyll A concentration".format(resolution=RESOLUTIONS['300']['long']),
+            "rights": "CC-BY Attribution 4.0",
+            "landingPage": "See <a http://www.bio-oracle.org/\">http://www.bio-oracle.org/</a>",
+            "attribution": [
+                "Tyberghein L, Verbruggen H, Pauly K, Troupin C, Mineur F, De Clerck O (2012) Bio-ORACLE: A global environmental dataset for marine species distribution modelling. Global Ecology and Biogeography, 21: 272–281.",
+                "Assis J, Tyberghein L, Bosh S, Verbruggen H, Serrão EA, De Clerck O (2017) Bio-ORACLE v2.0: Extending marine data layers for bioclimatic modelling. Global Ecology and Biogeography, 27: 277-284."
+            ],
+            "subjects": ["Current datasets", "Future datasets"],
+            "categories": ["environmental"],
+            "BCCDataGenre": ["DataGenreE"],
+            "datasets": [],
+        }
+    ]
 
     def parse_filename(self, tiffile):
         return {
