@@ -25,3 +25,5 @@ MARINE_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'marine
 MARSPEC_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'marspec_vars.json'), 'r'))
 
 AUSTOPO_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'austopo_vars.json'), 'r'))
+
+GEOFABRIC_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'geofabric_vars.json'), 'r'))

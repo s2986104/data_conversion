@@ -375,6 +375,7 @@ class BaseLayerMetadata(object):
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 coverage['bccvl:metadata'] = md
                 coverage['bccvl:metadata']['uuid'] = self.cov_uuid(coverage)
+                coverage['bccvl:metadata']['coluuid'] = dsdef2['coluuid']
                 datasets.append(coverage)
 
         return datasets
@@ -419,11 +420,13 @@ class BaseLayerMetadata(object):
         # TODO: only one collection so far
         with open(os.path.join(opts.srcdir, 'collection.json'), 'w') as mdfile:
             # add datasets
-            collection = copy.deepcopy(self.COLLECTION)
-            collection['datasets'] = []
-            for ds in datasets:
-                collection['datasets'].append({
-                    "uuid": ds['bccvl:metadata']['uuid'],
-                    "title": ds['bccvl:metadata']['title']
-                })
-            json.dump([collection], mdfile, indent=2)
+            collections = copy.deepcopy(self.COLLECTION)
+            for collection in collections:
+                collection['datasets'] = []
+                for ds in datasets:
+                    if ds['bccvl:metadata']['coluuid'] == collection['uuid']:
+                        collection['datasets'].append({
+                            "uuid": ds['bccvl:metadata']['uuid'],
+                            "title": ds['bccvl:metadata']['title']
+                        })
+            json.dump(collections, mdfile, indent=2)
