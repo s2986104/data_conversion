@@ -1,0 +1,400 @@
+
+type: "CollectionList"
+collections:
+  - _id: "accuclim_layers"
+    type: "Collection"
+    uuid: "1db9e574-2f14-11e9-b0ea-0242ac110002"
+    title: "ACCUclim climate data"
+    description: |-
+      A set of 7 temperature variables for the Wet Tropics area in north-east Australia
+
+      Geographic extent: Wet Tropics, Australia
+      Year range: 1950-2015
+      Resolution: 9 arcsec (~250m)
+      Data layers: B01-07
+    categories: ["climate"]
+    rights":
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage: "https://researchdata.ands.org.au/accuclim-30-year-heritage-area/654267"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013)
+          Improved spatial estimates of climate predict patchier species distributions.
+          Diversity and Distributions, 19 (9). pp. 1106-1113.
+    subjects: ["Current datasets"]
+
+  - _id: "anuclim_layers"
+    type: "Collection"
+    uuid: "d75094b7-0eac-4176-accb-d5a23f5d4b4d"
+    title: "ANUclim climate data"
+    description: |-
+      Monthly climate data for the Australian continent
+
+      Geographic extent: Australia
+      Year range: 1976-2005
+      Resolution: 30 arcsec (~1km)
+      Data layers: Minimum/Maximum Temperature, Precipitation, Evaporation, Vapour Pressure
+    categories: ["climate"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPage: "https://researchdata.ands.org.au/anuclimate-collection/983248"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Hutchinson M, Kesteven J, Xu T (2014) Monthly climate data: ANUClimate 1.0,
+          0.01 degree, Australian Coverage, 1976-2005. Australian National University, 
+          Canberra, Australia. Made available by the Ecosystem Modelling and Scaling 
+          Infrastructure (eMAST, http://www.emast.org.au) of the Terrestrial Ecosystem 
+          Research Network (TERN, http://www.tern.org.au).
+    subjects: ["Current datasets"]
+
+  - _id: "australia_layers"
+    _type: "Collection"
+    uuid: "1db9e574-2f14-11e9-b0ea-0242ac110002"
+    title: "Australia current and future climate data"
+    description: |-
+      Current and future climate data for the Australian continent
+
+      Geographic extent: Australia
+      Year range: 1976-2005, 2015-2085
+
+      Resolution: 30 arcsec (~1 km), 2.5 arcmin (~5 km)
+      Data layers: B01-19
+    categories: ["climate"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage: "https://research.jcu.edu.au/researchdata/default/detail/a06a78f553e1452bcf007231f6204f04/"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Vanderwal, Jeremy. (2012). All future climate layers for Australia - 5km
+          resolution. James Cook University.
+    subjects: ["Current datasets", "Future datasets"]
+
+  - _id: "climond_layers"
+    type: "Collection"
+    uuid: "9a865673-a8f1-4e05-9f4d-8b950b8206b9"
+    title: "CliMond climate data"
+    description: |-
+      Global current and future climate data
+
+      Geographic extent: Global
+      Year range: 1961-1990, 2030, 2050, 2070, 2090, 2100
+      Resolution: 10 arcmin (~20km)
+      Data layers: B01-35
+    categories: ["climate"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0 AU"
+    landingPage: "https://www.climond.org/ClimateData.aspx"
+    attributions: 
+      - type: "Citation"
+        value: >-
+          Kriticos, D.J., B.L. Webber, A. Leriche, N. Ota, I. Macadam, J. Bathols
+          & J.K. Scott.  2012.  CliMond: global high-resolution historical and
+          future scenario climate surfaces for bioclimatic modelling.  Methods
+          in Ecology & Evolution, 3(1), 53 - 64.
+    subjects: ["Current datasets", "Future datasets"]
+
+  - _id: "cruclim_layers"
+    type: "Collection"
+    uuid: "06d2de1c-559a-4e91-80ea-24aec53eca3f"
+    title: "Alimatic Research Unit (CRU) climate data"
+    description: |-
+      Global climate data from monthly observations collated by the University of East Anglia Climatic Research Unit
+    categories: ["climate"]
+    rights:
+      - type: "License"
+        value: "Open Government Licence for Public Sector Information (UK)"
+    landingPage: "http://www.ceda.ac.uk/"
+    attributions:
+      - type: "Citation"
+        value: >-
+          University of East Anglia Climatic Research Unit; Harris, I.C.;
+          Jones, P.D. (2015): CRU TS3.23: Climatic Research Unit (CRU)
+          Time-Series (TS) Version 3.23 of High Resolution Gridded Data
+          of Month-by-month Variation in Climate (Jan. 1901- Dec. 2014).
+          Centre for Environmental Data Analysis, 09 November 2015.
+          doi:10.5285/4c7fdfa6-f176-4c58-acee-683d5e9d2ed5.
+    subjects: ["Current datasets"]
+
+  - _id: "narclim_layers"
+    type: "Collection"
+    uuid: "e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8"
+    title: "NaRCLIM climate data"
+    description: |-
+      Current and future climate data for south-east Australia
+
+      Geographic extent: South-east Australia
+      Year range: 1990-2010, 2030, 2070
+      Resolution: 36 arcsec (~1km)
+      Data layers: B01-35
+    categories: ["climate"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPage:
+      href: "https://climatedata.environment.nsw.gov.au"
+      label: NSW Climate Data Portal
+    attributions:
+      - type: "Citation"
+        value: >-
+          Evans JP, Ji F, Lee C, Smith P, Argueso D and Fita L (2014) Design of
+          a regional climate modelling projection ensemble experiment Geosci.
+          Model Dev., 7, 621-629
+    subjects: ["Current datasets", "Future datasets"]
+
+  - _id: "tasclim_layers"
+    _type: "Collection"
+    uuid: "f33a8644-7d84-4574-a774-1bbf50da046e"
+    title: "Climate Futures Tasmania (CFT) climate data"
+    description: |-
+      Fine-scale current and future climate data for Tasmania
+
+      Geographic extent: Tasmania (Australia)
+      Year range: 1965-2100
+      Resolution: 6 arcmin (~12 km)
+      Data layers: B01-19
+    categories: ["climate"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0 AU"
+    landingPage:
+      href: "http://www.dpac.tas.gov.au/__data/assets/pdf_file/0016/151126/CFT_-_Climate_Modelling_Summary.pdf"
+      label: "Climate Futures for Tasmania: climate modelling. Antarctic Climate and Ecosystems Cooperative Research Centre, Hobart, Tasmania"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Corney, S. P., J. J. Katzfey, J. L. McGregor, M. R. Grose, J. C. Bennett
+          C. J. White, G. K. Holz, S. Gaynor, and N. L. Bindoff, 2010: Climate
+          Futures for Tasmania: climate modelling. Antarctic Climate and Ecosystems
+          Cooperative Research Centre, Hobart, Tasmania.
+    subjects: ["Current datasets", "Future datasets"]
+
+  - _id: "aus-topography_layers"
+    type: "Collection"
+    uuid: "76f6b00a-706b-460b-98ac-67af601b348d"
+    title: "Australia Topography"
+    description: |-
+      Topography indices identifying areas of deposited material or high flat areas in Australia.
+
+      Geographic extent: Australia
+      Year range: 2000-2000
+      Resolution: 3 arcsec (~90m)
+      Data layers: Multi-resolution Ridge Top Flatness, Multi-resolution Valley Bottom Flatness
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage:
+      href: "https://data.csiro.au/dap/"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Gallant J, Dowling T, Austin J (2013) Multi-resolution Ridge Top Flatness (MrRTF, 3" resolution).
+          v1. CSIRO. Data Collection. https://doi.org/10.4225/08/512EEA6332EEB
+      - type: "Citation"
+        value: >-
+          Gallant J, Dowling T, Austin J (2013) Multi-resolution Valley Bottom Flatness (MrRTF, 3" resolution).
+          v1. CSIRO. Data Collection. https://doi.org/10.4225/08/512EF27AC3888
+    subjects: ["Current datasets"]
+
+  - _id: "global_marine_layers"
+    type: "Collection"
+    uuid: "12aeac92c-77ff-4b44-8ae5-b26cb1c7ad58"
+    title": "Global Marine Environmental Data (Bio-ORACLE)"
+    description: |-
+      Bio-ORACLE, v2: a suite of geophysical, biotic and environmental data layers for surface waters of marine realms for current and future time periods.
+
+      Geographic extent: Global
+      Year range: 2000-2014, 2040-2050, 2090-2100
+      Resolution: 6 arcmin (~12km)
+      Data layers: 280 layers across 26 datasets, including water temperature, salinity, currents velocity and chlorophyll A concentration
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPage:
+      href: "http://www.bio-oracle.org/"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Tyberghein L, Verbruggen H, Pauly K, Troupin C, Mineur F, De Clerck O (2012)
+          Bio-ORACLE: A global environmental dataset for marine species distribution modelling.
+          Global Ecology and Biogeography, 21: 272–281.
+      - type: "Citation"
+        value: >-
+          Assis J, Tyberghein L, Bosh S, Verbruggen H, Serrão EA, De Clerck O (2017)
+          Bio-ORACLE v2.0: Extending marine data layers for bioclimatic modelling.
+          Global Ecology and Biogeography, 27: 277-284.
+    subjects: ["Current datasets", "Future datasets"]
+
+  - _id: "gpp_layers"
+    type: "Collection"
+    uuid: "f20868f0-f10d-4172-a532-afd6e1ba38e1"
+    title: "Australia Gross Primary Productivity"
+    description: |-
+      Australia Gross Primary Productivity
+
+      Geographic extent: Australia
+      Year range: 2000-2007
+      Resolution: 9 arcsec (~250m)
+      Data layers: Annual mean, minimum and maximum Gross Primary Productivity, long-term average and CoV
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage: {}
+    attribution: []
+    subjects: ["Current datasets"]
+
+  - _id: "marspec_layers"
+    type: "Collection"
+    uuid: "2d8021b7-a971-4c9b-b194-37d1ff91a965"
+    title: "Global Marine Environmental Data (MARSPEC)"
+    description: |-
+      Global ocean bathymetry data.
+
+      Geographic extent: Global
+      Year range: 1955-2010
+      Resolution: 5 arcmin (~10km)
+      Data layers: Bathymetry
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPage:
+      href: "http://marspec.weebly.com/modern-data.html"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Sbrocco EJ, Barber PH (2013)
+          MARSPEC: Ocean climate layers for marine spatial ecology.
+          Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1
+    subjects: ["Current datasets"]
+
+  - _id: "national-dynamic-land-cover_layers"
+    type: "Collection"
+    uuid: "b735a408-473e-4080-be4c-9ee3628417dc"
+    title: "Australia Land Cover"
+    description: |-
+      Comprehensive land cover data for Australia.
+
+      Geographic extent: Australia
+      Year range: 2000-2008
+      Resolution: 9 arcsec (~250m)
+      Data layers: Dynamic Land Cover, Enhanced Vegetation Index (min, max, mean)
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage:
+      href: "http://www.ga.gov.au/scientific-topics/earth-obs/accessing-satellite-imagery/landcover/executive-summary"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Lymburner L, Tan P, Mueller N, Thackway R, Lewis A, Thankappan M, Randall L, Islam A, Senarath U (2011)
+          The National Dynamic Land Cover Dataset (v1.0), Geoscience Australia, Canberra.
+    subjects: ["Current datasets"]
+
+  - _id: "national_soil_grids_layers"
+    type: "Collection"
+    uuid: "1e7eb0c57-33f1-11e9-bbab-acde48001122"
+    title: "National Soil Grids Australia"
+    description: |-
+      Soil classification and attributes
+
+      Geographic extent: Australia
+      Year range: 2012
+      Resolution: 9 arcsec (~250m)
+      Data layers: Soil classification, Bulk density, Clay content, Plant available water capacity, pH
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage:
+      href: "http://www.asris.csiro.au/themes/NationalGrids.html"
+    attributions:
+      - type: "Citation"
+        value: >-
+          National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP,
+          endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep).
+    subjects: ["Current datasets"]
+
+  - _id: "nvis_layers"
+    type: "Collection"
+    uuid: "33876f6c-b196-4370-9950-ab2b8e6e328e"
+    title: "Australia National Vegetation Information System (NVIS)"
+    description: |-
+      Variety and distribution of Australia's native vegetation.
+
+      Geographic extent: Australia
+      Version: 4.2
+      Resolution: 9 arcsec (~250m)
+      Data layers: Australian Major Vegetation Groups, pre-1750 and present
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPage:
+      href: "http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system"
+    attributions:
+      - type: "Citation"
+        value: National Vegetation Information System V4.2 (C) Australian Government Department of the Environment and Energy 2016
+    subjects: ["Current datasets"]
+
+  - _id: "vast_layers"
+    type: "Collection"
+    uuid: "ef493e7d-1b06-403b-844a-ca771622085a"
+    title: "Australia Vegetation Assets, States and Transitions (VAST)"
+    description: |-
+      Classification for Australian vegetation according to its degree of anthropogenic modification from a natural state.
+
+      Geographic extent: Australia
+      Year range: 2008
+      Resolution: 30 arcsec (~1km)
+      Data layers: VAST classification
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage:
+      href: "http://data.daff.gov.au/anrdl/metadata_files/pa_vast_g9abll0032008_11a.xml"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Lesslie R, Thackway R, Smith J (2010)
+          A national-level Vegetation Assets, States and Transitions (VAST) dataset for Australia (version 2),
+          Bureau of Rural Sciences, Canberra.
+    subjects: ["Current datasets"]
+
+  - _id: "awap_layers"
+    type: "Collection"
+    uuid: "88b335a1-ce16-46a2-aa7c-5b1b8049ecd4"
+    title: "Australian Water Availability Project"
+    description: |-
+      Annual data about the state and trend of the terrestrial water balance in Australia.
+
+      Geographic extent: Australia
+      Year range: 1900-2013
+      Resolution: 3 arcmin (~5 km)
+      Data layers: 36 layers including runoff, evaporation, soil moisture and heat flux
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage:
+      href: "http://www.csiro.au/awap/"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Raupach MR, PR Briggs, V Haverd, EA King, M Paget, CM Trudinger (2009),
+          Australian Water Availability Project (AWAP):
+          CSIRO Marine and Atmospheric Research Component:
+          Final Report for Phase 3. CAWCR Technical Report No. 013. 67 pp.
+    subjects: ["Current datasets"]
+

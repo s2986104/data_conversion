@@ -2,12 +2,12 @@
 import os.path
 
 from data_conversion.converter import BaseLayerMetadata
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class NSGLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'substrate'
+    CATEGORIES = ['environmental', 'substrate']
     DATASET_ID = 'national_soil_grids'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -28,27 +28,11 @@ class NSGLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': 'http://www.asris.csiro.au/themes/NationalGrids.html',
-            'coluuid': '1e7eb0c57-33f1-11e9-bbab-acde48001122',
+            'partof': [collection_by_id('national_soil_grids_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
             },
             'aggs': [],
-        }
-    ]
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "1e7eb0c57-33f1-11e9-bbab-acde48001122",
-            "title": "National Soil Grids Australia",
-            "description": "Soil classification and attributes\n\nGeographic extent: Australia\nYear range: 2012\nResolution: {resolution}\nData layers: Soil classification, Bulk density, Clay content, Plant available water capacity, pH".format(resolution=RESOLUTIONS['9']['long']),
-            "rights": "CC-BY Attribution 3.0",
-            "landingPage": "See <a href=\"http://www.asris.csiro.au/themes/NationalGrids.html\">http://www.asris.csiro.au/themes/NationalGrids.html</a>",
-            "attribution": ["National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep)."],
-            "subjects": ["Current datasets"],
-            "categories": ["environmental"],
-            "BCCDataGenre": ["DataGenreE"],
-            "datasets": [],
         }
     ]
 

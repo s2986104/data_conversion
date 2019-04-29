@@ -3,12 +3,12 @@ import os.path
 import re
 
 from data_conversion.converter import BaseLayerMetadata
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class AusTopographyLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'topography'
+    CATEGORIES = ['environmental', 'topography']
     DATASET_ID = 'aus-topography'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -28,7 +28,7 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': 'https://data.csiro.au/dap/landingpage?pid=csiro:5681',
-            'coluuid': '76f6b00a-706b-460b-98ac-67af601b348d',
+            'partof': [collection_by_id('aus-topography_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*mrvbf.*\.tif$')
@@ -46,32 +46,13 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': 'https://data.csiro.au/dap/landingpage?pid=csiro:6239',
-            'coluuid': '76f6b00a-706b-460b-98ac-67af601b348d',
+            'partof': [collection_by_id('aus-topography_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*mrrtf.*\.tif$')
             },
             'aggs': [],
         }        
-    ]
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "76f6b00a-706b-460b-98ac-67af601b348d",
-            "title": "Australia Topography",
-            "description": "Topography indices identifying areas of deposited material or high flat areas in Australia.\n\nGeographic extent: Australia\nYear range: 2000-2000\nResolution: {resolution}\nData layers: Multi-resolution Ridge Top Flatness, Multi-resolution Valley Bottom Flatness".format(resolution=RESOLUTIONS['3']['long']),
-            "rights": "CC-BY Attribution 3.0",
-            "landingPage": "See <a href=\"https://data.csiro.au/dap/\">https://data.csiro.au/dap/</a>",
-            "attribution": [
-                'Gallant J, Dowling T, Austin J (2013) Multi-resolution Ridge Top Flatness (MrRTF, 3" resolution). v1. CSIRO. Data Collection. https://doi.org/10.4225/08/512EEA6332EEB',
-                'Gallant J, Dowling T, Austin J (2013) Multi-resolution Valley Bottom Flatness (MrRTF, 3" resolution). v1. CSIRO. Data Collection. https://doi.org/10.4225/08/512EF27AC3888'
-            ],
-            "subjects": ["Current datasets"],
-            "categories": ["environmental"],
-            "BCCDataGenre": ["DataGenreE"],
-            "datasets": [],
-        }
     ]
 
     def parse_filename(self, tiffile):

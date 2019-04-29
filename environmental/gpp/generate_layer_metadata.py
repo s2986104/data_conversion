@@ -3,16 +3,16 @@ import os.path
 import re
 
 from data_conversion.converter import BaseLayerMetadata
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class GPPLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'vegetation'
+    CATEGORIES = ['environmental', 'vegetation']
     DATASET_ID = 'gpp'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'gpp'
+        'gpp_layers'
     )
 
     DATASETS = [
@@ -31,7 +31,7 @@ class GPPLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': '',
-            'coluuid': 'f20868f0-f10d-4172-a532-afd6e1ba38e1',
+            'partof': [collection_by_id('gpp_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*gpp_maxmin_2000_2007.*\.tif$')
@@ -51,29 +51,13 @@ class GPPLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': '',
-            'coluuid': 'f20868f0-f10d-4172-a532-afd6e1ba38e1',
+            'partof': [collection_by_id('gpp_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*gpp_year_means2000_2007.*_gppmean\.tif$'),
                 'year': None
             },
             'aggs': [],
-        }
-    ]
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "f20868f0-f10d-4172-a532-afd6e1ba38e1",
-            "title": "Australia Gross Primary Productivity",
-            "description": "Australia Gross Primary Productivity\n\nGeographic extent: Australia\nYear range: 2000-2007\nResolution: {resolution}\nData layers: Annual mean, minimum and maximum Gross Primary Productivity, long-term average and CoV".format(resolution=RESOLUTIONS['9']['long']),
-            "rights": "CC-BY Attribution 3.0",
-            "landingPage": "",
-            "attribution": [""],
-            "subjects": ["Current datasets"],
-            "categories": ["environmental"],
-            "BCCDataGenre": ["DataGenreE"],
-            "datasets": [],
         }
     ]
 

@@ -3,16 +3,16 @@ import os.path
 import re
 
 from data_conversion.converter import BaseLayerMetadata
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class MarspecLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'topography'
+    CATEGORIES = ['environmental', 'topography']
     DATASET_ID = 'marspec'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'marspec'
+        'marspec_layers'
     )
 
     DATASETS = [
@@ -29,30 +29,11 @@ class MarspecLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/4.0'
             ),
             'external_url': 'http://marspec.weebly.com/modern-data.html',
-            'coluuid': '2d8021b7-a971-4c9b-b194-37d1ff91a965',
+            'partof': [collection_by_id('marspec_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE'
             },
             'aggs': [],
-        }
-    ]
-
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "2d8021b7-a971-4c9b-b194-37d1ff91a965",
-            "title": "Global Marine Environmental Data (MARSPEC)",
-            "description": "Global ocean bathymetry data.\n\nGeographic extent: Global\nYear range: 1955-2010\nResolution: {resolution}\nData layers: Bathymetry".format(resolution=RESOLUTIONS['300']['long']),
-            "rights": "CC-BY Attribution 4.0",
-            "landingPage": "See <a http://marspec.weebly.com/modern-data.html\">http://marspec.weebly.com/modern-data.html</a>",
-            "attribution": [
-                "Sbrocco EJ, Barber PH (2013) MARSPEC: Ocean climate layers for marine spatial ecology. Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1"
-            ],
-            "subjects": ["Current datasets"],
-            "categories": ["environmental"],
-            "BCCDataGenre": ["DataGenreE"],
-            "datasets": [],
         }
     ]
 

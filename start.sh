@@ -1,6 +1,7 @@
 #!/bin/bash
 
-docker build --no-cache -t data_conversion .
+#docker build --no-cache -t data_conversion .
+docker build -t data_conversion .
 
 docker run --rm -it -v $(PWD):/data_conversion -v /Volumes/USB/datasets:/mnt/collection/datasets data_conversion bash
 

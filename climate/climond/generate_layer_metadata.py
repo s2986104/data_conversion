@@ -2,12 +2,12 @@
 import os.path
 
 from data_conversion.converter import BaseLayerMetadata
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class CLIMONDLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'climate'
+    CATEGORIES = ['environmental', 'climate']
     DATASET_ID = 'climond'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -30,7 +30,7 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU'
                 'https://creativecommons.org/licenses/by/3.0/au'
             ),
-            'coluuid': '9a865673-a8f1-4e05-9f4d-8b950b8206b9',
+            'partof': [collection_by_id('climond_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC'
             },
@@ -50,7 +50,7 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU'
                 'https://creativecommons.org/licenses/by/3.0/au'
             ),
-            'coluuid': '9a865673-a8f1-4e05-9f4d-8b950b8206b9',
+            'partof': [collection_by_id('climond_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreFC',
                 'gcm': None,
@@ -59,22 +59,6 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
             },
             'aggs': [], 
         }    
-    ]
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "9a865673-a8f1-4e05-9f4d-8b950b8206b9",
-            "title": "CliMond climate data",
-            "description": "Global current and future climate data\n\nGeographic extent: Global\nYear range: 1961-1990, 2030, 2050, 2070, 2090, 2100\nResolution: {resolution}\nData layers: B01-35".format(resolution=RESOLUTIONS['600']['long']),
-            "rights": "CC-BY Attribution 3.0 AU",
-            "landingPage": "See <a href=\"https://www.climond.org/ClimateData.aspx\">CliMond Climate Data</a>",
-            "attribution": DATASETS[0]['acknowledgement'],
-            "subjects": ["Current datasets", "Future datasets"],
-            "categories": ["climate"],
-            "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
-            "datasets": [],
-        }
     ]
 
     def parse_filename(self, tiffile):

@@ -3,13 +3,13 @@ import os.path
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class AustraliaLayerMetadata(BaseLayerMetadata):
 
     # all datasets are in climate category
-    CATEGORY = 'climate'
+    CATEGORIES = ['environmental', 'climate']
     # TODO: should we rather set the id in DATASETS list?
     #       category as well?
     DATASET_ID = 'australia-{res}'
@@ -29,7 +29,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
                 'climate data-sets for Australia. Australian Meteorological and '
                 'Oceanographic Journal, 58(4), 233.'
             ),
-            'coluuid': '1db9e574-2f14-11e9-b0ea-0242ac110002',
+            'partof': [collection_by_id('australia_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC',
                 'resolution': None,
@@ -51,7 +51,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 3.0 AU '
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
-            'coluuid': '1db9e574-2f14-11e9-b0ea-0242ac110002',
+            'partof': [collection_by_id('australia_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreFC',
                 'gcm': None,
@@ -62,25 +62,6 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             'aggs': [],
         }
     ]
-
-    COLLECTION = {
-        "_type": "Collection",
-        "uuid": "1db9e574-2f14-11e9-b0ea-0242ac110002",
-        "title": "Australia current and future climate data",
-        "description": (
-            "Current and future climate data for the Australian continent\n\n"
-            "Geographic extent: Australia\nYear range: 1976-2005, 2015-2085\n"
-            "Resolution: 30 arcsec (~1 km), 2.5 arcmin (~5 km)\nData layers: B01-19"
-        ),
-        "rights": "CC-BY Attribution 3.0",
-        "landingPage": "See <a href=\"https://research.jcu.edu.au/researchdata/default/detail/a06a78f553e1452bcf007231f6204f04/\">https://research.jcu.edu.au/researchdata/default/detail/a06a78f553e1452bcf007231f6204f04/</a>",
-        "attribution": ["Vanderwal, Jeremy. (2012). All future climate layers for Australia - 5km resolution. James Cook University."],
-        "subjects": ["Current datasets", "Future datasets"],
-        "categories": ["climate"],
-        "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
-        # will be created/filled by metadata generator
-        "datasets": [],
-    }
 
     def parse_filename(self, tiffile):
         RESOLUTION_MAP = {  # udunits arc_minute / arcmin, UCUM/UOM: name: min_arc, symb: '

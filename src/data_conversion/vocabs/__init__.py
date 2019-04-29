@@ -2,6 +2,7 @@ import json
 import os.path
 
 from .climate import GCMS  # noqa
+from .collections import COLLECTIONS, collection_by_id # noqa
 from .geotiff import PREDICTORS  # noqa
 
 from .var_defs import (

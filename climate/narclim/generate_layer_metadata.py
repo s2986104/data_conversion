@@ -4,12 +4,12 @@ import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class NaRCLIMLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'climate'
+    CATEGORIES = ['environmental', 'climate']
     DATASET_ID = 'narclim-{res}'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -31,7 +31,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 4.0'
                 'https://creativecommons.org/licenses/by/4.0'
             ),
-            'coluuid': 'e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8',
+            'partof': [collection_by_id('narclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC',
                 'url': re.compile(r'https://.*/.*NaR-Extent.*\.tif'),
@@ -52,7 +52,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
                 'Creative Commons Attribution 4.0'
                 'https://creativecommons.org/licenses/by/4.0'
             ),
-            'coluuid': 'e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8',
+            'partof': [collection_by_id('narclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreFC',
                 'gcm': None,
@@ -63,22 +63,6 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
             },
             'aggs': [], 
         }    
-    ]
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "e7824f09-f1fd-4cbd-80dd-87ce80ba2ae8",
-            "title": "NaRCLIM climate data",
-            "description": "Current and future climate data for south-east Australia\n\nGeographic extent: South-east Australia\nYear range: 1990-2010, 2030, 2070\nResolution: 36 arcsec (~1km)\nData layers: B01-35",
-            "rights": "CC-BY Attribution 4.0",
-            "landingPage": "See <a href=\"https://climatedata.environment.nsw.gov.au/\">NSW Climate Data Portal</a>",
-            "attribution": DATASETS[0]['acknowledgement'],
-            "subjects": ["Current datasets", "Future datasets"],
-            "categories": ["climate"],
-            "BCCDataGenre": ["DataGenreCC", "DataGenreFC"],
-            "datasets": [],
-        }
     ]
 
     def parse_filename(self, tiffile):

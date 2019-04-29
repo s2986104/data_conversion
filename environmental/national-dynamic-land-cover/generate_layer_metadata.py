@@ -3,16 +3,16 @@ import os.path
 import re
 
 from data_conversion.converter import BaseLayerMetadata
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class NDLCLayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'landcover'
+    CATEGORIES = ['environmental', 'landcover']
     DATASET_ID = 'national-dynamic-land-cover'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
-        'national-dynamic-land-cover'
+        'national-dynamic-land-cover_layers'
     )
 
     DATASETS = [
@@ -30,7 +30,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': 'https://data.gov.au/dataset/ds-ga-a05f7893-0031-7506-e044-00144fdd4fa6',
-            'coluuid': 'b735a408-473e-4080-be4c-9ee3628417dc',
+            'partof': [collection_by_id('national-dynamic-land-cover_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*dlcdv1-class.*\.tif$')
@@ -50,28 +50,12 @@ class NDLCLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/3.0/au'
             ),
             'external_url': 'https://data.gov.au/dataset/ds-ga-a05f7893-0031-7506-e044-00144fdd4fa6',
-            'coluuid': 'b735a408-473e-4080-be4c-9ee3628417dc',
+            'partof': [collection_by_id('national-dynamic-land-cover_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*trend-evi.*\.tif$')
             },
             'aggs': [],
-        }
-    ]
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "b735a408-473e-4080-be4c-9ee3628417dc",
-            "title": "Australia Land Cover",
-            "description": "Comprehensive land cover data for Australia.\n\nGeographic extent: Australia\nYear range: 2000-2008\nResolution: {resolution}\nData layers: Dynamic Land Cover, Enhanced Vegetation Index (min, max, mean)".format(resolution=RESOLUTIONS['9']['long']),
-            "rights": "CC-BY Attribution 3.0",
-            "landingPage": "See <a href=\"http://www.ga.gov.au/scientific-topics/earth-obs/accessing-satellite-imagery/landcover/executive-summary\">http://www.ga.gov.au/scientific-topics/earth-obs/accessing-satellite-imagery/landcover/executive-summary</a>",
-            "attribution": ["Lymburner L, Tan P, Mueller N, Thackway R, Lewis A, Thankappan M, Randall L, Islam A, Senarath U (2011) The National Dynamic Land Cover Dataset (v1.0), Geoscience Australia, Canberra."],
-            "subjects": ["Current datasets"],
-            "categories": ["environmental"],
-            "BCCDataGenre": ["DataGenreE"],
-            "datasets": [],
         }
     ]
 

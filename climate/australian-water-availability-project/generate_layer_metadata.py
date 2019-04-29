@@ -3,15 +3,13 @@ import os.path
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class AwapLayerMetadata(BaseLayerMetadata):
 
     # all datasets are of 'hydrology sciemtific type'
-    CATEGORY = 'hydrology'
-    # TODO: should we rather set the id in DATASETS list?
-    #       category as well?
+    CATEGORIES = ['environmental', 'hydrology']
     DATASET_ID = 'awap'
     # swift base url for this data
     SWIFT_CONTAINER = (
@@ -30,33 +28,12 @@ class AwapLayerMetadata(BaseLayerMetadata):
                 'Atmospheric Research Component: Final Report for Phase 3. CAWCR '
                 'Technical Report No. 013. 67 pp.'
             ),
-            'coluuid': '88b335a1-ce16-46a2-aa7c-5b1b8049ecd4',
+            'partof': [collection_by_id('awap_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
                 'year': None
             },
             'aggs': [],
-        }
-    ]
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "88b335a1-ce16-46a2-aa7c-5b1b8049ecd4",
-            "title": "Australian Water Availability Project",
-            "description": (
-                "Annual data about the state and trend of the terrestrial water balance in Australia.\n\n"
-                "Geographic extent: Australia\nYear range: 1900-2013\n"
-                "Resolution: 3 arcmin (~5 km)\nData layers: 36 layers including runoff, evaporation, soil moisture and heat flux"
-            ),
-            "rights": "CC-BY Attribution 3.0",
-            "landingPage": "See <a href=\"http://www.csiro.au/awap/\">http://www.csiro.au/awap/</a>",
-            "attribution": ["Raupach MR, PR Briggs, V Haverd, EA King, M Paget, CM Trudinger (2009), Australian Water Availability Project (AWAP): CSIRO Marine and Atmospheric Research Component: Final Report for Phase 3. CAWCR Technical Report No. 013. 67 pp."],
-            "subjects": ["Current datasets"],
-            "categories": ["environmental"],
-            "BCCDataGenre": ["DataGenreE"],
-            # will be created/filled by metadata generator
-            "datasets": [],
         }
     ]
 
@@ -80,7 +57,7 @@ class AwapLayerMetadata(BaseLayerMetadata):
         # collect some bits of metadata from data
         # all coverages have the same year and year_range
         ds_md['year'] = coverages[0]['bccvl:metadata']['year']
-        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']ß
+        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
         return ds_md
 
     def get_genre(self, md):

@@ -2,12 +2,12 @@
 import os.path
 
 from data_conversion.converter import BaseLayerMetadata
-from data_conversion.vocabs import RESOLUTIONS
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 
 class CRULayerMetadata(BaseLayerMetadata):
 
-    CATEGORY = 'climate'
+    CATEGORIES = ['environmental', 'climate']
     DATASET_ID = 'cruclim'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -33,26 +33,11 @@ class CRULayerMetadata(BaseLayerMetadata):
                 'Open Government Licence for Public Sector Information (UK) '
                 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
             ),
+            'partof': [collection_by_id('cruclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC'
             },
             'aggs': [], 
-        }
-    ]
-
-    COLLECTION = [
-        {
-            "_type": "Collection",
-            "uuid": "06d2de1c-559a-4e91-80ea-24aec53eca3f",
-            "title": "Alimatic Research Unit (CRU) climate data",
-            "description": "Global climate data from monthly observations collated by the University of East Anglia Climatic Research Unit",
-            "rights": "Open Government Licence for Public Sector Information (UK)",
-            "landingPage": "http://www.ceda.ac.uk/",
-            "attribution": [DATASETS[0]['acknowledgement']],
-            "subjects": ["Current datasets"],
-            "categories": ["climate"],
-            "BCCDataGenre": ["DataGenreCC"],
-            "datasets": [],
         }
     ]
 
