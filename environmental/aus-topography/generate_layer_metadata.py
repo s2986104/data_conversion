@@ -18,6 +18,8 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
         # only one dataset in nsg
         {
             'title': 'Australia, Multi-resolution Valley Bottom Flatness (v1.0, 2013), {resolution}',
+            'categories': ['environmental', 'topography'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Gallant J, Dowling T, Austin J (2013) Multi-resolution Valley Bottom Flatness (MrRTF, '
                 '3" resolution). v1. CSIRO. Data Collection. https://doi.org/10.4225/08/512EF27AC3888'
@@ -36,6 +38,8 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
         },
         {
             'title': 'Australia, Multi-resolution Ridge Top Flatness (v1.0, 2013), {resolution}',
+            'categories': ['environmental', 'topography'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Gallant J, Dowling T, Austin J (2013) Multi-resolution Ridge Top Flatness (MrRTF, '
                 '3" resolution). v1. CSIRO. Data Collection. https://doi.org/10.4225/08/512EEA6332EEB'
@@ -61,7 +65,8 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'topography'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['3']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

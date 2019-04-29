@@ -18,6 +18,8 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'CliMond (global), current climate (1961 - 1990), {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Kriticos, D.J., B.L. Webber, A. Leriche, N. Ota, I. Macadam, J. Bathols '
                 '& J.K. Scott.  2012.  CliMond: global high-resolution historical and '
@@ -38,6 +40,8 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'CliMond (global), Climate Projection, {emsc} based on {gcm}, {resolution} - {year}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Kriticos, D.J., B.L. Webber, A. Leriche, N. Ota, I. Macadam, J. Bathols '
                 '& J.K. Scott.  2012.  CliMond: global high-resolution historical and '
@@ -67,7 +71,8 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'climate'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['600']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

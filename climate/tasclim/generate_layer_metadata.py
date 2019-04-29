@@ -18,6 +18,8 @@ class TASClimLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'Tasmania, Current Climate ({year}), ({emsc}) based on {gcm}, {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Corney, S. P., J. J. Katzfey, J. L. McGregor, M. R. Grose, J. C. Bennett, '
                 'C. J. White, G. K. Holz, S. Gaynor, and N. L. Bindoff, 2010: Climate '
@@ -41,6 +43,8 @@ class TASClimLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'Tasmania, Future Climate ({year}), ({emsc}) based on {gcm}, {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Corney, S. P., J. J. Katzfey, J. L. McGregor, M. R. Grose, J. C. Bennett, '
                 'C. J. White, G. K. Holz, S. Gaynor, and N. L. Bindoff, 2010: Climate '
@@ -70,7 +74,8 @@ class TASClimLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'climate'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['360']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

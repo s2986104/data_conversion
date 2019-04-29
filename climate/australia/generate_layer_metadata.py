@@ -22,6 +22,8 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'Australia, Current Climate (1976-2005), {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Jones, D. A., Wang, W., & Fawcett, R. (2009). High-quality spatial '
                 'climate data-sets for Australia. Australian Meteorological and '
@@ -36,6 +38,8 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
         },
         {
             'title': 'Australia, Climate Projection, {emsc} based on {gcm}, {resolution} - {year}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Vanderwal, Jeremy. (2012). All future climate layers for Australia - 5km '
                 'resolution. James Cook University. [Data files] '
@@ -75,7 +79,8 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
         ds_md = {
             # apply filter values as metadata
             # apply metadata bits from dsdef
-            'categories': ['environmental', 'climate'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': dsdef['filter']['resolution'],
             'acknowledgement': dsdef.get('acknowledgment'),

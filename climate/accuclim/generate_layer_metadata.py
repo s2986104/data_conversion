@@ -18,6 +18,8 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'accuCLIM (Wet Tropics Australia), 30-year average either side of ({year}), {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013) '
                 'Improved spatial estimates of climate predict patchier species distributions. '
@@ -45,7 +47,8 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'climate'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),

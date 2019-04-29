@@ -18,6 +18,8 @@ class NDLCLayerMetadata(BaseLayerMetadata):
         # only one dataset in nsg
         {
             'title': 'Australia, Dynamic Land Cover (2000-2008), {resolution}',
+            'categories': ['environmental', 'landcover'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., '
                 'Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), '
@@ -38,6 +40,8 @@ class NDLCLayerMetadata(BaseLayerMetadata):
         },
         {
             'title': 'Australia, Enhanced Vegetation Index (2000-2008), {resolution}',
+            'categories': ['environmental', 'landcover'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., '
                 'Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), '
@@ -65,7 +69,8 @@ class NDLCLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'landcover'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

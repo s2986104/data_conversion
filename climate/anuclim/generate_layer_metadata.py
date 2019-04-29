@@ -17,6 +17,8 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'ANUClim (Australia), Current Climate {month}, (1976-2005), {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Hutchinson M, Kesteven J, Xu T (2014) Monthly climate data: ANUClimate 1.0, '
                 '0.01 degree, Australian Coverage, 1976-2005. Australian National University, '
@@ -45,7 +47,8 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'climate'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['30']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

@@ -20,12 +20,13 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
         # Datasets
         {
             'title': 'Freshwater {btype} Data (Australia), {vname}, {res}'.format(btype=i[0].capitalize(), vname=i[3], res=RESOLUTIONS['9']['long']),
+            'categories': ['environmental', i[2]],    # scientific type
+            'domain': 'freshwater',
             'acknowledgement': (
                 'Stein JL, Hutchinson MF, Stein JA (2014) A new stream and nested '
                 'catchment framework for Australia. Hydrology and Earth System Sciences, '
                 '18: 1917-1933. doi:10.5194/hess-18-1917-2014'
             ),
-            'categories': ['environmental', i[2]],    # scientific type
             'partof': [collection_by_id(i[5])],
             'filter': {
                 'genre': i[4],
@@ -63,7 +64,8 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
         ds_md = {
             # apply filter values as metadata
             # apply metadata bits from dsdef
-            'categories': dsdef.get('categories'),
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

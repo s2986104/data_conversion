@@ -18,6 +18,8 @@ class GPPLayerMetadata(BaseLayerMetadata):
         # Distinguisg dataset by layer name, and year
         {
             'title': 'Australia, Gross Primary Productivity (2000-2007), {resolution}',
+            'categories': ['environmental', 'vegetation'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 "Roderick, M.; Farquhar, G.; Berry, S. et al. 2001. On the direct effect of clouds and atmospheric particles on the productivity and structure of vegetation. Oecolgoia, vol. 129, 21-30; ",
                 "Berry, Sandra; Mackey, Brendan; Brown, Tiffany. 2007. Potential Applications of Remotely Sensed Vegetation Greenness to Habitat Analysis and the Conservation of Dispersive Fauna. Pacific Conservation Biology, Vol. 13, No. 2, [120]-127; ",
@@ -39,6 +41,8 @@ class GPPLayerMetadata(BaseLayerMetadata):
         },
         {
             'title': 'Australia, Gross Primary Productivity ({year}), {resolution}',
+            'categories': ['environmental', 'vegetation'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 "Roderick, M.; Farquhar, G.; Berry, S. et al. 2001. On the direct effect of clouds and atmospheric particles on the productivity and structure of vegetation. Oecolgoia, vol. 129, 21-30; ",
                 "Berry, Sandra; Mackey, Brendan; Brown, Tiffany. 2007. Potential Applications of Remotely Sensed Vegetation Greenness to Habitat Analysis and the Conservation of Dispersive Fauna. Pacific Conservation Biology, Vol. 13, No. 2, [120]-127; ",
@@ -67,7 +71,8 @@ class GPPLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'vegetation'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

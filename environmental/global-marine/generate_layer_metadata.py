@@ -27,6 +27,8 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         # only one dataset in nsg
         {
             'title': 'Global marine surface data, {variable} ({yearrange}), {resolution}'.format(variable=i[0], yearrange=i[4], resolution=RESOLUTIONS['300']['long']),
+            'categories': ['environmental', i[2]],
+            'domain': 'marine',
             'acknowledgement': ACKNOWLEDGEMENT,
             'year': i[3],
             'license': (
@@ -34,7 +36,6 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
                 'http://creativecommons.org/licenses/by/4.0'
             ),
             'external_url': 'http://www.bio-oracle.org/',
-            'categories': ['environmental', i[2]],
             'partof': [collection_by_id('global_marine_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
@@ -68,13 +69,14 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'title': 'Global marine surface data, {variable} (year_range), emsc, {resolution}'.format(
                     variable=i[0], resolution=RESOLUTIONS['300']['long']
                 ).replace('emsc', '{emsc}').replace('year_range', '{year_range}'),
+            'categories': ['environmental', i[2]],
+            'domain': 'marine',
             'acknowledgement': ACKNOWLEDGEMENT,
             'license': (
                 'Creative Commons Attribution 4.0 '
                 'http://creativecommons.org/licenses/by/4.0'
             ),
             'external_url': 'http://www.bio-oracle.org/',
-            'categories': ['environmental', i[2]],
             'partof': [collection_by_id('global_marine_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
@@ -103,6 +105,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         year_range_str = '{}-{}'.format(year_range[0], year_range[1])
         ds_md = {
             'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['300']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

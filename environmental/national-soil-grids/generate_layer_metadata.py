@@ -17,6 +17,8 @@ class NSGLayerMetadata(BaseLayerMetadata):
         # only one dataset in nsg
         {
             'title': 'Australia, Soil Grids (2012), {resolution}',
+            'categories': ['environmental', 'substrate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, '
                 'endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep).'
@@ -42,7 +44,8 @@ class NSGLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'substrate'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

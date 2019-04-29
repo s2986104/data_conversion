@@ -20,6 +20,8 @@ class AwapLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'Australia, Water Availability ({year}), {resolution}',
+            'categories': ['environmental', 'hydrology'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Raupach MR, PR Briggs, V Haverd, EA King, M Paget, CM Trudinger (2009), '
                 'Australian Water Availability Project (AWAP): CSIRO Marine and '
@@ -44,7 +46,8 @@ class AwapLayerMetadata(BaseLayerMetadata):
         ds_md = {
             # apply filter values as metadata
             # apply metadata bits from dsdef
-            'categories': ['environmental', 'hydrology'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['180']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

@@ -17,6 +17,8 @@ class NSGLayerMetadata(BaseLayerMetadata):
         # only one dataset in nsg
         {
             'title': 'Australia, Major Vegetation Groups (NVIS) (v4.2), {resolution}',
+            'categories': ['environmental', 'vegetation'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'National Vegetation Information System V4.2 (C) Australian Government Department of the '
                 'Environment and Energy 2016'
@@ -42,7 +44,8 @@ class NSGLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'vegetation'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

@@ -20,6 +20,8 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'South-East Australia Current Climate, (2000), {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Evans JP, Ji F, Lee C, Smith P, Argueso D and Fita L (2014) Design of '
                 'a regional climate modelling projection ensemble experiment Geosci. '
@@ -41,6 +43,8 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'South-East Australia Future Climate, ({year}), ({emsc}-R{rcm}) based on {gcm}, {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Evans JP, Ji F, Lee C, Smith P, Argueso D and Fita L (2014) Design of '
                 'a regional climate modelling projection ensemble experiment Geosci. '
@@ -72,7 +76,8 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'climate'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': dsdef['filter']['resolution'],
             'acknowledgement': dsdef.get('acknowledgment'),

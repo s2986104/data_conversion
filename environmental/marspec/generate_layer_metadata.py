@@ -18,6 +18,8 @@ class MarspecLayerMetadata(BaseLayerMetadata):
         # only one dataset in nsg
         {
             'title': 'Global marine data, Bathymetry (1955-2010), {resolution}'.format(resolution=RESOLUTIONS['300']['long']),
+            'categories': ['environmental', 'topography'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'Sbrocco EJ, Barber PH (2013) MARSPEC: Ocean climate layers for marine spatial ecology. '
                 'Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1'
@@ -44,7 +46,8 @@ class MarspecLayerMetadata(BaseLayerMetadata):
     def gen_dataset_metadata(self, dsdef, coverages):
         # find year range in coverages and use as year_range
         ds_md = {
-            'categories': ['environmental', 'topography'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['300']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

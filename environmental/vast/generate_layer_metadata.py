@@ -18,6 +18,8 @@ class VASTLayerMetadata(BaseLayerMetadata):
         # only one dataset in vast
         {
             'title': 'Australia, Vegetation Assets, States and Transitions (VAST) (1995-2006), {resolution}',
+            'categories': ['environmental', 'vegetation'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'All visual and pubished material must acknowledge the Australian Bureau of Agricultural '
                 'and Resource Economics and Sciences (ABRES) compiled and derived the dataset.'
@@ -44,7 +46,8 @@ class VASTLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'vegetation'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['30']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

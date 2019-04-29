@@ -18,6 +18,8 @@ class CRULayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'CRUclim (global), current climate (1976-2005), {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
             'acknowledgement': (
                 'University of East Anglia Climatic Research Unit; Harris, I.C.; '
                 'Jones, P.D. (2015): CRU TS3.23: Climatic Research Unit (CRU) '
@@ -47,7 +49,8 @@ class CRULayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'categories': ['environmental', 'climate'],
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['1800']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
