@@ -17,4 +17,9 @@ setup(
     packages=find_packages('src'),
     include_package_data=True,
     zip_safe=False,
+    entry_points={
+        'console_scripts': [
+            'gen_collections=data_conversion.gen_collections:main',
+        ]
+    }
 )

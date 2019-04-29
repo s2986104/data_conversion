@@ -8,7 +8,6 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class AusTopographyLayerMetadata(BaseLayerMetadata):
 
-    CATEGORIES = ['environmental', 'topography']
     DATASET_ID = 'aus-topography'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -62,7 +61,7 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'category': self.CATEGORY,                  # scientific type
+            'categories': ['environmental', 'topography'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['3']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

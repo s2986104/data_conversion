@@ -13,7 +13,7 @@ collections:
       Resolution: 9 arcsec (~250m)
       Data layers: B01-07
     categories: ["climate"]
-    rights":
+    rights:
       - type: "License"
         value: "CC-BY Attribution 3.0"
     landingPage: "https://researchdata.ands.org.au/accuclim-30-year-heritage-area/654267"
@@ -52,7 +52,7 @@ collections:
     subjects: ["Current datasets"]
 
   - _id: "australia_layers"
-    _type: "Collection"
+    type: "Collection"
     uuid: "1db9e574-2f14-11e9-b0ea-0242ac110002"
     title: "Australia current and future climate data"
     description: |-
@@ -139,7 +139,7 @@ collections:
         value: "CC-BY Attribution 4.0"
     landingPage:
       href: "https://climatedata.environment.nsw.gov.au"
-      label: NSW Climate Data Portal
+      label: "NSW Climate Data Portal"
     attributions:
       - type: "Citation"
         value: >-
@@ -149,7 +149,7 @@ collections:
     subjects: ["Current datasets", "Future datasets"]
 
   - _id: "tasclim_layers"
-    _type: "Collection"
+    type: "Collection"
     uuid: "f33a8644-7d84-4574-a774-1bbf50da046e"
     title: "Climate Futures Tasmania (CFT) climate data"
     description: |-
@@ -206,7 +206,7 @@ collections:
   - _id: "global_marine_layers"
     type: "Collection"
     uuid: "12aeac92c-77ff-4b44-8ae5-b26cb1c7ad58"
-    title": "Global Marine Environmental Data (Bio-ORACLE)"
+    title: "Global Marine Environmental Data (Bio-ORACLE)"
     description: |-
       Bio-ORACLE, v2: a suite of geophysical, biotic and environmental data layers for surface waters of marine realms for current and future time periods.
 
@@ -249,7 +249,7 @@ collections:
       - type: "License"
         value: "CC-BY Attribution 3.0"
     landingPage: {}
-    attribution: []
+    attributions: []
     subjects: ["Current datasets"]
 
   - _id: "marspec_layers"
@@ -344,7 +344,7 @@ collections:
       href: "http://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system"
     attributions:
       - type: "Citation"
-        value: National Vegetation Information System V4.2 (C) Australian Government Department of the Environment and Energy 2016
+        value: "National Vegetation Information System V4.2 (C) Australian Government Department of the Environment and Energy 2016"
     subjects: ["Current datasets"]
 
   - _id: "vast_layers"
@@ -396,5 +396,105 @@ collections:
           Australian Water Availability Project (AWAP):
           CSIRO Marine and Atmospheric Research Component:
           Final Report for Phase 3. CAWCR Technical Report No. 013. 67 pp.
+    subjects: ["Current datasets"]
+
+  - _id: "geofabric_catchment_climate"
+    type: "Collection"
+    uuid: "9129e2f2-fee7-4c32-9e59-32832d5a90d3"
+    title: "Australia Catchment climate data"
+    description: |-
+      A suite of climate layers calculated based on the Australian Hydrological Geospatial Fabric (‘Geofabric’) network that represents freshwater catchments.
+
+      Geographic extent: Australia
+      Year range: 1921-1995
+      Resolution: 9 arcsec (~250 m)
+      Data layers: B01, 05, 06, 08, 09, 11, 12, 16-20, Growth index, Growth index seasonality, Rainfall erosivity
+    categories: ["climate"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPage:
+      href: "https://data.gov.au/dataset/national-environmental-stream-attributes-v1-1-5"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Stein JL, Hutchinson MF, Stein JA (2014)
+          A new stream and nested catchment framework for Australia.
+          Hydrology and Earth System Sciences, 18: 1917-1933. doi:10.5194/hess-18-1917-2014
+    subjects: ["Current datasets"]
+
+  - _id: "geofabric_stream_climate"
+    type: "Collection"
+    uuid: "9720af6b-0aa4-4957-b3ca-db0d1ee60be0"
+    title: "Australia Stream climate data"
+    description: |-
+      A suite of climate layers calculated based on the Australian Hydrological Geospatial Fabric (‘Geofabric’) network that represents freshwater catchments.
+
+      Geographic extent: Australia
+      Year range: 1921-1995
+      Resolution: 9 arcsec (~250 m)
+      Data layers: B01, 05, 06, 08, 09, 11, 12, 16-20, Growth index, Growth index seasonality, Rainfall erosivity
+    categories: ["climate"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPage:
+      href: "https://data.gov.au/dataset/national-environmental-stream-attributes-v1-1-5"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Stein JL, Hutchinson MF, Stein JA (2014)
+          A new stream and nested catchment framework for Australia.
+          Hydrology and Earth System Sciences, 18: 1917-1933. doi:10.5194/hess-18-1917-2014
+    subjects: ["Current datasets"]
+
+  - _id: "geofabric_catchment_data"
+    type: "Collection"
+    uuid: "09f0b8e2-be00-400b-afaf-dff7504dcffd"
+    title: "Australia Catchment Data"
+    description: |-
+      A suite of environmental layers calculated for freshwater catchments based on the Australian Hydrological Geospatial Fabric (‘Geofabric’) network.
+
+      Geographic extent: Australia
+      Year range:
+      Resolution: 9 arcsec (~250 m)
+      Data layers: 176 layers across 7 datasets, including vegetation, river disturbance, landuse and population
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPag":
+      href: "https://data.gov.au/dataset/national-environmental-stream-attributes-v1-1-5"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Stein JL, Hutchinson MF, Stein JA (2014)
+          A new stream and nested catchment framework for Australia.
+          Hydrology and Earth System Sciences, 18: 1917-1933. doi:10.5194/hess-18-1917-2014
+    subjects: ["Current datasets"]
+
+  - _id: "geofabric_stream_data"
+    type: "Collection"
+    uuid: "d35f05a9-4b27-48c8-b508-fb63115a6f3b"
+    title: "Australia Stream Data"
+    description: |-
+      A suite of environmental layers calculated for freshwater catchments based on the Australian Hydrological Geospatial Fabric (‘Geofabric’) network.
+
+      Geographic extent: Australia
+      Year range:
+      Resolution: 9 arcsec (~250 m)
+      Data layers: 176 layers across 7 datasets, including vegetation, river disturbance, landuse and population
+    categories: ["environmental"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPag":
+      href: "https://data.gov.au/dataset/national-environmental-stream-attributes-v1-1-5"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Stein JL, Hutchinson MF, Stein JA (2014)
+          A new stream and nested catchment framework for Australia.
+          Hydrology and Earth System Sciences, 18: 1917-1933. doi:10.5194/hess-18-1917-2014
     subjects: ["Current datasets"]
 

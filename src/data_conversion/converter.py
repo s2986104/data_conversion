@@ -259,10 +259,9 @@ class BaseConverter(object):
 class BaseLayerMetadata(object):
 
     # Dataset id/name for uuid namespace (may need parameter like resolution / version)
-    CATEGORY = None
+    CATEGORIES = None
     SWIFT_CONTAINER = None
     DATASETS = []
-    COLLECTION = {}
     DATASET_ID = ''
 
     def parse_filename(self, tiffile):
@@ -415,18 +414,3 @@ class BaseLayerMetadata(object):
         with open(os.path.join(opts.srcdir, 'datasets.json'), 'w') as mdfile:
             json.dump(datasets, mdfile, indent=2)
 
-
-        tqdm.write("Write collection.json")
-        # TODO: only one collection so far
-        with open(os.path.join(opts.srcdir, 'collection.json'), 'w') as mdfile:
-            # add datasets
-            collections = copy.deepcopy(self.COLLECTION)
-            for collection in collections:
-                collection['datasets'] = []
-                for ds in datasets:
-                    if ds['bccvl:metadata']['coluuid'] == collection['uuid']:
-                        collection['datasets'].append({
-                            "uuid": ds['bccvl:metadata']['uuid'],
-                            "title": ds['bccvl:metadata']['title']
-                        })
-            json.dump(collections, mdfile, indent=2)

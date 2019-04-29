@@ -8,7 +8,6 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class NDLCLayerMetadata(BaseLayerMetadata):
 
-    CATEGORIES = ['environmental', 'landcover']
     DATASET_ID = 'national-dynamic-land-cover'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -66,7 +65,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'category': self.CATEGORY,                  # scientific type
+            'categories': ['environmental', 'landcover'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

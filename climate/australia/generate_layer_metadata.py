@@ -8,8 +8,6 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class AustraliaLayerMetadata(BaseLayerMetadata):
 
-    # all datasets are in climate category
-    CATEGORIES = ['environmental', 'climate']
     # TODO: should we rather set the id in DATASETS list?
     #       category as well?
     DATASET_ID = 'australia-{res}'
@@ -77,7 +75,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
         ds_md = {
             # apply filter values as metadata
             # apply metadata bits from dsdef
-            'category': self.CATEGORY,
+            'categories': ['environmental', 'climate'],
             'genre': dsdef['filter']['genre'],
             'resolution': dsdef['filter']['resolution'],
             'acknowledgement': dsdef.get('acknowledgment'),

@@ -102,7 +102,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         year_range = coverages[0]['bccvl:metadata']['year_range']
         year_range_str = '{}-{}'.format(year_range[0], year_range[1])
         ds_md = {
-            'category': dsdef['category'],
+            'categories': dsdef['categories'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['300']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

@@ -8,8 +8,6 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class AwapLayerMetadata(BaseLayerMetadata):
 
-    # all datasets are of 'hydrology sciemtific type'
-    CATEGORIES = ['environmental', 'hydrology']
     DATASET_ID = 'awap'
     # swift base url for this data
     SWIFT_CONTAINER = (
@@ -46,7 +44,7 @@ class AwapLayerMetadata(BaseLayerMetadata):
         ds_md = {
             # apply filter values as metadata
             # apply metadata bits from dsdef
-            'category': self.CATEGORY,
+            'categories': ['environmental', 'hydrology'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['180']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

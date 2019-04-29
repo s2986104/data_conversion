@@ -8,7 +8,6 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class MarspecLayerMetadata(BaseLayerMetadata):
 
-    CATEGORIES = ['environmental', 'topography']
     DATASET_ID = 'marspec'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -45,7 +44,7 @@ class MarspecLayerMetadata(BaseLayerMetadata):
     def gen_dataset_metadata(self, dsdef, coverages):
         # find year range in coverages and use as year_range
         ds_md = {
-            'category': self.CATEGORY,
+            'categories': ['environmental', 'topography'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['300']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

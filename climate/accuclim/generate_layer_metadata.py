@@ -7,7 +7,6 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class AccuClimLayerMetadata(BaseLayerMetadata):
 
-    CATEGORIES = ['environmental', 'climate']
     DATASET_ID = 'accuclim'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -46,7 +45,7 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'category': self.CATEGORY,
+            'categories': ['environmental', 'climate'],
             'genre': dsdef['filter']['genre'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),

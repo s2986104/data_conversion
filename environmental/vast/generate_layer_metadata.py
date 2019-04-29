@@ -8,7 +8,6 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class VASTLayerMetadata(BaseLayerMetadata):
 
-    CATEGORIES = ['environmental', 'vegetation']
     DATASET_ID = 'vast'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -45,7 +44,7 @@ class VASTLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'category': self.CATEGORY,                  # scientific type
+            'categories': ['environmental', 'vegetation'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['30']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),

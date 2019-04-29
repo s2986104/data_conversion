@@ -7,7 +7,6 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class NSGLayerMetadata(BaseLayerMetadata):
 
-    CATEGORIES = ['environmental', 'vegetation']
     DATASET_ID = 'nvis'
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -43,7 +42,7 @@ class NSGLayerMetadata(BaseLayerMetadata):
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
-            'category': self.CATEGORY,
+            'categories': ['environmental', 'vegetation'],
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
