@@ -2,6 +2,7 @@ import argparse
 from concurrent import futures
 import copy
 import glob
+import itertools
 import json
 import os.path
 import shutil
@@ -27,6 +28,7 @@ from data_conversion.utils import (
     product_dict,
 )
 from data_conversion.vocabs import (
+    COLLECTIONS,
     VAR_DEFS,
     PREDICTORS,
 )
@@ -173,7 +175,7 @@ class BaseConverter(object):
                 if self.skip_zipinfo(zipinfo):
                     continue
 
-                parsed_md = copy.copy(parsed_zip_md)
+                parsed_md = copy.deepcopy(parsed_zip_md)
                 parsed_md.update(
                     self.parse_filename(zipinfo.filename)
                 )
@@ -358,7 +360,7 @@ class BaseLayerMetadata(object):
             # 3. all values collected, lets iterate over the product of them all
             for comb in tqdm(list(product_dict(discriminators))):
                 # make a copy
-                dsdef2 = copy.copy(dsdef)
+                dsdef2 = copy.deepcopy(dsdef)
                 # each comb is one combination of filter values
                 dsdef2['filter'].update(comb)
                 # generate data subset
@@ -374,7 +376,7 @@ class BaseLayerMetadata(object):
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 coverage['bccvl:metadata'] = md
                 coverage['bccvl:metadata']['uuid'] = self.cov_uuid(coverage)
-                coverage['bccvl:metadata']['coluuid'] = dsdef2['coluuid']
+                coverage['bccvl:metadata']['partof'] = dsdef2['partof']
                 datasets.append(coverage)
 
         return datasets
@@ -406,7 +408,6 @@ class BaseLayerMetadata(object):
             tqdm.write("Use existing data.json")
             coverages = json.load(open(datajson))
 
-
         tqdm.write("Generate datasets.json")
         datasets = self.build_datasets(coverages)
         tqdm.write("Write datasets.json")
@@ -414,3 +415,19 @@ class BaseLayerMetadata(object):
         with open(os.path.join(opts.srcdir, 'datasets.json'), 'w') as mdfile:
             json.dump(datasets, mdfile, indent=2)
 
+        tqdm.write("Write collection.json")
+        coluids = set()
+        coluids = set(itertools.chain.from_iterable(ds['bccvl:metadata']['partof'] for ds in datasets))
+        # TODO: only one collection so far
+        with open(os.path.join(opts.srcdir, 'collection.json'), 'w') as mdfile:
+            # add datasets
+            collections = [
+                col for col in COLLECTIONS.values()
+                if col['uuid'] in coluids
+            ]
+            json.dump(
+                {
+                    'type': 'CollectionList',
+                    'collections': collections
+                }, mdfile, indent=2
+            )
