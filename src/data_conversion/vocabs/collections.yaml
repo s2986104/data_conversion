@@ -1,9 +1,10 @@
 
 type: "CollectionList"
 collections:
+
   - _id: "accuclim_layers"
     type: "Collection"
-    uuid: "1db9e574-2f14-11e9-b0ea-0242ac110002"
+    uuid: "6bf93dfa-6ad3-11e9-bfdf-88e9fe4c8bfc"
     title: "ACCUclim climate data"
     description: |-
       A set of 7 temperature variables for the Wet Tropics area in north-east Australia
