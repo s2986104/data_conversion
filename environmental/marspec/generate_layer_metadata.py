@@ -19,7 +19,7 @@ class MarspecLayerMetadata(BaseLayerMetadata):
         {
             'title': 'Global marine data, Bathymetry (1955-2010), {resolution}'.format(resolution=RESOLUTIONS['300']['long']),
             'categories': ['environmental', 'topography'],
-            'domain': 'terrestrial',
+            'domain': 'marine',
             'acknowledgement': (
                 'Sbrocco EJ, Barber PH (2013) MARSPEC: Ocean climate layers for marine spatial ecology. '
                 'Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1'
