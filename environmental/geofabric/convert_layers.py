@@ -372,7 +372,6 @@ class GeofabricConverter(BaseConverter):
             'layerid': layerid, 
             'version': version,
             'dstype': dstype,
-            'attribute': attrname,
             'gdbfilename': gdbfilename
         }
         if layerid == 'nppmon':
