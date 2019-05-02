@@ -9,7 +9,9 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
 class GeofabricLayerMetadata(BaseLayerMetadata):
 
-    DATASET_ID = 'geofabric'
+    # TODO: should we rather set the id in DATASETS list?
+    #       category as well?
+    DATASET_ID = 'geofabric_{ref}'
     # swift base url for this data
     SWIFT_CONTAINER = (
         'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
@@ -33,6 +35,7 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
                 'url': re.compile('^.*geofabric_{btype}_{dstype}.*\.tif$'.format(btype=i[0], dstype=i[1]))
             },
             'aggs': [],
+            'reference': i[0],
         } for i in [
             # boundary type, dataset type, scientific type, variable name, genre, collection uuid 
             ('stream', 'climate', 'climate', 'current climate (1921-1995)', 'DataGenreCC', 'geofabric_stream_climate'),
@@ -55,8 +58,10 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
     ]
 
     def parse_filename(self, tiffile):
+        nameparts = os.path.basename(tiffile).split('_')
         return {
-            'genre': 'DataGenreCC' if 'climate' in os.path.basename(tiffile).split('_') else 'DataGenreE',
+            'genre': 'DataGenreCC' if 'climate' in nameparts else 'DataGenreE',
+            'reference': 'catchment' if 'catchment' in nameparts else 'stream',
             'resolution': RESOLUTIONS['9']['long']
         }
 
@@ -66,6 +71,7 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
             # apply metadata bits from dsdef
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
+            'reference': dsdef.get('reference'),
             'genre': dsdef['filter']['genre'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
@@ -84,6 +90,12 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
     def get_genre(self, md): 
         return md['genre']
 
+    def cov_uuid(self, dscov):
+        """
+        Generate data/dataset uuid for dataset coverage
+        """
+        md = dscov['bccvl:metadata']
+        return gen_coverage_uuid(dscov, self.DATASET_ID.format(ref=md.get('reference')))
 
 def main():
     gen = GeofabricLayerMetadata()

@@ -405,16 +405,11 @@ class GeofabricConverter(BaseConverter):
     def destfilename(self, destdir, md):
         """
         Generate file name for output tif file.
-        Need to pull in the attribute table because catchment data
-        can have multiple attributes with the same layer id.
-        i.e. population density for catchment, stream and sub-catchment.
         """
         return (
             os.path.basename(destdir) +
             '_' +
             md['dstype'] +
-            '_' +
-            md['attribute'].replace('_', '-') +
             '_' +
             md['layerid'].replace('_', '-') +
             '.tif'
