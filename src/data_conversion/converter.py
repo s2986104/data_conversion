@@ -20,6 +20,7 @@ from data_conversion.coverage import (
     gen_dataset_coverage,
 )
 from data_conversion.utils import (
+    FilterType,
     ensure_directory,
     get_vsi_path,
     match_coverage,
@@ -342,17 +343,17 @@ class BaseLayerMetadata(object):
             fixed_filter = {
                 key: value
                 for (key,value) in dsdef['filter'].items()
-                if value is not None
+                if value is not FilterType.DISCRIMINATOR
             }
             cov_subset = list(filter(
                 lambda x: match_coverage(x, fixed_filter),
                 coverages
             ))
-            # 2. find all possible values for None filters
+            # 2. find all possible values for DISCRIMINATOR filters
             #    in filtered coverage subset
             discriminators = {}
             for key in dsdef['filter'].keys():
-                if dsdef['filter'][key] is not None:
+                if dsdef['filter'][key] is not FilterType.DISCRIMINATOR:
                     continue
                 discriminators[key] = sorted(
                     {cov['bccvl:metadata'][key] for cov in cov_subset if key in cov['bccvl:metadata']}

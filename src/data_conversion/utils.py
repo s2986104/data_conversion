@@ -7,6 +7,7 @@ import typing
 import shutil
 import subprocess
 import time
+from enum import Enum
 
 from osgeo import gdal
 
@@ -125,6 +126,9 @@ def check_file_online(fname):
         # more blocks allocated thas file size, file is online
         return True, blk_size, 'Online'
 
+class FilterType(Enum):
+    MISSING = 1          # the attribute is missing
+    DISCRIMINATOR = 2    # the attribute value is a discriminator
 
 def match_coverage(cov, attrs):
     # used to filter set of coverages
@@ -136,12 +140,12 @@ def match_coverage(cov, attrs):
             if not value.match(md[attr]):
                 return False
             continue
-        if value is None:
-            # None means attr should not be there
+        if value in (FilterType.MISSING, FilterType.DISCRIMINATOR):
+            # MISSING means attr should not be there.
             if attr in md:
                 return False
             continue
-        if value == '*':
+        if value == '*':    
             # attr should be there with any value, empty or None
             if attr not in md:
                 return False
