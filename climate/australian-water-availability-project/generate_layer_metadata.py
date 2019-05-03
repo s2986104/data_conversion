@@ -4,6 +4,7 @@ import os.path
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 
 class AwapLayerMetadata(BaseLayerMetadata):
@@ -31,7 +32,7 @@ class AwapLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('awap_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
-                'year': None
+                'year': FilterType.DISCRIMINATOR
             },
             'aggs': [],
         }

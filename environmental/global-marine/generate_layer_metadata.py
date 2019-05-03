@@ -4,6 +4,7 @@ import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 ACKNOWLEDGEMENT = (
     'Tyberghein L, Verbruggen H, Pauly K, Troupin C, Mineur F, De Clerck O (2012) Bio-ORACLE: '
@@ -81,8 +82,8 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*rcp.*_Surface.{lid}.*\.tif$'.format(lid=i[1])),
-                'emsc': None,
-                'year': None
+                'emsc': FilterType.DISCRIMINATOR,
+                'year': FilterType.DISCRIMINATOR
             },
             'aggs': [],
         }

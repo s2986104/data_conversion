@@ -3,6 +3,7 @@ import os.path
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 
 class AccuClimLayerMetadata(BaseLayerMetadata):
@@ -33,7 +34,7 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('accuclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC',
-                'year': None
+                'year': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
         }

@@ -4,6 +4,7 @@ import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 
 class GPPLayerMetadata(BaseLayerMetadata):
@@ -58,7 +59,7 @@ class GPPLayerMetadata(BaseLayerMetadata):
             'filter': {
                 'genre': 'DataGenreE',
                 'url': re.compile('^.*gpp_year_means2000_2007.*_gppmean\.tif$'),
-                'year': None
+                'year': FilterType.DISCRIMINATOR
             },
             'aggs': [],
         }

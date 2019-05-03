@@ -5,6 +5,7 @@ import re
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 
 class NaRCLIMLayerMetadata(BaseLayerMetadata):
@@ -36,7 +37,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
             'filter': {
                 'genre': 'DataGenreCC',
                 'url': re.compile(r'https://.*/.*NaR-Extent.*\.tif'),
-                'resolution': None
+                'resolution': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
         },
@@ -58,11 +59,11 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('narclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreFC',
-                'gcm': None,
-                'emsc': None,
-                'rcm': None,
-                'year': None,
-                'resolution': None,
+                'gcm': FilterType.DISCRIMINATOR,
+                'emsc': FilterType.DISCRIMINATOR,
+                'rcm': FilterType.DISCRIMINATOR,
+                'year': FilterType.DISCRIMINATOR,
+                'resolution': FilterType.DISCRIMINATOR,
             },
             'aggs': [], 
         }    

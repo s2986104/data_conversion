@@ -4,6 +4,7 @@ import os.path
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 
 class AustraliaLayerMetadata(BaseLayerMetadata):
@@ -32,7 +33,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('australia_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC',
-                'resolution': None,
+                'resolution': FilterType.DISCRIMINATOR,
             },
             'aggs': [],
         },
@@ -56,10 +57,10 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('australia_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreFC',
-                'gcm': None,
-                'emsc': None,
-                'year': None,
-                'resolution': None,
+                'gcm': FilterType.DISCRIMINATOR,
+                'emsc': FilterType.DISCRIMINATOR,
+                'year': FilterType.DISCRIMINATOR,
+                'resolution': FilterType.DISCRIMINATOR,
             },
             'aggs': [],
         }

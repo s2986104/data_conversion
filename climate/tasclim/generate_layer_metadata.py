@@ -3,6 +3,7 @@ import os.path
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 
 class TASClimLayerMetadata(BaseLayerMetadata):
@@ -34,9 +35,9 @@ class TASClimLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('tasclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC',
-                'gcm': None,
-                'emsc': None,
-                'year': None
+                'gcm': FilterType.DISCRIMINATOR,
+                'emsc': FilterType.DISCRIMINATOR,
+                'year': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
         },
@@ -59,9 +60,9 @@ class TASClimLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('tasclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreFC',
-                'gcm': None,
-                'emsc': None,
-                'year': None
+                'gcm': FilterType.DISCRIMINATOR,
+                'emsc': FilterType.DISCRIMINATOR,
+                'year': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
         }    

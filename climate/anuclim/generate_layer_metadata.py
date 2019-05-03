@@ -3,6 +3,8 @@ import os.path
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
+
 
 class ANUClimLayerMetadata(BaseLayerMetadata):
 
@@ -34,7 +36,7 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('anuclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC',
-                'month': None
+                'month': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
         }

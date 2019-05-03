@@ -3,6 +3,7 @@ import os.path
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 
 class CLIMONDLayerMetadata(BaseLayerMetadata):
@@ -56,9 +57,9 @@ class CLIMONDLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('climond_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreFC',
-                'gcm': None,
-                'emsc': None,
-                'year': None
+                'gcm': FilterType.DISCRIMINATOR,
+                'emsc': FilterType.DISCRIMINATOR,
+                'year': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
         }    
