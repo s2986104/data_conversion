@@ -21,7 +21,7 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
     DATASETS = [
         # Datasets
         {
-            'title': 'Freshwater {btype} Data (Australia), {vname}, {res}'.format(btype=i[0].capitalize(), vname=i[3], res=RESOLUTIONS['9']['long']),
+            'title': 'Freshwater {btype} Data (Australia), {vname}, {res}'.format(btype=i[0].capitalize(), vname=i[3].capitalize(), res=RESOLUTIONS['9']['long']),
             'categories': ['environmental', i[2]],    # scientific type
             'domain': 'freshwater',
             'acknowledgement': (
@@ -77,7 +77,7 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
             'license': dsdef.get('license'),
-            'title': dsdef['title'].format(resolution=RESOLUTIONS['9']['long'], **dsdef['filter'])
+            'title': dsdef['title']
         }
         # collect some bits of metadata from data
         # all coverages have the same year and year_range
