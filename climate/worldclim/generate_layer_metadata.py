@@ -1,255 +1,222 @@
 #!/usr/bin/env python
-import argparse
-import os
 import os.path
-import glob
-import json
-import sys
-import tqdm
-import re
-import copy
+import calendar
 
-from data_conversion.coverage import (
-    gen_tif_metadata,
-    gen_tif_coverage,
-    get_coverage_extent,
-    gen_coverage_uuid,
-    gen_dataset_coverage,
-)
+from data_conversion.converter import BaseLayerMetadata
+from data_conversion.coverage import gen_coverage_uuid
+from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import FilterType
 
 
-# TODO: for most metadata we probably would not need to look into tiff file.
-#       almost all additional metadata we use in bccvl could be inferred
-#       by filename plus hardcoded vocabularies
+class WorldClimLayerMetadata(BaseLayerMetadata):
 
-CATEGORY = 'climate'
-AKCNOWLEDGEMENT = (
-    "Hijmans, R.J., S.E. Cameron, J.L. Parra, P.G. Jones and A. Jarvis, 2005. "
-    "Very high resolution interpolated climate surfaces for global land "
-    "areas. International Journal of Climatology 25: 1965-1978."
-)
-EXTERNAL_URL = "http://worldclim.org/"
-LICENSE = "Not Specified"
+    DATASET_ID = 'worldclim-{res}'
+ 
+    # swift base url for this data
+    SWIFT_CONTAINER = (
+        'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/'
+        'worldclim_layers'
+    )
 
-# TODO: yearly vs. monthly
-DATASETS = [
-    # current
-    {
-        # bio + alt
-        'title': 'WorldClim 1.4 Current Conditions (~1960-1990), {resolution}',
-        'filter': {
-            'genre': 'DataGenreCC',
-            'month': None,
+    DATASETS = [
+        # current
+        {
+            # bio
+            'title': 'WorldClim, current climate (1960-1990), {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
+            'acknowledgement': (
+                'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
+                'resolution interpolated climate surfaces for global land areas. '
+                'International Journal of Climatology 25: 1965-1978. doi:10.1002/joc.1276'
+            ),
+            'external_url': (
+                'http://worldclim.org/'
+            ),
+            'license': (
+                'Creative Commons Attribution 3.0 AU '
+                'http://creativecommons.org/licenses/by/3.0/au'
+            ),
+            'partof': [collection_by_id('worldclim_climate_layers')['uuid']],            
+            'filter': {
+                'genre': 'DataGenreCC',
+                'month': FilterType.MISSING,
+                'resolution': FilterType.DISCRIMINATOR
+            },
+            'aggs': []
         },
-        'aggs': []
-    },
-    {
-        # monthly tmin, tmax, tmean, prec
-        'title': 'WorldClim 1.4 Current Conditions monthly (~1960-1990), {resolution}',
-        'filter': {
-            'genre': 'DataGenreCC',
-            'month': '*',
+        {
+            # alt
+            'title': 'WorldClim, Altitude, {resolution}',
+            'categories': ['environmental', 'topography'],
+            'domain': 'terrestrial',
+            'acknowledgement': (
+                'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
+                'resolution interpolated climate surfaces for global land areas. '
+                'International Journal of Climatology 25: 1965-1978. doi:10.1002/joc.1276'
+            ),
+            'external_url': (
+                'http://worldclim.org/'
+            ),
+            'license': (
+                'Creative Commons Attribution 3.0 AU '
+                'http://creativecommons.org/licenses/by/3.0/au'
+            ),
+            'partof': [collection_by_id('worldclim_altitude_layers')['uuid']],     
+            'filter': {
+                'genre': 'DataGenreE',
+                'resolution': FilterType.DISCRIMINATOR
+            },
+            'aggs': []
         },
-        'aggs': ['month']
-    },
-    {
-        # bio
-        'title': 'WorldClim 1.4 Climate Projection for {gcm}, {resolution}',
-        'filter': {
-            'month': None,
-            'gcm': None,
-            'genre': 'DataGenreFC',
+        {
+            # monthly tmin, tmax, tmean, prec
+            'title': 'WorldClim, current climate {monthname} (1960-1990), {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
+            'acknowledgement': (
+                'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
+                'resolution interpolated climate surfaces for global land areas. '
+                'International Journal of Climatology 25: 1965-1978. doi:10.1002/joc.1276'
+            ),
+            'external_url': (
+                'http://worldclim.org/'
+            ),
+            'license': (
+                'Creative Commons Attribution 3.0 AU '
+                'http://creativecommons.org/licenses/by/3.0/au'
+            ),
+            'partof': [collection_by_id('worldclim_monthly_layers')['uuid']],            
+            'filter': {
+                'genre': 'DataGenreCC',
+                'month': FilterType.DISCRIMINATOR,
+                'resolution': FilterType.DISCRIMINATOR
+            },
+            'aggs': ['month']
         },
-        'aggs': ['emsc', 'year'],
-    },
-    {
-        # monthly tmin, tmax, tmean, prec
-        'title': 'WorldClim 1.4 Climate Projection monthly for {gcm}, {resolution}',
-        'filter': {
-            'month': '*',
-            'gcm': None,
-            'genre': 'DataGenreFC',
+        {
+            # bio
+            'title': 'WorldClim, future climate {year}, {gcm} {emsc}, {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
+            'acknowledgement': (
+                'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
+                'resolution interpolated climate surfaces for global land areas. '
+                'International Journal of Climatology 25: 1965-1978. doi:10.1002/joc.1276'
+            ),
+            'external_url': (
+                'http://worldclim.org/'
+            ),
+            'license': (
+                'Creative Commons Attribution 3.0 AU '
+                'http://creativecommons.org/licenses/by/3.0/au'
+            ),
+            'partof': [collection_by_id('worldclim_climate_layers')['uuid']],            
+            'filter': {
+                'genre': 'DataGenreFC',
+                'month': FilterType.MISSING,
+                'gcm': FilterType.DISCRIMINATOR,
+                'emsc': FilterType.DISCRIMINATOR,
+                'year': FilterType.DISCRIMINATOR,
+                'resolution': FilterType.DISCRIMINATOR
+            },
+            'aggs': ['gcm', 'emsc', 'year'],
         },
-        'aggs': ['emsc', 'month', 'year'],
-    },
-]
+        {
+            # monthly tmin, tmax, tmean, prec
+            'title': 'WorldClim, future climate {monthname} ({year}), {gcm} {emsc}, {resolution}',
+            'categories': ['environmental', 'climate'],
+            'domain': 'terrestrial',
+            'acknowledgement': (
+                'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
+                'resolution interpolated climate surfaces for global land areas. '
+                'International Journal of Climatology 25: 1965-1978. doi:10.1002/joc.1276'
+            ),
+            'external_url': (
+                'http://worldclim.org/'
+            ),
+            'license': (
+                'Creative Commons Attribution 3.0 AU '
+                'http://creativecommons.org/licenses/by/3.0/au'
+            ),
+            'partof': [collection_by_id('worldclim_monthly_layers')['uuid']],            
+            'filter': {
+                'genre': 'DataGenreFC',
+                'month': FilterType.DISCRIMINATOR,
+                'gcm': FilterType.DISCRIMINATOR,
+                'emsc': FilterType.DISCRIMINATOR,
+                'year': FilterType.DISCRIMINATOR,
+                'resolution': FilterType.DISCRIMINATOR
+            },
+            'aggs': ['gcm', 'emsc', 'month', 'year'],
+        },
+    ]
 
 
-SWIFT_CONTAINER = 'https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/worldclim_layers'
+    def parse_filename(self, tiffile):
+        RESOLUTION_MAP = {  # udunits arc_minute / arcmin, UCUM/UOM: name: min_arc, symb: '
+            '30s': '30',
+            '2-5m': '150',
+            '5m': '300',
+            '10m': '600',
+        }
+        resolution = os.path.basename(os.path.dirname(os.path.dirname(tiffile)))
+        return {
+            'resolution': RESOLUTIONS[RESOLUTION_MAP[resolution]]['long'],
+        }
 
+    def gen_dataset_metadata(self, dsdef, coverages):
+        month = dsdef['filter'].get('month')
+        if month is not FilterType.MISSING and month:
+            title = dsdef['title'].format(monthname = calendar.month_name[int(month)], **dsdef['filter'])
+        else:
+            title = dsdef['title'].format(**dsdef['filter'])
+        ds_md = {
+            # apply filter values as metadata
+            # apply metadata bits from dsdef
+            'categories': dsdef['categories'],
+            'domain': dsdef['domain'],
+            'genre': dsdef['filter']['genre'],
+            'resolution': dsdef['filter']['resolution'],
+            'acknowledgement': dsdef.get('acknowledgment'),
+            'external_url': dsdef.get('external_url'),
+            'license': dsdef.get('license'),
+            'title': title
+        }
+        # collect some bits of metadata from data
+        # all coverages have the same year and year_range
+        ds_md['version'] = coverages[0]['bccvl:metadata']['version']
+        if dsdef['filter']['genre'] != 'DataGenreE':
+            ds_md['year'] = coverages[0]['bccvl:metadata']['year']
+            ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
 
-RESOLUTIONS = {  # udunits arc_minute / arcmin, UCUM/UOM: min_arc
-    '30s': '30 arcsec',
-    '2-5m': '2.5 arcmin',
-    '5m': '5 arcmin',
-    '10m': '10 arcmin'
-}
+            if dsdef['filter'].get('emsc'):
+                ds_md['emsc'] = dsdef['filter']['emsc']
+            if dsdef['filter'].get('gcm'):
+                ds_md['gcm'] = dsdef['filter']['gcm']
+        return ds_md
 
+    def cov_uuid(self, dscov):
+        md = dscov['bccvl:metadata']
+        return gen_coverage_uuid(dscov, self.DATASET_ID.format(res=md['resolution']))
 
-def gen_dataset_metadata(dsdef, coverages, resolution):
-    genre = dsdef['filter']['genre']
-    ds_md = {
-        'category': CATEGORY,  # TODO: need elevation category as well for current
-        'genre': genre,
-        'resolution': RESOLUTIONS[resolution],
-        'acknowledgement': AKCNOWLEDGEMENT,
-        'external_url': EXTERNAL_URL,
-        'license': LICENSE,
-        'title': dsdef['title'].format(
-            resolution=RESOLUTIONS[resolution],
-            gcm=dsdef['filter'].get('gcm'),
-        )
-    }
-    if genre == 'DataGenreCC':
-        ds_md['year'] = coverages[0]['bccvl:metadata']['year']
-        ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
-    return ds_md
+    def get_genre(self, md):
+        """
+        Determine genre based on metadata from tiffile.
+        """
+        if 'emsc' in md and 'gcm' in md:
+            # Future Climate
+            return 'DataGenreFC'
+        # Altitude is env dataset, don't have year
+        if 'year' not in md:
+            return 'DataGenreE'
+        else:
+            # Current Climate
+            return 'DataGenreCC'
 
-
-# TODO: duplicate in australia-5km/generate_metadata_layers
-def match_coverage(cov, attrs):
-    # used to filter set of coverages
-    md = cov['bccvl:metadata']
-    for attr, value in attrs.items():
-        if isinstance(value, re._pattern_type):
-            if not value.match(md[attr]):
-                return False
-            continue
-        if value is None:
-            # attr should not be there
-            if attr in md:
-                return False
-            continue
-        if value == '*':
-            # attr should be there
-            if attr not in md:
-                return False
-            continue
-        if md.get(attr) != attrs[attr]:
-            return False
-    return True
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--force', action='store_true',
-                        help='Re generate data.json form tif files.')
-    parser.add_argument('srcdir')
-    return parser.parse_args()
-
-
-def main(argv):
-    opts = parse_args()
-    opts.srcdir = os.path.abspath(opts.srcdir)
-
-    datajson = os.path.join(opts.srcdir, 'data.json')
-    print("Generate data.json")
-    if not os.path.exists(datajson) or opts.force:
-        print("Rebuild data.json")
-        coverages = []
-        tiffiles = sorted(glob.glob(os.path.join(opts.srcdir, '**/*.tif'),
-                                    recursive=True))
-        for tiffile in tqdm.tqdm(tiffiles):
-            try:
-                md = gen_tif_metadata(tiffile, opts.srcdir, SWIFT_CONTAINER)
-                coverage = gen_tif_coverage(tiffile, md['url'])
-                md['extent_wgs84'] = get_coverage_extent(coverage)
-                coverage['bccvl:metadata'] = md
-                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'worldclim')
-                coverages.append(coverage)
-            except Exception as e:
-                print('Failed to generate metadata for:', tiffile, e)
-
-        print("Write data.json")
-        with open(datajson, 'w') as mdfile:
-            json.dump(coverages, mdfile, indent=2)
-    else:
-        print("Using existing data.json")
-        coverages = json.load(open(datajson))
-
-    print("Generate datasets.json")
-    datasets = []
-    # collect all emission scenarios from coverages
-    GCMS = sorted({cov['bccvl:metadata']['gcm'] for cov in coverages if 'gcm' in cov['bccvl:metadata']})
-    for dsdef in DATASETS:
-        # make a copy so that we can modify it
-        dsdef = copy.deepcopy(dsdef)
-        for resolution in RESOLUTIONS:
-            cov_filter = dsdef['filter']
-            # add resolution filter:
-            cov_filter['url'] = re.compile(r'https://.*/.*{}.*\.tif'.format(resolution))
-            if 'gcm' not in cov_filter:
-                # current
-                subset = list(filter(
-                    lambda x: match_coverage(x, cov_filter),
-                    coverages
-                ))
-                if not subset:
-                    print("No Data matched for {}".format(cov_filter))
-                    continue
-                coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-                md = gen_dataset_metadata(dsdef, subset, resolution)
-                md['extent_wgs84'] = get_coverage_extent(coverage)
-                coverage['bccvl:metadata'] = md
-                coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'worldclim-1.4')
-                datasets.append(coverage)
-            else:
-                # future
-                for gcm in GCMS:
-                    cov_filter['gcm'] = gcm
-                    subset = list(filter(
-                        lambda x: match_coverage(x, cov_filter),
-                        coverages
-                    ))
-                    if not subset:
-                        print("No Data matched for {}".format(cov_filter))
-                        continue
-                    coverage = gen_dataset_coverage(subset, dsdef['aggs'])
-                    md = gen_dataset_metadata(dsdef, subset, resolution)
-                    md['extent_wgs84'] = get_coverage_extent(coverage)
-                    md['gcm'] = cov_filter['gcm']
-                    coverage['bccvl:metadata'] = md
-                    coverage['bccvl:metadata']['uuid'] = gen_coverage_uuid(coverage, 'worldclim-1.4')
-                    datasets.append(coverage)
-
-
-    print("Write datasets.json")
-    # save all the data
-    with open(os.path.join(opts.srcdir, 'datasets.json'), 'w') as mdfile:
-        json.dump(datasets, mdfile, indent=2)
-
-
-
-    # if len(argv) != 2:
-    #     print "Usage: {0} <srcdir>".format(argv[0])
-    #     sys.exit(1)
-    # srcdir = argv[1]
-
-    # resolution = '5 arcmin'
-    # resol = [key for key in RESOLUTION.keys() if RESOLUTION[key] == resolution]
-    # print "Resolution = ", resol
-    # category = ["climate", "topography"]
-    # for subdir in ('current-layers', 'future-layers'):
-    #     for dataset in glob.glob(os.path.join(srcdir, subdir, '*_' + resol[0] + '_*')):
-    #         print "Processing ", dataset
-    #         gen_metadatajson(JSON_TEMPLATE, dataset, SWIFT_CONTAINER)
-
-    # for genre in ("DataGenreCC", "DataGenreFC"):
-    #     dsmd = gen_dataset_metadata(JSON_TEMPLATE, category, genre, resolution)
-    #     if dsmd:
-    #         datasetmds.append(dsmd)
-
-    # # save layer metadata to file
-    # prefix = 'worldclim_' + resolution.replace(' ', '')
-    # with open(os.path.join(srcdir, prefix + '_layer_metadata.json'), 'w') as mdfile:
-    #     json.dump({"type": "layer", "data": layermds}, mdfile, indent=4)
-
-    # # save dataset metadata to file
-    # with open(os.path.join(srcdir, prefix + '_dataset_metadata.json'), 'w') as dsmdfile:
-    #     json.dump({"type": "dataset", "data": datasetmds}, dsmdfile, indent=4)
-
-    # # save collection
-
+def main():
+    gen = WorldClimLayerMetadata()
+    gen.main()
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
