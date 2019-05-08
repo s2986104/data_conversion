@@ -27,3 +27,5 @@ MARSPEC_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'marsp
 AUSTOPO_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'austopo_vars.json'), 'r'))
 
 GEOFABRIC_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'geofabric_vars.json'), 'r'))
+
+PETARIDITY_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'petaridity_vars.json'), 'r'))

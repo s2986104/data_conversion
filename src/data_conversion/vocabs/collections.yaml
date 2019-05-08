@@ -574,4 +574,35 @@ collections:
           International Journal of Climatology 25: 1965-1978. doi:10.1002/joc.1276
     subjects: ["Current datasets"]    
 
+  - _id: "global_pet_and_aridity_layers"
+    type: "Collection"
+    uuid: "4a89d4a7-8745-47d5-9bea-3f657d5fdc8d"
+    title: "Global PET and Aridity"
+    description: |-
+      Potential Evapo-Transpiration and rainfall deficiency data for potential vegetative growth.
+
+      Geographic extent: Global
+      Year range: 1950-2000
+
+      Resolution: 30 arcsec (~1 km) 
+      Data layers: Potential Evapo-Transpiration (PET), Aridity
+    categories: ["hydrology"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 4.0"
+    landingPage: "http://www.cgiar-csi.org/data/global-aridity-and-pet-database"
+    attributions:
+      - type: "Citation"
+        value: >-
+          Zomer RJ, Trabucco A, Bossio DA, van Straaten O, Verchot LV, 2008. 
+          Climate Change Mitigation: A Spatial Analysis of Global Land Suitability 
+          for Clean Development Mechanism Afforestation and Reforestation. Agric. 
+          Ecosystems and Envir. 126: 67-80. 
+      - type: "Citation"
+        value: >-
+          Zomer RJ, Bossio DA, Trabucco A, Yuanjie L, Gupta DC & Singh VP, 2007. 
+          Trees and Water: Smallholder Agroforestry on Irrigated Lands in Northern 
+          India. Colombo, Sri Lanka: International Water Management Institute. 
+          pp 45. (IWMI Research Report 122).
+    subjects: ["Current datasets"]    
 
