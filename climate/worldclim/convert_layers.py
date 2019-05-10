@@ -88,10 +88,6 @@ def run_gdal(cmd, infile, outfile, md):
         # TODO: check if setting ds = None fixes this as well?
         ds.FlushCache()
 
-        # adapt layerid from zip file to specific layer inside zip
-        if md.get('month'):
-            ds.SetMetadataItem('month', str(md.get('month')))
-
         band = ds.GetRasterBand(1)
         # ensure band stats
         band.ComputeStatistics(False)
@@ -238,6 +234,11 @@ class WorldClimConverter(BaseConverter):
             options += ['-mo', 'general_circulation_models={}'.format(gcm.upper())]
             options += ['-mo', 'year_range={}-{}'.format(year - 9, year + 10)]
             options += ['-mo', 'year={}'.format(year)]
+
+        # add month 
+        if md.get('month'):
+            options += ['-mo', 'month={}'.format(md.get('month'))]
+
         options += ['-mo', 'version=1.4']
         return options
 

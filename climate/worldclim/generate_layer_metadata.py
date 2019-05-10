@@ -186,6 +186,9 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
         # collect some bits of metadata from data
         # all coverages have the same year and year_range
         ds_md['version'] = coverages[0]['bccvl:metadata']['version']
+
+        if month is not FilterType.MISSING and month:
+            ds_md['month'] = month        
         if dsdef['filter']['genre'] != 'DataGenreE':
             ds_md['year'] = coverages[0]['bccvl:metadata']['year']
             ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
