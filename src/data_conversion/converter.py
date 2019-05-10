@@ -4,6 +4,7 @@ import copy
 import glob
 import itertools
 import json
+import os
 import os.path
 import shutil
 import tempfile
@@ -91,6 +92,10 @@ class BaseConverter(object):
     OFFSETS = {}
 
     def __init__(self):
+        try:
+            self.max_processes = int(os.environ.get('MAX_PROCESSES'))
+        except:
+            self.max_processes = None
         super().__init__()
 
     # helper mehods to override in sub classes
@@ -169,7 +174,7 @@ class BaseConverter(object):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
-        pool = futures.ProcessPoolExecutor(3)
+        pool = futures.ProcessPoolExecutor(self.max_processes)
         results = []
         with zipfile.ZipFile(srcfile) as srczip:
             for zipinfo in tqdm(srczip.filelist, desc="build jobs"):

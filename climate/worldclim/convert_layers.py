@@ -258,7 +258,7 @@ class WorldClimConverter(BaseConverter):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
-        pool = futures.ProcessPoolExecutor(3)
+        pool = futures.ProcessPoolExecutor(self.max_processes)
         results = []
         with zipfile.ZipFile(srcfile) as srczip:
             for zipinfo in tqdm(srczip.filelist, desc="build jobs"):

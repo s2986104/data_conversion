@@ -500,7 +500,7 @@ class GeofabricConverter(BaseConverter):
         bandData = band1.ReadAsArray(0, 0, cols, rows)
 
         parsed_zip_md = self.parse_zip_filename(srcfile)
-        pool = futures.ProcessPoolExecutor(3)
+        pool = futures.ProcessPoolExecutor(self.max_processes)
 
         for dstype, tablename in self.GEOFABRIC_TABLES[parsed_zip_md.get('boundtype')]:    
             # For each attribute in the table, create a layer geotif file 

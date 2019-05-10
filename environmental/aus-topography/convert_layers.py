@@ -117,7 +117,7 @@ class AusTopographyConverter(BaseConverter):
         """
         zipfilename = os.path.basename(srcfile)
         parsed_zip_md = self.parse_zip_filename(srcfile)
-        pool = futures.ProcessPoolExecutor(3)
+        pool = futures.ProcessPoolExecutor(self.max_processes)
         results = []
         vrtfile = None
         try:

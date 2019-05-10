@@ -149,7 +149,7 @@ class NDLCConverter(BaseConverter):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
-        pool = futures.ProcessPoolExecutor(3)
+        pool = futures.ProcessPoolExecutor(self.max_processes)
         results = []
         tfname1 = None
         tfname2 = None
