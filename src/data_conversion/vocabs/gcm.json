@@ -171,6 +171,10 @@
         "title": "",
         "license": ""
     },
+    "ECHAM5": {
+        "title": "",
+        "license": ""
+    },
     "ECHAM5-R1": {
         "title": "",
         "license": ""
@@ -183,6 +187,14 @@
         "title": "",
         "license": ""
     },
+    "GCM-MEAN": {
+        "title": "",
+        "license": ""
+    },
+    "MIROC3.2-MEDRES": {
+        "title": "",
+        "license": ""
+    },
     "MIROC3.2-R1": {
         "title": "",
         "license": ""
@@ -192,18 +204,6 @@
         "license": ""
     },
     "MIROC3.2-R3": {
-        "title": "",
-        "license": ""
-    },
-    "ECHAM5": {
-        "title": "",
-        "license": ""
-    },
-    "GCM-MEAN": {
-        "title": "",
-        "license": ""
-    },
-    "MIROC3.2-MEDRES": {
         "title": "",
         "license": ""
     }
