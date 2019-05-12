@@ -514,7 +514,7 @@ collections:
     rights:
       - type: "License"
         value: "CC-BY Attribution 4.0"
-    landingPag":
+    landingPage:
       href: "https://data.gov.au/dataset/national-environmental-stream-attributes-v1-1-5"
     attributions:
       - type: "Citation"
@@ -539,7 +539,7 @@ collections:
     rights:
       - type: "License"
         value: "CC-BY Attribution 4.0"
-    landingPag":
+    landingPage:
       href: "https://data.gov.au/dataset/national-environmental-stream-attributes-v1-1-5"
     attributions:
       - type: "Citation"
@@ -565,7 +565,8 @@ collections:
     rights:
       - type: "License"
         value: "CC-BY Attribution 3.0"
-    landingPage: "http://worldclim.org/"
+    landingPage: 
+      href: "http://worldclim.org/"
     attributions:
       - type: "Citation"
         value: >-
@@ -590,7 +591,8 @@ collections:
     rights:
       - type: "License"
         value: "CC-BY Attribution 4.0"
-    landingPage: "http://www.cgiar-csi.org/data/global-aridity-and-pet-database"
+    landingPage:
+      href: "http://www.cgiar-csi.org/data/global-aridity-and-pet-database"
     attributions:
       - type: "Citation"
         value: >-
@@ -604,5 +606,30 @@ collections:
           Trees and Water: Smallholder Agroforestry on Irrigated Lands in Northern 
           India. Colombo, Sri Lanka: International Water Management Institute. 
           pp 45. (IWMI Research Report 122).
+    subjects: ["Current datasets"]    
+
+  - _id: "fpar_layers"
+    type: "Collection"
+    uuid: "17c9fedd-5ffd-4f0f-b42b-b2d0f10a2c24"
+    title: "Australia Fraction of Photosynthetically Active Radiation (fPAR)"
+    description: |-
+      Indicator for the variability in the greenness of the vegetation.
+
+      Geographic extent: Australia
+      Year range: 2000-2014
+
+      Resolution: 9 arcsec (~250 m) 
+      Data layers: Fraction of Photosynthetically Active Radiation (fPAR)
+    categories: ["vegetation"]
+    rights:
+      - type: "License"
+        value: "CC-BY Attribution 3.0"
+    landingPage: {}
+    attributions:
+      - type: "Citation"
+        value: >-
+          Mackey B, Berry S, Hugh S, Ferrier S, Harwood TD, Williams KJ (2012) 
+          Ecosystem greenspots: identifying potential drought, fire, and 
+          climate‐change micro‐refuges. Ecological Applications, 22(6), 1852-1864.
     subjects: ["Current datasets"]    
 

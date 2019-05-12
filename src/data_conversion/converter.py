@@ -231,16 +231,19 @@ class BaseConverter(object):
         )
         return parser.parse_args()
 
+    def get_sourcefiles(self, srcfile):
+        if os.path.isdir(srcfile):
+            return sorted(glob.glob(os.path.join(srcfile, '**', '*.zip'), recursive=True))
+        return [srcfile]
+
+
     def main(self):
         """
         start the conversion process
         """
         opts = self.parse_args()
         srcfile = os.path.abspath(opts.source)
-        if os.path.isdir(srcfile):
-            srcfiles = sorted(glob.glob(os.path.join(srcfile, '**', '*.zip'), recursive=True))
-        else:
-            srcfiles = [srcfile]
+        srcfiles = self.get_sourcefiles(srcfile)
         # Optional filter for source files
         srcfiles = list(filter(self.filter_srcfiles, srcfiles))
 
@@ -431,6 +434,7 @@ class BaseLayerMetadata(object):
                 col for col in COLLECTIONS.values()
                 if col['uuid'] in coluids
             ]
+            
             json.dump(
                 {
                     'type': 'CollectionList',

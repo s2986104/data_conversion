@@ -1,0 +1,32 @@
+{
+    "fpar": {
+        "standard_name": "fpar",
+        "long_name": "Fraction of Photosynthetically Active Radiation",
+        "units": "%",
+        "measure_type": "continuous"
+    },
+    "fparmean": {
+        "standard_name": "fparmean",
+        "long_name": "Fraction of Photosynthetically Active Radiation (Mean)",
+        "units": "%",
+        "measure_type": "continuous"
+    },
+    "fparmin": {
+        "standard_name": "fparmin",
+        "long_name": "Fraction of Photosynthetically Active Radiation (Minimum)",
+        "units": "%",
+        "measure_type": "continuous"
+    },
+    "fparmax": {
+        "standard_name": "fparmax",
+        "long_name": "Fraction of Photosynthetically Active Radiation (Maximum)",
+        "units": "%",
+        "measure_type": "continuous"
+    },
+    "fparcov": {
+        "standard_name": "fparcov",
+        "long_name": "Fraction of Photosynthetically Active Radiation (Coefficient of Variance)",
+        "units": "1",
+        "measure_type": "continuous"
+    }
+}

@@ -29,3 +29,5 @@ AUSTOPO_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'austo
 GEOFABRIC_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'geofabric_vars.json'), 'r'))
 
 PETARIDITY_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'petaridity_vars.json'), 'r'))
+
+FPAR_VAR_DEFS = json.load(open(os.path.join(os.path.dirname(__file__), 'fpar_vars.json'), 'r'))
