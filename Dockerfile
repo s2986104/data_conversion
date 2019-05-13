@@ -1,6 +1,7 @@
 #FROM python:3.6
 FROM debian:buster
 
+
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update \
  && apt-get upgrade -y \
@@ -32,8 +33,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get install -y --no-install-recommends unzip man-db \
  && curl https://rclone.org/install.sh | bash
 
+
 WORKDIR /data_conversion
+COPY requirements.txt /tmp
 
 # xarray? numpy? rasterio?
-# cd /data-conversion/
-# pip3 install -r requirements.txt
+#cd /data-conversion/
+#pip3 install -r requirements.txt
+
+# Install other packages
+RUN pip3 install -r /tmp/requirements.txt
