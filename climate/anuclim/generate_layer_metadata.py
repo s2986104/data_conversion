@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os.path
+import calendar
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
@@ -18,7 +19,7 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
         # current
         {
             # bio
-            'title': 'ANUClim (Australia), Current Climate {month}, (1976-2005), {resolution}',
+            'title': 'ANUClim (Australia), Current Climate {monthname}, (1976-2005), {resolution}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
             'acknowledgement': (
@@ -58,6 +59,7 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
             'license': dsdef.get('license'),
             'title': dsdef['title'].format(
                 resolution=RESOLUTIONS['30']['long'],
+                monthname=calendar.month_name[int(dsdef['filter']['month'])],
                 **dsdef['filter']
             ),
             'month': dsdef['filter']['month']
