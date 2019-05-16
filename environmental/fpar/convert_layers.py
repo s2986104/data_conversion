@@ -73,11 +73,11 @@ class FparConverter(BaseConverter):
 
     def check_results(self, results, desc=None):
        for result in tqdm(futures.as_completed(results),
-                                desc=desc,
-                                total=len(results)):
-            if result.exception():
-                tqdm.write("Job failed")
-                raise result.exception()
+                          desc=desc,
+                          total=len(results)):
+           if result.exception():
+               tqdm.write("Job failed")
+               raise result.exception()
  
 
     def convert_stats(self, stats, template, destroot, md):
@@ -106,7 +106,7 @@ class FparConverter(BaseConverter):
                 if md['layerid'] in self.OFFSETS:
                     md['offset'] = self.OFFSETS[md['layerid']]
 
-                _, tmpfile = tempfile.mkstemp(suffix='.tif')
+                _, tmpfile = tempfile.mkstemp(prefix=stattype + '_', suffix='.tif')
                 write_array_to_raster(tmpfile, statarr, template)
                 tmpfiles.append(tmpfile)
 
@@ -131,8 +131,9 @@ class FparConverter(BaseConverter):
         (glbl, mntly, growyrly, calyrly) = get_file_lists(srctif_dir)
 
         # Calculate the statistics
-        print("Calculating monthly stats ...")
-        for mth in mntly.keys():
+        #print("Calculating monthly stats ...")
+        pbar = tqdm(total=4, desc="Calculate stats")
+        for mth in tqdm(mntly.keys(), desc='monthly'):
             md = {
                 'fnameformat': 'monthly',
                 'month': int(mth),
@@ -142,8 +143,10 @@ class FparConverter(BaseConverter):
             stats = raster_chunking_stats(mntly[mth])
             self.convert_stats(stats, mntly[mth][0], destroot, md)
             stats = None
-        print("Calculating grow-yearly stats ...")
-        for yr in growyrly.keys():
+        pbar.update()
+
+        #print("Calculating grow-yearly stats ...")
+        for yr in tqdm(growyrly.keys(), desc='grow-yearly'):
             year = int(yr)
             md = {
                 'fnameformat': 'growyearly',
@@ -153,8 +156,10 @@ class FparConverter(BaseConverter):
             stats = raster_chunking_stats(growyrly[yr])
             self.convert_stats(stats, growyrly[yr][0], destroot, md)
             stats = None
-        print("Calculating calendar yearly stats ...")
-        for yr in calyrly.keys():
+        pbar.update()
+
+        #print("Calculating calendar yearly stats ...")
+        for yr in tqdm(calyrly.keys(), desc='calenda-ryearly'):
             year = int(yr)
             md = {
                 'fnameformat': 'calyearly',
@@ -164,8 +169,9 @@ class FparConverter(BaseConverter):
             stats = raster_chunking_stats(calyrly[yr])
             self.convert_stats(stats, calyrly[yr][0], destroot, md)
             stats = None
+        pbar.update()
 
-        print("Calculating global stats ...")
+        #print("Calculating global stats ...")
         md = {
             'fnameformat': 'global',
             'year': 2007,
@@ -174,6 +180,8 @@ class FparConverter(BaseConverter):
         stats = raster_chunking_stats(glbl)
         stats['cov'] = calc_cov(glbl)
         self.convert_stats(stats, glbl[0], destroot, md)
+        pbar.update()
+        pbar.close()
 
     def convert(self, srcfile, destdir):
         """conver the tif layer and then compute the stats.
