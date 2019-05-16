@@ -187,7 +187,7 @@ class FparConverter(BaseConverter):
         """conver the tif layer and then compute the stats.
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
-        pool = futures.ProcessPoolExecutor(3)
+        pool = futures.ProcessPoolExecutor(self.max_processes)
         results = []
         srcfiles = sorted(glob.glob(os.path.join(srcfile, '**', '*.tif'), recursive=True))
         for filename in tqdm(srcfiles, desc="build jobs"):
