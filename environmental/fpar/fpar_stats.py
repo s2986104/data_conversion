@@ -1,11 +1,13 @@
 import numpy as np
 from scipy import stats
-from osgeo import gdal
+from osgeo import gdal, gdal_array
 import glob
 import os
 import os.path
 from collections import defaultdict
 import tempfile
+from tqdm import trange
+
 
 def write_array_to_raster(outfile, dataset, template):
     """Write numpy array to raster (geoTIFF format).
@@ -21,18 +23,29 @@ def write_array_to_raster(outfile, dataset, template):
     # open template dataset
     templateds = gdal.Open(template)
 
-    # create new dataset
-    outdata = templateds.GetDriver().CreateCopy(outfile, templateds, options=("COMPRESS=DEFLATE", "TILED=YES"))
+    outdata = gdal.GetDriverByName('GTiff').Create(
+        outfile,
+        xsize=dataset.shape[1],  # X
+        ysize=dataset.shape[0],  # Y
+        bands=1,
+        eType=gdal_array.NumericTypeCodeToGDALTypeCode(dataset.dtype),
+        # uncompressed data is quicker to write, but usually takes up 3 times the space
+        options=("COMPRESS=DEFLATE", "TILED=YES")
+    )
+    # copy infos from templateds
+    gdal_array.CopyDatasetInfo(templateds, outdata)
 
-    # write data to file
     band = outdata.GetRasterBand(1)
+    # preserve no data value
+    # TODO: this only works because we pass NoDataValue through everywhere
+    #       otherwise we should set a proper nodatavalue here and
+    #       replace all nan's in dataset to this value before writing
+    band.SetNoDataValue(templateds.GetRasterBand(1).GetNoDataValue())
+    # write data
     band.WriteArray(dataset)
-
-    # calculate statistics
-    band.ComputeStatistics(False)
-
-    # flush data to disk
+    # no stats compute required, we do that later anyway
     outdata.FlushCache()
+
 
 
 def get_file_lists(fparroot):
