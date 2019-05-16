@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 import os.path
-import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
-from data_conversion.utils import FilterType
+from data_conversion.utils import FilterType, RegExp
 
 
 class NaRCLIMLayerMetadata(BaseLayerMetadata):
@@ -36,7 +35,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('narclim_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreCC',
-                'url': re.compile(r'https://.*/.*NaR-Extent.*\.tif'),
+                'url': RegExp(r'https://.*/.*NaR-Extent.*\.tif'),
                 'resolution': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
@@ -96,7 +95,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
         if dsdef['filter'].get('gcm'):
             ds_md['gcm'] = dsdef['filter']['gcm']
         if dsdef['filter'].get('rcm'):
-            ds_md['gcm'] = dsdef['filter']['rcm']
+            ds_md['rcm'] = dsdef['filter']['rcm']
         return ds_md
 
     def cov_uuid(self, dscov):

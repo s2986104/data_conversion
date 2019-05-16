@@ -126,16 +126,37 @@ def check_file_online(fname):
         # more blocks allocated thas file size, file is online
         return True, blk_size, 'Online'
 
+
 class FilterType(Enum):
     MISSING = 1          # the attribute is missing
     DISCRIMINATOR = 2    # the attribute value is a discriminator
+
+
+class RegExp(str):
+
+    def __new__(cls, value):
+        return super().__new__(cls, value)
+
+    def __init__(self, value):
+        self._pattern = re.compile(value)
+
+    def __deepcopy__(self, memo):
+        # call our constructor again
+        # no need to deepcopy str object / self value as it is immutable by default
+        result = type(self)(self)
+        memo[id(self)] = result
+        return result
+
+    def match(self, string, flags=0):
+        return self._pattern.match(string, flags)
+
 
 def match_coverage(cov, attrs):
     # used to filter set of coverages
     md = cov['bccvl:metadata']
     # check all filters attrs. if any of the filters does not match return False
     for attr, value in attrs.items():
-        if isinstance(value, typing.Pattern):
+        if isinstance(value, (typing.Pattern, RegExp)):
             # if regexp does not match return False
             if not value.match(md[attr]):
                 return False

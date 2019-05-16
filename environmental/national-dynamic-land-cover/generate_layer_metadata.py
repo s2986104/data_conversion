@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import os.path
-import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
-
+from data_conversion.utils import RegExp
 
 class NDLCLayerMetadata(BaseLayerMetadata):
 
@@ -34,7 +33,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('national-dynamic-land-cover_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*dlcdv1-class.*\.tif$')
+                'url': RegExp('^.*dlcdv1-class.*\.tif$')
             },
             'aggs': [],
         },
@@ -56,7 +55,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('national-dynamic-land-cover_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*trend-evi.*\.tif$')
+                'url': RegExp('^.*trend-evi.*\.tif$')
             },
             'aggs': [],
         }

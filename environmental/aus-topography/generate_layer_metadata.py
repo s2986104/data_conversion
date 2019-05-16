@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import os.path
-import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
-
+from data_conversion.utils import RegExp
 
 class AusTopographyLayerMetadata(BaseLayerMetadata):
 
@@ -32,7 +31,7 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('aus-topography_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*mrvbf.*\.tif$')
+                'url': RegExp('^.*mrvbf.*\.tif$')
             },
             'aggs': [],
         },
@@ -52,7 +51,7 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('aus-topography_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*mrrtf.*\.tif$')
+                'url': RegExp('^.*mrrtf.*\.tif$')
             },
             'aggs': [],
         }        
