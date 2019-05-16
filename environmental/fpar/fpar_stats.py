@@ -125,7 +125,7 @@ def raster_chunking_stats(imlist):
     yBSize = yBSize * 4
 
     # Reads rasters in in chunks to minimise memory load
-    for y in range(0, rows, yBSize):
+    for y in trange(0, rows, yBSize, desc='calc min/max/mean blocks'):
         if y + yBSize < rows:
             numRows = yBSize
         else:
@@ -188,7 +188,7 @@ def calc_cov(dsfiles):
     x_block_size, y_block_size = datasets[0].GetRasterBand(1).GetBlockSize()
     x_block_size = x_block_size * 4
     y_block_size = y_block_size * 4
-    for i in range(0, ysize, y_block_size):
+    for i in trange(0, ysize, y_block_size, desc='calc cov blocks'):
         # determine block height to read
         if i + y_block_size < ysize:
             rows = y_block_size
