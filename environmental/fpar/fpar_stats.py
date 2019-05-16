@@ -107,14 +107,16 @@ def raster_chunking_stats(imlist):
     # get size from first raster (assume all are the same size)
     rows = dss[0].GetRasterBand(1).YSize
     cols = dss[0].GetRasterBand(1).XSize
+    dtype = gdal_array.GDALTypeCodeToNumericTypeCode(dss[0].GetRasterBand(1).DataType)
+    nodata = dtype(dss[0].GetRasterBand(1).GetNoDataValue())
 
     # Define statistics related arrays
-    meanarr = np.empty((rows, cols), np.float32)
-    meanarr[:] = 0.0
-    minarr = np.empty((rows, cols), np.float32)
-    minarr[:] = 0.0
-    maxarr = np.empty((rows, cols), np.float32)
-    maxarr[:] = 0.0
+    meanarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='mean_'),
+                        dtype=dtype, shape=(rows, cols))
+    minarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='min_'),
+                       dtype=dtype, shape=(rows, cols))
+    maxarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='max_'),
+                       dtype=dtype, shape=(rows, cols))
     # covarr = np.zeros((rows, cols))
 
     # Define chunk size
@@ -136,16 +138,24 @@ def raster_chunking_stats(imlist):
                 numCols = cols - x
 
             # Create a rasterStack with chunks from datasources
-            stackRast = np.dstack((np.array(ds.GetRasterBand(1).ReadAsArray(x, y, numCols, numRows)) for ds in dss))
-
+            stackRast = np.stack((np.array(ds.GetRasterBand(1).ReadAsArray(x, y, numCols, numRows)) for ds in dss))
+            # replace nodata with nan; we do this to avoid considering nodata values for statistics
+            # TODO: should we use nanmean/nanmin/nanmax?
+            #       these functions wolud return values if only some values are nan, whereas
+            #       the normal methods return nan if any value is nan
+            stackRast[stackRast == nodata] = np.nan
             try:
-                meanarr[y:y + numRows, x:x + numCols] = np.mean(stackRast, axis=2)
-                minarr[y:y + numRows, x:x + numCols] = np.min(stackRast, axis=2)
-                maxarr[y:y + numRows, x:x + numCols] = np.max(stackRast, axis=2)
-            except Exception:
-                print("Error calculating statistics...")
-                raise 
-     # Construct a dictionary as result
+                meanarr[y:y + numRows, x:x + numCols] = np.mean(stackRast, axis=0)
+                minarr[y:y + numRows, x:x + numCols] = np.min(stackRast, axis=0)
+                maxarr[y:y + numRows, x:x + numCols] = np.max(stackRast, axis=0)
+            except Exception as e:
+                print("Error calculating statistics...", e)
+                raise
+    # replace all nan's with nodata (we don't want to write nan's to the resulting tiff)
+    meanarr[np.isnan(meanarr)] = nodata
+    minarr[np.isnan(minarr)] = nodata
+    maxarr[np.isnan(maxarr)] = nodata
+    # Construct a dictionary as result
     return {
         'mean': meanarr,
         'min': minarr,
@@ -168,7 +178,12 @@ def calc_cov(dsfiles):
     if len(shape) != 1:
         raise Exception("Raster have different shape")
     ysize, xsize = shape.pop()
-    result = np.zeros((ysize, xsize), dtype=np.float32)
+    # determine dtype and nodata
+    dtype = gdal_array.GDALTypeCodeToNumericTypeCode(dss[0].GetRasterBand(1).DataType)
+    nodata = dtype(dss[0].GetRasterBand(1).GetNoDataValue())
+
+    result = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='cov_'),
+                       dtype=dtype, shape=(ysize, xsize))
     # build buffer array for blocked reading (assume same block size for all datasets, and only one band)
     x_block_size, y_block_size = datasets[0].GetRasterBand(1).GetBlockSize()
     x_block_size = x_block_size * 4
@@ -191,11 +206,15 @@ def calc_cov(dsfiles):
                 ds.GetRasterBand(1).ReadAsArray(xoff=j, yoff=i,
                                                 win_xsize=cols, win_ysize=rows)
                 for ds in datasets))
-
+            # replace nodata with nan
+            inarr[inarr == nodata] = np.nan
             # calculate coefficient of variance across datasets (axis 2)
             result[i:i+inarr.shape[0], j:j+inarr.shape[1]] = stats.variation(inarr, axis=2)
 
-    result[result>1.0] = np.nan
+    # replace all nan's with nodata
+    result[result.isnan()] = nodata
+    # ???
+    result[result>1.0] = nodata
     return result
 
 def stat_filename(destdir, md):
