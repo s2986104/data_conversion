@@ -120,8 +120,8 @@ class FparConverter(BaseConverter):
                 results.append(
                     pool.submit(run_gdal, cmd, tmpfile, outfile, md)
                 )
-
-                self.check_results(results, desc=os.path.basename(outfile))
+            # TODO: this desc is not quite right (last file of stats output)
+            self.check_results(results, desc=os.path.basename(outfile))
         finally:
             for tmpf in tmpfiles:
                 os.remove(tmpf)
