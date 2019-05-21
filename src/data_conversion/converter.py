@@ -248,25 +248,23 @@ class BaseConverter(object):
             return sorted(glob.glob(os.path.join(srcfile, '**', '*.zip'), recursive=True))
         return [srcfile]
 
-
     def main(self):
         """
         start the conversion process
         """
-        opts = self.parse_args()
-        srcfile = os.path.abspath(opts.source)
-        srcfiles = self.get_sourcefiles(srcfile)
+        self.opts = self.parse_args()
+        srcfiles = self.get_sourcefiles(self.opts.source)
         # Optional filter for source files
         srcfiles = list(filter(self.filter_srcfiles, srcfiles))
 
-        workdir = ensure_directory(opts.workdir)
-        dest = ensure_directory(opts.destdir)
+        workdir = ensure_directory(self.opts.workdir)
+        dest = ensure_directory(self.opts.destdir)
         # unpack contains one destination datasets
         for srcfile in tqdm(srcfiles):
             target_work_dir = self.create_target_dir(workdir, srcfile)
             try:
                 # TODO: skip not done anhywhere else
-                if opts.skipexisting and self.create_target_dir(dest, srcfile, check=True):
+                if self.opts.skipexisting and self.create_target_dir(dest, srcfile, check=True):
                     tqdm.write('Skip {}'.format(srcfile))
                     continue
                 # convert files into workdir
@@ -420,14 +418,13 @@ class BaseLayerMetadata(object):
         #       all tiff files. This would be useful to just update titles and
         #       things.
         #       could probably also be done in a separate one off script?
-        opts = self.parse_args()
-        opts.srcdir = os.path.abspath(opts.srcdir)
+        self.opts = self.parse_args()
 
-        datajson = os.path.join(opts.srcdir, 'data.json')
+        datajson = os.path.join(self.opts.srcdir, 'data.json')
         tqdm.write("Generate data.json")
-        if not os.path.exists(datajson) or opts.force:
+        if not os.path.exists(datajson) or self.opts.force:
             tqdm.write("Build data.json")
-            coverages = self.build_data(opts)
+            coverages = self.build_data(self.opts)
             tqdm.write("Write data.json")
             with open(datajson, 'w') as mdfile:
                 json.dump(coverages, mdfile, indent=2)
@@ -439,14 +436,14 @@ class BaseLayerMetadata(object):
         datasets = self.build_datasets(coverages)
         tqdm.write("Write datasets.json")
         # save all the data
-        with open(os.path.join(opts.srcdir, 'datasets.json'), 'w') as mdfile:
+        with open(os.path.join(self.opts.srcdir, 'datasets.json'), 'w') as mdfile:
             json.dump(datasets, mdfile, indent=2)
 
         tqdm.write("Write collection.json")
         coluids = set()
         coluids = set(itertools.chain.from_iterable(ds['bccvl:metadata']['partof'] for ds in datasets))
         # TODO: only one collection so far
-        with open(os.path.join(opts.srcdir, 'collection.json'), 'w') as mdfile:
+        with open(os.path.join(self.opts.srcdir, 'collection.json'), 'w') as mdfile:
             # add datasets
             collections = [
                 col for col in COLLECTIONS.values()
