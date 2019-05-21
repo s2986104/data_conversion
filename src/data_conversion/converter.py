@@ -41,7 +41,11 @@ def run_gdal(cmd, infile, outfile, md):
     """
     Run gdal_translate in sub process.
     """
-    _, tfname = tempfile.mkstemp(suffix='.tif')
+    tfd, tfname = tempfile.mkstemp(
+        prefix='run_{}_'.format(os.path.splitext(os.path.basename(infile))[0]),
+        suffix='.tif',
+    )
+    os.close(tfd)
     try:
         retry_run_cmd(cmd + [infile, tfname])
         # add band metadata

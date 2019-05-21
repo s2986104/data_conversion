@@ -73,7 +73,8 @@ class AusTopographyConverter(BaseConverter):
         return options
 
     def run_buildvrt(self, srcdir, infile):
-        _, ofile = tempfile.mkstemp(suffix='.vrt')
+        ofd, ofile = tempfile.mkstemp(suffix='.vrt')
+        os.close(ofd)
 
         # Need to run it in shell to prevent failure.
         cmd = 'gdalbuildvrt {} {}'.format(ofile, infile)
@@ -84,7 +85,6 @@ class AusTopographyConverter(BaseConverter):
             )
         ret.check_returncode()
         return ofile
-
 
     def create_rat(self, infile, ratdata):
         hasInterpretation = len(ratdata[0]) == 4

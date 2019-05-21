@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import os.path
 from concurrent import futures
 import copy
@@ -75,7 +76,8 @@ def run_gdal(cmd, infile, outfile, md):
     """
     Run gdal_translate in sub process.
     """
-    _, tfname = tempfile.mkstemp(suffix='.tif')
+    tfd, tfname = tempfile.mkstemp(suffix='.tif')
+    os.close(tfd)
     try:
         retry_run_cmd(cmd + [infile, tfname])
         # add band metadata

@@ -106,7 +106,9 @@ class FparConverter(BaseConverter):
                 if md['layerid'] in self.OFFSETS:
                     md['offset'] = self.OFFSETS[md['layerid']]
 
-                _, tmpfile = tempfile.mkstemp(prefix=stattype + '_', suffix='.tif')
+                tmpfd, tmpfile = tempfile.mkstemp(prefix=stattype + '_', suffix='.tif')
+                # close the file descriptor ... it won't get garbage collected, as it is just an int not a file object
+                os.close(tmpfd)
                 write_array_to_raster(tmpfile, statarr, template)
                 tmpfiles.append(tmpfile)
 

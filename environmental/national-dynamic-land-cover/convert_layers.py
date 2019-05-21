@@ -192,7 +192,8 @@ class NDLCConverter(BaseConverter):
                     ds = gdal.Open(srcurl)
                     # create a temp tif file and attach the RAT table
                     driver = ds.GetDriver()
-                    _, tfname1 = tempfile.mkstemp(suffix='.tif')
+                    tfd1, tfname1 = tempfile.mkstemp(suffix='.tif')
+                    os.close(tfd1)
                     newds = driver.CreateCopy(tfname1,
                                               ds, strict=0,
                                               options=['TILED=YES',
@@ -216,7 +217,8 @@ class NDLCConverter(BaseConverter):
 
                     # Add reduced classification data layer for DLCDv1_Class
                     class_map = {1: (1,10), 2: (11,23), 3: (24,30), 4: (31,32), 5: (33,34)}
-                    _, tfname2 = tempfile.mkstemp(suffix='.tif')
+                    tfd2, tfname2 = tempfile.mkstemp(suffix='.tif')
+                    os.close(tfd2)
                     self.reclassify(srcurl, class_map, tfname2)
 
                     reduced_md = {'layerid': 'dlcdv1_class_reduced', 'year': 2004}

@@ -453,7 +453,8 @@ class GeofabricConverter(BaseConverter):
         rows = rasterLayer.RasterYSize
         cols = rasterLayer.RasterXSize
 
-        outfilename = tempfile.mkstemp(suffix='.tif', prefix=attrname)[1]
+        ofd, outfilename = tempfile.mkstemp(suffix='.tif', prefix=attrname)
+        os.close(ofd)
         try:
             outData = None
             outDataset = driver.Create(outfilename, cols, rows, 1, pixel_dtype, ['COMPRESS=LZW', 'TILED=YES'])
