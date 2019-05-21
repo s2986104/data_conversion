@@ -213,7 +213,7 @@ class BaseConverter(object):
                 tqdm.write("Job failed")
                 raise result.exception()
 
-    def parse_args(self):
+    def get_argument_parser(self):
         parser = argparse.ArgumentParser()
         parser.add_argument(
             'source', action='store',
@@ -233,7 +233,15 @@ class BaseConverter(object):
             '--skipexisting', action='store_true',
             help='Skip files for which destination dir exists. (no checks done)'
         )
-        return parser.parse_args()
+        return parser
+
+    def parse_args(self):
+        parser = self.get_argument_parser()
+        opts = parser.parse_args()
+        opts.source = os.path.abspath(opts.source)
+        opts.destdir = os.path.abspath(opts.destdir)
+        opts.workdir = os.path.abspath(opts.workdir)
+        return opts
 
     def get_sourcefiles(self, srcfile):
         if os.path.isdir(srcfile):
@@ -394,12 +402,18 @@ class BaseLayerMetadata(object):
 
         return datasets
 
-    def parse_args(self):
+    def get_argument_parser(self):
         parser = argparse.ArgumentParser()
         parser.add_argument('--force', action='store_true',
                             help='Re generate data.json form tif files.')
         parser.add_argument('srcdir')
-        return parser.parse_args()
+        return parser
+
+    def parse_args(self):
+        parser = self.get_argument_parser()
+        opts = parser.parse_args()
+        opts.srcdir = os.path.abspath(srcdir)
+        return opts
 
     def main(self):
         # TODO: we need a mode to just update as existing json file without parsing
