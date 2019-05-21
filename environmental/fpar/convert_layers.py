@@ -7,7 +7,7 @@ import tempfile
 from concurrent import futures
 from tqdm import tqdm
 
-from data_conversion.utils import get_vsi_path
+from data_conversion.utils import get_vsi_path, ensure_directory
 from data_conversion.converter import BaseConverter, run_gdal
 
 from fpar_stats import get_file_lists, raster_chunking_stats, calc_cov, write_array_to_raster, stat_filename
@@ -67,7 +67,7 @@ class FparConverter(BaseConverter):
     def get_sourcefiles(self, srcfile):
         # return only the fpar folder
         if os.path.isdir(srcfile):
-            return [os.path.join(srcfile, 'fpar')]
+            return sorted(glob.glob(os.path.join(srcfile, 'fpar', '**', '*.tif'), recursive=True))
         else:
             raise Exception("source must be a directory")
 
@@ -79,7 +79,6 @@ class FparConverter(BaseConverter):
                tqdm.write("Job failed")
                raise result.exception()
  
-
     def convert_stats(self, stats, template, destroot, md):
         """Load in raster files in chunks to reduce memory demands,
         calculate statistics, and save to file.
@@ -91,12 +90,15 @@ class FparConverter(BaseConverter):
         md -- metadata
         Returns: None.
         """
-
         # Write the results to raster format with appropriate filenames
         pool = futures.ProcessPoolExecutor(self.max_processes)
         results = []
         tmpfiles =[]
         try:
+            # TODO: this method does the final gdal_translate directly to
+            #       destination storage. (without intermediate workdir)
+            # TODO: also parallel processing is very poor
+            # TODO: file skipping is not possible either
             for stattype, statarr in tqdm(stats.items(), desc='build stats'):
                 layerid = 'fpar{}'.format(stattype)
                 md['layerid'] = layerid
@@ -132,56 +134,59 @@ class FparConverter(BaseConverter):
         # Generate the lists for global, long-term monthly, and yearly raster stacks
         (glbl, mntly, growyrly, calyrly) = get_file_lists(srctif_dir)
 
-        # Calculate the statistics
-        #print("Calculating monthly stats ...")
+        # Calculating monthly stats ...
         pbar = tqdm(total=4, desc="Calculate stats")
-        for mth in tqdm(mntly.keys(), desc='monthly'):
+        if not self.opts.skipmonthly:
+            for mth in tqdm(mntly.keys(), desc='monthly'):
+                md = {
+                    'fnameformat': 'monthly',
+                    'month': int(mth),
+                    'year': 2007,
+                    'year_range': '2000-2014'
+                }
+                stats = raster_chunking_stats(mntly[mth])
+                self.convert_stats(stats, mntly[mth][0], destroot, md)
+                stats = None
+        pbar.update()
+
+        # Calculating grow-yearly stats ...
+        if not self.opts.skipgrow:
+            for yr in tqdm(growyrly.keys(), desc='grow-yearly'):
+                year = int(yr)
+                md = {
+                    'fnameformat': 'growyearly',
+                    'year': year,
+                    'year_range': "{:04d}-{:04d}".format(year, year + 1)
+                }
+                stats = raster_chunking_stats(growyrly[yr])
+                self.convert_stats(stats, growyrly[yr][0], destroot, md)
+                stats = None
+        pbar.update()
+
+        # Calculating calendar yearly stats ...
+        if not self.opts.skipyearly:
+            for yr in tqdm(calyrly.keys(), desc='calenda-ryearly'):
+                year = int(yr)
+                md = {
+                    'fnameformat': 'calyearly',
+                    'year': year,
+                    'year_range': "{:04d}-{:04d}".format(year, year)
+                }       
+                stats = raster_chunking_stats(calyrly[yr])
+                self.convert_stats(stats, calyrly[yr][0], destroot, md)
+                stats = None
+        pbar.update()
+
+        # Calculating global stats ...
+        if not self.opts.skipglobal:
             md = {
-                'fnameformat': 'monthly',
-                'month': int(mth),
+                'fnameformat': 'global',
                 'year': 2007,
                 'year_range': '2000-2014'
-            }
-            stats = raster_chunking_stats(mntly[mth])
-            self.convert_stats(stats, mntly[mth][0], destroot, md)
-            stats = None
-        pbar.update()
-
-        #print("Calculating grow-yearly stats ...")
-        for yr in tqdm(growyrly.keys(), desc='grow-yearly'):
-            year = int(yr)
-            md = {
-                'fnameformat': 'growyearly',
-                'year': year,
-                'year_range': "{:04d}-{:04d}".format(year, year + 1)
-            }
-            stats = raster_chunking_stats(growyrly[yr])
-            self.convert_stats(stats, growyrly[yr][0], destroot, md)
-            stats = None
-        pbar.update()
-
-        #print("Calculating calendar yearly stats ...")
-        for yr in tqdm(calyrly.keys(), desc='calenda-ryearly'):
-            year = int(yr)
-            md = {
-                'fnameformat': 'calyearly',
-                'year': year,
-                'year_range': "{:04d}-{:04d}".format(year, year)
-            }       
-            stats = raster_chunking_stats(calyrly[yr])
-            self.convert_stats(stats, calyrly[yr][0], destroot, md)
-            stats = None
-        pbar.update()
-
-        #print("Calculating global stats ...")
-        md = {
-            'fnameformat': 'global',
-            'year': 2007,
-            'year_range': '2000-2014'
-        }        
-        stats = raster_chunking_stats(glbl)
-        stats['cov'] = calc_cov(glbl)
-        self.convert_stats(stats, glbl[0], destroot, md)
+            }        
+            stats = raster_chunking_stats(glbl)
+            stats['cov'] = calc_cov(glbl)
+            self.convert_stats(stats, glbl[0], destroot, md)
         pbar.update()
         pbar.close()
 
@@ -191,8 +196,9 @@ class FparConverter(BaseConverter):
         parsed_zip_md = self.parse_zip_filename(srcfile)
         pool = futures.ProcessPoolExecutor(self.max_processes)
         results = []
-        srcfiles = sorted(glob.glob(os.path.join(srcfile, '**', '*.tif'), recursive=True))
-        for filename in tqdm(srcfiles, desc="build jobs"):
+        # TODO: fpar is different we get only one file in here
+        #       we'd have to do multiprocess loop outside of here
+        for filename in tqdm([srcfile], desc="build jobs"):
             if self.skip_zipinfo(filename):
                 continue
 
@@ -218,9 +224,36 @@ class FparConverter(BaseConverter):
             )
         self.check_results(results, os.path.basename(srcfile))
 
-        # Calculate the fpar statistics for the tiff files
-        self.fpar_stats(destdir, srcfile)
+    def get_argument_parser(self):
+        parser = super().get_argument_parser(self)
+        parser.add_argument(
+            '--skipmonthly', action='store_true',
+            help='Skip calculating monthly stats'
+        )
+        parser.add_argument(
+            '--skipyearly', action='store_true',
+            help='Skip calculating yearly stats'
+        )
+        parser.add_argument(
+            '--skipgrow', action='store_true',
+            help='Skip calculating grow yearly stats'
+        )
+        parser.add_argument(
+            '--skipglobal', action='store_true',
+            help='Skip calculating global stats'
+        )
+        return parser
 
+    def main(self):
+        """
+        start the conversion process
+        """
+        super().main()
+
+        # Calculate the fpar statistics for the tiff files
+        dest = ensure_directory(self.opts.destdir)
+        self.fpar_stats(dest, os.path.join(self.opts.source, 'fpar'))
+        
 
 def main():
     converter = FparConverter()
