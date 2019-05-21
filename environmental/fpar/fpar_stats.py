@@ -111,11 +111,11 @@ def raster_chunking_stats(imlist):
     nodata = dtype(dss[0].GetRasterBand(1).GetNoDataValue())
 
     # Define statistics related arrays
-    meanarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='mean_'),
+    meanarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='mmap_mean_'),
                         dtype=dtype, shape=(rows, cols))
-    minarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='min_'),
+    minarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='mmap_min_'),
                        dtype=dtype, shape=(rows, cols))
-    maxarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='max_'),
+    maxarr = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='mmap_max_'),
                        dtype=dtype, shape=(rows, cols))
     # covarr = np.zeros((rows, cols))
 
@@ -182,7 +182,7 @@ def calc_cov(dsfiles):
     dtype = gdal_array.GDALTypeCodeToNumericTypeCode(dss[0].GetRasterBand(1).DataType)
     nodata = dtype(dss[0].GetRasterBand(1).GetNoDataValue())
 
-    result = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='cov_'),
+    result = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='mmap_cov_'),
                        dtype=dtype, shape=(ysize, xsize))
     # build buffer array for blocked reading (assume same block size for all datasets, and only one band)
     x_block_size, y_block_size = datasets[0].GetRasterBand(1).GetBlockSize()
