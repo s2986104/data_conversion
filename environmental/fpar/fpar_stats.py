@@ -179,8 +179,8 @@ def calc_cov(dsfiles):
         raise Exception("Raster have different shape")
     ysize, xsize = shape.pop()
     # determine dtype and nodata
-    dtype = gdal_array.GDALTypeCodeToNumericTypeCode(dss[0].GetRasterBand(1).DataType)
-    nodata = dtype(dss[0].GetRasterBand(1).GetNoDataValue())
+    dtype = gdal_array.GDALTypeCodeToNumericTypeCode(datasets[0].GetRasterBand(1).DataType)
+    nodata = dtype(datasets[0].GetRasterBand(1).GetNoDataValue())
 
     result = np.memmap(filename=tempfile.NamedTemporaryFile(prefix='mmap_cov_'),
                        dtype=dtype, shape=(ysize, xsize))
@@ -212,7 +212,7 @@ def calc_cov(dsfiles):
             result[i:i+inarr.shape[0], j:j+inarr.shape[1]] = stats.variation(inarr, axis=2)
 
     # replace all nan's with nodata
-    result[result.isnan()] = nodata
+    result[np.isnan(result)] = nodata
     # ???
     result[result>1.0] = nodata
     return result
