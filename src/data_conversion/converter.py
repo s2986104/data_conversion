@@ -410,7 +410,7 @@ class BaseLayerMetadata(object):
     def parse_args(self):
         parser = self.get_argument_parser()
         opts = parser.parse_args()
-        opts.srcdir = os.path.abspath(srcdir)
+        opts.srcdir = os.path.abspath(opts.srcdir)
         return opts
 
     def main(self):
