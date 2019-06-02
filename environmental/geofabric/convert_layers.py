@@ -144,7 +144,7 @@ class GeofabricConverter(BaseConverter):
         'cat_silicsed' : 'siliciclasticrock',
         'cat_unconsoldted' : 'unconsolidatedrock',
         'cat_a_ksat' : 'sathydraulicconductivity',
-        'cat_solpawhc' : 'WaterHoldCapacity',
+        'cat_solpawhc' : 'waterHoldCapacity',
         'str_carbnatesed' : 'carbonatesedimentrock',
         'str_igneous' : 'igneousrock',
         'str_metamorph' : 'metamorphicrock',
