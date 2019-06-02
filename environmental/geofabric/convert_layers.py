@@ -8,7 +8,7 @@ from concurrent import futures
 import copy
 from tqdm import tqdm
 
-from osgeo import gdal, ogr
+from osgeo import gdal, ogr, gdal_array
 from osgeo.gdalconst import *
 from datetime import datetime
 
@@ -422,6 +422,8 @@ class GeofabricConverter(BaseConverter):
 
 
     def get_attribute(self, attrname, tablename, attrgdbfile):
+        # TODO: this method is terribly slow
+        #       maybe we could use ogr2ogr to convert FileGDB to something that's faster?
         # Extract the attribute values from the attribute table
         sqlcmd = "select segmentno, {attrname} from {tablename}".format(attrname=attrname, tablename=tablename)
         attDriver = ogr.GetDriverByName("OpenFileGDB")
@@ -442,52 +444,85 @@ class GeofabricConverter(BaseConverter):
         return (valueType, values)
 
 
-    def extractAsGeotif(self, rasterLayer, bandData, attrname, tablename, attrgdbfile):
+    def extractAsGeotif(self, template, bandData, attrname, tablename, attrgdbfile):
         # Get the attribute values and type (i.e. 0 = integer)
+        # TODO: maybe read whole table (or even file) at once ... read one attribute takes ages ~100MB ram?
+        # dtype is OGR Data type
         dtype, values = self.get_attribute(attrname, tablename, attrgdbfile)
         pixel_dtype = GDT_Int32 if dtype == ogr.OFTInteger else GDT_Float32
+        # gdal_array.GDALTypeCodeToNumericTypeCode(pixel_dtype) 
         value_dtype = numpy.int32 if dtype == ogr.OFTInteger else numpy.float32
-
-        # Create dataset for the layer output
-        driver = rasterLayer.GetDriver()
-        rows = rasterLayer.RasterYSize
-        cols = rasterLayer.RasterXSize
 
         ofd, outfilename = tempfile.mkstemp(suffix='.tif', prefix=attrname)
         os.close(ofd)
         try:
+            # Create dataset for the layer output
+            rasterLayer = gdal.Open(template)
+            driver = rasterLayer.GetDriver()
+            rows = rasterLayer.RasterYSize
+            cols = rasterLayer.RasterXSize
+
             outData = None
             outDataset = driver.Create(outfilename, cols, rows, 1, pixel_dtype, ['COMPRESS=LZW', 'TILED=YES'])
             if outDataset is None:
                 raise Exception('Could not create {}'.format(outfilename))
 
+            # TODO: gdal_array.CopyDataSetInfo?
+            # georeference the image and set the projection
+            outDataset.SetGeoTransform(rasterLayer.GetGeoTransform())
+            outDataset.SetProjection(rasterLayer.GetProjection())
+            restarLayer = None
+
             mapfunc = numpy.vectorize(values.get, otypes=[value_dtype])
-            outData = mapfunc(bandData, self.NODATA_VALUE)
-            del values
+            outData = numpy.memmap(
+                tempfile.NamedTemporaryFile(prefix=attrname),
+                dtype=value_dtype, shape=(rows, cols)
+            )
+            # arbitrary blocksize as we calc from numpy to numpy
+            ysize = 256
+            for y in range(0, rows, ysize):  # ysize):
+                if y + ysize < rows:
+                    r = ysize
+                else:
+                    r = rows - y
+                outData[y:y+r,:] = mapfunc(bandData[y:y+r,:], self.NODATA_VALUE)
 
             # write the data
             outBand = outDataset.GetRasterBand(1)
-            outBand.WriteArray(outData, 0, 0)
+            # TODO: write  by blocks?
+            # write band data by blocks into numpy array
+            xsize, ysize = outBand.GetBlockSize()
+            for y in range(0, rows, ysize):
+                if y + ysize < rows:
+                    r = ysize
+                else:
+                    r = rows - y
+                outBand.WriteArray(outData[y:y+r,:], 0, y)
 
             # flush data to disk, set the NoData value and calculate stats
             outBand.FlushCache()
             outBand.SetNoDataValue(self.NODATA_VALUE)
-
-            # georeference the image and set the projection
-            outDataset.SetGeoTransform(rasterLayer.GetGeoTransform())
-            outDataset.SetProjection(rasterLayer.GetProjection())
+            
         finally:
             # Release dataset
+            if outBand:
+                outBand = None
             if outDataset:
                 outDataset = None
             if outData is not None:
-                del outData
+                outData = None
         return outfilename
 
 
     def convert(self, srcfile, destdir):
         """convert .asc.gz files in folder to .tif in dest
         """
+        # TODO: looping does not quite fit processing pattern
+        #       the full geofabric dataset get's converted into workdir,
+        #       before it is being moved to final destination
+        #       PROBLEMs:
+        #          - workdir may not be able to hold full data
+        #          - if anything goes wrong all work has to be redone because loop nothing has been written to final destination (workdir is temp as well)  
 
         # Open the catchmen/stream boundary raster layer
         rasterLayer = gdal.Open(srcfile)
@@ -498,7 +533,22 @@ class GeofabricConverter(BaseConverter):
         band1 = rasterLayer.GetRasterBand(1)
         rows = rasterLayer.RasterYSize
         cols = rasterLayer.RasterXSize
-        bandData = band1.ReadAsArray(0, 0, cols, rows)
+        # either write to memmap array or look at gdal virtual datatypes?
+        bandData = numpy.memmap(
+            tempfile.NamedTemporaryFile(prefix=os.path.basename(srcfile)),
+            dtype=gdal_array.GDALTypeCodeToNumericTypeCode(band1.DataType),
+            shape=(rows, cols)
+        )
+        # read band data by blocks into numpy array
+        xsize, ysize = band1.GetBlockSize()
+        for y in range(0, rows, ysize):
+            if y + ysize < rows:
+                r = ysize
+            else:
+                r = rows - y
+            bandData[y:y+r,:] = band1.ReadAsArray(0, y, cols, r)
+        band1 = None
+        rasterLayer = None
 
         parsed_zip_md = self.parse_zip_filename(srcfile)
         pool = futures.ProcessPoolExecutor(self.max_processes)
@@ -523,7 +573,9 @@ class GeofabricConverter(BaseConverter):
 
                     # extract attribute data from the associated table
                     attr_gdbfilename = os.path.join(os.path.dirname(srcfile), parsed_md['gdbfilename'])
-                    tmpfile = self.extractAsGeotif(rasterLayer, bandData, attrname, tablename, attr_gdbfilename)
+                    # TODO: can we move this into subprocess as well? (bandData as memmap file? rasterLayer as template file?)
+                    #       either override run_gdal or callback in returned process?
+                    tmpfile = self.extractAsGeotif(srcfile, bandData, attrname, tablename, attr_gdbfilename)
                     tmpfiles.append(tmpfile)
 
                     #  Run gdal translate to attach metadata
