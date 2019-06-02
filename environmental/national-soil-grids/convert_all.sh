@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 BASEDIR="/mnt/collection/datasets/environmental/national_soil_grids"
