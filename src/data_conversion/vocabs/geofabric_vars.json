@@ -635,6 +635,12 @@
         "units": "bool",
         "measure_type": "continuous"
     },
+    "barrierupstr": {
+        "standard_name": "barrierupstr",
+        "long_name": "Artificial barrier presence upstream",
+        "units": "bool",
+        "measure_type": "continuous"
+    },
     "barrierdownstr": {
         "standard_name": "barrierdownstr",
         "long_name": "Artificial barrier presence downstream",
