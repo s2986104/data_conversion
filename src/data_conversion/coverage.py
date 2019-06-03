@@ -1,7 +1,10 @@
+import copy
+import logging
+from math import isnan
 import os.path
 import uuid
 
-from osgeo import gdal, osr
+from osgeo import gdal, gdal_array, osr
 
 from data_conversion.utils import transform_pixel, open_gdal_dataset
 
@@ -111,6 +114,39 @@ def gen_dataset_coverage(coverages, aggs=[]):
     }
 
 
+def validate_bbox(bbox, crs):
+    # bbox is within area of use of crs
+    # if within a small tolerance we assume arounding error
+    # which may come from the original data (sometimes shifted slighty)
+    # or due to our conversion
+    # if error is bigger than tolerance raise an exception
+    log = logging.getLogger(__name__)
+    tol = 0.0001
+    use = crs.GetAreaOfUse()
+    if use is not None:
+        if use.south_lat_degree > bbox['bottom']:
+            if abs(use.south_lat_degree - bbox['bottom']) > tol:
+                raise Exception('BBOX bottom out of bonuds {}'.format(bbox['bottom']))
+            log.warn('Adjusting BBOX bottom {} to {}'.format(bbox['bottom'], use.south_lat_degree))
+            bbox['bottom'] = use.south_lat_degree
+        if use.north_lat_degree < bbox['top']:
+            if abs(use.north_lat_degree - bbox['top']) > tol:
+                raise Exception('BBOX top out of bonuds {}'.format(bbox['top']))
+            log.warn('Adjusting BBOX top {} to {}'.format(bbox['top'], use.north_lat_degree))
+            bbox['top'] = use.north_lat_degree
+        if use.west_lon_degree > bbox['left']:
+            if abs(use.west_lon_degree - bbox['left']) > tol:
+                raise Exception('BBOX left out of bonuds {}'.format(bbox['left']))
+            log.warn('Adjusting BBOX left {} to {}'.format(bbox['left'], use.west_lon_degree))
+            bbox['left'] = use.west_lon_degree
+        if use.east_lon_degree < bbox['right']:
+            if abs(use.east_lon_degree - bbox['right']) > tol:
+                raise Exception('BBOX right out of bonuds {}'.format(bbox['right']))
+            log.warn('Adjusting BBOX right {} to {}'.format(bbox['right'], use.east_lon_degree))
+            bbox['right'] = use.east_lon_degree
+    return bbox
+
+
 def get_coverage_extent(coverage):
     # calc extent in WGS84 for x/y axes in given CRS
     axes = coverage['domain']['axes']
@@ -118,36 +154,49 @@ def get_coverage_extent(coverage):
         coverage['domain']['referencing'][0]['system']['wkt']
     )
     dst_crs = osr.SpatialReference()
+    # dst crs 4326 has lat/lon axis order
     dst_crs.ImportFromEPSGA(4326)
-    transform = osr.CoordinateTransformation(src_crs, dst_crs)
-
+    
     x_size = (axes['x']['stop'] - axes['x']['start']) / (axes['x']['num'] - 1) / 2
     y_size = abs((axes['y']['stop'] - axes['y']['start']) / (axes['y']['num'] - 1) / 2)
     # we have to subtract/add half a step to get full extent
+    # Can I get rid of sorted here? (now that axes should be sorted already)
     xs = sorted([axes['x']['start'], axes['x']['stop']])
     ys = sorted([axes['y']['start'], axes['y']['stop']])
     xs = [xs[0] - x_size, xs[1] + x_size]
     ys = [ys[0] - y_size, ys[1] + y_size]
-    left_bottom = transform.TransformPoint(xs[0], ys[0])
-    right_top = transform.TransformPoint(xs[1], ys[1])
-    return {
+    # force our src_crs to lat/lon coordinate order (so that we can call TransformPoint in a consistent manner independet of axis order)
+    src_crs.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
+    transform = osr.CoordinateTransformation(src_crs, dst_crs)
+    # epsg:4326 axis order is lat/lon
+    # TODO: Warning, this code required GDAL >= 3
+    bottom_left = transform.TransformPoint(xs[0], ys[0])
+    top_right = transform.TransformPoint(xs[1], ys[1])
+    bbox = {
         # 5 decimal digits is roughly 1m
-        'left': round(left_bottom[0], 5),
-        'bottom': round(left_bottom[1], 5),
-        'right': round(right_top[0], 5),
-        'top': round(right_top[1], 5),
+        'bottom': round(bottom_left[0], 5),
+        'left': round(bottom_left[1], 5),
+        'top': round(top_right[0], 5),
+        'right': round(top_right[1], 5),
     }
-
+    # check area_of_use
+    bbox = validate_bbox(bbox, dst_crs)
+    return bbox
+    
 
 def gen_cov_domain_axes(ds):
     # calculate raster mid points
     # axes ranges are defined as closed interval
+    # bottom left
+    # TODO: replace transform_pikel with gdal.ApplyGeoTransform(gt, x, y)
     p0 = transform_pixel(ds, 0.5, 0.5)
+    # top right
     p1 = transform_pixel(ds, ds.RasterXSize - 0.5, ds.RasterYSize - 0.5)
+    # TODO: do I need to do anything about image being upside / down?
 
     return {
-        "x": {"start": p0[0], "stop": p1[0], "num": ds.RasterXSize},
-        "y": {"start": p0[1], "stop": p1[1], "num": ds.RasterYSize},
+        "x": {"start": min(p0[0], p1[0]), "stop": max(p0[0], p1[0]), "num": ds.RasterXSize},
+        "y": {"start": min(p0[1], p1[1]), "stop": max(p0[1], p1[1]), "num": ds.RasterYSize},
         # tiffs are anly 2 dimensional, so no need to add any further axes
     }
 
@@ -259,6 +308,23 @@ def gen_cov_parameters(ds, ratmap=None):
     if categories:
         parameters[bandmd['standard_name']]['observedProperty']['categories'] = categories
         parameters[bandmd['standard_name']]['categoryEncoding'] = categoryEncoding
+    else:
+        # apply min/max value range and nodata value to observedProperty
+        (min, max, mean, stddev) = band.GetStatistics(False, False)
+        # force correct data type GetNoDataValue always returns a float
+        dtype = gdal_array.GDALTypeCodeToNumericTypeCode(band.DataType)
+        # TODO: this will happily convert almost anything to some dtype
+        #       e.g. np.int16(65535) == -1 (similar with floats)
+        nodata = dtype(band.GetNoDataValue()).item()
+        if isnan(nodata):
+            nodata = None
+        parameters[bandmd['standard_name']]['observedProperty']['statistics'] = {
+            'min': dtype(min).item(),
+            'max': dtype(max).item(),
+            'mean': mean,
+            'stddev': stddev
+        }
+        parameters[bandmd['standard_name']]['observedProperty']['nodata'] = nodata
     return parameters
 
 
@@ -276,6 +342,7 @@ def gen_cov_range_alternates(ds, url):
     band = ds.GetRasterBand(1)
     bandmd = band.GetMetadata_Dict()
     return {
+        # TODO: convert min/max/nodata to actual dtypes.item() from band.DataType
         "dmgr:tiff": {
             bandmd['standard_name']: {
                 "type": "dmgr:TIFF2DArray",
@@ -343,13 +410,28 @@ def gen_dataset_cov_referencing(coverages, aggs):
 
 
 def gen_dataset_cov_parameters(coverages, aggs):
+    log = logging.getLogger(__name__)
     # copy all uniquely named parameters
     parameters = {}
     for coverage in coverages:
         for key, value in coverage['parameters'].items():
             if key in parameters:
+                # update stats
+                # get rid of mean and stddev, and pick min/max accordingly
+                # TODO: what to do about nodata?
+                #       issue warning if nodata is different for now
+                # TODO: aggregating categories should probably viladate for equality as well
+                stats = parameters[key]['observedProperty'].get('statistics')
+                if stats:
+                    stats.pop('mean', None)
+                    stats.pop('stddv', None)
+                    stats['min'] = min(stats['min'], value['observedProperty']['statistics']['min'])
+                    stats['max'] = max(stats['max'], value['observedProperty']['statistics']['max'])
+                if parameters[key]['observedProperty'].get('nodata') != value['observedProperty'].get('nodata'):
+                    log.warn('NoData does not match in parameter aggregation: {}'.format(key))
                 continue
-            parameters[key] = value
+            # we have to deepcopy here, because we may modify the dict on aggregation
+            parameters[key] = copy.deepcopy(value)
     return parameters
 
 
