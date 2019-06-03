@@ -596,6 +596,8 @@ class GeofabricConverter(BaseConverter):
                         tqdm.write("Job failed")
                         raise result.exception()
             finally:
+                # TODO: this keeps all tmpfiles until we have finished converting everything to WORKDIR (not final dir)
+                #       this may consume a lot of tmp space
                 for f in tmpfiles:
                     os.remove(f)
 
