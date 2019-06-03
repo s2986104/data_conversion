@@ -19,7 +19,7 @@ class NVISConverter(BaseConverter):
         fname, _ = os.path.splitext(basename)
         # layerid, year
         return {
-           'layerid': LAYERINFO[fname][1],
+            'layerid': LAYERINFO[fname][1],
             #'year': 2016,
             'version': '4.2',
             'fragment': LAYERINFO[fname][0],
@@ -27,9 +27,9 @@ class NVISConverter(BaseConverter):
 
     # get layer id from filename within zip file
     def parse_filename(self, filename):
-        layerid = os.path.basename(os.path.dirname(filename))
+        # layerid = os.path.basename(os.path.dirname(filename))
         return {
-            'layerid': 'amvg',
+            # 'layerid': 'amvg',
         }
 
     def destfilename(self, destdir, md):
