@@ -6,7 +6,7 @@
         "measure_type": "categorical"
     },
     "amvg-1975": {
-        "standard_name": "amvg",
+        "standard_name": "amvg-1975",
         "long_name": "Australian Major Vegetation Groups - Pre-1975",
         "units": "vegetation group class",
         "measure_type": "categorical"
