@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import os.path
-import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
+from data_conversion.utils import RegExp
 
 
 class GeofabricLayerMetadata(BaseLayerMetadata):
@@ -29,10 +29,10 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
                 'catchment framework for Australia. Hydrology and Earth System Sciences, '
                 '18: 1917-1933. doi:10.5194/hess-18-1917-2014'
             ),
-            'partof': [collection_by_id(i[5])],
+            'partof': [collection_by_id(i[5])['uuid']],
             'filter': {
                 'genre': i[4],
-                'url': re.compile('^.*geofabric_{btype}_{dstype}.*\.tif$'.format(btype=i[0], dstype=i[1]))
+                'url': RegExp('^.*geofabric_{btype}_{dstype}.*\.tif$'.format(btype=i[0], dstype=i[1]))
             },
             'aggs': [],
             'reference': i[0],
