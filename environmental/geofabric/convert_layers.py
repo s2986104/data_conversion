@@ -405,12 +405,17 @@ class GeofabricConverter(BaseConverter):
         """
         Generate file name for output tif file.
         """
+        # Only nppmon has month
+        layername = md['layerid']
+        if layername == 'nppmon':
+            layername += md['month']
+
         return (
             os.path.basename(destdir) +
             '_' +
             md['dstype'] +
             '_' +
-            md['layerid'].replace('_', '-') +
+            layername.replace('_', '-') +
             '.tif'
         )
 
