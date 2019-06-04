@@ -51,6 +51,10 @@ def get_vsi_path(srcfile, archivepath=None):
     # check if gzip?
     if vsi_path.endswith('.gz'):
         vsi_path = '/vsigzip/' + vsi_path
+
+    if vsi_path.endswith('.zip'):
+        vsi_path = '/vsizip/' + vsi_path
+
     return vsi_path
 
 

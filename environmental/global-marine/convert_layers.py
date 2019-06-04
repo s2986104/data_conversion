@@ -20,11 +20,12 @@ LAYERINFO = {
     }
 }
 
+
 class GlobalMarineConverter(BaseConverter):
 
-    def parse_zip_filename(self, srcfile):
+    def parse_filename(self, filename):
         # Get layer id from zip filename
-        basename = os.path.basename(srcfile).lower()
+        basename = os.path.basename(filename).lower()
         fname = basename[:-len('.tif.zip')]
         parts = fname.split('.')
         period = parts[0]
@@ -56,11 +57,12 @@ class GlobalMarineConverter(BaseConverter):
             'emsc': rcp,
         }
 
+
     def target_dir(self, destdir, srcfile):
-        fmd = self.parse_zip_filename(srcfile)
-        emsc = fmd['emsc'].replace('.', '')
-        year = fmd['year']
-        dirname = 'globalmarine_{0}_{1}'.format(emsc.lower(), year).replace(' ', '')
+        parts = os.path.basename(srcfile).split('.')
+        dirname = '_'.join(parts[:3]) 
+        if parts[1] == 'Future':
+            dirname = '{0}_{1}'.format(dirname, parts[3].split('-')[0])
         root = os.path.join(destdir, dirname)
         return root
 
@@ -80,7 +82,20 @@ class GlobalMarineConverter(BaseConverter):
         """
         return False to skip this srcfile (zip file)
         """
-        return srcfile.lower().endswith('.tif.zip')
+        return srcfile.lower().endswith('.zip')
+
+    def skip_zipinfo(self, zipinfo):
+        """
+        return true to ignore this zipinfo entry
+        """
+        # default ignore directories
+        if zipinfo.is_dir():
+            return True
+        # ignore none .tif, .zip files
+        _, ext = os.path.splitext(zipinfo.filename)
+        if ext not in ('.zip', '.tif'):
+            return True
+        return False
 
 
 def main():
