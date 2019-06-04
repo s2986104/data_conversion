@@ -47,7 +47,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             ('Diffuse Attenuation', 'Diffuse.Attenuation', 'physical', 2007, '2000-2014'), 
             ('Sea Ice Concentration', 'Ice.Cover', 'physical', 2007, '2000-2014'), 
             ('Ice Thickness', 'Ice.Thickness', 'physical', 2007, '2000-2014'),
-            ('Currents Velocity', 'Currents.Velocity', 'physical', 2007, '2000-2014'),
+            ('Currents Velocity', 'Current.Velocity', 'physical', 2007, '2000-2014'),
             ('Water Salinity', 'Salinity', 'physical', 2007, '2000-2014'),
             ('Water Temperature', 'Temperature', 'physical', 2007, '2000-2014'),
             ('Iron', 'Iron', 'nutrients', 2007, '2000-2014'),
@@ -90,7 +90,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             ('Water Temperature', 'Temperature', 'physical'),
             ('Water Salinity', 'Salinity', 'physical'),
             ('Ice Thickness', 'Ice.Thickness', 'physical'),
-            ('Currents Velocity', 'Currents.Velocity', 'physical')
+            ('Currents Velocity', 'Current.Velocity', 'physical')
         ]
     ]
 
