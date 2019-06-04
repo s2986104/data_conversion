@@ -60,9 +60,7 @@ class GlobalMarineConverter(BaseConverter):
 
     def target_dir(self, destdir, srcfile):
         parts = os.path.basename(srcfile).split('.')
-        dirname = '_'.join(parts[:3]) 
-        if parts[1] == 'Future':
-            dirname = '{0}_{1}'.format(dirname, parts[3].split('-')[0])
+        dirname = '_'.join(parts[:3])
         root = os.path.join(destdir, dirname)
         return root
 
@@ -77,6 +75,25 @@ class GlobalMarineConverter(BaseConverter):
         if emsc != 'current':
             options += ['-mo', 'emission_scenario={}'.format(emsc)]
         return options
+
+    def destfilename(self, destdir, md):
+        """
+        generate file name for output tif file.
+        """
+        if md['emsc'] != 'current':
+            return (
+                os.path.basename(destdir).replace('_', '-') +
+                '_' + str(md['year']) + '_' + md['emsc'] + '_' +
+                md['layerid'].replace('_', '-') +
+                '.tif'
+            )
+        else:
+            return (
+                os.path.basename(destdir).replace('_', '-') +
+                '_' + str(md['year']) + '_' +
+                md['layerid'].replace('_', '-') +
+                '.tif'
+            )
 
     def filter_srcfiles(self, srcfile):
         """

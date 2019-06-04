@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import os.path
-import re
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
-from data_conversion.utils import FilterType
+from data_conversion.utils import FilterType, RegExp
 
 ACKNOWLEDGEMENT = (
     'Tyberghein L, Verbruggen H, Pauly K, Troupin C, Mineur F, De Clerck O (2012) Bio-ORACLE: '
@@ -40,7 +39,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('global_marine_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*current_2007_Surface.{lid}.*\.tif$'.format(lid=i[1]))
+                'url': RegExp('^.*/Marine-Present-Surface_.*_Surface.{lid}.*\.tif$'.format(lid=i[1]))
             },
             'aggs': [],
         } for i in [
@@ -81,7 +80,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'partof': [collection_by_id('global_marine_layers')['uuid']],
             'filter': {
                 'genre': 'DataGenreE',
-                'url': re.compile('^.*rcp.*_Surface.{lid}.*\.tif$'.format(lid=i[1])),
+                'url': RegExp('^.*/Marine-Future-Surface_.*_Surface.{lid}.*\.tif$'.format(lid=i[1])),
                 'emsc': FilterType.DISCRIMINATOR,
                 'year': FilterType.DISCRIMINATOR
             },
