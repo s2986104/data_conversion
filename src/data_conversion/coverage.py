@@ -309,6 +309,7 @@ def gen_cov_parameters(ds, ratmap=None):
         parameters[bandmd['standard_name']]['observedProperty']['categories'] = categories
         parameters[bandmd['standard_name']]['categoryEncoding'] = categoryEncoding
     else:
+        # TODO: do I need to adjust statistics by offset/scale?
         # apply min/max value range and nodata value to observedProperty
         (min, max, mean, stddev) = band.GetStatistics(False, False)
         # force correct data type GetNoDataValue always returns a float
@@ -318,13 +319,13 @@ def gen_cov_parameters(ds, ratmap=None):
         nodata = dtype(band.GetNoDataValue()).item()
         if isnan(nodata):
             nodata = None
-        parameters[bandmd['standard_name']]['observedProperty']['statistics'] = {
+        parameters[bandmd['standard_name']]['observedProperty']['dmgr:statistics'] = {
             'min': dtype(min).item(),
             'max': dtype(max).item(),
             'mean': mean,
             'stddev': stddev
         }
-        parameters[bandmd['standard_name']]['observedProperty']['nodata'] = nodata
+        parameters[bandmd['standard_name']]['observedProperty']['dmgr:nodata'] = nodata
     return parameters
 
 
@@ -390,7 +391,10 @@ def gen_dataset_cov_domain_axes(coverages, aggs):
     }
     # go through all aggregations which will become axes as well
     for agg in aggs:
-        # collect all values for this agg
+        if not all(agg in c['bccvl:metadata'] for c in coverages):
+            # sanity check
+            # some coverages are missing the agg key ... we have to fail here
+            raise Exception("Some coverages are missing aggregation key: {}".format(agg))
         values = {c['bccvl:metadata'][agg] for c in coverages}
         axes[agg] = {"values": sorted(values)}
         # special handling for years
@@ -416,18 +420,23 @@ def gen_dataset_cov_parameters(coverages, aggs):
     for coverage in coverages:
         for key, value in coverage['parameters'].items():
             if key in parameters:
+                if key not in aggs:
+                    # sanity check before we loose data in coverage json
+                    raise Exception('Overriding exisiting Parameter "{}". Most likely some kind of naming or aggregation.'.format(
+                        key
+                    ))
                 # update stats
                 # get rid of mean and stddev, and pick min/max accordingly
                 # TODO: what to do about nodata?
                 #       issue warning if nodata is different for now
                 # TODO: aggregating categories should probably viladate for equality as well
-                stats = parameters[key]['observedProperty'].get('statistics')
+                stats = parameters[key]['observedProperty'].get('dmgr:statistics')
                 if stats:
                     stats.pop('mean', None)
                     stats.pop('stddv', None)
-                    stats['min'] = min(stats['min'], value['observedProperty']['statistics']['min'])
-                    stats['max'] = max(stats['max'], value['observedProperty']['statistics']['max'])
-                if parameters[key]['observedProperty'].get('nodata') != value['observedProperty'].get('nodata'):
+                    stats['min'] = min(stats['min'], value['observedProperty']['dmgr:statistics']['min'])
+                    stats['max'] = max(stats['max'], value['observedProperty']['dmgr:statistics']['max'])
+                if parameters[key]['observedProperty'].get('dmgr:nodata') != value['observedProperty'].get('dmgr:nodata'):
                     log.warn('NoData does not match in parameter aggregation: {}'.format(key))
                 continue
             # we have to deepcopy here, because we may modify the dict on aggregation

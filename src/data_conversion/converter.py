@@ -327,6 +327,7 @@ class BaseLayerMetadata(object):
             glob.glob(os.path.join(opts.srcdir, '**/*.tif'),
                       recursive=True)
         )
+        uuids_seen = set()
         for tiffile in tqdm(tiffiles):
             try:
                 # TODO: fetch data stats from tiff if available
@@ -345,7 +346,14 @@ class BaseLayerMetadata(object):
                     md['acknowledgement'] = self.DATASETS[0]['acknowledgement']
                 # ony set md keys without leading '_'
                 coverage['bccvl:metadata'] = {key: val for (key,val) in md.items() if not key.startswith('_')}
-                coverage['bccvl:metadata']['uuid'] = self.cov_uuid(coverage)
+                covuuid = self.cov_uuid(coverage)
+                coverage['bccvl:metadata']['uuid'] = covuuid
+                if covuuid in uuids_seen:
+                    # sanity check
+                    # this check is only within this converter, but the way we generate uuids
+                    # should make things unique enough
+                    raise Exception('Duplicate uuid generated: {}'.format(coverage['bccvl:metadata']))
+                uuids_seen.add(covuuid)
                 coverages.append(coverage)
             except Exception as e:
                 tqdm.write('Failed to generate metadata for: {}, {}'.format(tiffile, e))
@@ -354,6 +362,7 @@ class BaseLayerMetadata(object):
 
     def build_datasets(self, coverages):
         datasets = []
+        uuids_seen = set()
         for dsdef in tqdm(self.DATASETS):
             # build sorted lists for all attribute filter with None
             # (discriminators)
@@ -394,8 +403,17 @@ class BaseLayerMetadata(object):
                 md = self.gen_dataset_metadata(dsdef2, subset)
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 coverage['bccvl:metadata'] = md
-                coverage['bccvl:metadata']['uuid'] = self.cov_uuid(coverage)
+                covuuid = self.cov_uuid(coverage)
+                coverage['bccvl:metadata']['uuid'] = covuuid
                 coverage['bccvl:metadata']['partof'] = dsdef2['partof']
+                # TODO: shall we check against data uuids as well?
+                if covuuid in uuids_seen:
+                    # sanity check
+                    # this check is only within this converter, but the way we generate uuids
+                    # should make things unique enough
+                    raise Exception('Duplicate uuid generated: {}'.format(coverage['bccvl:metadata']))
+                uuids_seen.add(covuuid)
+
                 datasets.append(coverage)
 
         return datasets
