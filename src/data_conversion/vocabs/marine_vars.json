@@ -12,7 +12,7 @@
         "measure_type": "continuous"
     },
     "Surface.Temperature.Mean": {
-        "standard_name": "Surface.Temperature.Min",
+        "standard_name": "Surface.Temperature.Mean",
         "long_name": "Mean Water Temperature",
         "units": "degree_Celsius",
         "measure_type": "continuous"
@@ -54,19 +54,19 @@
         "measure_type": "continuous"
     },
     "Surface.Salinity.Range": {
-        "standard_name": "Surface.Salinity.Min",
+        "standard_name": "Surface.Salinity.Range",
         "long_name": "Range of Water Salinity",
         "units": "Practical Salinity Scale",
         "measure_type": "continuous"
     },
     "Surface.Salinity.Lt.Min": {
-        "standard_name": "Surface.Salinity.Min",
+        "standard_name": "Surface.Salinity.Lt.Min",
         "long_name": "Minimum Water Salinity of Freshest Month",
         "units": "Practical Salinity Scale",
         "measure_type": "continuous"
     },
     "Surface.Salinity.Lt.Max": {
-        "standard_name": "Surface.Salinity.Min",
+        "standard_name": "Surface.Salinity.Lt.Max",
         "long_name": "Maximum Water Salinity of Saltiest Month",
         "units": "Practical Salinity Scale",
         "measure_type": "continuous"
@@ -435,12 +435,6 @@
         "standard_name": "Surface.Chlorophyll.Lt.Min",
         "long_name": "Long term average of minimum chlorophyll A concentration",
         "units": "mg/m3",
-        "measure_type": "continuous"
-    },
-    "Surface.Phytoplankton.Min": {
-        "standard_name": "Surface.Phytoplankton.Min",
-        "long_name": "Minimum Phytoplankton Concentration",
-        "units": "umol/m3",
         "measure_type": "continuous"
     },
     "Surface.Phytoplankton.Min": {
