@@ -408,7 +408,7 @@ class GeofabricConverter(BaseConverter):
         # Only nppmon has month
         layername = md['layerid']
         if layername == 'nppmon':
-            layername += md['month']
+            layername += str(md['month'])
 
         return (
             os.path.basename(destdir) +
