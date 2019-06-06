@@ -454,6 +454,8 @@ class GeofabricConverter(BaseConverter):
         # TODO: maybe read whole table (or even file) at once ... read one attribute takes ages ~100MB ram?
         # dtype is OGR Data type
         dtype, values = self.get_attribute(attrname, tablename, attrgdbfile)
+        # TODO: we could optimize things a bit here ....
+        #       e.g. Bool variables only need GDT_Byte instead of Int32
         pixel_dtype = GDT_Int32 if dtype == ogr.OFTInteger else GDT_Float32
         # gdal_array.GDALTypeCodeToNumericTypeCode(pixel_dtype) 
         value_dtype = numpy.int32 if dtype == ogr.OFTInteger else numpy.float32
