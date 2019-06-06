@@ -420,7 +420,7 @@ def gen_dataset_cov_parameters(coverages, aggs):
     for coverage in coverages:
         for key, value in coverage['parameters'].items():
             if key in parameters:
-                if key not in aggs:
+                if not aggs:
                     # sanity check before we loose data in coverage json
                     raise Exception('Overriding exisiting Parameter "{}". Most likely some kind of naming or aggregation.'.format(
                         key
@@ -433,7 +433,7 @@ def gen_dataset_cov_parameters(coverages, aggs):
                 stats = parameters[key]['observedProperty'].get('dmgr:statistics')
                 if stats:
                     stats.pop('mean', None)
-                    stats.pop('stddv', None)
+                    stats.pop('stddev', None)
                     stats['min'] = min(stats['min'], value['observedProperty']['dmgr:statistics']['min'])
                     stats['max'] = max(stats['max'], value['observedProperty']['dmgr:statistics']['max'])
                 if parameters[key]['observedProperty'].get('dmgr:nodata') != value['observedProperty'].get('dmgr:nodata'):

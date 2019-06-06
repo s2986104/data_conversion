@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This is for collections for geofabric data, which is handled differently from other datasets.
 # Run this to generate the data layers for Geofabric data 

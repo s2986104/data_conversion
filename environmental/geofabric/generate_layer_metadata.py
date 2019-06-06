@@ -154,7 +154,7 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
                 'genre': i[4],
                 'url': RegExp('^.*geofabric_{btype}_{dstype}.*\.tif$'.format(btype=i[0], dstype=i[1])) if i[6] is None else i[6]
             },
-            'aggs': ['month'] if i[3] == 'nppmon' else [],
+            'aggs': ['month'] if i[1] == 'nppmon' else [],
             'reference': i[0],
         } for i in [
             # boundary type, dataset type/layer id, scientific type, variable name, genre, collection uuid, regexp for filtering 
