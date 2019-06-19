@@ -20,6 +20,18 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'ANUClim (Australia), Current Climate {monthname}, (1976-2005), {resolution}',
+            'description': (
+                'Monthly climate data for the Australian continent between 1976-2005, '
+                'generated using ANUClimate 1.0. This dataset includes 5 variables: '
+                'monthly total precipitation, mean daily minimum and maximum temperature '
+                'of the month, mean daily vapour pressure of the month and monthly total '
+                'class A pan evaporation. The monthly anomalies were interpolated by '
+                'trivariate thin plate smoothing spline functions of longitude, latitude '
+                'and vertically exaggerated elevation using ANUSPLIN Version 4.5. Monthly '
+                'data values were calculated from Bureau of Meteorology daily data at '
+                'stations where there were no missing observations and any accumulated '
+                'records were wholly within the month.'
+            ),
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
             'acknowledgement': (

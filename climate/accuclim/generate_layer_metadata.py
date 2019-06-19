@@ -19,6 +19,20 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'accuCLIM (Wet Tropics Australia), 30-year average either side of ({year}), {resolution}',
+            'description': (
+                'accuCLIM Bioclimate Map Time-Series, 1965 - 2000.  30-year average mapped '
+                'bioclimatic variables for the Australian Wet Tropics, statistically downscaled '
+                'according to key environmental and topographic factors, at 9 arcsecond resolution.'
+                'A set of 7 bioclimatic variables, calculated according to the WorldClim method. '
+                'They are coded as follows: '
+                'ccuCLIM_01 = Annual Mean Temperature, '
+                'accuCLIM_02 = Mean Diurnal Range, '
+                'accuCLIM_03 = Isothermality (accuCLIM_02/accuCLIM_07), '
+                'accuCLIM_04 = Temperature Seasonality, '
+                'accuCLIM_05 = Max Temperature of Warmest Month, '
+                'accuCLIM_06 = Min Temperature of Coldest Month, '
+                'accuCLIM_07 = Temperature Annual Range (accuCLIM_05-accuCLIM_06).'
+            ),
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
             'acknowledgement': (

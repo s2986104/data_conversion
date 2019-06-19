@@ -4,6 +4,34 @@ import os.path
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 
+#Dataset 
+DS_DESCRIPTION = (
+    'Climatic Research Unit (CRU) Bioclimate Map Time-Series, 1915 - 1995. 30-year '
+    'average mapped bioclimatic variables at global extent with 30 arcminute resolution.'
+    'A set of 19 bioclimatic variables, calculated according to the WorldClim method. '
+    'They are coded as follows: '
+    'CRUCLIM_01 = Annual Mean Temperature, '
+    'CRUCLIM_02 = Mean Diurnal Range, '
+    'CRUCLIM_03 = Isothermality (CRUCLIM_02/CRUCLIM_07), '
+    'CRUCLIM_04 = Temperature Seasonality, '
+    'CRUCLIM_05 = Max Temperature of Warmest Month, '
+    'CRUCLIM_06 = Min Temperature of Coldest Month, '
+    'CRUCLIM_07 = Temperature Annual Range (CRUCLIM_05-CRUCLIM_06), '
+    'CRUCLIM_08 = Mean Temperature of Wettest Quarter, '
+    'CRUCLIM_09 = Mean Temperature of Driest Quarter, '
+    'CRUCLIM_10 = Mean Temperature of Warmest Quarter, '
+    'CRUCLIM_11 = Mean Temperature of Coldest Quarter, '
+    'CRUCLIM_12 = Annual Precipitation, '
+    'CRUCLIM_13 = Precipitation of Wettest Month, '
+    'CRUCLIM_14 = Precipitation of Driest Month, '
+    'CRUCLIM_15 = Precipitation Seasonality (Coefficient of Variation), '
+    'CRUCLIM_16 = Precipitation of Wettest Quarter, '
+    'CRUCLIM_17 = Precipitation of Driest Quarter, '
+    'CRUCLIM_18 = Precipitation of Warmest Quarter, '
+    'CRUCLIM_19 = Precipitation of Coldest Quarter'
+)
+
+
 
 class CRULayerMetadata(BaseLayerMetadata):
 
@@ -18,6 +46,7 @@ class CRULayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'CRUclim (global), current climate (1976-2005), {resolution}',
+            'description': DS_DESCRIPTION,
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
             'acknowledgement': (

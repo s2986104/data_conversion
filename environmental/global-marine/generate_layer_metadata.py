@@ -14,6 +14,79 @@ ACKNOWLEDGEMENT = (
     '277-284.'
 )
 
+COMMON_DESC = (
+    'Bio-ORACLE data layers are created from monthly pre-processed satellite and in situ observations. '
+    'Bio-ORACLE is developed by a team of marine researchers from the Flanders Marine Institute (VLIZ), '
+    'the University of Algarve, the University of Melbourne and Ghent University. '
+    'Website: http://www.bio-oracle.org/'
+)
+
+# Dataset full descriptions
+DESCRIPTIONS = {
+    'Cloud Cover': (
+        'Cloud cover indicates how much of the earth is covered by clouds. A bilinear '
+        'interpolation was used to convert the data from 6 arcminutes to 5 arcminutes.'
+    ),
+    'Diffuse Attenuation': (
+        'The diffuse attenuation coefficient is an indicator of water clarity. It expresses '
+        'how deeply visible light in the blue to the green region of the spectrum penetrates '
+        'into the water column.'
+    ),
+    'Sea Ice Concentration': (
+        'Sea ice concentration refers to the area of sea ice relative to the total area of '
+        'the ocean surface. '
+    ),
+    'Ice Thickness': (
+        'Ice thickness in metres at the ocean surface. '
+    ),
+    'Currents Velocity': (
+        'Measurements of current speeds at the ocean surface. '
+    ),
+    'Water Salinity': (
+        'Salinity indicates the dissolved salt content in the ocean surface. '
+    ),
+    'Water Temperature': (
+        'Sea surface temperature is the temperature of the topmost meter of the ocean water column. '
+    ),
+    'Iron': (
+        'Micromole concentration of dissolved iron at the sea surface. '
+    ),
+    'Calcite': (
+        'Calcite concentration indicates the mean concentration of calcite (CaCO3) in oceans. ',
+    )
+    'Dissolved Molecular Oxygen': (
+        'Mole concentration of dissolved oxygen at the sea surface. '
+    ),
+    'Silicate': (
+        'Mole concentration of silicate at the sea surface. '
+    ),
+    'Phosphate': (
+        'Mole concentration of phosphate at the sea surface. '
+    ),
+    'Nitrate': (
+        'Mole concentration of nitrate at the sea surface. '
+    ),
+    'Primary Productivity': (
+        'Sea surface net primary productivity of carbon. '
+    ),
+    'Photosynthetically Available Radiation': (
+        'Photosynthetically Available Radiation (PAR) indicates the quantum energy flux '
+        'from the sun (in the spectral range 400-700 nm) reaching the ocean surface. '
+    ),
+    'pH': (
+        'pH is an indicator of the acidity in the ocean, with lower values indicating '
+        'more acid conditions and higher values more alkaline conditions. '
+    ),
+    'Phytoplankton': (
+        'Mole concentration of phytoplankton expressed as carbon at the sea surface. '
+    ),
+    'Chlorophyll': (
+        'Chlorophyll A concentration indicates the concentration of photosynthetic pigment '
+        'chlorophyll A (the most common "green" chlorophyll) in oceans. Please note that in '
+        'shallow water these values may reflect any kind of autotrophic biomass. '
+    )
+}
+
 
 class GlobalMarineLayerMetadata(BaseLayerMetadata):
 
@@ -26,7 +99,9 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
     DATASETS = [
         # only one dataset in nsg
         {
-            'title': 'Global marine surface data, {variable} ({yearrange}), {resolution}'.format(variable=i[0], yearrange=i[4], resolution=RESOLUTIONS['300']['long']),
+            'title': 'Global marine surface data, {variable} ({yearrange}), {resolution}'.format(
+                variable=i[0], yearrange=i[4], resolution=RESOLUTIONS['300']['long']),
+            'description': DESCRIPTIONS[i[0]] + COMMON_DESC,
             'categories': ['environmental', i[2]],
             'domain': 'marine',
             'acknowledgement': ACKNOWLEDGEMENT,
@@ -69,6 +144,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'title': 'Global marine surface data, {variable} (year_range), emsc, {resolution}'.format(
                     variable=i[0], resolution=RESOLUTIONS['300']['long']
                 ).replace('emsc', '{emsc}').replace('year_range', '{year_range}'),
+            'description': DESCRIPTIONS[i[0]] + COMMON_DESC,
             'categories': ['environmental', i[2]],
             'domain': 'marine',
             'acknowledgement': ACKNOWLEDGEMENT,

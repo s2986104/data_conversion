@@ -7,6 +7,12 @@ from data_conversion.vocabs import RESOLUTIONS, collection_by_id
 from data_conversion.utils import FilterType, RegExp
 
 
+DS_DESCRIPTION = (
+    'NaRCLIM Bioclimate Maps.  20-year average mapped bioclimatic variables for '
+    'NSW, VIC & ACT with 9 arcsecond resolution. '
+    'A set of 35 bioclimatic variables, calculated according to the WorldClim method. '
+)
+
 class NaRCLIMLayerMetadata(BaseLayerMetadata):
 
     DATASET_ID = 'narclim-{res}'
@@ -20,6 +26,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'South-East Australia Current Climate, (2000), {resolution}',
+            'description': DS_DESCRIPTION,
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
             'acknowledgement': (
@@ -43,6 +50,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
         {
             # bio
             'title': 'South-East Australia Future Climate, ({year}), ({emsc}-R{rcm}) based on {gcm}, {resolution}',
+            'description': DS_DESCRIPTION,
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
             'acknowledgement': (

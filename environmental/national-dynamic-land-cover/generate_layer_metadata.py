@@ -19,6 +19,21 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Dynamic Land Cover (2000-2008), {resolution}',
             'categories': ['environmental', 'landcover'],
             'domain': 'terrestrial',
+            'description': (
+                "Land cover is the observed biophysical cover on the Earth's surface, including "
+                "native vegetation, soils, exposed rocks and water bodies as well as anthropogenic "
+                "elements such as plantations, crops and built environments. The dataset presents "
+                "land cover information for every 250m by 250m area of the country from April 2000 "
+                "to April 2008. The classification scheme used to describe land cover categories in "
+                "the Dynamic Land Cover Dataset conforms to the 2007 International Standards "
+                "Organisation (ISO) land cover standard (19144-2). The Dynamic Land Cover Dataset "
+                "shows Australian land covers clustered into 34 ISO classes. These reflect the "
+                "structural character of vegetation, ranging from cultivated and managed land covers "
+                "(crops and pastures) to natural land covers such as closed forest and sparse, open "
+                "grasslands. Complete information on the creation of this product can be found in "
+                "the documents available from the Geoscience Australia website: "
+                "https://data.gov.au/dataset/1556b944-731c-4b7f-a03e-14577c7e68db"
+            ),
             'acknowledgement': (
                 'Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., '
                 'Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), '
@@ -41,6 +56,18 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Enhanced Vegetation Index (2000-2008), {resolution}',
             'categories': ['environmental', 'landcover'],
             'domain': 'terrestrial',
+            'description': (
+                "The Enhanced Vegetation Index data is part of the Australian Dynamic Land Cover dataset. "
+                "The dataset presents land cover information for every 250m by 250m area of the country "
+                "from April 2000 to April 2008. A key aspect of land cover is vegetation greenness. The "
+                "greenness of vegetation is directly related to the amount of photosynthesis occurring, "
+                "and can be measured as an index such as the Enhanced Vegetation Index (EVI). Complete "
+                "information on the creation of this product can be found in the documents available "
+                "from the Geoscience Australia website: "
+                "https://data.gov.au/dataset/f6951ba7-8968-4f64-9d38-1ed1a25785a0. More information on "
+                "how to interpret this data can be found here: "
+                "http://www.ga.gov.au/scientific-topics/earth-obs/accessing-satellite-imagery/landcover/executive-summary"
+            ),
             'acknowledgement': (
                 'Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., '
                 'Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), '

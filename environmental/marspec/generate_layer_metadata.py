@@ -20,6 +20,12 @@ class MarspecLayerMetadata(BaseLayerMetadata):
             'title': 'Global marine data, Bathymetry (1955-2010), {resolution}'.format(resolution=RESOLUTIONS['300']['long']),
             'categories': ['environmental', 'topography'],
             'domain': 'marine',
+            'description': (
+                'Bathymetry for the world’s ocean at at 5 arcmin resolution. The MARSPEC bathymetry dataset is extracted '
+                'from the SRTM30_PLUS V6.0 data set, a 30 arc-second digital elevation model of global elevation and '
+                'seafloor topography (http://topex.ucsd.edu/WWW_html/srtm30_plus.html; Becker et al. 2009). '
+                'Website: http://marspec.weebly.com/modern-data.html'
+            ),
             'acknowledgement': (
                 'Sbrocco EJ, Barber PH (2013) MARSPEC: Ocean climate layers for marine spatial ecology. '
                 'Ecology 94:979. http://dx.doi.org/10.1890/12-1358.1'
