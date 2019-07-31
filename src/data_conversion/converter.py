@@ -165,16 +165,27 @@ class BaseConverter(object):
         """
         return True
 
-    # common methods usually not required to change
-    def create_target_dir(self, destdir, srcfile, check=False):
-        root = self.target_dir(destdir, srcfile)
-        if check:
-            return os.path.exists(root)
-        else:
-            os.makedirs(root, exist_ok=True)
-        return root
+    def validate_target_file(self, targetpath):
+        # TODO: do some validity check?
+        # 1. simple open check
+        ds = gdal.Open(targetpath, gdal.GA_ReadOnly)
+        if not ds:
+            return False
+        return True
 
-    def convert(self, srcfile, destdir):
+    def skip_existing(self, targetpath):
+        # return True if targetpath can be skipped
+        if not self.opts.skip_existing:
+            # skip not requested
+            return False
+        if not os.path.exists(targetpath):
+            # target does not exists
+            return False
+        # TODO: add some option, that thorough validation is not necessary
+        #       e.g. waking all files can take some time.
+        return self.validate_target_file(targetpath)
+
+    def convert(self, srcfile, destdir, target_dir):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
@@ -199,9 +210,19 @@ class BaseConverter(object):
                 gdaloptions = self.gdal_options(parsed_md)
                 # output file name
                 destpath = os.path.join(destdir, destfilename)
+                # target path to skip existing
+                targetpath = os.path.join(target_dir, destfilename)
+                if self.skip_existing(targetpath):
+                    # target is valid... skip it
+                    # TODO: log targetpath or destfilename?
+                    tqdm.write('Skip {}:{} -> {}'.format(srcfile, zipinfo.filename, destfilename))
+                    continue
                 # run gdal translate
                 cmd = ['gdal_translate']
                 cmd.extend(gdaloptions)
+                # dry-run check
+                if self.opts.dry_run:
+                    continue
                 results.append(
                     pool.submit(run_gdal, cmd, srcurl, destpath, parsed_md)
                 )
@@ -230,8 +251,12 @@ class BaseConverter(object):
                   'destination')
         )
         parser.add_argument(
-            '--skipexisting', action='store_true',
+            '--skip-existing', action='store_true',
             help='Skip files for which destination dir exists. (no checks done)'
+        )
+        parser.add_argument(
+            '--dry-run', action='store_true',
+            help='Only work through filter filter etc. Do not actually convert files.'
         )
         return parser
 
@@ -261,16 +286,16 @@ class BaseConverter(object):
         dest = ensure_directory(self.opts.destdir)
         # unpack contains one destination datasets
         for srcfile in tqdm(srcfiles):
-            target_work_dir = self.create_target_dir(workdir, srcfile)
+            target_work_dir = self.target_dir(workdir, srcfile)
+            target_dir = self.target_dir(dest, srcfile)
             try:
-                # TODO: skip not done anhywhere else
-                if self.opts.skipexisting and self.create_target_dir(dest, srcfile, check=True):
-                    tqdm.write('Skip {}'.format(srcfile))
-                    continue
                 # convert files into workdir
-                self.convert(srcfile, target_work_dir)
+                os.makedirs(target_work_dir, exist_ok=True)
+                self.convert(srcfile, target_work_dir, target_dir)
                 # move results to dest
-                target_dir = self.create_target_dir(dest, srcfile)
+                # TODO: double check our new skip-existing check won;t interfere here
+                #       workdir may not be popuplated / exist at all?
+                os.makedirs(target_dir, exist_ok=True)
                 move_files(target_work_dir, target_dir)
             finally:
                 # cleanup
