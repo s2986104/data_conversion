@@ -377,7 +377,8 @@ class BaseLayerMetadata(object):
                     # sanity check
                     # this check is only within this converter, but the way we generate uuids
                     # should make things unique enough
-                    raise Exception('Duplicate uuid generated: {}'.format(coverage['bccvl:metadata']))
+                    old = [c for c in coverages if c['bccvl:metadata']['uuid'] == coverage['bccvl:metadata']['uuid']][0]
+                    raise Exception('Duplicate uuid generated: old: {}\n new: {}'.format(old['bccvl:metadata'], coverage['bccvl:metadata']))
                 uuids_seen.add(covuuid)
                 coverages.append(coverage)
             except Exception as e:
