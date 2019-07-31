@@ -56,8 +56,8 @@ def run_gdal(cmd, infile, outfile, md):
         # ensure band stats
         band.ComputeStatistics(False)
         layerid = md['layerid']
-        for key, value in VAR_DEFS[layerid].items():
-            band.SetMetadataItem(key, value)
+        for key in ('standard_name', 'long_name', 'measure_type'):
+            band.SetMetadataItem(key, VAR_DEFS[layerid][key])
         # just for completeness
         band.SetUnitType(VAR_DEFS[layerid]['units'])
         band.SetScale(md.get('scale', 1.0))
@@ -165,6 +165,12 @@ class BaseConverter(object):
         """
         return True
 
+    def update_scale_offset(self, md):
+        if md['layerid'] in self.SCALES:
+            md['scale'] = self.SCALES[md['layerid']]
+        if md['layerid'] in self.OFFSETS:
+            md['offset'] = self.OFFSETS[md['layerid']]
+
     def validate_target_file(self, targetpath):
         # TODO: do some validity check?
         # 1. simple open check
@@ -201,10 +207,7 @@ class BaseConverter(object):
                     self.parse_filename(zipinfo.filename)
                 )
                 # apply scale and offset
-                if parsed_md['layerid'] in self.SCALES:
-                    parsed_md['scale'] = self.SCALES[parsed_md['layerid']]
-                if parsed_md['layerid'] in self.OFFSETS:
-                    parsed_md['offset'] = self.OFFSETS[parsed_md['layerid']]
+                self.update_scale_offset(parsed_md)
                 destfilename = self.destfilename(destdir, parsed_md)
                 srcurl = get_vsi_path(srcfile, zipinfo.filename)
                 gdaloptions = self.gdal_options(parsed_md)
@@ -228,8 +231,8 @@ class BaseConverter(object):
                 )
 
         for result in tqdm(futures.as_completed(results),
-                                desc=os.path.basename(srcfile),
-                                total=len(results)):
+                           desc=os.path.basename(srcfile),
+                           total=len(results)):
             if result.exception():
                 tqdm.write("Job failed")
                 raise result.exception()

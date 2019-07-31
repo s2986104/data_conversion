@@ -51,6 +51,29 @@ GCM_MAP = {
     'no': 'NorESM1-M',
 }
 
+VAR_MAP = {
+    'alt': 'altitude',
+    'prec': 'precipitation_mean',
+    'tmax': 'temperature_max',
+    'tmin': 'temperature_min',
+    'tmean': 'temperature_mean',
+    'srad': 'solar_radiation',
+    'vapr': 'vapor_pressure',
+    'wind': 'wind_speed',
+}
+
+REV_VAR_MAP = {
+    'altitude': 'alt',
+    'precipitation_mean': 'prec',
+    'temperature_max': 'tmax',
+    'temperature_min': 'tmin',
+    'temperature_mean': 'tmean',
+    'solar_radiation': 'srad',
+    'vapor_pressure': 'vapr',
+    'wind_speed': 'wind',
+}
+
+
 # Worldclim current seems to be slightly off, we use this map to adjust it.
 GEO_TRANSFORM_PATCH = {
     '10m': (-180.0, 0.16666666666666666, 0.0, 90.0, 0.0, -0.16666666666666666),
@@ -85,8 +108,8 @@ def run_gdal(cmd, infile, outfile, md):
         # ensure band stats
         band.ComputeStatistics(False)
         layerid = md['layerid']
-        for key, value in VAR_DEFS[layerid].items():
-            band.SetMetadataItem(key, value)
+        for key in ('standard_name', 'long_name', 'measure_type'):
+            band.SetMetadataItem(key, VAR_DEFS[layerid][key])
         # just for completeness
         band.SetUnitType(VAR_DEFS[layerid]['units'])
         band.SetScale(md.get('scale', 1.0))
@@ -123,9 +146,9 @@ def run_gdal(cmd, infile, outfile, md):
 class WorldClimConverter(BaseConverter):
 
     SCALES = {
-        'tmean': 0.1,
-        'tmin': 0.1,
-        'tmax': 0.1,
+        'temperature_mean': 0.1,
+        'temperature_min': 0.1,
+        'temperature_max': 0.1,
         'bioclim_01': 0.1,
         'bioclim_02': 0.1,
         # 'bioclim_03': 0.1,
@@ -245,7 +268,10 @@ class WorldClimConverter(BaseConverter):
             month = int(subid)
         else:
             raise Exception('Unknown lzid {}'.format(lzid))
-        md = { 'layerid': layerid }
+        if 'layerid' in VAR_MAP:
+            md = {'layerid': VAR_MAP[layerid]}
+        else:
+            md = {'layerid': layerid}
         if month is not None:
             md['month'] = month
         return md
@@ -277,7 +303,7 @@ class WorldClimConverter(BaseConverter):
         options += ['-co', 'COMPRESS=DEFLATE', '-norat']
         if emsc == 'current':
             # Altitude don't have year
-            if md['layerid'] != 'alt':
+            if md['layerid'] != 'altitude':
                 options += ['-mo', 'year_range={}-{}'.format(year - 15, year + 15)]
                 options += ['-mo', 'year={}'.format(year)]
         else:
@@ -311,10 +337,14 @@ class WorldClimConverter(BaseConverter):
     def destfilename(self, destdir, md):
         if 'month' in md:
             # include month in filename
+            if md['layerid'] in REV_VAR_MAP:
+                lzid = md['layerid']
+            else:
+                lzid = layerid
             return (
                 os.path.basename(destdir) +
                 '_' +
-                md['layerid'].replace('_', '-') +
+                lzid.replace('_', '-') +
                 '_' +
                 '{:02d}'.format(md['month']) +
                 '.tif'
@@ -322,7 +352,7 @@ class WorldClimConverter(BaseConverter):
         return (
             os.path.basename(destdir) +
             '_' +
-            md['layerid'].replace('_', '-') +
+            lzid.replace('_', '-') +
             '.tif'
         )
 
@@ -330,6 +360,13 @@ class WorldClimConverter(BaseConverter):
         if self.opts.filter:
             return self.opts.filter.search(srcfile)
         return True
+
+    def update_scale_offset(self, md):
+        if md['version'] == 'v1.4':
+            if md['layerid'] in self.SCALES:
+                parsed_md['scale'] = self.SCALES[md['layerid']]
+            if md['layerid'] in self.OFFSETS:
+                parsed_md['offset'] = self.OFFSETS[md['layerid']]
 
     def get_argument_parser(self):
         parser = super().get_argument_parser()
@@ -346,61 +383,6 @@ class WorldClimConverter(BaseConverter):
         if opts.filter:
             opts.filter = re.compile(opts.filter)
         return opts
-
-    def convert(self, srcfile, destdir, target_dir):
-        """convert .asc.gz files in folder to .tif in dest
-        """
-        parsed_zip_md = self.parse_zip_filename(srcfile)
-        pool = futures.ProcessPoolExecutor(self.max_processes)
-        results = []
-        try:
-            with zipfile.ZipFile(srcfile) as srczip:
-                for zipinfo in tqdm(srczip.filelist, desc="build jobs"):
-                    if self.skip_zipinfo(zipinfo):
-                        continue
-
-                    parsed_md = copy.copy(parsed_zip_md)
-                    parsed_md.update(
-                        self.parse_filename(zipinfo.filename)
-                    )
-                    # apply scale and offset
-                    # TODO: onyl scale in v1.4???
-                    if parsed_md['version'] == 'v1.4':
-                        if parsed_md['layerid'] in self.SCALES:
-                            parsed_md['scale'] = self.SCALES[parsed_md['layerid']]
-                        if parsed_md['layerid'] in self.OFFSETS:
-                            parsed_md['offset'] = self.OFFSETS[parsed_md['layerid']]
-                    destfilename = self.destfilename(destdir, parsed_md)
-                    srcurl = get_vsi_path(srcfile, zipinfo.filename)
-                    gdaloptions = self.gdal_options(parsed_md)
-                    # output file name
-                    destpath = os.path.join(destdir, destfilename)
-                    # target path to skip existing
-                    targetpath = os.path.join(target_dir, destfilename)
-                    if self.skip_existing(targetpath):
-                        # target is valid... skip it
-                        # TODO: log targetpath or destfilename?
-                        tqdm.write('Skip {}:{} -> {}'.format(srcfile, zipinfo.filename, destfilename))
-                        continue
-                    # run gdal translate
-                    cmd = ['gdal_translate']
-                    cmd.extend(gdaloptions)
-                    if self.opts.dry_run:
-                        continue
-                    results.append(
-                        pool.submit(run_gdal, cmd, srcurl, destpath, parsed_md)
-                    )
-
-            for result in tqdm(futures.as_completed(results),
-                               desc=os.path.basename(srcfile),
-                               total=len(results)):
-                if result.exception():
-                    tqdm.write("Job failed")
-                    raise result.exception()
-        except:
-            print("Failed {}".format(srcfile))
-            raise
-
 
 
 def main():
