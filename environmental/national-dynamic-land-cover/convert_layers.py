@@ -145,7 +145,7 @@ class NDLCConverter(BaseConverter):
                     skip += 1
         return rat
 
-    def convert(self, srcfile, destdir):
+    def convert(self, srcfile, destdir, target_dir):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
@@ -172,14 +172,33 @@ class NDLCConverter(BaseConverter):
                 gdaloptions = self.gdal_options(parsed_md)
                 # output file name
                 destpath = os.path.join(destdir, destfilename)
+                # target path to skip existing
+                targetpath = os.path.join(target_dir, destfilename)
+                if self.skip_existing(targetpath):
+                    # target is valid... skip it
+                    # TODO: log targetpath or destfilename?
+                    tqdm.write('Skip {}:{} -> {}'.format(srcfile, zipinfo.filename, destfilename))
+                    continue
                 # run gdal translate
                 cmd = ['gdal_translate']
                 cmd.extend(gdaloptions)
+                # TODO: this is weird here ...
+                #       we skip on dry run  which is ok,
+                #       but the else clause below, generates new datasets
+                #       which are not checked all in exists check or
+                #       here....
+                if self.opts.dry_run:
+                    continue
+
                 if zipinfo.filename.lower().find('dlcdv1_class.tif') < 0:
                     results.append(
                         pool.submit(run_gdal, cmd, srcurl, destpath, parsed_md)
                     )
                 else:
+                    # TODO: ideally we don't make up new datasets on the fly in convert...
+                    #       it is called convert not generate
+                    #       convert assumes transfrom one source into one destination
+                    #       it is already broken by processing zip zources, but this here breaks it even more
                     # Special handling for DLCDV1_Class.
                     # 1. Need to attach the associated RAT table
                     # 2. Add a reduced classification data layer for DLCDv1_Class

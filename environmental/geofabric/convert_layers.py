@@ -521,7 +521,8 @@ class GeofabricConverter(BaseConverter):
         return outfilename
 
 
-    def convert(self, srcfile, destdir):
+    # FIXME: skip-existing check and dry-run check inside this method
+    def convert(self, srcfile, destdir, target_dir):
         """convert .asc.gz files in folder to .tif in dest
         """
         # TODO: looping does not quite fit processing pattern

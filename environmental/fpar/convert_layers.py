@@ -78,7 +78,8 @@ class FparConverter(BaseConverter):
            if result.exception():
                tqdm.write("Job failed")
                raise result.exception()
- 
+
+    # TODO: again... we generate new datasets in convert ...
     def convert_stats(self, stats, template, destroot, md):
         """Load in raster files in chunks to reduce memory demands,
         calculate statistics, and save to file.
@@ -117,7 +118,7 @@ class FparConverter(BaseConverter):
                 #run gdal command to attach metadata
                 gdaloptions = self.gdal_options(md)
                 # output stats file name
-                outfile = stat_filename(destroot, md)
+                outfile = stat_filename(self.target_dir(destroot, None), md)
                 # run gdal translate
                 cmd = ['gdal_translate']
                 cmd.extend(gdaloptions)
@@ -190,7 +191,7 @@ class FparConverter(BaseConverter):
         pbar.update()
         pbar.close()
 
-    def convert(self, srcfile, destdir):
+    def convert(self, srcfile, destdir, target_dir):
         """conver the tif layer and then compute the stats.
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
@@ -216,9 +217,18 @@ class FparConverter(BaseConverter):
             gdaloptions = self.gdal_options(parsed_md)
             # output file name
             destpath = os.path.join(destdir, destfilename)
+            # target path to skip existing
+            targetpath = os.path.join(target_dir, destfilename)
+            if self.skip_existing(targetpath):
+                # target is valid... skip it
+                # TODO: log targetpath or destfilename?
+                tqdm.write('Skip {}:{} -> {}'.format(srcfile, zipinfo.filename, destfilename))
+                continue
             # run gdal translate
             cmd = ['gdal_translate']
             cmd.extend(gdaloptions)
+            if self.opts.dry_run:
+                continue
             results.append(
                 pool.submit(run_gdal, cmd, srcurl, destpath, parsed_md)
             )
@@ -251,6 +261,7 @@ class FparConverter(BaseConverter):
         super().main()
 
         # Calculate the fpar statistics for the tiff files
+        # TODO: this does not follow a nice model here ...
         dest = ensure_directory(self.opts.destdir)
         self.fpar_stats(dest, os.path.join(self.opts.source, 'fpar'))
         

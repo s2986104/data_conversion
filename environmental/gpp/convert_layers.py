@@ -185,7 +185,8 @@ class GPPConverter(BaseConverter):
         # flush data to disk
         outdata.FlushCache()
 
-    def convert(self, srcfile, destdir):
+    # FIXME: skip-existing check and dry-run check in this method here
+    def convert(self, srcfile, destdir, target_dir):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)

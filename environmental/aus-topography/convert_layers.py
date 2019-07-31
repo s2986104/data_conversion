@@ -112,7 +112,7 @@ class AusTopographyConverter(BaseConverter):
                 rat.SetValueAsString(data[0], 3, data[3])  # interpretation
         rb.SetDefaultRAT(rat)
 
-    def convert(self, srcfile, destdir):
+    def convert(self, srcfile, destdir, target_dir):
         """convert .zip files in folder to .tif in dest
         """
         zipfilename = os.path.basename(srcfile)
@@ -123,6 +123,7 @@ class AusTopographyConverter(BaseConverter):
         try:
             with tempfile.TemporaryDirectory() as tempdirname:
                 # Extract files
+                # FIXME: ... why doe we extract?
                 with zipfile.ZipFile(srcfile) as srczip:
                     srczip.extractall(tempdirname)
 
@@ -140,12 +141,22 @@ class AusTopographyConverter(BaseConverter):
                 gdaloptions = self.gdal_options(parsed_md)
                 # output file name
                 destpath = os.path.join(destdir, destfilename)
+                # target path to skip existing
+                targetpath = os.path.join(target_dir, destfilename)
+                if self.skip_existing(targetpath):
+                    # target is valid... skip it
+                    # TODO: log targetpath or destfilename?
+                    tqdm.write('Skip {}:{} -> {}'.format(srcfile, zipinfo.filename, destfilename))
+                    continue
                 # run gdal translate
                 cmd = ['gdal_translate']
                 cmd.extend(gdaloptions)
+                if self.opts.dyr_run:
+                    continue
                 results.append(
                     pool.submit(run_gdal, cmd, vrtfile, destpath, parsed_md)
                 )
+                # FIXME: why do we loop over a single result?
                 for result in futures.as_completed(results):
                     if result.exception():
                         raise result.exception()

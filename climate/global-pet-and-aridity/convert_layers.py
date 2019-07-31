@@ -66,7 +66,7 @@ class GlobalPetAridityConverter(BaseConverter):
         root = os.path.join(destdir, dirname)
         return root
 
-    def convert(self, srcfile, destdir):
+    def convert(self, srcfile, destdir, target_dir):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
@@ -99,9 +99,18 @@ class GlobalPetAridityConverter(BaseConverter):
                     gdaloptions = self.gdal_options(parsed_md)
                     # output file name
                     destpath = os.path.join(destdir, destfilename)
+                    # target path to skip existing
+                    targetpath = os.path.join(target_dir, destfilename)
+                    if self.skip_existing(targetpath):
+                        # target ist valid... skip it
+                        # TODO: log targetpath or destfilename?
+                        tqdm.write('Skip {}:{} -> {}'.format(srcfile, zipinfo.filename, destfilename))
+                        continue
                     # run gdal translate
                     cmd = ['gdal_translate']
                     cmd.extend(gdaloptions)
+                    if self.opts.dry_run:
+                        continue
                     results.append(
                         pool.submit(run_gdal, cmd, srcurl, destpath, parsed_md)
                     )
