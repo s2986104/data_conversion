@@ -83,14 +83,14 @@ def gen_tif_metadata(tiffile, srcdir, swiftcontainer):
 #       or maybe jsut parameterise the fileds that go into the uuid?
 def gen_coverage_uuid(cov, identifier):
     # generate predictable uuid
-    # kind + 'id' + genre + variable names + emsc + gcm + year + month
+    # kind + 'id' + time_domain + variable names + emsc + gcm + year + month
     # if any of these identifiers change, the uuid will be different
     md = cov['bccvl:metadata']
     # determine if Data or Dataset; dataset has title, data do not have.
     # TODO: better detection of Dataset or not
     kind = 'Data' if len(cov['parameters']) == 1 and 'title' not in cov['bccvl:metadata'] else 'Dataset'
     parts = [
-        kind, identifier, md['genre'],
+        kind, identifier, md['time_domain'],
         ''.join(sorted(cov['parameters'].keys())),
     ]
     for key in ('emsc', 'gcm', 'rcm', 'year', 'month'):
