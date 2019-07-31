@@ -20,6 +20,8 @@ setup(
     entry_points={
         'console_scripts': [
             'gen_collections=data_conversion.gen_collections:main',
+            'gen_variables=data_conversion.gen_variables:main',
+            'update_metadata=data_conversion.update_metadata:main'
         ]
     }
 )
