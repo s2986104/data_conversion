@@ -7,6 +7,7 @@ import uuid
 from osgeo import gdal, gdal_array, osr
 
 from data_conversion.utils import transform_pixel, open_gdal_dataset
+from data_conversion.vocabs import VAR_DEFS
 
 
 GDAL_JSON_TYPE_MAP = {
@@ -289,19 +290,13 @@ def gen_cov_parameters(ds, ratmap=None):
                 # }
             },
             "unit": {  # categories don't have units
-                # TODO: maybe switch to UCUM units?
-                # There is no id for udunits
                 # "id": "",  # optional
-                # We have no label for udunits (yet)
                 # "label": {"en": ""},  # at least label or symbol is
                 #          required
-                # We have udunits, for which there is no type url,
-                #    so we use the string version of symbol
-                "symbol": bandmd['units'],  # can be a string
-                # "symbol": {    # or an object
-                #     "value": "",
-                #     "type": "",
-                # }
+                "symbol": {
+                    "value": band.GetUnitType(),
+                    "type" : "http://www.opengis.net/def/uom/UCUM/",
+                }, 
             }
         }
     }
@@ -326,6 +321,10 @@ def gen_cov_parameters(ds, ratmap=None):
             'stddev': stddev
         }
         parameters[bandmd['standard_name']]['observedProperty']['dmgr:nodata'] = nodata
+    # check VAR_DEFS and add dmgr:legen dor observedProperty
+    var_def = VAR_DEFS.get(bandmd['standard_name'])
+    if var_def and 'legend' in var_def:
+        parameters[bandmd['standard_name']]['observedProperty']['dmgr:legend'] = var_def['legend']
     return parameters
 
 
