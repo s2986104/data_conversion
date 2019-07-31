@@ -8,22 +8,11 @@ from data_conversion.vocabs import COLLECTIONS
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('destdir', default=os.getcwd())
+    parser.add_argument('destdir', default=os.getcwd(), nargs='?', help='Output directory')
     return parser.parse_args()
 
-    def main(self):
-        # TODO: we need a mode to just update as existing json file without parsing
-        #       all tiff files. This would be useful to just update titles and
-        #       things.
-        #       could probably also be done in a separate one off script?
-        opts = self.parse_args()
-        opts.destdir = os.path.abspath(opts.destdir)
-
-        datajson = os.path.join(opts.srcdir, 'data.json')
-
-        
 def main():
-    opts = self.parse_args()
+    opts = parse_args()
     opts.destdir = os.path.abspath(opts.destdir)
 
     with open(os.path.join(opts.destdir, 'collections.json'), 'w') as mdfile:
