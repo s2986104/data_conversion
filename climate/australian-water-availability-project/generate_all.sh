@@ -2,4 +2,4 @@
 
 BASEDIR="/mnt/collection/datasets/climate/australian-water-availability-project"
 
-python3 convert_layers.py ${BASEDIR}/source ${BASEDIR}/layers
+python3 generate_layer_metadata.py --force ${BASEDIR}/layers

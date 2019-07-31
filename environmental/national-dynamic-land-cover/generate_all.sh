@@ -2,4 +2,4 @@
 
 BASEDIR="/mnt/collection/datasets/environmental/national-dynamic-land-cover"
 
-python3 convert_layers.py ${BASEDIR}/source ${BASEDIR}/layers
+python3 generate_layer_metadata.py --force ${BASEDIR}/layers 
