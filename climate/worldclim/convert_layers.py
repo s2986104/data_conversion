@@ -3,6 +3,7 @@ import os
 import os.path
 from concurrent import futures
 import copy
+import re
 import tempfile
 import zipfile
 
@@ -22,6 +23,10 @@ EMSC_MAP = {
     'RCP6': 'RCP6.0',
     'RCP45': 'RCP4.5',
     'RCP85': 'RCP8.5',
+    '26': 'RCP2.6',
+    '45': 'RCP4.5',
+    '60': 'RCP6.0',
+    '85': 'RCP8.5',
 }
 
 GCM_MAP = {
@@ -46,23 +51,6 @@ GCM_MAP = {
     'no': 'NorESM1-M',
 }
 
-SCALES = {
-    'tmean': 0.1,
-    'tmin': 0.1,
-    'tmax': 0.1,
-    'bioclim_01': 0.1,
-    'bioclim_02': 0.1,
-    # 'bioclim_03': 0.1,
-    'bioclim_04': 0.1,
-    'bioclim_05': 0.1,
-    'bioclim_06': 0.1,
-    'bioclim_07': 0.1,
-    'bioclim_08': 0.1,
-    'bioclim_09': 0.1,
-    'bioclim_10': 0.1,
-    'bioclim_11': 0.1,
-}
-
 # Worldclim current seems to be slightly off, we use this map to adjust it.
 GEO_TRANSFORM_PATCH = {
     '10m': (-180.0, 0.16666666666666666, 0.0, 90.0, 0.0, -0.16666666666666666),
@@ -76,7 +64,10 @@ def run_gdal(cmd, infile, outfile, md):
     """
     Run gdal_translate in sub process.
     """
-    tfd, tfname = tempfile.mkstemp(suffix='.tif')
+    tfd, tfname = tempfile.mkstemp(
+        prefix='run_{}_'.format(os.path.splitext(os.path.basename(infile))[0]),
+        suffix='.tif',
+    )
     os.close(tfd)
     try:
         retry_run_cmd(cmd + [infile, tfname])
@@ -131,32 +122,63 @@ def run_gdal(cmd, infile, outfile, md):
 
 class WorldClimConverter(BaseConverter):
 
+    SCALES = {
+        'tmean': 0.1,
+        'tmin': 0.1,
+        'tmax': 0.1,
+        'bioclim_01': 0.1,
+        'bioclim_02': 0.1,
+        # 'bioclim_03': 0.1,
+        'bioclim_04': 0.1,
+        'bioclim_05': 0.1,
+        'bioclim_06': 0.1,
+        'bioclim_07': 0.1,
+        'bioclim_08': 0.1,
+        'bioclim_09': 0.1,
+        'bioclim_10': 0.1,
+        'bioclim_11': 0.1,
+    }
+
+
     def parse_zip_filename(self, srcfile):
         """
         Parse filename of the format 1km/RCP85_ncar-pcm1_2015.zip to get emsc and
         gcm and year and resolution
         """
-        basename, _ = os.path.splitext(os.path.basename(srcfile))
-        basedir = os.path.basename(os.path.dirname(srcfile))
+        parts = srcfile.split(os.path.sep)
+        basename, _ = os.path.splitext(parts[-1])
+        # get other parts from path
+        version, period, resolution = parts[-4:-1]
         gcm = None
-        if basedir == 'current':
-            # it's a current file ... type_ = 'esri'
-            var, res, type_ = basename.split('_')
-            emsc = gcm = 'current'
-            year = 1975
+        # file name scheme different per version
+        if version == 'v1.4':
+            if period == 'current':
+                # it's a current file ... type_ = 'esri'
+                var, _, type_ = basename.split('_')
+                emsc = gcm = 'current'
+                year = 1975
+            else:
+                # it's future .. basedir is resolution
+                gcm, emsc, var, year = re.findall(r'\w{2}', basename)
+                type_ = 'tif'
+                year = 2000 + int(year)
+                emsc = EMSC_MAP[emsc]
+                gcm = GCM_MAP[gcm]
         else:
-            # it's future .. basedir is resolution
-            gcm, emsc, var, year = re.findall(r'\w{2}', basename)
-            res = basedir.replace(".", '-')
-            type_ = 'tif'
-            year = 2000 + int(year)
-            emsc = EMSC_MAP[emsc]
-            gcm = GCM_MAP[gcm]
+            if period == 'current':
+                _, _, var = basename.split('_')
+                emsc = gcm = 'current'
+                year = 1985
+                type_ = 'tif'
+            else:
+                raise Exception('v2.0 future not implemented')
+
         return {
             'emsc': emsc,
             'gcm': gcm,
-            'resolution': res,
+            'resolution': resolution.replace('.', '-'),
             'year': year,
+            'version': version,
             'type': type_
         }
 
@@ -165,35 +187,62 @@ class WorldClimConverter(BaseConverter):
         parse a full path within a zip file and return a dict
         with informatn extracted from path and filename
         """
-        basedir = os.path.basename(os.path.dirname(filename))
-        lzid = basedir.split('_')[0]
+        if filename.endswith('.adf'):
+            # 1.4 current is in esri format
+            # things are in folders
+            basedir = os.path.basename(os.path.dirname(filename))
+            # subid is either month or bioclim layer num
+            lzid, subid = basedir.split('_')
+        else:
+            # 1.4 future in geotiff
+            match = re.match(r'(?P<gcm>\w{2})(?P<emsc>\d{2})(?P<var>\w{2})(?P<year>\d{2})(?P<sub>\d{1,2}).tif', filename)
+            if match:
+                lzid = match.group('var')
+                subid = match.group('sub')
+            else:
+                # 2.0 current in geotiff
+                match = re.match(r'wc2.0_(?P<res>.+)_(?P<var>.+)_(?P<sub>\d{2}).tif', filename)
+                if match:
+                    if match.group('res') == 'bio':
+                        # bio is swapped around
+                        lzid = match.group('res')
+                    else:
+                        lzid = match.group('var')
+                    subid = match.group('sub')
+                else:
+                    raise Exception('No regexp matched.')
+
         month = None
-        if lzid in ('prec', 'tmin', 'tmax', 'tmean'):
+        if lzid in ('prec', 'tmin', 'tmax', 'tmean', 'srad', 'vapr', 'wind'):
             # current other
             layerid = lzid
-            month = int(basedir.split('_')[1])
+            month = int(subid)
+        elif lzid in ('tavg'):
+            # current 2.0
+            layerid = 'tmean'
+            month = int(subid)
         elif lzid == 'alt':
             # current alt
             layerid = lzid
         elif lzid == 'bio':
             # current dataset
-            layerid = 'bioclim_{:02d}'.format(int(basedir.split('_')[1]))
+            layerid = 'bioclim_{:02d}'.format(int(subid))
         elif lzid == 'bi':
             # future
             # last one or two digits before '.tif' are bioclim number
-            layerid = 'bioclim_{:02d}'.format(int(basedir[8:-4]))
+            layerid = 'bioclim_{:02d}'.format(int(subid))
         elif lzid == 'pr':
             # future
             layerid = 'prec'
-            month = int(basedir[8:-4])
+            month = int(subid)
         elif lzid == 'tn':
             # future
             layerid = 'tmin'
-            month = int(basedir[8:-4])
+            month = int(subid)
         elif lzid == 'tx':
             # future
             layerid = 'tmax'
-            month = int(basedir[8:-4])
+            month = int(subid)
         else:
             raise Exception('Unknown lzid {}'.format(lzid))
         md = { 'layerid': layerid }
@@ -241,60 +290,116 @@ class WorldClimConverter(BaseConverter):
         if md.get('month'):
             options += ['-mo', 'month={}'.format(md.get('month'))]
 
-        options += ['-mo', 'version=1.4']
+        options += ['-mo', 'version={}'.format(md['version'])]
         return options
 
     def target_dir(self, destdir, srcfile):
+        # srcfile ... src zip file
         fmd = self.parse_zip_filename(srcfile)
         res = fmd['resolution']
         emsc = fmd['emsc']
         gcm = fmd['gcm']
         year = fmd['year']
+        version = fmd['version']
         if emsc == 'current':
-            dirname = 'current_{year}'.format(year=year)
+            dirname = '{version}_current_{year}'.format(version=version, year=year)
         else:
-            dirname = '{0}_{1}_{2}'.format(emsc, gcm, year).replace(' ', '')
+            dirname = '{0}_{1}_{2}_{3}'.format(version, emsc, gcm, year).replace(' ', '')
         root = os.path.join(destdir, res, dirname)
         return root
 
-    def convert(self, srcfile, destdir):
+    def destfilename(self, destdir, md):
+        if 'month' in md:
+            # include month in filename
+            return (
+                os.path.basename(destdir) +
+                '_' +
+                md['layerid'].replace('_', '-') +
+                '_' +
+                '{:02d}'.format(md['month']) +
+                '.tif'
+            )
+        return (
+            os.path.basename(destdir) +
+            '_' +
+            md['layerid'].replace('_', '-') +
+            '.tif'
+        )
+
+    def filter_srcfiles(self, srcfile):
+        if self.opts.filter:
+            return self.opts.filter.search(srcfile)
+        return True
+
+    def get_argument_parser(self):
+        parser = super().get_argument_parser()
+        # TODO: add filter params
+        parser.add_argument(
+            '--filter', action='store',
+            help='regexp to filter srcfiles. applied on full path'
+        )
+        return parser
+
+    def parse_args(Self):
+        import re
+        opts = super().parse_args()
+        if opts.filter:
+            opts.filter = re.compile(opts.filter)
+        return opts
+
+    def convert(self, srcfile, destdir, target_dir):
         """convert .asc.gz files in folder to .tif in dest
         """
         parsed_zip_md = self.parse_zip_filename(srcfile)
         pool = futures.ProcessPoolExecutor(self.max_processes)
         results = []
-        with zipfile.ZipFile(srcfile) as srczip:
-            for zipinfo in tqdm(srczip.filelist, desc="build jobs"):
-                if self.skip_zipinfo(zipinfo):
-                    continue
+        try:
+            with zipfile.ZipFile(srcfile) as srczip:
+                for zipinfo in tqdm(srczip.filelist, desc="build jobs"):
+                    if self.skip_zipinfo(zipinfo):
+                        continue
 
-                parsed_md = copy.copy(parsed_zip_md)
-                parsed_md.update(
-                    self.parse_filename(zipinfo.filename)
-                )
-                # apply scale and offset
-                if parsed_md['layerid'] in self.SCALES:
-                    parsed_md['scale'] = self.SCALES[parsed_md['layerid']]
-                if parsed_md['layerid'] in self.OFFSETS:
-                    parsed_md['offset'] = self.OFFSETS[parsed_md['layerid']]
-                destfilename = self.destfilename(destdir, parsed_md)
-                srcurl = get_vsi_path(srcfile, zipinfo.filename)
-                gdaloptions = self.gdal_options(parsed_md)
-                # output file name
-                destpath = os.path.join(destdir, destfilename)
-                # run gdal translate
-                cmd = ['gdal_translate']
-                cmd.extend(gdaloptions)
-                results.append(
-                    pool.submit(run_gdal, cmd, srcurl, destpath, parsed_md)
-                )
+                    parsed_md = copy.copy(parsed_zip_md)
+                    parsed_md.update(
+                        self.parse_filename(zipinfo.filename)
+                    )
+                    # apply scale and offset
+                    # TODO: onyl scale in v1.4???
+                    if parsed_md['version'] == 'v1.4':
+                        if parsed_md['layerid'] in self.SCALES:
+                            parsed_md['scale'] = self.SCALES[parsed_md['layerid']]
+                        if parsed_md['layerid'] in self.OFFSETS:
+                            parsed_md['offset'] = self.OFFSETS[parsed_md['layerid']]
+                    destfilename = self.destfilename(destdir, parsed_md)
+                    srcurl = get_vsi_path(srcfile, zipinfo.filename)
+                    gdaloptions = self.gdal_options(parsed_md)
+                    # output file name
+                    destpath = os.path.join(destdir, destfilename)
+                    # target path to skip existing
+                    targetpath = os.path.join(target_dir, destfilename)
+                    if self.skip_existing(targetpath):
+                        # target is valid... skip it
+                        # TODO: log targetpath or destfilename?
+                        tqdm.write('Skip {}:{} -> {}'.format(srcfile, zipinfo.filename, destfilename))
+                        continue
+                    # run gdal translate
+                    cmd = ['gdal_translate']
+                    cmd.extend(gdaloptions)
+                    if self.opts.dry_run:
+                        continue
+                    results.append(
+                        pool.submit(run_gdal, cmd, srcurl, destpath, parsed_md)
+                    )
 
-        for result in tqdm(futures.as_completed(results),
-                                desc=os.path.basename(srcfile),
-                                total=len(results)):
-            if result.exception():
-                tqdm.write("Job failed")
-                raise result.exception()
+            for result in tqdm(futures.as_completed(results),
+                               desc=os.path.basename(srcfile),
+                               total=len(results)):
+                if result.exception():
+                    tqdm.write("Job failed")
+                    raise result.exception()
+        except:
+            print("Failed {}".format(srcfile))
+            raise
 
 
 
