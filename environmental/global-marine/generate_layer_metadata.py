@@ -52,8 +52,8 @@ DESCRIPTIONS = {
         'Micromole concentration of dissolved iron at the sea surface. '
     ),
     'Calcite': (
-        'Calcite concentration indicates the mean concentration of calcite (CaCO3) in oceans. ',
-    )
+        'Calcite concentration indicates the mean concentration of calcite (CaCO3) in oceans. '
+    ),
     'Dissolved Molecular Oxygen': (
         'Mole concentration of dissolved oxygen at the sea surface. '
     ),
@@ -104,6 +104,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'description': DESCRIPTIONS[i[0]] + COMMON_DESC,
             'categories': ['environmental', i[2]],
             'domain': 'marine',
+            'spatial_domain': 'Global',
             'acknowledgement': ACKNOWLEDGEMENT,
             'year': i[3],
             'license': (
@@ -113,7 +114,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'external_url': 'http://www.bio-oracle.org/',
             'partof': [collection_by_id('global_marine_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'url': RegExp('^.*/Marine-Present-Surface_.*_Surface.{lid}.*\.tif$'.format(lid=i[1]))
             },
             'aggs': [],
@@ -147,6 +148,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'description': DESCRIPTIONS[i[0]] + COMMON_DESC,
             'categories': ['environmental', i[2]],
             'domain': 'marine',
+            'spatial_domain': 'Global',
             'acknowledgement': ACKNOWLEDGEMENT,
             'license': (
                 'Creative Commons Attribution 4.0 '
@@ -155,7 +157,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             'external_url': 'http://www.bio-oracle.org/',
             'partof': [collection_by_id('global_marine_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'url': RegExp('^.*/Marine-Future-Surface_.*_Surface.{lid}.*\.tif$'.format(lid=i[1])),
                 'emsc': FilterType.DISCRIMINATOR,
                 'year': FilterType.DISCRIMINATOR
@@ -173,6 +175,7 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['300']['long'],
+            'spatial_domain': 'Global',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
@@ -182,7 +185,8 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['300']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -196,8 +200,8 @@ class GlobalMarineLayerMetadata(BaseLayerMetadata):
             ds_md['emsc'] = dsdef['filter']['emsc']
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
     def __init__(self):
         self.DATASETS.extend(self.FUTURE_DATASETS)

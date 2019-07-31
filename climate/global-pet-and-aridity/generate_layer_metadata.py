@@ -19,6 +19,7 @@ class PetAridityLayerMetadata(BaseLayerMetadata):
             'title': 'Global, Potential Evapo-Transpiration and Aridity (1950-2000), {resolution}',
             'categories': ['environmental', 'hydrology'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'acknowledgement': (
                 'Zomer RJ, Trabucco A, Bossio DA, van Straaten O, Verchot LV, 2008. '
                 'Climate Change Mitigation: A Spatial Analysis of Global Land Suitability '
@@ -37,7 +38,7 @@ class PetAridityLayerMetadata(BaseLayerMetadata):
             'external_url': 'http://www.cgiar-csi.org/data/global-aridity-and-pet-database',
             'partof': [collection_by_id('global_pet_and_aridity_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
             },
             'aggs': [],
         }
@@ -46,13 +47,15 @@ class PetAridityLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['30']['long'],
+            'spatial_domain': 'Global',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['30']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -67,8 +70,8 @@ class PetAridityLayerMetadata(BaseLayerMetadata):
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
 
 def main():

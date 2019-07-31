@@ -35,6 +35,7 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
             ),
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Regional',
             'acknowledgement': (
                 'Storlie, C.J., Phillips, B.L., VanDerWal, J.J., and Williams, S.E. (2013) '
                 'Improved spatial estimates of climate predict patchier species distributions. '
@@ -47,7 +48,7 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('accuclim_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreCC',
+                'time_domain': 'Current',
                 'year': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
@@ -57,14 +58,16 @@ class AccuClimLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             # all 9 arcsec
-            'resolution': RESOLUTIONS['9']['long']
+            'resolution': RESOLUTIONS['9']['long'],
+            'spatial_domain': 'Regional',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
             'license': dsdef.get('license'),

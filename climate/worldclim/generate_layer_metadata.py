@@ -25,6 +25,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             'title': 'WorldClim, current climate (1960-1990), {resolution}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'acknowledgement': (
                 'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
                 'resolution interpolated climate surfaces for global land areas. '
@@ -39,7 +40,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('worldclim_climate_layers')['uuid']],            
             'filter': {
-                'genre': 'DataGenreCC',
+                'time_domain': 'Current',
                 'month': FilterType.MISSING,
                 'resolution': FilterType.DISCRIMINATOR
             },
@@ -50,6 +51,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             'title': 'WorldClim, Altitude, {resolution}',
             'categories': ['environmental', 'topography'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'acknowledgement': (
                 'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
                 'resolution interpolated climate surfaces for global land areas. '
@@ -64,7 +66,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('worldclim_altitude_layers')['uuid']],     
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'resolution': FilterType.DISCRIMINATOR
             },
             'aggs': []
@@ -74,6 +76,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             'title': 'WorldClim, current climate {monthname} (1960-1990), {resolution}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'acknowledgement': (
                 'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
                 'resolution interpolated climate surfaces for global land areas. '
@@ -88,7 +91,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('worldclim_monthly_layers')['uuid']],            
             'filter': {
-                'genre': 'DataGenreCC',
+                'time_domain': 'Current',
                 'month': FilterType.DISCRIMINATOR,
                 'resolution': FilterType.DISCRIMINATOR
             },
@@ -99,6 +102,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             'title': 'WorldClim, future climate {year}, {gcm} {emsc}, {resolution}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'acknowledgement': (
                 'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
                 'resolution interpolated climate surfaces for global land areas. '
@@ -113,7 +117,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('worldclim_climate_layers')['uuid']],            
             'filter': {
-                'genre': 'DataGenreFC',
+                'time_domain': 'Future',
                 'month': FilterType.MISSING,
                 'gcm': FilterType.DISCRIMINATOR,
                 'emsc': FilterType.DISCRIMINATOR,
@@ -127,6 +131,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             'title': 'WorldClim, future climate {monthname} ({year}), {gcm} {emsc}, {resolution}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'acknowledgement': (
                 'Hijmans RJ, Cameron SE, Parra JL, Jones PG, Jarvis A (2005) Very high '
                 'resolution interpolated climate surfaces for global land areas. '
@@ -141,7 +146,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('worldclim_monthly_layers')['uuid']],            
             'filter': {
-                'genre': 'DataGenreFC',
+                'time_domain': 'Future',
                 'month': FilterType.DISCRIMINATOR,
                 'gcm': FilterType.DISCRIMINATOR,
                 'emsc': FilterType.DISCRIMINATOR,
@@ -163,6 +168,7 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
         resolution = os.path.basename(os.path.dirname(os.path.dirname(tiffile)))
         return {
             'resolution': RESOLUTIONS[RESOLUTION_MAP[resolution]]['long'],
+            'spatial_domain': 'Global',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
@@ -176,7 +182,8 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
             # apply metadata bits from dsdef
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': dsdef['filter']['resolution'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -188,34 +195,34 @@ class WorldClimLayerMetadata(BaseLayerMetadata):
         ds_md['version'] = coverages[0]['bccvl:metadata']['version']
 
         if month is not FilterType.MISSING and month:
-            ds_md['month'] = month        
-        if dsdef['filter']['genre'] != 'DataGenreE':
+            ds_md['month'] = month
+        if 'year' in coverages[0]['bccvl:metadata']:
             ds_md['year'] = coverages[0]['bccvl:metadata']['year']
+        if 'year_range' in coverages[0]['bccvl:metadata']:
             ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
-
-            if dsdef['filter'].get('emsc'):
-                ds_md['emsc'] = dsdef['filter']['emsc']
-            if dsdef['filter'].get('gcm'):
-                ds_md['gcm'] = dsdef['filter']['gcm']
+        if dsdef['filter'].get('emsc'):
+            ds_md['emsc'] = dsdef['filter']['emsc']
+        if dsdef['filter'].get('gcm'):
+            ds_md['gcm'] = dsdef['filter']['gcm']
         return ds_md
 
     def cov_uuid(self, dscov):
         md = dscov['bccvl:metadata']
         return gen_coverage_uuid(dscov, self.DATASET_ID.format(res=md['resolution']))
 
-    def get_genre(self, md):
+    def get_time_domain(self, md):
         """
-        Determine genre based on metadata from tiffile.
+        Determine time_domain based on metadata from tiffile.
         """
         if 'emsc' in md and 'gcm' in md:
             # Future Climate
-            return 'DataGenreFC'
+            return 'Future'
         # Altitude is env dataset, don't have year
         if 'year' not in md:
-            return 'DataGenreE'
+            return 'Current'
         else:
             # Current Climate
-            return 'DataGenreCC'
+            return 'Current'
 
 def main():
     gen = WorldClimLayerMetadata()

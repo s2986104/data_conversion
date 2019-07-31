@@ -21,6 +21,7 @@ class TASClimLayerMetadata(BaseLayerMetadata):
             'title': 'Tasmania, Current Climate ({year}), ({emsc}) based on {gcm}, {resolution}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Regional',
             'acknowledgement': (
                 'Corney, S. P., J. J. Katzfey, J. L. McGregor, M. R. Grose, J. C. Bennett, '
                 'C. J. White, G. K. Holz, S. Gaynor, and N. L. Bindoff, 2010: Climate '
@@ -34,7 +35,7 @@ class TASClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('tasclim_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreCC',
+                'time_domain': 'Current',
                 'gcm': FilterType.DISCRIMINATOR,
                 'emsc': FilterType.DISCRIMINATOR,
                 'year': FilterType.DISCRIMINATOR
@@ -46,6 +47,7 @@ class TASClimLayerMetadata(BaseLayerMetadata):
             'title': 'Tasmania, Future Climate ({year}), ({emsc}) based on {gcm}, {resolution}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Regional',
             'acknowledgement': (
                 'Corney, S. P., J. J. Katzfey, J. L. McGregor, M. R. Grose, J. C. Bennett, '
                 'C. J. White, G. K. Holz, S. Gaynor, and N. L. Bindoff, 2010: Climate '
@@ -59,7 +61,7 @@ class TASClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('tasclim_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreFC',
+                'time_domain': 'Future',
                 'gcm': FilterType.DISCRIMINATOR,
                 'emsc': FilterType.DISCRIMINATOR,
                 'year': FilterType.DISCRIMINATOR
@@ -71,13 +73,15 @@ class TASClimLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['360']['long'],
+            'spatial_domain': 'Regional',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['360']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -97,10 +101,10 @@ class TASClimLayerMetadata(BaseLayerMetadata):
             ds_md['gcm'] = dsdef['filter']['gcm']
         return ds_md
 
-    def get_genre(self, md):
+    def get_time_domain(self, md):
         if md['year'] < 2016:
-            return 'DataGenrceCC'
-        return 'DataGenreFC'
+            return 'Current'
+        return 'Future'
 
 
 def main():

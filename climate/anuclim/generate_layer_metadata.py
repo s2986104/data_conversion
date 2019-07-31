@@ -34,6 +34,7 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
             ),
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 'Hutchinson M, Kesteven J, Xu T (2014) Monthly climate data: ANUClimate 1.0, '
                 '0.01 degree, Australian Coverage, 1976-2005. Australian National University, '
@@ -48,7 +49,7 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('anuclim_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreCC',
+                'time_domain': 'Current',
                 'month': FilterType.DISCRIMINATOR
             },
             'aggs': [], 
@@ -58,13 +59,15 @@ class ANUClimLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['30']['long'],
+            'spatial_domain': 'Australia',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['30']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),

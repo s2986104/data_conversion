@@ -19,6 +19,7 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Multi-resolution Valley Bottom Flatness (v1.0, 2013), {resolution}',
             'categories': ['environmental', 'topography'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 'Gallant J, Dowling T, Austin J (2013) Multi-resolution Valley Bottom Flatness (MrRTF, '
                 '3" resolution). v1. CSIRO. Data Collection. https://doi.org/10.4225/08/512EF27AC3888'
@@ -30,7 +31,7 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
             'external_url': 'https://data.csiro.au/dap/landingpage?pid=csiro:5681',
             'partof': [collection_by_id('aus-topography_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'url': RegExp('^.*mrvbf.*\.tif$')
             },
             'aggs': [],
@@ -39,6 +40,7 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Multi-resolution Ridge Top Flatness (v1.0, 2013), {resolution}',
             'categories': ['environmental', 'topography'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 'Gallant J, Dowling T, Austin J (2013) Multi-resolution Ridge Top Flatness (MrRTF, '
                 '3" resolution). v1. CSIRO. Data Collection. https://doi.org/10.4225/08/512EEA6332EEB'
@@ -50,7 +52,7 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
             'external_url': 'https://data.csiro.au/dap/landingpage?pid=csiro:6239',
             'partof': [collection_by_id('aus-topography_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'url': RegExp('^.*mrrtf.*\.tif$')
             },
             'aggs': [],
@@ -60,13 +62,15 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['3']['long'],
+            'spatial_domain': 'Australia',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['3']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -80,8 +84,8 @@ class AusTopographyLayerMetadata(BaseLayerMetadata):
         ds_md['version'] = coverages[0]['bccvl:metadata']['version']
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
     def get_rat_map(self, tiffile):
         if os.path.basename(tiffile) == 'aus-topography-90m-mrvbf_mrvbf.tif':

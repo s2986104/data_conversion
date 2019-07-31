@@ -19,6 +19,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Dynamic Land Cover (2000-2008), {resolution}',
             'categories': ['environmental', 'landcover'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'description': (
                 "Land cover is the observed biophysical cover on the Earth's surface, including "
                 "native vegetation, soils, exposed rocks and water bodies as well as anthropogenic "
@@ -47,7 +48,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'external_url': 'https://data.gov.au/dataset/ds-ga-a05f7893-0031-7506-e044-00144fdd4fa6',
             'partof': [collection_by_id('national-dynamic-land-cover_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'url': RegExp('^.*dlcdv1-class.*\.tif$')
             },
             'aggs': [],
@@ -56,6 +57,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Enhanced Vegetation Index (2000-2008), {resolution}',
             'categories': ['environmental', 'landcover'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'description': (
                 "The Enhanced Vegetation Index data is part of the Australian Dynamic Land Cover dataset. "
                 "The dataset presents land cover information for every 250m by 250m area of the country "
@@ -81,7 +83,7 @@ class NDLCLayerMetadata(BaseLayerMetadata):
             'external_url': 'https://data.gov.au/dataset/ds-ga-a05f7893-0031-7506-e044-00144fdd4fa6',
             'partof': [collection_by_id('national-dynamic-land-cover_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'url': RegExp('^.*trend-evi.*\.tif$')
             },
             'aggs': [],
@@ -91,13 +93,15 @@ class NDLCLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['9']['long'],
+            'spatial_domain': 'Global',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -112,8 +116,8 @@ class NDLCLayerMetadata(BaseLayerMetadata):
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
     def get_rat_map(self, tiffile):
         if os.path.basename(tiffile) in ('ndlc-2004-250m_dlcdv1-class.tif', 'ndlc-2004-250m_dlcdv1-class-reduced.tif'):

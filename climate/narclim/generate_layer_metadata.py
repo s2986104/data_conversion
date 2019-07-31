@@ -29,6 +29,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
             'description': DS_DESCRIPTION,
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Regional',
             'acknowledgement': (
                 'Evans JP, Ji F, Lee C, Smith P, Argueso D and Fita L (2014) Design of '
                 'a regional climate modelling projection ensemble experiment Geosci. '
@@ -41,7 +42,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('narclim_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreCC',
+                'time_domain': 'Current',
                 'url': RegExp(r'https://.*/.*NaR-Extent.*\.tif'),
                 'resolution': FilterType.DISCRIMINATOR
             },
@@ -53,6 +54,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
             'description': DS_DESCRIPTION,
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Regional',
             'acknowledgement': (
                 'Evans JP, Ji F, Lee C, Smith P, Argueso D and Fita L (2014) Design of '
                 'a regional climate modelling projection ensemble experiment Geosci. '
@@ -65,7 +67,7 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('narclim_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreFC',
+                'time_domain': 'Future',
                 'gcm': FilterType.DISCRIMINATOR,
                 'emsc': FilterType.DISCRIMINATOR,
                 'rcm': FilterType.DISCRIMINATOR,
@@ -79,14 +81,16 @@ class NaRCLIMLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         resolution = os.path.basename(os.path.dirname(os.path.dirname(tiffile)))
         return {
-            'resolution': RESOLUTIONS[resolution]['long']
+            'resolution': RESOLUTIONS[resolution]['long'],
+            'spatial_domain': 'Regional',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': dsdef['filter']['resolution'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),

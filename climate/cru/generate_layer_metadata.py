@@ -49,6 +49,7 @@ class CRULayerMetadata(BaseLayerMetadata):
             'description': DS_DESCRIPTION,
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Global',
             'acknowledgement': (
                 'University of East Anglia Climatic Research Unit; Harris, I.C.; '
                 'Jones, P.D. (2015): CRU TS3.23: Climatic Research Unit (CRU) '
@@ -65,7 +66,7 @@ class CRULayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('cruclim_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreCC'
+                'time_domain': 'Current'
             },
             'aggs': [], 
         }
@@ -74,13 +75,15 @@ class CRULayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['1800']['long'],
+            'spatial_domain': 'Global',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['1800']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),

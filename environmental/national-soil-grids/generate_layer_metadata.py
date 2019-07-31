@@ -19,6 +19,7 @@ class NSGLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Soil Grids (2012), {resolution}',
             'categories': ['environmental', 'substrate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 'National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, '
                 'endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep).'
@@ -31,7 +32,7 @@ class NSGLayerMetadata(BaseLayerMetadata):
             'external_url': 'http://www.asris.csiro.au/themes/NationalGrids.html',
             'partof': [collection_by_id('national_soil_grids_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
             },
             'aggs': [],
         }
@@ -40,13 +41,15 @@ class NSGLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['9']['long'],
+            'spatial_domain': 'Australia',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -61,8 +64,8 @@ class NSGLayerMetadata(BaseLayerMetadata):
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
     def get_rat_map(self, tiffile):
         if os.path.basename(tiffile) == 'nsg-2011-250m_asc.tif':

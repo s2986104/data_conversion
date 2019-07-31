@@ -322,16 +322,16 @@ class BaseLayerMetadata(object):
         """
         return {}
 
-    def get_genre(self, md):
+    def get_time_domain(self, md):
         """
-        Determine genre based on metadata from tiffile.
+        Determine time_domain based on metadata from tiffile.
         """
         if 'emsc' in md and 'gcm' in md:
             # Future Climate
-            return 'DataGenreFC'
+            return 'Future'
         else:
             # Current Climate
-            return 'DataGenreCC'
+            return 'Current'
 
     def get_rat_map(self, tiffile):
         """
@@ -359,15 +359,15 @@ class BaseLayerMetadata(object):
                 # TODO: maybe re-order things here...
                 #       0. keep oerder metadata -> coverage (md could be used to improve coverage?)
                 #       1. gen md['url'] in separate step (no passing around of self.SWIFT_CONTAINER, and md['url'])
-                #       2. move decision about genre into method (maybe after gen coverage?)
+                #       2. move decision about time_domain into method (maybe after gen coverage?)
                 md = gen_tif_metadata(tiffile, opts.srcdir, self.SWIFT_CONTAINER)
                 md.update(self.parse_filename(tiffile))
-                md['genre'] = self.get_genre(md)
+                md['time_domain'] = self.get_time_domain(md)
                 # TODO: move this up and pass on full md
                 coverage = gen_tif_coverage(tiffile, md['url'], ratmap=self.get_rat_map(tiffile))
                 md['extent_wgs84'] = get_coverage_extent(coverage)
                 # TODO: the way we set acknowloedgement is weird here
-                if md['genre'] == 'DataGenreCC':
+                if md['time_domain'] == 'Current':
                     md['acknowledgement'] = self.DATASETS[0]['acknowledgement']
                 # ony set md keys without leading '_'
                 coverage['bccvl:metadata'] = {key: val for (key,val) in md.items() if not key.startswith('_')}

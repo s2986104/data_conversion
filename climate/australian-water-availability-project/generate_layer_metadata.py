@@ -23,6 +23,7 @@ class AwapLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Water Availability ({year}), {resolution}',
             'categories': ['environmental', 'hydrology'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 'Raupach MR, PR Briggs, V Haverd, EA King, M Paget, CM Trudinger (2009), '
                 'Australian Water Availability Project (AWAP): CSIRO Marine and '
@@ -31,7 +32,7 @@ class AwapLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('awap_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'year': FilterType.DISCRIMINATOR
             },
             'aggs': [],
@@ -41,6 +42,7 @@ class AwapLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['180']['long'],
+            'spatial_domain': 'Australia',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
@@ -49,7 +51,8 @@ class AwapLayerMetadata(BaseLayerMetadata):
             # apply metadata bits from dsdef
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['180']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -62,8 +65,8 @@ class AwapLayerMetadata(BaseLayerMetadata):
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
 
 def main():

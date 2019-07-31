@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 import os.path
-import re
 import calendar
 
 from data_conversion.converter import BaseLayerMetadata
 from data_conversion.coverage import gen_coverage_uuid
 from data_conversion.vocabs import RESOLUTIONS, collection_by_id
-from data_conversion.utils import FilterType
+from data_conversion.utils import FilterType, RegExp
 
 
 class FparLayerMetadata(BaseLayerMetadata):
@@ -23,6 +22,7 @@ class FparLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, MODIS-fPAR (2000-2014), {resolution}',
             'categories': ['environmental', 'vegetation'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 "Mackey B, Berry S, Hugh S, Ferrier S, Harwood TD, Williams KJ (2012) "
                 "Ecosystem greenspots: identifying potential drought, fire, and "
@@ -35,10 +35,11 @@ class FparLayerMetadata(BaseLayerMetadata):
             'external_url': '',
             'partof': [collection_by_id('fpar_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'month': FilterType.MISSING,
                 'year': 2007,
-                'url': re.compile('^.*_global_.*\.tif$')
+                # TODO: we have dataset_type on data as well. and could use that is filter
+                'url': RegExp('^.*_global_.*\.tif$')
             },
             'aggs': [],
             'dataset_type': 'global'
@@ -48,6 +49,7 @@ class FparLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, MODIS-fPAR {monthname} (2000-2014), {resolution}',
             'categories': ['environmental', 'vegetation'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 "Mackey B, Berry S, Hugh S, Ferrier S, Harwood TD, Williams KJ (2012) "
                 "Ecosystem greenspots: identifying potential drought, fire, and "
@@ -60,9 +62,10 @@ class FparLayerMetadata(BaseLayerMetadata):
             'external_url': '',
             'partof': [collection_by_id('fpar_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'month': FilterType.DISCRIMINATOR,
-                'url': re.compile('^.*_monthly_.*\.tif$')
+                # TODO: we have dataset_type on data as well. and could use that is filter
+                'url': RegExp('^.*_monthly_.*\.tif$')
             },
             'aggs': [],
             'dataset_type': 'monthly'
@@ -72,6 +75,7 @@ class FparLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, MODIS-fPAR ({year_range} Growing Year), {resolution}',
             'categories': ['environmental', 'vegetation'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 "Mackey B, Berry S, Hugh S, Ferrier S, Harwood TD, Williams KJ (2012) "
                 "Ecosystem greenspots: identifying potential drought, fire, and "
@@ -84,10 +88,11 @@ class FparLayerMetadata(BaseLayerMetadata):
             'external_url': '',
             'partof': [collection_by_id('fpar_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'month': FilterType.MISSING,
                 'year': FilterType.DISCRIMINATOR,
-                'url': re.compile('^.*_growyearly_.*\.tif$')
+                # TODO: we have dataset_type on data as well. and could use that is filter
+                'url': RegExp('^.*_growyearly_.*\.tif$')
             },
             'aggs': [],
             'dataset_type': 'growyearly'
@@ -97,6 +102,7 @@ class FparLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, MODIS-fPAR ({year}), {resolution}',
             'categories': ['environmental', 'vegetation'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 "Mackey B, Berry S, Hugh S, Ferrier S, Harwood TD, Williams KJ (2012) "
                 "Ecosystem greenspots: identifying potential drought, fire, and "
@@ -109,10 +115,11 @@ class FparLayerMetadata(BaseLayerMetadata):
             'external_url': '',
             'partof': [collection_by_id('fpar_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'month': FilterType.MISSING,
                 'year': FilterType.DISCRIMINATOR,
-                'url': re.compile('^.*_calyearly_.*\.tif$')
+                # TODO: we have dataset_type on data as well. and could use that is filter
+                'url': RegExp('^.*_calyearly_.*\.tif$')
             },
             'aggs': [],
             'dataset_type': 'calyearly'
@@ -122,6 +129,7 @@ class FparLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, MODIS-fPAR {monthname} {year}, {resolution}',
             'categories': ['environmental', 'vegetation'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 "Mackey B, Berry S, Hugh S, Ferrier S, Harwood TD, Williams KJ (2012) "
                 "Ecosystem greenspots: identifying potential drought, fire, and "
@@ -134,10 +142,11 @@ class FparLayerMetadata(BaseLayerMetadata):
             'external_url': '',
             'partof': [collection_by_id('fpar_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'month': FilterType.DISCRIMINATOR,
                 'year': FilterType.DISCRIMINATOR,
-                'url': re.compile('^.*_fpar_.*\.tif$')
+                # TODO: we have dataset_type on data as well. and could use that is filter
+                'url': RegExp('^.*_fpar_.*\.tif$')
             },
             'aggs': [],
             'dataset_type': 'timeseries'
@@ -145,8 +154,13 @@ class FparLayerMetadata(BaseLayerMetadata):
     ]
 
     def parse_filename(self, tiffile):
+        basename = os.path.splitext(os.path.basename(tiffile))[0]
+        parts = basename.split('_')
+        data_type = parts[1]
         return {
             'resolution': RESOLUTIONS['9']['long'],
+            'dataset_type': data_type,
+            'spatial_domain': 'Australia',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
@@ -161,6 +175,7 @@ class FparLayerMetadata(BaseLayerMetadata):
             title = dsdef['title'].format(
                 resolution=RESOLUTIONS['9']['long'],
                 year_range='{}-{}'.format(yrrange[0], yrrange[1]),
+
                 **dsdef['filter'])
         else:
             title = dsdef['title'].format(
@@ -169,7 +184,8 @@ class FparLayerMetadata(BaseLayerMetadata):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -184,8 +200,8 @@ class FparLayerMetadata(BaseLayerMetadata):
             ds_md['month'] = month
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
     def cov_uuid(self, dscov):
         """

@@ -144,6 +144,7 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
             'description': DESCRIPTIONS.get(i[0]).get(i[1]),
             'categories': ['environmental', i[2]],    # scientific type
             'domain': 'freshwater',
+            'spatial_domain': 'Australia',            
             'acknowledgement': (
                 'Stein JL, Hutchinson MF, Stein JA (2014) A new stream and nested '
                 'catchment framework for Australia. Hydrology and Earth System Sciences, '
@@ -151,39 +152,40 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id(i[5])['uuid']],
             'filter': {
-                'genre': i[4],
+                'time_domain': i[4],
                 'url': RegExp('^.*geofabric_{btype}_{dstype}.*\.tif$'.format(btype=i[0], dstype=i[1])) if i[6] is None else i[6]
             },
             'aggs': ['month'] if i[1] == 'nppmon' else [],
             'reference': i[0],
         } for i in [
-            # boundary type, dataset type/layer id, scientific type, variable name, genre, collection uuid, regexp for filtering 
-            ('stream', 'climate', 'climate', 'current climate (1921-1995)', 'DataGenreCC', 'geofabric_stream_climate', None),
-            ('stream', 'vegetation', 'vegetation', 'Vegetation', 'DataGenreE', 'geofabric_stream_data', None),
-            ('stream', 'terrain', 'topography', 'Terrain', 'DataGenreE', 'geofabric_stream_data', None),
-            ('stream', 'substrate', 'substrate', 'Substrate', 'DataGenreE', 'geofabric_stream_data', None),
-            ('stream', 'population', 'human-impact', 'Population', 'DataGenreE', 'geofabric_stream_data', None),
-            ('stream', 'network', 'hydrology', 'Network', 'DataGenreE', 'geofabric_stream_data', None),
-            ('stream', 'landuse', 'landuse', 'Land Use', 'DataGenreE', 'geofabric_stream_data', None),
-            ('stream', 'connectivity', 'hydrology', 'Connectivity', 'DataGenreE', 'geofabric_stream_data', None),
-            ('catchment', 'climate', 'climate', 'current climate (1921-1995)', 'DataGenreCC', 'geofabric_catchment_climate', None),
-            ('catchment', 'vegetation', 'vegetation', 'Vegetation', 'DataGenreE', 'geofabric_catchment_data', None),
-            ('catchment', 'terrain', 'topography', 'Terrain', 'DataGenreE', 'geofabric_catchment_data', None),
-            ('catchment', 'substrate', 'substrate', 'Substrate', 'DataGenreE', 'geofabric_catchment_data', None),
-            ('catchment', 'population', 'human-impact', 'Population', 'DataGenreE', 'geofabric_catchment_data', None),
-            ('catchment', 'nppmon', 'vegetation', 'Net Primary Productivity (monthly)', 'DataGenreE', 'geofabric_catchment_data', RegExp('^.*geofabric_catchment_npp_nppmon.*\.tif$')),
-            ('catchment', 'nppann', 'vegetation', 'Net Primary Productivity (annually)', 'DataGenreE', 'geofabric_catchment_data', RegExp('^.*geofabric_catchment_npp_nppann\.tif$')),
-            ('catchment', 'landuse', 'landuse', 'Land Use', 'DataGenreE', 'geofabric_catchment_data', None),
-            ('catchment', 'rdi', 'human-impact', 'River Disturbance', 'DataGenreE', 'geofabric_catchment_data', None)
+            # boundary type, dataset type/layer id, scientific type, variable name, time_domain, collection uuid, regexp for filtering 
+            ('stream', 'climate', 'climate', 'current climate (1921-1995)', 'Current', 'geofabric_stream_climate', None),
+            ('stream', 'vegetation', 'vegetation', 'Vegetation', 'Current', 'geofabric_stream_data', None),
+            ('stream', 'terrain', 'topography', 'Terrain', 'Current', 'geofabric_stream_data', None),
+            ('stream', 'substrate', 'substrate', 'Substrate', 'Current', 'geofabric_stream_data', None),
+            ('stream', 'population', 'human-impact', 'Population', 'Current', 'geofabric_stream_data', None),
+            ('stream', 'network', 'hydrology', 'Network', 'Current', 'geofabric_stream_data', None),
+            ('stream', 'landuse', 'landuse', 'Land Use', 'Current', 'geofabric_stream_data', None),
+            ('stream', 'connectivity', 'hydrology', 'Connectivity', 'Current', 'geofabric_stream_data', None),
+            ('catchment', 'climate', 'climate', 'current climate (1921-1995)', 'Current', 'geofabric_catchment_climate', None),
+            ('catchment', 'vegetation', 'vegetation', 'Vegetation', 'Current', 'geofabric_catchment_data', None),
+            ('catchment', 'terrain', 'topography', 'Terrain', 'Current', 'geofabric_catchment_data', None),
+            ('catchment', 'substrate', 'substrate', 'Substrate', 'Current', 'geofabric_catchment_data', None),
+            ('catchment', 'population', 'human-impact', 'Population', 'Current', 'geofabric_catchment_data', None),
+            ('catchment', 'nppmon', 'vegetation', 'Net Primary Productivity (monthly)', 'Current', 'geofabric_catchment_data', RegExp('^.*geofabric_catchment_npp_nppmon.*\.tif$')),
+            ('catchment', 'nppann', 'vegetation', 'Net Primary Productivity (annually)', 'Current', 'geofabric_catchment_data', RegExp('^.*geofabric_catchment_npp_nppann\.tif$')),
+            ('catchment', 'landuse', 'landuse', 'Land Use', 'Current', 'geofabric_catchment_data', None),
+            ('catchment', 'rdi', 'human-impact', 'River Disturbance', 'Current', 'geofabric_catchment_data', None)
         ]
     ]
 
     def parse_filename(self, tiffile):
         nameparts = os.path.basename(tiffile).split('_')
         return {
-            'genre': 'DataGenreCC' if 'climate' in nameparts else 'DataGenreE',
+            'time_domain': 'Current',
             'reference': 'catchment' if 'catchment' in nameparts else 'stream',
-            'resolution': RESOLUTIONS['9']['long']
+            'resolution': RESOLUTIONS['9']['long'],
+            'spatial_domain': 'Australia',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
@@ -193,8 +195,9 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
             'description': dsdef['description'],
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
+            'spatial_domain': dsdef['spatial_domain'],
             'reference': dsdef.get('reference'),
-            'genre': dsdef['filter']['genre'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -209,8 +212,8 @@ class GeofabricLayerMetadata(BaseLayerMetadata):
         ds_md['version'] = coverages[0]['bccvl:metadata']['version']
         return ds_md
 
-    def get_genre(self, md): 
-        return md['genre']
+    def get_time_domain(self, md): 
+        return md['time_domain']
 
     def cov_uuid(self, dscov):
         """

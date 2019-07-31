@@ -20,6 +20,7 @@ class VASTLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Vegetation Assets, States and Transitions (VAST) (1995-2006), {resolution}',
             'categories': ['environmental', 'vegetation'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 'All visual and pubished material must acknowledge the Australian Bureau of Agricultural '
                 'and Resource Economics and Sciences (ABRES) compiled and derived the dataset.'
@@ -33,7 +34,7 @@ class VASTLayerMetadata(BaseLayerMetadata):
             'external_url': 'http://data.daff.gov.au/anrdl/metadata_files/pa_vast_g9abll0032008_11a.xml',
             'partof': [collection_by_id('vast_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE'
+                'time_domain': 'Current'
             },
             'aggs': [],
         }
@@ -42,13 +43,15 @@ class VASTLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['30']['long'],
+            'spatial_domain': 'Australia',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['30']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -63,8 +66,8 @@ class VASTLayerMetadata(BaseLayerMetadata):
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
     def get_rat_map(self, tiffile):
         if os.path.basename(tiffile) in ('vast-2008-1km_vastgridv2-1k.tif'):

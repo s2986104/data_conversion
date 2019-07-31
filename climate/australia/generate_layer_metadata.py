@@ -25,6 +25,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Current Climate (1976-2005), {resolution}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 'Jones, D. A., Wang, W., & Fawcett, R. (2009). High-quality spatial '
                 'climate data-sets for Australia. Australian Meteorological and '
@@ -32,7 +33,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('australia_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreCC',
+                'time_domain': 'Current',
                 'resolution': FilterType.DISCRIMINATOR,
             },
             'aggs': [],
@@ -41,6 +42,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             'title': 'Australia, Climate Projection, {emsc} based on {gcm}, {resolution} - {year}',
             'categories': ['environmental', 'climate'],
             'domain': 'terrestrial',
+            'spatial_domain': 'Australia',
             'acknowledgement': (
                 'Vanderwal, Jeremy. (2012). All future climate layers for Australia - 5km '
                 'resolution. James Cook University. [Data files] '
@@ -56,7 +58,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             ),
             'partof': [collection_by_id('australia_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreFC',
+                'time_domain': 'Future',
                 'gcm': FilterType.DISCRIMINATOR,
                 'emsc': FilterType.DISCRIMINATOR,
                 'year': FilterType.DISCRIMINATOR,
@@ -74,6 +76,7 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
         resolution = os.path.basename(os.path.dirname(os.path.dirname(tiffile)))
         return {
             'resolution': RESOLUTIONS[RESOLUTION_MAP[resolution]]['long'],
+            'spatial_domain': 'Australia',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
@@ -82,7 +85,8 @@ class AustraliaLayerMetadata(BaseLayerMetadata):
             # apply metadata bits from dsdef
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': dsdef['filter']['resolution'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),

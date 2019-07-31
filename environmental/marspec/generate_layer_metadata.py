@@ -20,6 +20,7 @@ class MarspecLayerMetadata(BaseLayerMetadata):
             'title': 'Global marine data, Bathymetry (1955-2010), {resolution}'.format(resolution=RESOLUTIONS['300']['long']),
             'categories': ['environmental', 'topography'],
             'domain': 'marine',
+            'spatial_domain': 'Global',
             'description': (
                 'Bathymetry for the world’s ocean at at 5 arcmin resolution. The MARSPEC bathymetry dataset is extracted '
                 'from the SRTM30_PLUS V6.0 data set, a 30 arc-second digital elevation model of global elevation and '
@@ -38,7 +39,7 @@ class MarspecLayerMetadata(BaseLayerMetadata):
             'external_url': 'http://marspec.weebly.com/modern-data.html',
             'partof': [collection_by_id('marspec_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE'
+                'time_domain': 'Current'
             },
             'aggs': [],
         }
@@ -47,6 +48,7 @@ class MarspecLayerMetadata(BaseLayerMetadata):
     def parse_filename(self, tiffile):
         return {
             'resolution': RESOLUTIONS['300']['long'],
+            'spatial_domain': 'Global',
         }
 
     def gen_dataset_metadata(self, dsdef, coverages):
@@ -54,7 +56,8 @@ class MarspecLayerMetadata(BaseLayerMetadata):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'spatial_domain': dsdef['spatial_domain'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['300']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -65,8 +68,8 @@ class MarspecLayerMetadata(BaseLayerMetadata):
         }
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
 
 def main():

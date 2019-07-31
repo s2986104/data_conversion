@@ -35,7 +35,7 @@ class GPPLayerMetadata(BaseLayerMetadata):
             'external_url': '',
             'partof': [collection_by_id('gpp_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'url': re.compile('^.*gpp_maxmin_2000_2007.*\.tif$')
             },
             'aggs': [],
@@ -57,7 +57,7 @@ class GPPLayerMetadata(BaseLayerMetadata):
             'external_url': '',
             'partof': [collection_by_id('gpp_layers')['uuid']],
             'filter': {
-                'genre': 'DataGenreE',
+                'time_domain': 'Current',
                 'url': re.compile('^.*gpp_year_means2000_2007.*_gppmean\.tif$'),
                 'year': FilterType.DISCRIMINATOR
             },
@@ -74,7 +74,7 @@ class GPPLayerMetadata(BaseLayerMetadata):
         ds_md = {
             'categories': dsdef['categories'],
             'domain': dsdef['domain'],
-            'genre': dsdef['filter']['genre'],
+            'time_domain': dsdef['filter']['time_domain'],
             'resolution': RESOLUTIONS['9']['long'],
             'acknowledgement': dsdef.get('acknowledgment'),
             'external_url': dsdef.get('external_url'),
@@ -89,8 +89,8 @@ class GPPLayerMetadata(BaseLayerMetadata):
         ds_md['year_range'] = coverages[0]['bccvl:metadata']['year_range']
         return ds_md
 
-    def get_genre(self, md):
-        return 'DataGenreE'
+    def get_time_domain(self, md):
+        return 'Current'
 
 
 def main():
