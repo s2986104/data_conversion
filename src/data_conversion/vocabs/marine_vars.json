@@ -2,535 +2,627 @@
     "Surface.Temperature.Min": {
         "standard_name": "Surface.Temperature.Min",
         "long_name": "Minimum Water Temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "Absolute minimum water temperature of the topmost meter of the ocean water column for the time period."
     },
     "Surface.Temperature.Max": {
         "standard_name": "Surface.Temperature.Max",
         "long_name": "Maximum Water Temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "Absolute maximum water temperature of the topmost meter of the ocean water column for the time period."
     },
     "Surface.Temperature.Mean": {
         "standard_name": "Surface.Temperature.Mean",
         "long_name": "Mean Water Temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "Average water temperature of the topmost meter of the ocean water column over the time period."
     },
     "Surface.Temperature.Range": {
         "standard_name": "Surface.Temperature.Range",
         "long_name": "Range of Water Temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "Range of water temperatures of the topmost meter of the ocean water column calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Temperature.Lt.Max": {
         "standard_name": "Surface.Temperature.Lt.Max",
         "long_name": "Maximum Water Temperature of Warmest Month",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "Long term average of maximum water temperature of the topmost meter of the ocean water column of the warmest month."
     },
     "Surface.Temperature.Lt.Min": {
         "standard_name": "Surface.Temperature.Lt.Min",
         "long_name": "Minimum Water Temperature of Coldest Month",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "Long term average of minimum water temperature of the topmost meter of the ocean water column of the coldest month."
     },
     "Surface.Salinity.Min": {
         "standard_name": "Surface.Salinity.Min",
         "long_name": "Minimum Water Salinity",
-        "units": "Practical Salinity Scale",
-        "measure_type": "continuous"
+        "units": "{Practical Salinity Scale}",
+        "measure_type": "continuous",
+        "description": "Absolute minimum water salinity of the ocean surface for the time period."
     },
     "Surface.Salinity.Max": {
         "standard_name": "Surface.Salinity.Max",
         "long_name": "Maximum Water Salinity",
-        "units": "Practical Salinity Scale",
-        "measure_type": "continuous"
+        "units": "{Practical Salinity Scale}",
+        "measure_type": "continuous",
+        "description": "Absolute maximum water salinity of the ocean surface for the time period."
     },
     "Surface.Salinity.Mean": {
         "standard_name": "Surface.Salinity.Mean",
         "long_name": "Mean Water Salinity",
-        "units": "Practical Salinity Scale",
-        "measure_type": "continuous"
+        "units": "{Practical Salinity Scale}",
+        "measure_type": "continuous",
+        "description": "Average water salinity of the ocean surface over the time period."
     },
     "Surface.Salinity.Range": {
         "standard_name": "Surface.Salinity.Range",
         "long_name": "Range of Water Salinity",
-        "units": "Practical Salinity Scale",
-        "measure_type": "continuous"
+        "units": "{Practical Salinity Scale}",
+        "measure_type": "continuous",
+        "description": "Range of water salinity of the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Salinity.Lt.Min": {
         "standard_name": "Surface.Salinity.Lt.Min",
         "long_name": "Minimum Water Salinity of Freshest Month",
-        "units": "Practical Salinity Scale",
-        "measure_type": "continuous"
+        "units": "{Practical Salinity Scale}",
+        "measure_type": "continuous",
+        "description": "Long term average of minimum water salinity of the ocean surface of the freshest month."
     },
     "Surface.Salinity.Lt.Max": {
         "standard_name": "Surface.Salinity.Lt.Max",
         "long_name": "Maximum Water Salinity of Saltiest Month",
-        "units": "Practical Salinity Scale",
-        "measure_type": "continuous"
+        "units": "{Practical Salinity Scale}",
+        "measure_type": "continuous",
+        "description": "Long term average of maximum water salinity of the ocean surface of the saltiest month."
     },
     "Surface.Current.Velocity.Min": {
         "standard_name": "Surface.Current.Velocity.Min",
         "long_name": "Minimum Currents Velocity",
         "units": "m/s",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum currents velocity at the ocean surface for the time period."
     },
     "Surface.Current.Velocity.Max": {
         "standard_name": "Surface.Current.Velocity.Max",
         "long_name": "Maximum Currents Velocity",
         "units": "m/s",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum currents velocity at the ocean surface for the time period."
     },
     "Surface.Current.Velocity.Mean": {
         "standard_name": "Surface.Current.Velocity.Mean",
         "long_name": "Mean Currents Velocity",
         "units": "m/s",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average currents velocity at the ocean surface over the time period."
     },
     "Surface.Current.Velocity.Range": {
         "standard_name": "Surface.Current.Velocity.Range",
         "long_name": "Range of Currents Velocity",
         "units": "m/s",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of currents velocity at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Current.Velocity.Lt.Max": {
         "standard_name": "Surface.Current.Velocity.Lt.Max",
         "long_name": "Long term average of maximum currents velocity",
         "units": "m/s",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum currents velocity at the ocean surface."
     },
     "Surface.Current.Velocity.Lt.Min": {
         "standard_name": "Surface.Current.Velocity.Lt.Min",
         "long_name": "Long term average of minimum currents velocity",
         "units": "m/s",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum currents velocity at the ocean surface."
     },
     "Surface.Ice.Thickness.Min": {
         "standard_name": "Surface.Ice.Thickness.Min",
         "long_name": "Minimum Ice Thickness",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum ice thickness at the ocean surface for the time period."
     },
     "Surface.Ice.Thickness.Max": {
         "standard_name": "Surface.Ice.Thickness.Max",
         "long_name": "Maximum Ice Thickness",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum ice thickness at the ocean surface for the time period."
     },
     "Surface.Ice.Thickness.Mean": {
         "standard_name": "Surface.Ice.Thickness.Mean",
         "long_name": "Mean Ice Thickness",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average ice thickness at the ocean surface over the time period."
     },
     "Surface.Ice.Thickness.Range": {
         "standard_name": "Surface.Ice.Thickness.Range",
         "long_name": "Range of Ice Thickness",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of ice thickness at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Ice.Thickness.Lt.Max": {
         "standard_name": "Surface.Ice.Thickness.Lt.Max",
         "long_name": "Long term average of maximum ice thickness",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum ice thickness at the ocean surface."
     },
     "Surface.Ice.Thickness.Lt.Min": {
         "standard_name": "Surface.Ice.Thickness.Lt.Min",
         "long_name": "Long term average of minimum ice thickness",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum ice thickness at the ocean surface."
     },
     "Surface.Ice.Cover.Min": {
         "standard_name": "Surface.Ice.Cover.Min",
         "long_name": "Minimum Sea Ice Concentration",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum area of the ocean covered with sea ice relative to total ocean area for the time period."
     },
     "Surface.Ice.Cover.Max": {
         "standard_name": "Surface.Ice.Cover.Max",
         "long_name": "Maximum Sea Ice Concentration",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum area of the ocean covered with sea ice relative to total ocean area for the time period."
     },
     "Surface.Ice.Cover.Mean": {
         "standard_name": "Surface.Ice.Cover.Mean",
         "long_name": "Mean Sea Ice Concentration",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average area of the ocean covered with sea ice relative to total ocean area for the time period."
     },
     "Surface.Ice.Cover.Range": {
         "standard_name": "Surface.Ice.Cover.Range",
         "long_name": "Range of Sea Ice Concentration",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of area of the ocean covered with sea ice calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Ice.Cover.Lt.Max": {
         "standard_name": "Surface.Ice.Cover.Lt.Max",
         "long_name": "Long term average of maximum sea ice concentration",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum area of the ocean covered with sea ice relative to total ocean area."
     },
     "Surface.Ice.Cover.Lt.Min": {
         "standard_name": "Surface.Ice.Cover.Lt.Min",
         "long_name": "Long term average of minimum sea ice concentration",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum area of the ocean covered with sea ice relative to total ocean area."
     },
     "Surface.Diffuse.Attenuation.Min": {
         "standard_name": "Surface.Diffuse.Attenuation.Min",
         "long_name": "Minimum Diffuse Attenuation",
         "units": "m-1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Minimum diffuse attenuation at the ocean surface for the time period. This is an indicator of water clarity, expressing how deeply visible light in the blue to the green region of the spectrum penetrates into the water column."
     },
     "Surface.Diffuse.Attenuation.Max": {
         "standard_name": "Surface.Diffuse.Attenuation.Max",
         "long_name": "Maximum Diffuse Attenuation",
         "units": "m-1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Maximum diffuse attenuation at the ocean surface for the time period. This is an indicator of water clarity, expressing how deeply visible light in the blue to the green region of the spectrum penetrates into the water column."
     },
     "Surface.Diffuse.Attenuation.Mean": {
         "standard_name": "Surface.Diffuse.Attenuation.Mean",
         "long_name": "Mean Diffuse Attenuation",
         "units": "m-1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average diffuse attenuation at the ocean surface for the time period. This is an indicator of water clarity, expressing how deeply visible light in the blue to the green region of the spectrum penetrates into the water column."
     },
     "Surface.Cloud.Cover.Min": {
         "standard_name": "Surface.Cloud.Cover.Min",
         "long_name": "Minimum Cloud Cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Minimum percentage of the earth covered by clouds over the time period."
     },
     "Surface.Cloud.Cover.Max": {
         "standard_name": "Surface.Cloud.Cover.Max",
         "long_name": "Maximum Cloud Cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Maximum percentage of the earth covered by clouds over the time period."
     },
     "Surface.Cloud.Cover.Mean": {
         "standard_name": "Surface.Cloud.Cover.Mean",
         "long_name": "Mean Cloud Cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average percentage of the earth covered by clouds over the time period."
     },
     "Surface.Nitrate.Min": {
         "standard_name": "Surface.Nitrate.Min",
         "long_name": "Minimum Nitrate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum nitrate concentration at the ocean surface for the time period."
     },
     "Surface.Nitrate.Max": {
         "standard_name": "Surface.Nitrate.Max",
         "long_name": "Maximum Nitrate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum nitrate concentration at the ocean surface for the time period."
     },
     "Surface.Nitrate.Mean": {
         "standard_name": "Surface.Nitrate.Mean",
         "long_name": "Mean Nitrate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average nitrate concentration at the ocean surface over the time period."
     },
     "Surface.Nitrate.Range": {
         "standard_name": "Surface.Nitrate.Range",
         "long_name": "Range of Nitrate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of nitrate concentration at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Nitrate.Lt.Max": {
         "standard_name": "Surface.Nitrate.Lt.Max",
         "long_name": "Long term average of maximum nitrate concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum nitrate concentration at the ocean surface."
     },
     "Surface.Nitrate.Lt.Min": {
         "standard_name": "Surface.Nitrate.Lt.Min",
         "long_name": "Long term average of minimum nitrate concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum nitrate concentration at the ocean surface."
     },
     "Surface.Phosphate.Min": {
         "standard_name": "Surface.Phosphate.Min",
         "long_name": "Minimum Phosphate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum phosphate concentration at the ocean surface for the time period."
     },
     "Surface.Phosphate.Max": {
         "standard_name": "Surface.Phosphate.Max",
         "long_name": "Minimum Phosphate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum phosphate concentration at the ocean surface for the time period."
     },
     "Surface.Phosphate.Mean": {
         "standard_name": "Surface.Phosphate.Mean",
         "long_name": "Mean Phosphate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average phosphate concentration at the ocean surface over the time period."
     },
     "Surface.Phosphate.Range": {
         "standard_name": "Surface.Phosphate.Range",
         "long_name": "Range of Phosphate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of phosphate concentration at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Phosphate.Lt.Max": {
         "standard_name": "Surface.Phosphate.Lt.Max",
         "long_name": "Long term average of maximum phosphate concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum phosphate concentration at the ocean surface."
     },
     "Surface.Phosphate.Lt.Min": {
         "standard_name": "Surface.Phosphate.Lt.Min",
         "long_name": "Long term average of minimum phosphate concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum phosphate concentration at the ocean surface."
     },
     "Surface.Silicate.Min": {
         "standard_name": "Surface.Silicate.Min",
         "long_name": "Minimum Silicate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum silicate concentration at the ocean surface for the time period."
     },
     "Surface.Silicate.Max": {
         "standard_name": "Surface.Silicate.Max",
         "long_name": "Maximum Silicate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum silicate concentration at the ocean surface for the time period."
     },
     "Surface.Silicate.Mean": {
         "standard_name": "Surface.Silicate.Mean",
         "long_name": "Mean Silicate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average silicate concentration at the ocean surface over the time period."
     },
     "Surface.Silicate.Range": {
         "standard_name": "Surface.Silicate.Range",
         "long_name": "Range of Silicate Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of silicate concentration at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Silicate.Lt.Max": {
         "standard_name": "Surface.Silicate.Lt.Max",
         "long_name": "Long term average of maximum silicate concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum silicate concentration at the ocean surface."
     },
     "Surface.Silicate.Lt.Min": {
         "standard_name": "Surface.Silicate.Lt.Min",
         "long_name": "Long term average of minimum silicate concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum silicate concentration at the ocean surface."
     },
     "Surface.Dissolved.Oxygen.Min": {
         "standard_name": "Surface.Dissolved.Oxygen.Min",
         "long_name": "Minimum Oxygen Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum dissolved oxygen concentration at the ocean surface for the time period."
     },
     "Surface.Dissolved.Oxygen.Max": {
         "standard_name": "Surface.Dissolved.Oxygen.Max",
         "long_name": "Maximum Oxygen Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum dissolved oxygen concentration at the ocean surface for the time period."
     },
     "Surface.Dissolved.Oxygen.Mean": {
         "standard_name": "Surface.Dissolved.Oxygen.Mean",
         "long_name": "Mean Oxygen Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average oxygen dissolved concentration at the ocean surface over the time period."
     },
     "Surface.Dissolved.Oxygen.Range": {
         "standard_name": "Surface.Dissolved.Oxygen.Range",
         "long_name": "Range of Oxygen Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of dissolved oxygen concentration at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Dissolved.Oxygen.Lt.Max": {
         "standard_name": "Surface.Dissolved.Oxygen.Lt.Max",
         "long_name": "Long term average of maximum oxygen concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum dissolved oxygen concentration at the ocean surface."
     },
     "Surface.Dissolved.Oxygen.Lt.Min": {
         "standard_name": "Surface.Dissolved.Oxygen.Lt.Min",
         "long_name": "Long term average of minimum oxygen concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum dissolved oxygen concentration at the ocean surface."
     },
     "Surface.Iron.Min": {
         "standard_name": "Surface.Iron.Min",
         "long_name": "Minimum Iron Concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum dissolved iron concentration at the ocean surface for the time period."
     },
     "Surface.Iron.Max": {
         "standard_name": "Surface.Iron.Max",
         "long_name": "Max Iron Concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum dissolved iron concentration at the ocean surface for the time period."
     },
     "Surface.Iron.Mean": {
         "standard_name": "Surface.Iron.Mean",
         "long_name": "Mean Iron Concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average dissolved iron concentration at the ocean surface over the time period."
     },
     "Surface.Iron.Range": {
         "standard_name": "Surface.Iron.Range",
         "long_name": "Range of Iron Concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of dissolved iron concentration at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Iron.Lt.Max": {
         "standard_name": "Surface.Iron.Lt.Max",
         "long_name": "Long term average of maximum iron concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum dissolved iron concentration at the ocean surface."
     },
     "Surface.Iron.Lt.Min": {
         "standard_name": "Surface.Iron.Lt.Min",
         "long_name": "Long term average of minimum iron concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum dissolved iron concentration at the ocean surface."
     },
     "Surface.Calcite.Mean": {
         "standard_name": "Surface.Calcite.Mean",
         "long_name": "Mean Calcite Concentration",
         "units": "mol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average calcite (CaCO3) concentration at the ocean surface over the time period."
     },
     "Surface.Chlorophyll.Min": {
         "standard_name": "Surface.Chlorophyll.Min",
         "long_name": "Minimum Chlorophyll A Concentration",
         "units": "mg/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum chlorophyll A concentration at the ocean surface for the time period."
     },
     "Surface.Chlorophyll.Max": {
         "standard_name": "Surface.Chlorophyll.Max",
         "long_name": "Maximum Chlorophyll A Concentration",
         "units": "mg/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum chlorophyll A concentration at the ocean surface for the time period."
     },
     "Surface.Chlorophyll.Mean": {
         "standard_name": "Surface.Chlorophyll.Mean",
         "long_name": "Mean Chlorophyll A Concentration",
         "units": "mg/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average chlorophyll A concentration at the ocean surface over the time period."
     },
     "Surface.Chlorophyll.Range": {
         "standard_name": "Surface.Chlorophyll.Range",
         "long_name": "Range of Chlorophyll A Concentration",
         "units": "mg/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of chlorophyll A concentration at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Chlorophyll.Lt.Max": {
         "standard_name": "Surface.Chlorophyll.Lt.Max",
         "long_name": "Long term average of maximum chlorophyll A concentration",
         "units": "mg/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum chlorophyll A concentration at the ocean surface."
     },
     "Surface.Chlorophyll.Lt.Min": {
         "standard_name": "Surface.Chlorophyll.Lt.Min",
         "long_name": "Long term average of minimum chlorophyll A concentration",
         "units": "mg/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum chlorophyll A concentration at the ocean surface."
     },
     "Surface.Phytoplankton.Min": {
         "standard_name": "Surface.Phytoplankton.Min",
         "long_name": "Minimum Phytoplankton Concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute minimum phytoplankton concentration expressed as carbon at the ocean surface for the time period."
     },
     "Surface.Phytoplankton.Max": {
         "standard_name": "Surface.Phytoplankton.Max",
         "long_name": "Maximum Phytoplankton Concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Absolute maximum phytoplankton concentration expressed as carbon at the ocean surface for the time period."
     },
     "Surface.Phytoplankton.Mean": {
         "standard_name": "Surface.Phytoplankton.Mean",
         "long_name": "Mean Phytoplankton Concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Average phytoplankton concentration expressed as carbon at the ocean surface over the time period."
     },
     "Surface.Phytoplankton.Range": {
         "standard_name": "Surface.Phytoplankton.Range",
         "long_name": "Range of Phytoplankton Concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Range of phytoplankton concentration expressed as carbon at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Phytoplankton.Lt.Max": {
         "standard_name": "Surface.Phytoplankton.Lt.Max",
         "long_name": "Long term average of maximum phytoplankton concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of maximum phytoplankton concentration expressed as carbon at the ocean surface."
     },
     "Surface.Phytoplankton.Lt.Min": {
         "standard_name": "Surface.Phytoplankton.Lt.Min",
         "long_name": "Long term average of minimum phytoplankton concentration",
         "units": "umol/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Long term average of minimum phytoplankton concentration expressed as carbon at the ocean surface."
     },
     "Surface.Primary.Productivity.Min": {
         "standard_name": "Surface.Primary.Productivity.Min",
         "long_name": "Minimum Primary Productivity",
-        "units": "g/m3/day",
-        "measure_type": "continuous"
+        "units": "g/m3/d",
+        "measure_type": "continuous",
+        "description": "Absolute minimum net primary productivity of carbon at the ocean surface for the time period."
     },
     "Surface.Primary.Productivity.Max": {
         "standard_name": "Surface.Primary.Productivity.Max",
         "long_name": "Maximum Primary Productivity",
-        "units": "g/m3/day",
-        "measure_type": "continuous"
+        "units": "g/m3/d",
+        "measure_type": "continuous",
+        "description": "Absolute maximum net primary productivity of carbon at the ocean surface for the time period."
     },
     "Surface.Primary.Productivity.Mean": {
         "standard_name": "Surface.Primary.Productivity.Mean",
         "long_name": "Mean Primary Productivity",
-        "units": "g/m3/day",
-        "measure_type": "continuous"
+        "units": "g/m3/d",
+        "measure_type": "continuous",
+        "description": "Average net primary productivity of carbon at the ocean surface over the time period."
     },
     "Surface.Primary.Productivity.Range": {
         "standard_name": "Surface.Primary.Productivity.Range",
         "long_name": "Range of Primary Productivity",
-        "units": "g/m3/day",
-        "measure_type": "continuous"
+        "units": "g/m3/d",
+        "measure_type": "continuous",
+        "description": "Range of net primary productivity of carbon at the ocean surface calculated as absolute maximum - absolute minimum over the time period."
     },
     "Surface.Primary.Productivity.Lt.Max": {
         "standard_name": "Surface.Primary.Productivity.Lt.Max",
         "long_name": "Long term average of maximum primary productivity",
-        "units": "g/m3/day",
-        "measure_type": "continuous"
+        "units": "g/m3/d",
+        "measure_type": "continuous",
+        "description": "Long term average of maximum net primary productivity of carbon at the ocean surface."
     },
     "Surface.Primary.Productivity.Lt.Min": {
         "standard_name": "Surface.Primary.Productivity.Lt.Min",
         "long_name": "Long term average of minimum primary productivity",
-        "units": "g/m3/day",
-        "measure_type": "continuous"
+        "units": "g/m3/d",
+        "measure_type": "continuous",
+        "description": "Long term average of minimum net primary productivity of carbon at the ocean surface."
     },
     "Surface.Ph": {
         "standard_name": "Surface.Ph",
         "long_name": "Mean pH",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "pH",
+        "description": "Average pH of the ocean surface for the time period. pH is an indicator of the acidity in the ocean, with lower values indicating more acid conditions and higher values more alkaline conditions."
     },
     "Surface.Par.Max": {
         "standard_name": "Surface.Par.Max",
         "long_name": "Maximum Photosynthetically Available Radiation",
-        "units": "E/m2/day",
-        "measure_type": "continuous"
+        "units": "W/m2/d",
+        "measure_type": "continuous",
+        "description": "Maximum Photosynthetically Available Radiation (PAR) at the ocean surface for the time period. PAR indicates the quantum energy flux from the sun in the spectral range 400-700 nm reaching the ocean surface."
     },
     "Surface.Par.Mean": {
         "standard_name": "Surface.Par.Mean",
         "long_name": "Mean Photosynthetically Available Radiation",
-        "units": "E/m2/day",
-        "measure_type": "continuous"
-    },
-    "Surface.Par.Mean": {
-        "standard_name": "Surface.Par.Mean",
-        "long_name": "Mean Photosynthetically Available Radiation",
-        "units": "E/m2/day",
-        "measure_type": "continuous"
+        "units": "W/m2/d",
+        "measure_type": "continuous",
+        "description": "Mean Photosynthetically Available Radiation  at the ocean surface for the time period. PAR indicates the quantum energy flux from the sun in the spectral range 400-700 nm reaching the ocean surface."
     }
 }

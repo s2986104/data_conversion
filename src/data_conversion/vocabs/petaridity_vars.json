@@ -2,13 +2,15 @@
     "ai_yr": {
         "standard_name": "ai_yr",
         "long_name": "Annual Global Aridity",
-        "units": "Aridity Index",
-        "measure_type": "continuous"
+        "units": "{Aridity Index}",
+        "measure_type": "continuous",
+        "description": "The Aridity Index can be used to quantify precipitation availability over atmospheric water demand. Generally, an AI value of <0.03 = hyper arid where a value of >0.65 = humid."
     },
     "pet_he_yr": {
         "standard_name": "pet_he_yr",
         "long_name": "Annual Global Potential Evapo-Transpiration (PET)",
         "units": "mm/year",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is a measure of the ability of the atmosphere to remove water through Evapo-Transpiration (ET) processes."
     }
 }

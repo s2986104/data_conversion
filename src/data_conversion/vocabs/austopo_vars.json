@@ -2,13 +2,15 @@
     "mrrtf": {
         "standard_name": "mrrtf",
         "long_name": "Multi-resolution Ridge Top Flatness",
-        "units": "MrRTF index",
-        "measure_type": "categorical"
+        "units": "{MrRTF index}",
+        "measure_type": "categorical",
+        "description": "This layer is a topographic index designed to identify high flat areas at a range of scales. Zero values indicate areas that are steep or low, with values 1 and larger indicating progressively larger areas of high flat land."
     },
     "mrvbf": {
         "standard_name": "mrvbf",
         "long_name": "Multi-resolution Valley Bottom Flatness",
-        "units": "MrVBF index",
-        "measure_type": "categorical"
+        "units": "{MrVBF index}",
+        "measure_type": "categorical",
+        "description": "This layer is a topographic index designed to identify areas of deposited material. Zero values indicate erosional terrain with values 1 and larger indicating progressively larger areas of deposition."
     }
 }

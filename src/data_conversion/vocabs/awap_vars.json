@@ -3,228 +3,288 @@
         "standard_name": "mth_FWDis",
         "long_name": "monthly local discharge (tunoff+drainage) (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_mth_FWDis": {
         "standard_name": "pcr_mth_FWDis",
         "long_name": "monthly local discharge (runoff+drainage) (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_FWDis": {
         "standard_name": "ann_FWDis",
         "long_name": "Pann_FWDis', 'annual local discharge (runoff+drainage) (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_FWDis": {
         "standard_name": "pcr_ann_FWDis",
         "long_name": "annual local discharge (runoff+drainage) (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_FWE": {
         "standard_name": "ann_FWE",
         "long_name": "annual total evaporation (soil+vegetation) (average)",
         "units": "mm/d/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_FWE": {
         "standard_name": "pcr_ann_FWE",
         "long_name": "annual total evaporation (soil+vegetation) (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_FWLch2": {
         "standard_name": "ann_FWLch2",
         "long_name": "annual deep drainage (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_FWLch2": {
         "standard_name": "pcr_ann_FWLch2",
         "long_name": "annual deep drainage (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_FWPT": {
         "standard_name": "ann_FWPT",
         "long_name": "annual potential evaporation (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_FWPT": {
         "standard_name": "pcr_ann_FWPT",
         "long_name": "annual potential evaporation (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_FWRun": {
         "standard_name": "ann_FWRun",
         "long_name": "annual surface runoff (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_FWRun": {
         "standard_name": "pcr_ann_FWRun",
         "long_name": "aannual surface runoff (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_FWSoil": {
         "standard_name": "ann_FWSoil",
         "long_name": "annual soil evaporation (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_FWSoil": {
         "standard_name": "pcr_ann_FWSoil",
         "long_name": "aannual soil evaporation (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_FWTra": {
         "standard_name": "ann_FWTra",
         "long_name": "annual total transpiration (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_FWTra": {
         "standard_name": "pcr_ann_FWTra",
         "long_name": "aannual total transpiration (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_FWWater": {
         "standard_name": "ann_FWWater",
         "long_name": "annual open water evaporation (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_FWWater": {
         "standard_name": "pcr_ann_FWWater",
         "long_name": "annual open water evaporation (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_PhiE": {
         "standard_name": "ann_PhiE",
         "long_name": "annual daily latent heat flux (average)",
-        "units": "mW/m^2",
-        "measure_type": "continuous"
+        "units": "mW/m2",
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_PhiE": {
         "standard_name": "pcr_ann_PhiE",
         "long_name": "annual daily latent heat flux (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_PhiH": {
         "standard_name": "ann_PhiH",
         "long_name": "annual daily sensible heat flux (average)",
-        "units": "W/m^2",
-        "measure_type": "continuous"
+        "units": "W/m2",
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_PhiH": {
         "standard_name": "pcr_ann_PhiH",
         "long_name": "annual daily sensible heat flux (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_SolarMJ": {
         "standard_name": "ann_SolarMJ",
         "long_name": "annual incident solar radiation (average)",
-        "units": "MJ/m^2/d",
-        "measure_type": "continuous"
+        "units": "MJ/m2/d",
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_SolarMJ": {
         "standard_name": "pcr_ann_SolarMJ",
         "long_name": "annual incident solar radiation (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_TempMax": {
         "standard_name": "ann_TempMax",
         "long_name": "annual daily maximum temperature (average)",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_TempMax": {
         "standard_name": "pcr_ann_TempMax",
         "long_name": "annual daily maximum temperature (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_TempMin": {
         "standard_name": "ann_TempMin",
         "long_name": "annual daily minimum temperature (average)",
         "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_TempMin": {
         "standard_name": "pcr_ann_TempMin",
         "long_name": "annual daily minimum temperature (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_WRel1": {
         "standard_name": "ann_WRel1",
         "long_name": "annual relative soil moisture (upper layer)",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_WRel1": {
         "standard_name": "pcr_ann_WRel1",
         "long_name": "annual relative soil moisture (upper layer) (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_WRel1End": {
         "standard_name": "ann_WRel1End",
         "long_name": "annual relative soil moisture (upper layer) at end of aggregation period",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_WRel1End": {
         "standard_name": "pcr_ann_WRel1End",
         "long_name": "annual relative soil moisture (upper layer) at end of aggregation period (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_WRel2": {
         "standard_name": "ann_WRel2",
         "long_name": "aannual relative soil moisture (lower layer)",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_WRel2": {
         "standard_name": "pcr_ann_WRel2",
         "long_name": "annual relative soil moisture (lower layer) (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_WRel2End": {
         "standard_name": "ann_WRel2End",
         "long_name": "annual relative soil moisture (lower layer) at end of aggregation period",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_WRel2End": {
         "standard_name": "pcr_ann_WRel2End",
         "long_name": "aannual relative soil moisture (lower layer) at end of aggregation period (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "ann_Precip": {
         "standard_name": "ann_Precip",
         "long_name": "annual precipitation (average)",
         "units": "mm/d",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "rainfall",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     },
     "pcr_ann_Precip": {
         "standard_name": "pcr_ann_Precip",
         "long_name": "annual relative precipitation (percentile rank data)",
-        "units": "%",
-        "measure_type": "continuous"
+        "units": "%{percentile rank}",
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "This layer is part of a dataset that determines the state of soil moisture and all water fluxes contributing to changes in soil moisure (rainfall, transpiration, soil evaporation, surface runoff and deep drainage)."
     }
 }

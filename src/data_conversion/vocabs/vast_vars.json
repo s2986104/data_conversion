@@ -2,7 +2,9 @@
     "vastgridv2_1k": {
         "standard_name": "vastgridv2_1k",
         "long_name": "VAST classification",
-        "units": "index",
-        "measure_type": "categorical"
+        "units": "{VAST classification}",
+        "measure_type": "categorical",
+        "legend": "categories",
+        "description": "This index classifys vegetation according to its degree of anthropogenic modification from a natural state. Class 1 sets the benchmark where classes 2 - 6 represent largely unchanged through to total removal of vegetation."
     }
 }

@@ -2,781 +2,959 @@
     "megathermgrowindex": {
         "standard_name": "megathermgrowindex",
         "long_name": "Average annual growth index (megatherm plants)",
-        "units": "Growth Index",
-        "measure_type": "continuous"
+        "units": "{Growth Index}",
+        "measure_type": "continuous",
+        "description": "Average growth index value calculated for C4 megatherm plants as the product of three component indices (temperature, light and moisture). The index rates the potential for plant growth between 0 (completely limiting) and 1 (non-limiting)."
     },
     "mesothermgrowindex": {
         "standard_name": "mesothermgrowindex",
         "long_name": "Average annual growth index (mesotherm plants)",
-        "units": "Growth Index",
-        "measure_type": "categorical"
+        "units": "{Growth Index}",
+        "measure_type": "continuous",
+        "description": "Average growth index value calculated for C3 mesotherm plants as the product of three component indices (temperature, light and moisture). The index rates the potential for plant growth between 0 (completely limiting) and 1 (non-limiting)."
     },
     "microthermgrowindex": {
         "standard_name": "microthermgrowindex",
         "long_name": "Average annual growth index (microtherm plants)",
-        "units": "Growth Index",
-        "measure_type": "continuous"
+        "units": "{Growth Index}",
+        "measure_type": "continuous",
+        "description": "Average growth index value calculated for C3 microtherm plants as the product of three component indices (temperature, light and moisture). The index rates the potential for plant growth between 0 (completely limiting) and 1 (non-limiting)."
     },
     "megaseasongrowindex": {
         "standard_name": "megaseasongrowindex",
         "long_name": "Average growth index seasonality (mesotherm plants)",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average growth index seasonality value (coefficient of variation) calculated for C4 megatherm plants."
     },
     "mesoseasongrowindex": {
         "standard_name": "mesoseasongrowindex",
         "long_name": "Average growth index seasonality (mesotherm plants)",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average growth index seasonality value (coefficient of variation) calculated for C3 mesotherm plants."
     },
     "microseasongrowindex": {
         "standard_name": "microseasongrowindex",
         "long_name": "Average growth index seasonality (microtherm plants)",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average growth index seasonality value (coefficient of variation) calculated for C3 microtherm plants."
     },
     "rainerosivityfactor": {
         "standard_name": "rainerosivityfactor",
         "long_name": "Average rainfall erosivity R factor",
-        "units": "MJ mm ha-1 h-1 yr-1",
-        "measure_type": "continuous"
+        "units": "MJ.mm/ha/h/a",
+        "measure_type": "continuous",
+        "description": "Average value of the rainfall erosivity R-factor of all grid cells comprising the stream segment and its sub-catchment."
     },
     "carbonatesedimentrock": {
         "standard_name": "carbonatesedimentrock",
         "long_name": "Percentage of carbonate sedimentary rocks",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of all grid cells overlying carbonate sedimentary rocks (examples include limestone, marl, dolomite)."
     },
     "igneousrock": {
         "standard_name": "igneousrock",
         "long_name": "Percentage of igneous rocks",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of all grid cells overlying igneous rocks (examples include felsic, mafic, ultramafic intrusives and extrusives)."
     },
     "metamorphicrock": {
         "standard_name": "metamorphicrock",
         "long_name": "Percentage of metamorphic rocks",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of all grid cells overlying metamorphic rocks (examples include slate, schist, gneiss, serpentinite, hornfels)."
     },
     "oldbedrock": {
         "standard_name": "oldbedrock",
         "long_name": "Percentage of old bedrock",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of all grid cells overlying old rocks (>570My)."
     },
     "othersedimentrock": {
         "standard_name": "othersedimentrock",
         "long_name": "Percentage of other sedimentary rocks",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of all grid cells overlying other sedimentary rocks (examples include volcanogenic sediments, non-carbonate chemical sediment, organic-rich rocks)."
     },
     "mixedsedimentigneousrock": {
         "standard_name": "mixedsedimentigneousrock",
         "long_name": "Percentage of mixed sedimentary and igneous rocks",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of all grid cells overlying mixed sedimentary and igneous rocks."
     },
     "siliciclasticrock": {
         "standard_name": "siliciclasticrock",
         "long_name": "Percentage of siliciclastic/undifferentiated sedimentary rocks",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of all grid cells overlying siliciclastic/undifferentiated sedimentary rocks (examples include sandstones, conglomerate, mudstone, siltstone)."
     },
     "unconsolidatedrock": {
         "standard_name": "unconsolidatedrock",
         "long_name": "Percentage of unconsolidated rocks",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of all grid cells overlying unconsolidated material (regolith)."
     },
     "sathydraulicconductivity": {
         "standard_name": "sathydraulicconductivity",
         "long_name": "Average Saturated Hydraulic Conductivity",
         "units": "mm/h",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "A quantitative measure of a saturated soil's ability to transmit water when subjected to a hydraulic gradient, also described as the ease with which pores of a saturated soil permit water movement."
     },
     "waterHoldCapacity": {
         "standard_name": "waterHoldCapacity",
         "long_name": "Average Solum Plant Available Water Holding Capacity",
         "units": "mm",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "A measure of the amount of water that can be hold for crop use, here calculated as the sum of the capacities for soil horizons A and B (topsoil and subsoil), which are calculated as (field capacity – wilting point)*horizon depth."
     },
     "clayAhorizon": {
         "standard_name": "clayAhorizon",
         "long_name": "Average percent clay in the soil A horizon",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average percentage of clay in the A soil horizon, which refers to the topmost mineral horizon, also known as 'topsoil'. This layer is known as the zone in which the most biological activity occurs."
     },
     "clayBhorizon": {
         "standard_name": "clayBhorizon",
         "long_name": "Average percent clay in the soil B horizon",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average percentage of clay in the B soil horizon, which is commonly referred to as the 'subsoil'. Plant roots penetrate through this layer, but it has little humus."
     },
     "sandAhorizon": {
         "standard_name": "sandAhorizon",
         "long_name": "Average percent sand in the soil A horizon",
         "units": "%",
-        "measure_type": "continuous"
-    },
-    "waterHoldCapacity": {
-        "standard_name": "waterHoldCapacity",
-        "long_name": "Average Solum Plant Available Water Holding Capacity",
-        "units": "mm",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average percentage of sand in the A soil horizon, which refers to the topmost mineral horizon, also known as 'topsoil'. This layer is known as the zone in which the most biological activity occurs."
     },
     "areatotal": {
         "standard_name": "areatotal",
         "long_name": "Catchment area",
-        "units": "km^2",
-        "measure_type": "continuous"
+        "units": "km2",
+        "measure_type": "continuous",
+        "description": "Sum of the area of all grid cells upstream of the center of the stream segment pour-point."
     },
     "areadivided": {
         "standard_name": "areadivided",
         "long_name": "Catchment area divided at stream bifurcations",
-        "units": "km^2",
-        "measure_type": "continuous"
+        "units": "km2",
+        "measure_type": "continuous",
+        "description": "Sum of the area of all grid cells upstream of the center of the stream segment pour-point divided at stream bifurcations in the ratio of 8 river:4 creeks:1 unnamed streams:0.1 floodplain wetlands."
     },
     "elevationmax": {
         "standard_name": "elevationmax",
         "long_name": "Maximum upstream elevation",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Maximum elevation value of all upstream grid cells."
     },
     "elevationmean": {
         "standard_name": "elevationmean",
         "long_name": "Mean upstream elevation",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Mean elevation value of all upstream grid cells."
     },
     "relief": {
         "standard_name": "relief",
         "long_name": "Catchment relief",
-        "units": "ratio",
-        "measure_type": "continuous"
+        "units": "{ratio}",
+        "measure_type": "continuous",
+        "description": "Catchment relief calculated as (mean upstream elevation-pour point elevation) / (max upstream elevation-pour point elevation)."
     },
     "slope": {
         "standard_name": "slope",
         "long_name": "Catchment average slope",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average value of all  grid cells upstream of the segment pour-point."
     },
     "storage": {
         "standard_name": "storage",
         "long_name": "Catchment storage",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Proportion of upstream grid cells that are valley bottoms."
     },
     "elongationratio": {
         "standard_name": "elongationratio",
         "long_name": "Catchment shape (Elongation ratio)",
-        "units": "Elongation ratio",
-        "measure_type": "continuous"
+        "units": "{Elongation ratio}",
+        "measure_type": "continuous",
+        "description": "Re = Dc / L where Dc = the diameter of a circle with the same area as the catchment area upstream of the segment, L = the maximum length of the catchment along a line basically parallel to the main stem (Gordon et al., 1992)."
     },
     "reliefratio": {
         "standard_name": "reliefratio",
         "long_name": "Catchment relief ratio",
-        "units": "Relief ratio",
-        "measure_type": "continuous"
+        "units": "{Relief ratio}",
+        "measure_type": "continuous",
+        "description": "Catchment relief ratio calculated as (maximum upstream elevation-pour point elevation) / (flow path distance from source)."
     },
     "strahlerorder": {
         "standard_name": "strahlerorder",
         "long_name": "Strahler stream order",
-        "units": "order",
-        "measure_type": "continuous"
+        "units": "{order}",
+        "measure_type": "continuous",
+        "description": "Strahler stream order, order not incremented for rejoining anabranches,stream order allowed to increment downstream of a confluence with one or more DEM  connectors."
     },
     "segelevationmax": {
         "standard_name": "segelevationmax",
         "long_name": "Maximum segment elevation",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Maximum elevation value of all grid cells comprising the stream segment."
     },
     "segelevationmean": {
         "standard_name": "segelevationmean",
         "long_name": "Mean segment elevation",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Mean elevation value of all grid cells comprising the stream segment."
     },
     "segelevationmin": {
         "standard_name": "segelevationmin",
         "long_name": "Minimum segment elevation",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Minimum elevation value of all grid cells comprising the stream segment."
     },
     "segslope": {
         "standard_name": "segslope",
         "long_name": "Stream segment slope",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "The slope of the stream segment calculated as the stream segment elevation range / length of segment."
     },
     "downstreamslope": {
         "standard_name": "downstreamslope",
         "long_name": "Average slope of downstream flow path",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Average slope from one grid cell to the next in the  direction of flow downstream to the stream outlet (either the sea or an internal sink). At stream bifurcations direction is always that to the main channel."
     },
     "downstreamslopemax": {
         "standard_name": "downstreamslopemax",
         "long_name": "Maximum slope in downstream flow path",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Maximum slope from one grid cell to the next in the  direction of flow downstream to the stream outlet. At stream bifurcations direction is always that to the main channel."
     },
     "sourcedistance": {
         "standard_name": "sourcedistance",
         "long_name": "Distance to source",
         "units": "km",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Maximum flow path length upstream to the segment pour-point, calculated by incrementing the maximum upstream length of neighbouring contributing cells. Flow path distance is the distance to move across the surface, allowing for the change in elevation, from the centre of the grid cell to the centre of the next grid cell downstream in the direction of flow."
     },
     "outletdistance": {
         "standard_name": "outletdistance",
         "long_name": "Distance to outlet",
         "units": "km",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Maximum flow path length downstream to the stream outlet (either the sea or an internal sink). Flow path distance is the distance to move across the surface, allowing for the change in elevation, from the centre of the grid cell to the centre of the next grid cell downstream in the direction of flow.  At stream bifurcations direction is always that to the main channel."
     },
     "localaspect": {
         "standard_name": "localaspect",
         "long_name": "Local aspect",
-        "units": "degree",
-        "measure_type": "continuous"
+        "units": "deg",
+        "measure_type": "continuous",
+        "description": "Mean aspect of the stream segment grid cells (computed by taking the mean of the northerly and easterly components of the direction of flow separately)."
     },
     "confinement": {
         "standard_name": "confinement",
         "long_name": "Indicator of valley confinement",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Percentage of stream segment grid cells and their immediate neighbours that are not valley bottoms as defined by mrVBF (Multi-resolution Valley Bottom Flatness) and mrRTF (Multi-resolution Ridge Top Flatness) indices."
     },
     "bareextant": {
         "standard_name": "bareextant",
         "long_name": "Percentage extant bare",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with extant (present day) bare cover."
     },
     "forestcover": {
         "standard_name": "forestcover",
         "long_name": "Percentage extant forests cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with extant (present day) forests cover."
     },
     "grasscover": {
         "standard_name": "grasscover",
         "long_name": "Percentage extant grass cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with extant (present day) grasses cover."
     },
     "nodataextant": {
         "standard_name": "nodataextant",
         "long_name": "Percentage extant vegetation cover with no data values",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with no data values for extant (present day) vegetation cover."
     },
     "woodlandcover": {
         "standard_name": "woodlandcover",
         "long_name": "Percentage extant woodland cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with extant (present day) woodland cover."
     },
     "shrubcover": {
         "standard_name": "shrubcover",
         "long_name": "Percentage extant shrub cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with extant (present day) shrub cover."
     },
     "naturallybare": {
         "standard_name": "naturallybare",
         "long_name": "Percentage natural bare",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with natural (pre-1750) bare cover."
     },
     "natforestcover": {
         "standard_name": "natforestcover",
         "long_name": "Percentage natural forests cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with natural (pre-1750) forests cover."
     },
     "natgrasscover": {
         "standard_name": "natgrasscover",
         "long_name": "Percentage natural grasses cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with natural (pre-1750) grasses cover."
     },
     "natnodata": {
         "standard_name": "natnodata",
         "long_name": "Percentage natural vegetation cover with no data values",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with no data values for natural (pre-1750) vegetation cover."
     },
     "natshrubcover": {
         "standard_name": "natshrubcover",
         "long_name": "Percentage natural shrub cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with natural (pre-1750) shrub cover."
     },
     "natwoodlandcover": {
         "standard_name": "natwoodlandcover",
         "long_name": "Percentage natural woodland cover",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with natural (pre-1750) woodland cover."
     },
     "modifiedland": {
         "standard_name": "modifiedland",
         "long_name": "Percentage modified land (i.e. not conservation)",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is modified land (i.e. not conservation)."
     },
     "irrigatedland": {
         "standard_name": "irrigatedland",
         "long_name": "Percentage irrigated land",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is irrigated land."
     },
     "aquaculture": {
         "standard_name": "aquaculture",
         "long_name": "Percentage used for aquaculture",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is used for aquaculture."
     },
     "animalproduction": {
         "standard_name": "animalproduction",
         "long_name": "Percentage used for intensive animal production",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is used for intensive animal production."
     },
     "plantproduction": {
         "standard_name": "plantproduction",
         "long_name": "Percentage used for intensive plant production",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is used for intensive plant production."
     },
     "pestherbicidesused": {
         "standard_name": "pestherbicidesused",
         "long_name": "Percentage where herbicides/pesticides are likely to be used",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with land uses where herbicides/pesticides are likely to be used."
     },
     "fertilzerused": {
         "standard_name": "fertilzerused",
         "long_name": "Percentage where fertilzer is likely to be used",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells with land uses where fertilizer is likely to be used."
     },
     "forestryland": {
         "standard_name": "forestryland",
         "long_name": "Percentage used for forestry",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is used for forestry."
     },
     "miningland": {
         "standard_name": "miningland",
         "long_name": "Percentage used for mining",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is used for mining."
     },
     "urbanland": {
         "standard_name": "urbanland",
         "long_name": "Percentage urban",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is urban."
     },
     "irridrainageland": {
         "standard_name": "irridrainageland",
         "long_name": "Percentage used for irrigation supply/drainage",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is used for irrigation supply/drainage."
     },
     "artficialimpoundment": {
         "standard_name": "artficialimpoundment",
         "long_name": "Percentage artifical impoundment",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is an artificial impoundment."
     },
     "roadland": {
         "standard_name": "roadland",
         "long_name": "Percentage road",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Areal proportion of grid cells that is a road."
     },
     "popdensitymax": {
         "standard_name": "popdensitymax",
         "long_name": "Average population density",
-        "units": "no/km^2",
-        "measure_type": "continuous"
+        "units": "1/km2",
+        "measure_type": "continuous",
+        "description": "Maximum population density."
     },
     "popdensitymean": {
         "standard_name": "popdensitymean",
         "long_name": "Average population density",
-        "units": "no/km^2",
-        "measure_type": "continuous"
+        "units": "1/km2",
+        "measure_type": "continuous",
+        "description": "Average population density."
     },
     "popdensitygter1": {
         "standard_name": "popdensitygter1",
         "long_name": "Percentage with population density greater than 1 person/km2",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Proportion of grid cells with population density greater than 1 person/km2."
     },
     "popdensitygter10": {
         "standard_name": "popdensitygter10",
         "long_name": "Percentage with population density greater than 10 person/km2",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Proportion of grid cells with population density greater than 10 persons/km2."
     },
     "catdisturbindex": {
         "standard_name": "catdisturbindex",
         "long_name": "Catchment Disturbance Index",
-        "units": "index",
-        "measure_type": "continuous"
+        "units": "{index}",
+        "measure_type": "continuous",
+        "description": "Accumulated upstream values of the Sub-catchment Disturbance Index adjusted by an estimate of the sub-catchments relative contribution to total run-off."
     },
     "subcatdisturbindex": {
         "standard_name": "subcatdisturbindex",
         "long_name": "Sub-catchment Disturbance Index",
-        "units": "index",
-        "measure_type": "continuous"
+        "units": "{index}",
+        "measure_type": "continuous",
+        "description": "Rating for the indirect impact of human modifications in the sub-catchments."
     },
     "segflowdisturbindex": {
         "standard_name": "segflowdisturbindex",
         "long_name": "Segment Flow Regime Disturbance Index",
-        "units": "index",
-        "measure_type": "continuous"
+        "units": "{index}",
+        "measure_type": "continuous",
+        "description": "Rating for the disturbance of direct alterations to the flow regime such as dams, levee banks or flow diversions. This index is based on the Impoundment factor, Flow Diversions factor and Levee bank factor."
     },
     "flowregimedisturbindex": {
         "standard_name": "flowregimedisturbindex",
         "long_name": "Flow Regime Disturbance Index",
-        "units": "index",
-        "measure_type": "continuous"
+        "units": "{index}",
+        "measure_type": "continuous",
+        "description": "Accumulated values of the upstream Segment Flow Regime Disturbance Index adjusted by an estimate of the relative run-off accumulated at the points of disturbance."
     },
     "riverdisturbindex": {
         "standard_name": "riverdisturbindex",
         "long_name": "River Disturbance Index",
-        "units": "index",
-        "measure_type": "continuous"
+        "units": "{index}",
+        "measure_type": "continuous",
+        "description": "Overall rating for river disturbance standardized between 0 (undisturbed) and 1 (severe disturbance) based on the combination of the Catchment Disturbance Index and the Flow Regime Disturbance Index."
     },
     "extindsrcptfactor": {
         "standard_name": "extindsrcptfactor",
         "long_name": "Sub-catchments - Point source factor (maximum of all data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The point source factor reflects the impact of an extractive industry point source, calculated based on weighted categories ranging from high impact (operating mines, contaminated sites, chemical and nutrient point pollution) to low impact (abandoned mine/quarry/petroleum well) and a distance factor to account for proximity to a stream."
     },
     "landusefactor": {
         "standard_name": "landusefactor",
         "long_name": "Sub-catchments - Land use factor",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The land use factor is calculated as the proportion of the sub-catchment with land cover alterated post European settlement, weighted according to the relative impact of the land use on the stream, ranging from 1 (heavy impact, e.g. cleared for urban and cropping) to 0 (uncleared land)."
     },
     "leveebankfactor": {
         "standard_name": "leveebankfactor",
         "long_name": "Streams - Levee bank factor",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Indicates whether a levee bank was present within 500 m of the stream segment."
     },
     "nwisettlefactor": {
         "standard_name": "nwisettlefactor",
         "long_name": "Sub-catchments - Settlement factor (only NWI data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The settlement score reflects both the density of settlements within a sub-catchment and their proximity to the stream. It is calculated based on weighted categories of settlements and structures according to the assumed level of impact on a stream. NWI = National Wilderness Inventory."
     },
     "geodatasettlefactor": {
         "standard_name": "geodatasettlefactor",
         "long_name": "Sub-catchments - Settlement factor (only Geodata)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The settlement score reflects both the density of settlements within a sub-catchment and their proximity to the stream. It is calculated based on weighted categories of settlements and structures according to the assumed level of impact on a stream."
     },
     "otherdatasettlefactor": {
         "standard_name": "otherdatasettlefactor",
         "long_name": "Sub-catchments - Settlement factor (other data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The settlement score reflects both the density of settlements within a sub-catchment and their proximity to the stream. It is calculated based on weighted categories of settlements and structures according to the assumed level of impact on a stream."
     },
     "maxsettlefactor": {
         "standard_name": "maxsettlefactor",
         "long_name": "Sub-catchments - Settlement factor (maximum of all data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The settlement score reflects both the density of settlements within a sub-catchment and their proximity to the stream. It is calculated based on weighted categories of settlements and structures according to the assumed level of impact on a stream."
     },
     "nwiinffactor": {
         "standard_name": "nwiinffactor",
         "long_name": "Sub-catchments - Infrastructure factor (only NWI data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The infrastructure factor is calculated based on weighted categories of infrastructure ranging from high impact (main sealed roads) to low impact (walking tracks) and a distance factor to account for proximity to a stream. NWI = National Wilderness Inventory."
     },
     "geodatainffactor": {
         "standard_name": "geodatainffactor",
         "long_name": "Sub-catchments - Infrastructure factor (only Geodata)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The infrastructure factor is calculated based on weighted categories of infrastructure ranging from high impact (main sealed roads) to low impact (walking tracks) and a distance factor to account for proximity to a stream."
     },
     "maxinffactor": {
         "standard_name": "maxinffactor",
         "long_name": "Sub-catchments - Infrastructure factor (maximum of all data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The infrastructure factor is calculated based on weighted categories of infrastructure ranging from high impact (main sealed roads) to low impact (walking tracks) and a distance factor to account for proximity to a stream."
     },
     "nwiimpfactor": {
         "standard_name": "nwiimpfactor",
         "long_name": "Streams - Impoundments factor (only NWI data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The impoundments factor is the maximum value of weighted factors of any impoundment features (major structures, weirs, locks/sluice gates, minor structures) recorded for a stream section. All stream sections with no impoundments of any type were assigned a value of zero. Off-stream impoundments, including farm dams, were generally not considered. NWI = National Wilderness Inventory."
     },
     "geodataimpfactor": {
         "standard_name": "geodataimpfactor",
         "long_name": "Streams - Impoundments factor (only Geodata)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The impoundments factor is the maximum value of weighted factors of any impoundment features (major structures, weirs, locks/sluice gates, minor structures) recorded for a stream section. All stream sections with no impoundments of any type were assigned a value of zero. Off-stream impoundments, including farm dams, were generally not considered."
     },
     "maximpfactor": {
         "standard_name": "maximpfactor",
         "long_name": "Streams - Impoundments factor (maximum of all data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The impoundments factor is the maximum value of weighted factors of any impoundment features (major structures, weirs, locks/sluice gates, minor structures) recorded for a stream section. All stream sections with no impoundments of any type were assigned a value of zero. Off-stream impoundments, including farm dams, were generally not considered."
     },
     "nwidiverfactor": {
         "standard_name": "nwidiverfactor",
         "long_name": "Streams - Flow diversions factor (only NWI data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The flow diversions factor is the maximum value of weighted factors assigned to the classes of flow diversion (major, other) recorded for a stream section. All stream sections with no flow diversions of any type were assigned a value of zero. NWI = National Wilderness Inventory."
     },
     "geodatadiverfactor": {
         "standard_name": "geodatadiverfactor",
         "long_name": "Streams - Flow diversions factor (only Geodata)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The flow diversions factor is the maximum value of weighted factors assigned to the classes of flow diversion (major, other) recorded for a stream section. All stream sections with no flow diversions of any type were assigned a value of zero."
     },
     "maxdiverfactor": {
         "standard_name": "maxdiverfactor",
         "long_name": "Streams - Flow diversions factor (maximum of all data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The flow diversions factor is the maximum value of weighted factors assigned to the classes of flow diversion (major, other) recorded for a stream section. All stream sections with no flow diversions of any type were assigned a value of zero."
     },
     "sdif": {
         "standard_name": "sdif",
         "long_name": "Sub-catchments - Infrastructure factor (other data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The infrastructure factor is calculated based on weighted categories of infrastructure ranging from high impact (main sealed roads) to low impact (walking tracks) and a distance factor to account for proximity to a stream."
     },
     "nwief": {
         "standard_name": "nwief",
         "long_name": "Sub-catchments - Point source factor (only NWI data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The point source factor reflects the impact of an extractive industry point source, calculated based on weighted categories ranging from high impact (operating mines, contaminated sites, chemical and nutrient point pollution) to low impact (abandoned mine/quarry/petroleum well) and a distance factor to account for proximity to a stream. NWI = National Wilderness Inventory."
     },
     "gdef": {
         "standard_name": "gdef",
         "long_name": "Sub-catchments - Point source factor (only Geodata)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The point source factor reflects the impact of an extractive industry point source, calculated based on weighted categories ranging from high impact (operating mines, contaminated sites, chemical and nutrient point pollution) to low impact (abandoned mine/quarry/petroleum well) and a distance factor to account for proximity to a stream."
     },
     "sdef": {
         "standard_name": "sdef",
         "long_name": "Sub-catchments - Point source factor (other data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The point source factor reflects the impact of an extractive industry point source, calculated based on weighted categories ranging from high impact (operating mines, contaminated sites, chemical and nutrient point pollution) to low impact (abandoned mine/quarry/petroleum well) and a distance factor to account for proximity to a stream."
     },
     "sdimf": {
         "standard_name": "sdimf",
         "long_name": "Streams - Impoundments factor (other data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The impoundments factor is the maximum value of weighted factors of any impoundment features (major structures, weirs, locks/sluice gates, minor structures) recorded for a stream section. All stream sections with no impoundments of any type were assigned a value of zero. Off-stream impoundments, including farm dams, were generally not considered."
     },
     "sdfdf": {
         "standard_name": "sdfdf",
         "long_name": "Streams - Flow diversions factor (other data)",
-        "units": "-",
-        "measure_type": "continuous"
+        "units": "",
+        "measure_type": "continuous",
+        "description": "The flow diversions factor is the maximum value of weighted factors assigned to the classes of flow diversion (major, other) recorded for a stream section. All stream sections with no flow diversions of any type were assigned a value of zero."
     },
     "barfreelengmin": {
         "standard_name": "barfreelengmin",
         "long_name": "Percentage barrier free flow path length",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Minimum overall barrier free flow path length percentage (damwalls, spillways, large dams and reservoirs combined)."
     },
     "barfreelengresv": {
         "standard_name": "barfreelengresv",
         "long_name": "Percentage barrier free flow path length for reservoirs",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Percentage barrier free flow path length for reservoirs, calculated as ((Maximum barrier free flow path length upstream + Unrestricted distance downstream) / Total catchment length) * 100."
     },
     "barfreelengdam": {
         "standard_name": "barfreelengdam",
         "long_name": "Percentage barrier free flow path length for damwalls, spillways or large dams",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Percentage barrier free flow path length for damwalls, spillways or large dams, calculated as ((Maximum barrier free flow path length upstream + Unrestricted distance downstream) / Total catchment length) * 100."
     },
     "totalcatlength": {
         "standard_name": "totalcatlength",
         "long_name": "Total catchment length",
         "units": "km",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Sum of 'distance to outlet' and 'distance to source'. Indicates total flow path length across the surface, allowing for the change in elevation, from segment pour-point to stream outlet."
     },
     "maxupstbffplengres": {
         "standard_name": "maxupstbffplengres",
         "long_name": "Maximum barrier free flow path length upstream (reservoirs)",
-        "units": "kmm",
-        "measure_type": "continuous"
+        "units": "km",
+        "measure_type": "continuous",
+        "description": "Maximum flow path length upstream to the segment pour-point with sinks imposed on flow pathways at the outlet of stream segments flowing out of a reservoir."
     },
     "unrestdowndistres": {
         "standard_name": "unrestdowndistres",
         "long_name": "Unrestricted (no reservoirs) distance downstream",
         "units": "km",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Flow path length downstream to the outlet of stream segments flowing out of a reservoir or if no reservoir the stream outlet (either the sea or an internal sink). Flow path distance is the distance to move across the surface, allowing for the change in elevation, from the centre of the grid cell to the centre of the next grid cell downstream in the direction of flow.  At stream bifurcations direction is always that to the main channel."
     },
     "maxupstbffplengdam": {
         "standard_name": "maxupstbffplengdam",
         "long_name": "UMaximum barrier free flow path length upstream  (damwalls, spillways or large dams)",
         "units": "km",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Maximum flow path length upstream to the segment pour-point with sinks imposed on flow pathways at damwalls or spillways intersecting or within 100m of an AusHydro 1.1.6 WatercourseLine feature."
     },
     "unrestdowndistdam": {
         "standard_name": "unrestdowndistdam",
         "long_name": "Unrestricted (no damwalls, spillways or large dams) distance downstream",
         "units": "km",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Flow path length downstream to a damwall or spillway or if absent the stream outlet (either the sea or an internal sink). Flow path distance is the distance to move across the surface, allowing for the change in elevation, from the centre of the grid cell to the centre of the next grid cell downstream in the direction of flow.  At stream bifurcations direction is always that to the main channel."
     },
     "barrierupdownstr": {
         "standard_name": "barrierupdownstr",
         "long_name": "Artificial barrier presence up or downstream",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Presence (1) or absence (0) of a damwall, spillway or reservoir outlet upstream and/or downstream."
     },
     "barrierupstr": {
         "standard_name": "barrierupstr",
         "long_name": "Artificial barrier presence upstream",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Presence (1) or absence (0) of a damwall, spillway or reservoir outlet upstream."
     },
     "barrierdownstr": {
         "standard_name": "barrierdownstr",
         "long_name": "Artificial barrier presence downstream",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Presence (1) or absence (0) of a damwall, spillway or reservoir outlet in the downstream flowpath (including anabranches)."
     },
     "cliffdownstr": {
         "standard_name": "cliffdownstr",
         "long_name": "Cliff presence upstream",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Flags stream segments upstream of a segment flowing over a cliff (1 = present, 0 = absent)."
     },
     "cliffupstr": {
         "standard_name": "cliffupstr",
         "long_name": "Cliff presence downstream",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Flags stream segments downstream of a segment flowing over a cliff (1 = present, 0 = absent)"
     },
     "waterfallflow": {
         "standard_name": "waterfallflow",
         "long_name": "Waterfall presence up or downstream",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Flags stream segments flowing over a waterfall (1 = present, 0 = absent)."
     },
     "waterfallupstr": {
         "standard_name": "waterfallupstr",
         "long_name": "Waterfall presence upstream",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Flags stream segments upstream of a segment flowing over a waterfall (1 = present, 0 = absent)."
     },
     "waterfalldownstr": {
         "standard_name": "waterfalldownstr",
         "long_name": "Waterfall presence downstream",
-        "units": "bool",
-        "measure_type": "continuous"
+        "units": "{bool}",
+        "measure_type": "continuous",
+        "description": "Flags stream segments downstream of a segment flowing over a waterfall (1 = present, 0 = absent)."
     },
     "strdensity": {
         "standard_name": "strdensity",
         "long_name": "Stream density",
-        "units": "km/km^2",
-        "measure_type": "continuous"
+        "units": "km/km2",
+        "measure_type": "continuous",
+        "description": "Stream density calculated as total segment length of all upstream segments in the DEM derived stream network divided by the contributing area calculated for the segment pour-point."
     },
     "lakeportion": {
         "standard_name": "lakeportion",
         "long_name": "Stream and valley lake proportion",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Proportion of stream segment and associated valley bottom grid cells where a lake occupies the majority of the grid cell."
     },
     "springportion": {
         "standard_name": "springportion",
         "long_name": "Stream and valley springs proportion",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Proportion of stream segment and associated valley bottom grid cells in which a spring occurs."
     },
     "watercourseportion": {
         "standard_name": "watercourseportion",
         "long_name": "Waterfall presence downstreamStream and valley large streams proportion",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Proportion of stream segment and associated valley bottom grid cells where a large stream mapped as a watercourse area occupies the majority of the grid cell."
     },
     "waterholeportion": {
         "standard_name": "waterholeportion",
         "long_name": "Stream and valley waterholes proportion",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Proportion of stream segment and associated valley bottom grid cells in which a waterhole occurs."
     },
     "waterynessind": {
         "standard_name": "waterynessind",
         "long_name": "Wateryness Indicator",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Proportion of stream segment and associated valley bottom grid cells that contains one or more of a waterhole or spring or the majority of the grid cell is occupied by a lake or watercourse area."
     },
     "strsegmentleng": {
         "standard_name": "strsegmentleng",
         "long_name": "Stream segment length",
         "units": "km",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "Sum of the distances to move across the surface from each segment grid cell to the next downstream in the direction of flow."
     },
     "waterholecount": {
         "standard_name": "waterholecount",
         "long_name": "egment sub-catchment waterholes frequency",
-        "units": "count",
-        "measure_type": "continuous"
+        "units": "{count}",
+        "measure_type": "continuous",
+        "description": "Number of waterholes occurring within the stream segment sub-catchment."
     },
     "springcount": {
         "standard_name": "springcount",
         "long_name": "Segment sub-catchment springs frequency",
-        "units": "count",
-        "measure_type": "continuous"
+        "units": "{count}",
+        "measure_type": "continuous",
+        "description": "Number of springs occurring within the stream segment sub-catchment."
     },
     "waterholedensity": {
         "standard_name": "waterholedensity",
         "long_name": "Segment waterholes density",
-        "units": "no/km",
-        "measure_type": "continuous"
+        "units": "1/km",
+        "measure_type": "continuous",
+        "description": "Number of waterholes occurring within the stream segment sub-catchment divided by the length of the stream segment."
     },
     "springdensity": {
         "standard_name": "springdensity",
         "long_name": "Segment springs density",
-        "units": "no/km",
-        "measure_type": "continuous"
+        "units": "1/km",
+        "measure_type": "continuous",
+        "description": "Number of springs occurring within the stream segment sub-catchment divided by the length of the stream segment."
     },
     "lakearea": {
         "standard_name": "lakearea",
         "long_name": "Segment sub-catchment lake area",
-        "units": "km^2",
-        "measure_type": "continuous"
+        "units": "km2",
+        "measure_type": "continuous",
+        "description": "Total area of lakes occurring within the stream segment sub-catchment."
     },
     "lakedensity": {
         "standard_name": "lakedensity",
         "long_name": "Segment lakes density",
-        "units": "km^2/km",
-        "measure_type": "continuous"
+        "units": "km2/km",
+        "measure_type": "continuous",
+        "description": "Total area of lakes occurring within the stream segment sub-catchment divided by the length of the stream segment."
     },
     "watercoursearea": {
         "standard_name": "watercoursearea",
         "long_name": "Segment sub-catchment area of large streams",
-        "units": "km^2",
-        "measure_type": "continuous"
+        "units": "km2",
+        "measure_type": "continuous",
+        "description": "Total area of large streams mapped as watercourse area occurring within the stream segment sub-catchment."
     },
     "watercoursedensity": {
         "standard_name": "watercoursedensity",
         "long_name": "Segment large streams density",
-        "units": "km^2/km",
-        "measure_type": "continuous"
+        "units": "km2/km",
+        "measure_type": "continuous",
+        "description": "Total area of large streams mapped as watercourse area occurring within the stream segment sub-catchment divided by the length of the stream segment."
     },
     "nppann": {
         "standard_name": "nppann",
         "long_name": "Annual mean Net Primary Productivity",
-        "units": "tC ha",
-        "measure_type": "continuous"
+        "units": "t{C}/har",
+        "measure_type": "continuous",
+        "description": "Average of the grid cell values of “Base” (pre-1788) Net Primary Production upstream of the center of the segment pour-point cell."
     },
     "nppmon": {
         "standard_name": "nppmon",
         "long_name": "Monthly mean Net Primary Productivity",
-        "units": "tC ha",
-        "measure_type": "continuous"
+        "units": "t{C}/har",
+        "measure_type": "continuous",
+        "description": "Average of the grid cell values of “Base” (pre-1788) Net Primary Production upstream of the center of the segment pour-point cell."
     }
 }

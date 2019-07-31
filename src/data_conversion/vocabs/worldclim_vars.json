@@ -3,30 +3,61 @@
         "standard_name": "altitude",
         "long_name": "Elevation (elevation above sea level)",
         "units": "m",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "altitude",
+        "description": "This dataset describes the altitude, as elevation (metres) above sea level. This layer can be a helpful inclusion when modelling species distributions that may be limited by elevation or subsequent climatic conditions at these elevations."
     },
     "prec": {
         "standard_name": "precipitation_mean",
         "long_name": "Average precipitation",
         "units": "mm",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "monrainfall",
+        "description": "This information is useful when examining whether species distributions are affected by mean temperature anomalies throughout particular months in the year. Good information for modelling migratory species distributions."
     },
     "tmax": {
         "standard_name": "temperature_max",
         "long_name": "Average maximum temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "This information is useful when examining whether species distributions are affected by mean temperature anomalies throughout particular months in the year. Good information for modelling migratory species distributions."
     },
     "tmin": {
         "standard_name": "temperature_min",
         "long_name": "Average minimum temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "This information is useful when examining whether species distributions are affected by mean temperature anomalies throughout particular months in the year. Good information for modelling migratory species distributions."
     },
     "tmean": {
         "standard_name": "temperature_mean",
         "long_name": "Average mean temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "This information is useful when examining whether species distributions are affected by mean temperature anomalies throughout particular months in the year. Good information for modelling migratory species distributions."
+    },
+    "srad": {
+        "standard_name": "solar_radiation",
+        "long_name": "Daily solar radiation",
+        "units": "kJ.m2/d",
+        "measure_type": "continuous",
+        "description": ""
+    },
+    "vapr": {
+        "standard_name": "vapor_pressure",
+        "long_name": "Water vapor pressure",
+        "units": "hPa",
+        "measure_type": "continuous",
+        "description": ""
+    },
+    "wind": {
+        "standard_name": "wind_speed",
+        "long_name": "Wind speed",
+        "units": "m/s",
+        "measure_type": "continuous",
+        "description": ""
     }
 }

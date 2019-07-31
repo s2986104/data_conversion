@@ -3,30 +3,38 @@
         "standard_name": "clay30",
         "long_name": "Clay content percentage 0-30 cm",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "Clay is a useful proxy for defining the nutritional and biological capacity of soil."
     },
     "asc": {
         "standard_name": "asc",
         "long_name": "Australian Soil Classification",
-        "units": "soil class",
-        "measure_type": "categorical"
+        "units": "{soil class}",
+        "measure_type": "categorical",
+        "legend": "categories",
+        "description": "This is a 'best of' dataset of dominant soil order according to the Australian Soil Classification. Soil Order code list: 01. AN Anthroposol, 02. CA Calcarosol, 03. CH Chromosol, 04. DE Dermosol, 05. FE Ferrosol, 06. HY Hydrosol, 07. KA Kandosol, 08. KU Kurosol, 09. OR Organosol, 10. PO Podosol, 11. RU Rudosol, 12. SO Sodosol, 13. TE Tenosol, 14 .VE Vertosol."
     },
     "pawc_1m": {
         "standard_name": "pawc_1m",
         "long_name": "Plant available water capacity 0-1 m",
         "units": "mm",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "This index provides the maximum amount of plant available water a soil can provide. This is an indicator of a soil's ability to retain water and make it sufficiently available for plant use."
     },
     "ph_0_30": {
         "standard_name": "ph_0_30",
         "long_name": "pH (Calcium Chloride 1:5) 0-30cm",
-        "units": "pH",
-        "measure_type": "continuous"
+        "units": "[pH]",
+        "measure_type": "continuous",
+        "legend": "pH",
+        "description": "Soil pH is a measure of the concentration of hydrogen ions in the soil solution. The lower the pH of soil, the greater the acidity. pH is measured on a logarithmic scale from 1 to 14, with 7 being neutral."
     },
     "bd30": {
         "standard_name": "bd30",
         "long_name": "Bulk density 0-30 cm",
         "units": "Mg/m3",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "The soil bulk density, also known as dry bulk density, is the weight of dry soil divided by total soil volume. This is a useful indication of a soils physical condition."
     }
 }

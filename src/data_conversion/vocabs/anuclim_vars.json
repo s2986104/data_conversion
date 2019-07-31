@@ -2,31 +2,39 @@
     "mvapp": {
         "standard_name": "mvapp",
         "long_name": "Average Monthly Vapour Pressure",
-        "units": "HPa",
-        "measure_type": "continuous"
+        "units": "hPa",
+        "measure_type": "continuous",
+        "description": "Mean of daily vapour pressure for the month. Vapour pressure regulates evaporation rates and water need and use."
     },
     "mprec": {
         "standard_name": "mprec",
         "long_name": "Average Monthly Precipitation",
         "units": "mm",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "rainfall",
+        "description": "This layer approximates the total water inputs and is therefore useful when ascertaining the importance of water availability at specific months throughout the year to a species distribution . Good information for modelling migratory species distributions."
     },
     "mevap": {
         "standard_name": "mevap",
         "long_name": "Total Monthly Evaporation",
         "units": "mm",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description":  "Monthly total class A pan evaporation. Pan evaporation is a measurement that combines or integrates the effects of several climate elements: temperature, humidity, rain fall, drought dispersion, solar radiation, and wind, and is useful for estimating water need and use."
     },
     "mtmax": {
         "standard_name": "mtmax",
         "long_name": "Average Monthly Maximum Temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "This information is useful when examining whether species distributions are affected by extreme maximum temperature anomalies throughout particular months in the year. Good information for modelling migratory species distributions."
     },
     "mtmin": {
         "standard_name": "mtmin",
         "long_name": "Average Monthly Minimum Temperature",
-        "units": "degree_Celsius",
-        "measure_type": "continuous"
+        "units": "Cel",
+        "measure_type": "continuous",
+        "legend": "temperature",
+        "description": "This information is useful when examining whether species distributions are affected by mean temperature anomalies throughout particular months in the year. Good information for modelling migratory species distributions."
     }
 }

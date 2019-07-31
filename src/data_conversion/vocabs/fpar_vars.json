@@ -3,30 +3,39 @@
         "standard_name": "fpar",
         "long_name": "Fraction of Photosynthetically Active Radiation",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "fPAR is the fraction of photosythetically active radiation intercepted by the sunlit vegetation canopy. It is a good measure of vegetation greenness which can be used to analyse biomass production, carbon storage, habitat quality and disturbance regimes."
     },
     "fparmean": {
         "standard_name": "fparmean",
         "long_name": "Fraction of Photosynthetically Active Radiation (Mean)",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "fPAR is the fraction of photosythetically active radiation intercepted by the sunlit vegetation canopy. It is a good measure of vegetation greenness which can be used to analyse biomass production, carbon storage, habitat quality and disturbance regimes."
     },
     "fparmin": {
         "standard_name": "fparmin",
         "long_name": "Fraction of Photosynthetically Active Radiation (Minimum)",
         "units": "%",
-        "measure_type": "continuous"
-    },
+        "measure_type": "continuous",
+        "legend": "percentage",
+            "description": "fPAR is the fraction of photosythetically active radiation intercepted by the sunlit vegetation canopy. It is a good measure of vegetation greenness which can be used to analyse biomass production, carbon storage, habitat quality and disturbance regimes."
+},
     "fparmax": {
         "standard_name": "fparmax",
         "long_name": "Fraction of Photosynthetically Active Radiation (Maximum)",
         "units": "%",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "legend": "percentage",
+        "description": "fPAR is the fraction of photosythetically active radiation intercepted by the sunlit vegetation canopy. It is a good measure of vegetation greenness which can be used to analyse biomass production, carbon storage, habitat quality and disturbance regimes."
     },
     "fparcov": {
         "standard_name": "fparcov",
         "long_name": "Fraction of Photosynthetically Active Radiation (Coefficient of Variance)",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "fPAR is the fraction of photosythetically active radiation intercepted by the sunlit vegetation canopy. It is a good measure of vegetation greenness which can be used to analyse biomass production, carbon storage, habitat quality and disturbance regimes."
     }
 }

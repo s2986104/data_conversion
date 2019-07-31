@@ -2,25 +2,29 @@
     "gppmax": {
         "standard_name": "gppmax",
         "long_name": "Maximum Gross Primary Productivity",
-        "units": "mol CO2 per m^2",
-        "measure_type": "continuous"
+        "units": "mol{CO2}/m2",
+        "measure_type": "continuous",
+        "description": "GPP is the amount of carbon fixed during photosynthesis by all producers in an ecosystem."
     },
     "gppmin": {
         "standard_name": "gppmin",
         "long_name": "Minimum Gross Primary Productivity",
-        "units": "mol CO2 per m^2",
-        "measure_type": "continuous"
+        "units": "mol{CO2}/m2",
+        "measure_type": "continuous",
+        "description": "GPP is the amount of carbon fixed during photosynthesis by all producers in an ecosystem."
     },
     "gppmean": {
         "standard_name": "gppmean",
         "long_name": "Mean Gross Primary Productivity",
-        "units": "mol CO2 per m^2",
-        "measure_type": "continuous"
+        "units": "mol{CO2}/m2",
+        "measure_type": "continuous",
+        "description": "GPP is the amount of carbon fixed during photosynthesis by all producers in an ecosystem."
     },
     "gppcov": {
         "standard_name": "gppcov",
         "long_name": "Coefficient of Variance",
         "units": "1",
-        "measure_type": "continuous"
+        "measure_type": "continuous",
+        "description": "GPP is the amount of carbon fixed during photosynthesis by all producers in an ecosystem."
     }
 }
