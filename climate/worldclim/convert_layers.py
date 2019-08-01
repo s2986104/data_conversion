@@ -335,12 +335,12 @@ class WorldClimConverter(BaseConverter):
         return root
 
     def destfilename(self, destdir, md):
+        if md['layerid'] in REV_VAR_MAP:
+            lzid = REV_VAR_MAP[md['layerid']]
+        else:
+            lzid = md['layerid']
         if 'month' in md:
             # include month in filename
-            if md['layerid'] in REV_VAR_MAP:
-                lzid = md['layerid']
-            else:
-                lzid = layerid
             return (
                 os.path.basename(destdir) +
                 '_' +
@@ -364,9 +364,9 @@ class WorldClimConverter(BaseConverter):
     def update_scale_offset(self, md):
         if md['version'] == 'v1.4':
             if md['layerid'] in self.SCALES:
-                parsed_md['scale'] = self.SCALES[md['layerid']]
+                md['scale'] = self.SCALES[md['layerid']]
             if md['layerid'] in self.OFFSETS:
-                parsed_md['offset'] = self.OFFSETS[md['layerid']]
+                md['offset'] = self.OFFSETS[md['layerid']]
 
     def get_argument_parser(self):
         parser = super().get_argument_parser()
