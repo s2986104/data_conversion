@@ -19,3 +19,8 @@ environmental/vast/bccvl/
 climate/australian-water-availability-project/bccvl/Run26j/annual/logs/
 climate/australian-water-availability-project/bccvl/Run26j/annual/random_scripts/c
 *.egg-info
+env/
+climate/aus-clim-csiro/bccvl/
+environmental/aus-enviro-substrate/bccvl/
+environmental/aus-enviro-topography/bccvl/
+environmental/aus-enviro-vegetation/bccvl/

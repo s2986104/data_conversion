@@ -1,0 +1,24 @@
+{
+	"bccvl_metadata_version": "2014-09-01-01",
+	"title": "National Dynamic Land Cover Dataset",
+	"genre": "Environmental",
+	"data_type": "continuous",
+	"format": "GeoTIFF",
+	"resolution": "9 arcsec",
+	"resolution_comment" : "Documentation says data are sampled on a 250mx250m grid",
+	"geogcs": "WGS84",
+	"bounding_box": {
+		"top": "-10.0",
+		"right": "155.0091890",
+		"bottom": "-45.0047980",
+		"left": "110.0"
+	},
+	"temporal_coverage": {
+        	"comment": "Guessing this from readme.txt. It is not strictly obvious.", 
+		"start": "2000", 
+		"end": "2010"
+	}, 
+	"external_url": "https://data.gov.au/dataset/1556b944-731c-4b7f-a03e-14577c7e68db",
+	"license": "Creative commons Creative Commons Attribution 3.0 Australia Licence",
+	"acknowledgement": "Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition),  Geoscience Australia, Canberra."
+}
