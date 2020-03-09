@@ -7,10 +7,10 @@ class MetadataGenerator:
     COL_IDX_IN_GUIDE = 4  # collection index in guide.json
 
     def __init__(self):
-        self.guide = {}  # input json data serving as a guide
-        self.collection = {}  # output json data, goes to collections.json
-        self.datasets = []  # output json data, goes to datasets.json
-        self.data = []  # output json data, goes to data.json
+        self.guide = {}        # input json data serving as a guide
+        self.collection = {}   # output json data, goes to collections.json
+        self.datasets = []     # output json data, goes to datasets.json
+        self.data = []         # output json data, goes to data.json
         self.destination = "source/aus-enviro-vegetation"  # where to write json files
 
     def _load_guide(self):
@@ -85,14 +85,14 @@ class MetadataGenerator:
               "domainType": in_dataset["domain"],
               "axes": {
                 "x": {
-                  "start": 109.5043559220607,
-                  "stop":157.2170998449442,
-                  "num": 49180
+                  "start": 109.5043559220607,   # fixed
+                  "stop":157.2170998449442,     # fixed
+                  "num": 49180                  # fixed
                 },
                 "y": {
-                  "start": -44.318220539340075,
-                  "stop": -8.138805200337014,
-                  "num": 37292
+                  "start": -44.318220539340075,  # fixed
+                  "stop": -8.138805200337014,    # fixed
+                  "num": 37292                   # fixed
                 }
               },
               "referencing": [
