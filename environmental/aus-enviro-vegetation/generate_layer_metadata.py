@@ -85,14 +85,14 @@ class MetadataGenerator:
               "domainType": in_dataset["domain"],
               "axes": {
                 "x": {
-                  "start": -1888000.0,
-                  "stop": 2122000.0,
-                  "num": 40100
+                  "start": 109.5043559220607,
+                  "stop":157.2170998449442,
+                  "num": 49180
                 },
                 "y": {
-                  "start": -4841000.0,
-                  "stop": -1004000.0,
-                  "num": 38370
+                  "start": -44.318220539340075,
+                  "stop": -8.138805200337014,
+                  "num": 37292
                 }
               },
               "referencing": [
@@ -128,10 +128,10 @@ class MetadataGenerator:
               "year": in_dataset["published"],
               "year_range": in_dataset["year_range"],
               "extent_wgs84": {
-                "bottom": -4841000.0,
-                "left": -1888000.0,
-                "top": -1004000.0,
-                "right": 2122000.0
+                "bottom": -44.318220539340075,
+                "left": 109.5043559220607,
+                "top": -8.138805200337014,
+                "right": 157.2170998449442
               },
               "uuid": str(uuid.uuid4()),
               "partof": [
