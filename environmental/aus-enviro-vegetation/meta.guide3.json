@@ -35,7 +35,8 @@
             "layers": [
               {
                 "filename": "b01.tif",
-                "title": "B01 - annual mean temperature",
+                "title": "Bioclim 01: Annual mean temperature",
+                "parametername": "bioclim_01",
                 "tooltip": "The annual mean temperature approximates the total energy inputs for an ecosystem.",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -141,7 +142,8 @@
               },
               {
                 "filename": "b02.tif",
-                "title": "B02 - Mean Diurnal Range (mean of monthly (max temp - min temp))",
+                "title": "Bioclim 02: Mean Diurnal Range (Mean of monthly (max temp - min temp))",
+                "parametername": "bioclim_02",
                 "tooltip": "This index can help provide information pertaining to the relevance of temperature fluctuation for different species.",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -247,7 +249,8 @@
               },
               {
                 "filename": "b03.tif",
-                "title": "B03 - Isothermality (B02/B07)",
+                "title": "Bioclim 03: Isothermality (BIO2/BIO7) (* 100)",
+                "parametername": "bioclim_03",
                 "tooltip": "Isothermality quantifies how large the day-to-night temperatures oscillate relative to the summer- to-winter (annual) oscillations. An isothermal value of 100 indicates the diurnal temperature range is equiva- lent to the annual temperature range, while anything less than 100 indicates a smaller level of temperature variability within an average month relative to the year. A species distribution may be influenced by larger or smaller temperature fluctuations within a month relative to the year and this predictor is useful for ascertaining such information.",
                 "unit": "proportion",
                 "unitfull": "proportion",
@@ -353,7 +356,8 @@
               },
               {
                 "filename": "b04.tif",
-                "title": "B04 - Temperature Seasonality (standard deviation)",
+                "title": "Bioclim 04: Temperature Seasonality (standard deviation *100)",
+                "parametername": "bioclim_04",
                 "tooltip": "Temperature seasonality is a measure of temperature change over the course of the year. The larger the value, the greater the variability of temperature.",
                 "unit": "proportion",
                 "unitfull": "proportion",
@@ -459,7 +463,8 @@
               },
               {
                 "filename": "b05.tif",
-                "title": "B05 - Max Temperature of Warmest Month",
+                "title": "Bioclim 05: Max Temperature of Warmest Month",
+                "parametername": "bioclim_05",
                 "tooltip": "This information is useful when examining whether species distributions are affected by warm temperature anomalies throughout the year.",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -565,7 +570,8 @@
               },
               {
                 "filename": "b06.tif",
-                "title": "B06 - Min Temperature of Coldest Month",
+                "title": "Bioclim 06: Min Temperature of Coldest Month",
+                "parametername": "bioclim_06",
                 "tooltip": "This information is useful when examining whether species distributions are affected by cold temperature anomalies throughout the year.",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -671,7 +677,8 @@
               },
               {
                 "filename": "b07.tif",
-                "title": "B07 - Temperature Annual Range (B05-B06)",
+                "parametername": "bioclim_07",
+                "title": "Bioclim 07: Temperature Annual Range (BIO5-BIO6)",
                 "tooltip": "This information is useful when examining whether species distributions are affected by ranges of extreme temperature conditions.",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -777,7 +784,8 @@
               },
               {
                 "filename": "b08.tif",
-                "title": "B08 - Mean Temperature of Wettest Quarter",
+                "parametername": "bioclim_08",
+                "title": "Bioclim 08: Mean Temperature of Wettest Quarter",
                 "tooltip": "This index provides mean temperatures during the wettest three months of the year, which can be useful for examining how such environmental factors may affect species seasonal distributions",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -883,7 +891,8 @@
               },
               {
                 "filename": "b09.tif",
-                "title": "B09 - Mean Temperature of Driest Quarter",
+                "parametername": "bioclim_09",
+                "title": "Bioclim 09: Mean Temperature of Driest Quarter",
                 "tooltip": "This index provides mean temperatures during the driest three months of the year, which can be useful for examining how such environmental factors may affect species seasonal distributions",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -989,7 +998,8 @@
               },
               {
                 "filename": "b10.tif",
-                "title": "B10 - Mean Temperature of Warmest Quarter",
+                "parametername": "bioclim_10",
+                "title": "Bioclim 10: Mean Temperature of Warmest Quarter",
                 "tooltip": "This index provides mean temperatures during the warmest three months of the year, which can be useful for examining how such environmental factors may affect species seasonal distributions.",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -1095,7 +1105,8 @@
               },
               {
                 "filename": "b11.tif",
-                "title": "B11 - Mean Temperature of Coldest Quarter",
+                "parametername": "bioclim_11",
+                "title": "Bioclim 11: Mean Temperature of Coldest Quarter",
                 "tooltip": "This index provides mean temperatures during the coldest three months of the year, which can be useful for examining how such environmental factors may affect species seasonal distributions.",
                 "unit": "\u00b0C",
                 "unitfull": "degrees celsius",
@@ -1201,7 +1212,8 @@
               },
               {
                 "filename": "b12.tif",
-                "title": "B12 - Annual Precipitation",
+                "parametername": "bioclim_12",
+                "title": "Bioclim 12: Annual Precipitation",
                 "tooltip": "Annual total precipitation approximates the total water inputs and is therefore useful when ascertaining the importance of water availability to a species distribution.",
                 "unit": "mm",
                 "unitfull": "Millimetres",
@@ -1307,7 +1319,8 @@
               },
               {
                 "filename": "b13.tif",
-                "title": "B13 - Precipitation of Wettest Month",
+                "parametername": "bioclim_13",
+                "title": "Bioclim 13: Precipitation of Wettest Month",
                 "tooltip": "The wettest month is useful if extreme precipitation conditions during the year influence a species potential range.",
                 "unit": "mm",
                 "unitfull": "Millimetres",
@@ -1413,7 +1426,8 @@
               },
               {
                 "filename": "b14.tif",
-                "title": "B14 - Precipitation of Driest Month",
+                "parametername": "bioclim_14",
+                "title": "Bioclim 14: Precipitation of Driest Month",
                 "tooltip": "The driest month is useful if extreme precipitation conditions during the year influence a species potential range.",
                 "unit": "mm",
                 "unitfull": "Millimetres",
@@ -1519,7 +1533,8 @@
               },
               {
                 "filename": "b15.tif",
-                "title": "B15 - Precipitation Seasonality (Coefficient of Variation)",
+                "parametername": "bioclim_15",
+                "title": "Bioclim 15: Precipitation Seasonality (Coefficient of Variation)",
                 "tooltip": "Since species distributions can be strongly influenced by variability in precipitation, this index provides a percentage of precipitation variability where larger percentages represent greater variability of precipitation.",
                 "unit": "proportion",
                 "unitfull": "proportion",
@@ -1625,7 +1640,8 @@
               },
               {
                 "filename": "b16.tif",
-                "title": "B16 - Precipitation of Wettest Quarter",
+                "parametername": "bioclim_16",
+                "title": "Bioclim 16: Precipitation of Wettest Quarter",
                 "tooltip": "This index provides total precipitation during the wettest three months of the year, which can be useful for examining how such environmental factors may affect species seasonal distributions.",
                 "unit": "mm",
                 "unitfull": "Millimetres",
@@ -1731,7 +1747,8 @@
               },
               {
                 "filename": "b17.tif",
-                "title": "B17 - Precipitation of Driest Quarter",
+                "parametername": "bioclim_17",
+                "title": "Bioclim 17: Precipitation of Driest Quarter",
                 "tooltip": "This index provides total precipitation during the driest three months of the year, which can be useful for examining how such environmental factors may affect species seasonal distributions.",
                 "unit": "mm",
                 "unitfull": "Millimetres",
@@ -1837,7 +1854,8 @@
               },
               {
                 "filename": "b18.tif",
-                "title": "B18 - Precipitation of Warmest Quarter",
+                "parametername": "bioclim_18",
+                "title": "Bioclim 18: Precipitation of Warmest Quarter",
                 "tooltip": "This index provides total precipitation during the warmest three months of the year, which can be useful for examining how such environmental factors may affect species seasonal distributions.",
                 "unit": "mm",
                 "unitfull": "Millimetres",
@@ -1943,7 +1961,8 @@
               },
               {
                 "filename": "b19.tif",
-                "title": "B19 - Precipitation of Coldest Quarter",
+               "parametername": "bioclim_19",
+                "title": "Bioclim 19: Precipitation of Coldest Quarter",
                 "tooltip": "This index provides total precipitation during the coldest three months of the year, which can be useful for examining how such environmental factors may affect species seasonal distributions.",
                 "unit": "mm",
                 "unitfull": "Millimetres",
@@ -2075,8 +2094,9 @@
             "layers": [
               {
                 "filename": "Max_Temperature_TXM.tif",
-                "title": "Maximum temperature \u2013 Annual mean (TXM)",
-                "tooltip": "This index can help provide information pertaining to the relevance of maximum temperatures on different species. ",
+                "parametername": "max_temperature_txm",
+                "title": "Maximum temperature - Annual mean (TXM)",
+                "tooltip": "This index can help provide information pertaining to the relevance of maximum temperatures on different species.",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
                 "genre": "Climate",
@@ -2182,6 +2202,7 @@
               {
                 "filename": "Max_Temperature_TXI.tif",
                 "title": "Maximum temperature - monthly minimum (TXI)",
+                "parametername": "max_temperature_txi",
                 "tooltip": "This index can help provide information pertaining to the relevance of maximum temperatures on different species. ",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
@@ -2287,8 +2308,9 @@
               },
               {
                 "filename": "Max_Temperature_TXX.tif",
-                "title": "Maximum temperature - monthly maximum (TXX )",
-                "tooltip": "This index can help provide information pertaining to the relevance of maximum temperatures on different species. ",
+                "title": "Maximum temperature - monthly maximum (TXX)",
+                "parametername" : "max_temperature_txx",
+                "tooltip": "This index can help provide information pertaining to the relevance of maximum temperatures on different species.",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
                 "genre": "Climate",
@@ -2393,7 +2415,8 @@
               },
               {
                 "filename": "Min_Temperature_TNM.tif",
-                "title": "Minimum temperature \u2013 Annual mean (TNM)",
+                "title": "Minimum temperature - Annual mean (TNM)",
+                "parametername": "min_temperature_tnm",
                 "tooltip": "This index can help provide information pertaining to the relevance of minimum temperatures on different species. ",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
@@ -2500,6 +2523,7 @@
               {
                 "filename": "Min_Temperature_TNI.tif",
                 "title": "Minimum temperature - monthly minimum (TNI)",
+                "parametername": "min_temperature_tni",
                 "tooltip": "This index can help provide information pertaining to the relevance of minimum temperatures on different species. ",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
@@ -2606,6 +2630,7 @@
               {
                 "filename": "Min_Temperature_TNX.tif",
                 "title": "Minimum temperature - monthly maximum (TNX)",
+                "parametername": "min_temperature_tnx",
                 "tooltip": "This index can help provide information pertaining to the relevance of minimum temperatures on different species. ",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
@@ -2712,6 +2737,7 @@
               {
                 "filename": "Temperature_Range_TRI.tif",
                 "title": "Minimum monthly mean diurnal temperature range (TRI)",
+                "parametername": "temperature_range_tri",
                 "tooltip": "This index shows the difference between the minimum temperatures across months.",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
@@ -2818,6 +2844,7 @@
               {
                 "filename": "Temperature_Range_TRX.tif",
                 "title": "Maximum monthly mean diurnal temperature range (TRX)",
+                "parametername": "temperature_range_trx",
                 "tooltip": "This index shows the difference between the maximum temperatures across months.",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
@@ -2924,6 +2951,7 @@
               {
                 "filename": "Temperature_Range_TRA.tif",
                 "title": "Annual temperature range (TRA)",
+                "parametername": "temperature_range_tra",
                 "tooltip": "This index shows the difference between the hottest and coldest months over a year period.",
                 "unit": "\u00b0C",
                 "unitfull": "Degrees celsius",
@@ -3030,7 +3058,8 @@
               {
                 "filename": "Aridity_Index_ADM.tif",
                 "title": "Mean annual aridity index (ADM)",
-                "tooltip": "This index shows important information pertaining to the importance of aridity (annual precipitation/ annual potential evaporation) for different species.",
+                "parametername": "aridity_index_adm",
+                "tooltip": "This index shows important information pertaining to the importance of aridity (annual precipitation / annual potential evaporation) for different species.",
                 "unit": "Proportion",
                 "unitfull": "Proportion",
                 "genre": "Climate",
@@ -3136,6 +3165,7 @@
               {
                 "filename": "Aridity_Index_ADI.tif",
                 "title": "Minimum monthly aridity index (ADI)",
+                "parametername": "aridity_index_adi",
                 "tooltip": "This index shows important information pertaining to the importance of minimum aridity (minimum monthly precipitation/evaporation) for different species.",
                 "unit": "Proportion",
                 "unitfull": "Proportion",
@@ -3242,6 +3272,7 @@
               {
                 "filename": "Aridity_Index_ADX.tif",
                 "title": "Maximum monthly aridity index (ADX)",
+                "parametername": "aridity_index_adx",
                 "tooltip": "This index shows important information pertaining to the importance of maximum aridity (maximum monthly precipitation/evaporation) for different species.",
                 "unit": "Proportion",
                 "unitfull": "Proportion",
@@ -3348,7 +3379,8 @@
               {
                 "filename": "Evaporation_EPA.tif",
                 "title": "Annual potential evaporation (EPA)",
-                "tooltip": "This index shows important information pertaining to the importance of  evaporation (EPA) for different species. ",
+                "parametername": "evaporation_epa",
+                "tooltip": "This index shows important information pertaining to the importance of  evaporation (EPA) for different species.",
                 "unit": "mm",
                 "unitfull": "millimetres ",
                 "genre": "Climate",
@@ -3454,6 +3486,7 @@
               {
                 "filename": "Evaporation_EPI.tif",
                 "title": "Minimum monthly potential evaporation (EPI)",
+                "parametername": "evaporation_epi",
                 "tooltip": "This index shows important information pertaining to the importance of  evaporation (EPI) for different species. ",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -3560,6 +3593,7 @@
               {
                 "filename": "Evaporation_EPX.tif",
                 "title": "Maximum monthly potential evaporation (EPX)",
+                "parametername": "evaporation_epx",
                 "tooltip": "This index shows important information pertaining to the importance of  maximum monthly evaporation (EPX) for different species. ",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -3666,6 +3700,7 @@
               {
                 "filename": "Evaporation_EAA.tif",
                 "title": "Annual total actual evapotranspiration terrain scaled using MODIS (EAA)",
+                "parametername": "evaporation_eaa",
                 "tooltip": "This index shows important information pertaining to the importance of annual total actual evapotranspiration for different species. ",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -3772,6 +3807,7 @@
               {
                 "filename": "Evaporation_EAAS.tif",
                 "title": "Annual total actual evapotranspiration modelled using terrain-scaled water holding capacity (EAAS)",
+                "parametername": "evaporation_eaas",
                 "tooltip": "This index shows important information pertaining to the importance of annual total actual evapotranspiration for different species. ",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -3878,6 +3914,7 @@
               {
                 "filename": "Precipitation_PTA.tif",
                 "title": "Annual precipitation (PTA)",
+                "parametername": "precipitation_pta",
                 "tooltip": "This index shows important information pertaining to the importance of precipitation for different species. ",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -3984,6 +4021,7 @@
               {
                 "filename": "Precipitation_PTI.tif",
                 "title": "Minimum monthly precipitation (PTI)",
+                "parametername": "precipitation_pti",
                 "tooltip": "This index shows important information pertaining to the importance of minimum precipitation for different species. ",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -4090,6 +4128,7 @@
               {
                 "filename": "Precipitation_PTX.tif",
                 "title": "Maximum monthly precipitation (PTX)",
+                "parametername": "precipitation_ptx",
                 "tooltip": "This index shows important information pertaining to the importance of maximum precipitation for different species. ",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -4196,6 +4235,7 @@
               {
                 "filename": "Precipitation_PTS1.tif",
                 "title": "Precipitation seasonality 1- solstice seasonality composite factor ratio (PTS1)",
+                "parametername": "precipitation_pts1",
                 "tooltip": "This index shows important information pertaining to the importance of precipitation during the solstice period for different species. ",
                 "unit": "Ratio",
                 "unitfull": "Ratio",
@@ -4302,6 +4342,7 @@
               {
                 "filename": "Precipitation_PTS2.tif",
                 "title": "Precipitation seasonality 2- equinox seasonality composite factor ratio (PTS2)",
+                "parametername": "precipitation_pts2",
                 "tooltip": "This index shows important information pertaining to the importance of precipitation during the equinox period for different species. ",
                 "unit": "Ratio",
                 "unitfull": "Ratio",
@@ -4408,7 +4449,8 @@
               {
                 "filename": "Water_Deficit_WDA.tif",
                 "title": "Annual atmospheric water deficit (WDA)",
-                "tooltip": "This index shows inportant information pertaining to the importance of annual water deficit (annual precipitation \u2013 annual potential evaporation) for different species.",
+                "parametername": "water_deficit_wda",
+                "tooltip": "This index shows important information pertaining to the importance of annual water deficit (annual precipitation - annual potential evaporation) for different species.",
                 "unit": "mm",
                 "unitfull": "millimetres ",
                 "genre": "Climate",
@@ -4514,6 +4556,7 @@
               {
                 "filename": "Water_Deficit_WDI.tif",
                 "title": "Minimum monthly atmospheric water deficit (WDI)",
+                "parametername": "water_deficit_wdi",
                 "tooltip": "This index shows inportant information pertaining to the importance of minimum monthly water deficit (precipitation - potential evaporation) for different species.",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -4620,6 +4663,7 @@
               {
                 "filename": "Water_Deficit_WDX.tif",
                 "title": "Maximum monthly atmospheric water deficit (WDX)",
+                "parametername": "water_deficit_wdx",
                 "tooltip": "This index shows inportant information pertaining to the importance of maximum monthly water deficit (precipitation - potential evaporation) for different species.",
                 "unit": "mm",
                 "unitfull": "millimetres ",
@@ -4764,6 +4808,7 @@
               {
                 "filename": "mrrtf_3s.tif",
                 "title": "Multi-resolution Ridge Top Flatness (MrRTF)",
+                "parametername": "mrrtf",
                 "tooltip": "This topographic index designed to identify high flat areas at a range of scales. Zero values indicate areas that are steep or low, with values 1 and larger indicating progressively larger areas of high flat land.",
                 "unit": "MrRTF index",
                 "unitfull": "Multi-resolution ridge top flatness index",
@@ -4897,6 +4942,7 @@
             "layers": [
               {
                 "filename": "mrvbf_3s.tif",
+                "parametername": "mrvbf",
                 "title": "Multi-resolution Valley Bottom Flatness (MrVBF)",
                 "tooltip": "MrVBF is a topographic index is designed to identify areas of deposited material at a range of scales. Zero values indicate erosional terrain with values 1 and larger indicating progressively larger areas of deposition.",
                 "unit": "MrVBF index",
@@ -5043,7 +5089,8 @@
             "layers": [
               {
                 "filename": "GEOLMNAGE.tif",
-                "title": "Mean geological age ",
+                "title": "Mean geological age",
+                "parametername": "geolmnage",
                 "tooltip": "Mean geological age (millions of years before present) derived from the 1:1 million surface geology of Australia (Raymond 2009) by combining the descriptive geological age fields with the timescales database (Laurie et al. 2008) to assign numerical ages to each map unit. ",
                 "unit": "m.y.",
                 "unitfull": "millions of years",
@@ -5149,7 +5196,8 @@
               },
               {
                 "filename": "GEOLRNAGE.tif",
-                "title": "Range in geological ages ",
+                "title": "Range in geological ages",
+                "parametername": "geolrnage",
                 "tooltip": "The range in age can help provide information pertaining to the substrate for different species and is derived as the difference between the minimum and maximum of the age values.",
                 "unit": "m.y.",
                 "unitfull": "millions of years",
@@ -5256,6 +5304,7 @@
               {
                 "filename": "GRAVITY.tif",
                 "title": "Onshore gravity grid of Australia",
+                "parametername": "gravity",
                 "tooltip": "The onshore gravity grid of Australia is a compilation of over 1.4 Million gravity stations using Bouguer gravity anomalies in galileo units of acceleration (Gal).",
                 "unit": "Gal",
                 "unitfull": "Galileo units of acceleration",
@@ -5362,6 +5411,7 @@
               {
                 "filename": "MAGNETICS.tif",
                 "title": "Magnetics",
+                "parametername": "magnetics",
                 "tooltip": "These data derive from the 1000m gridded Magnetic Anomaly Map of Australia. The grid was compiled from about 9 million line-kilometres of TMI data held in the National Airborne Geophysics Database. ",
                 "unit": "nT",
                 "unitfull": "nanotesla",
@@ -5468,6 +5518,7 @@
               {
                 "filename": "WII.tif",
                 "title": "Weathering intensity index",
+                "parametername": "wii",
                 "tooltip": "This weathering intensity index (WII) over the Australian continent has been developed at a 100m resolution using regression models based on airborne gamma-ray spectrometry imagery and the Shuttle Radar Topography Mission (SRTM) elevation data.",
                 "unit": "Intensity",
                 "unitfull": "Weathering intensity",
@@ -5600,6 +5651,7 @@
               {
                 "filename": "TWI.tif",
                 "title": "Topographic wetness index",
+                "parametername": "twi",
                 "tooltip": "Topographic Wetness Index estimates the relative wetness within a catchment.",
                 "unit": "index",
                 "unitfull": "index",
@@ -5706,6 +5758,7 @@
               {
                 "filename": "SlopeDeg.tif",
                 "title": "Slope",
+                "parametername": "slopedeg",
                 "tooltip": "This index measures the inclination of the land surface from the horizontal. ",
                 "unit": "Degree",
                 "unitfull": "",
@@ -5812,6 +5865,7 @@
               {
                 "filename": "profCurv.tif",
                 "title": "Profile curvature",
+                "parametername": "profcurv",
                 "tooltip": "This index is the rate of change of potential gradient down a flow line and represents the changes in flow velocity down a slope. It is significant for flow acceleration, erosion/deposition rates and geomorphology.",
                 "unit": "Index",
                 "unitfull": "Index",
@@ -5918,6 +5972,7 @@
               {
                 "filename": "PlanCurv.tif",
                 "title": "Plan curvature",
+                "parametername": "plancurv",
                 "tooltip": "Plan (or contour) curvature is the rate of change of aspect (orthogonal to the slope) and represents topographic convergence or divergence. It is significant for water movement across the landscape.",
                 "unit": "Index",
                 "unitfull": "Index",
@@ -6024,6 +6079,7 @@
               {
                 "filename": "ELVR1000.tif",
                 "title": "Elevation",
+                "parametername": "elvr1000",
                 "tooltip": "This index can help provide information pertaining to the relevance of elevation change for different species. ",
                 "unit": "Index",
                 "unitfull": "Index",
@@ -6130,6 +6186,7 @@
               {
                 "filename": "ConArea.tif",
                 "title": "Contributing area",
+                "parametername": "conarea",
                 "tooltip": "Contributing area is the contributing area in m2 computed using multiple flow directions on hillslopes and ANUDEM-derived flow directions in channels.",
                 "unit": "Index",
                 "unitfull": "Index",
@@ -6236,6 +6293,7 @@
               {
                 "filename": "AWC.tif",
                 "title": "Available Water Capacity",
+                "parametername": "awc",
                 "tooltip": "This index can help provide information pertaining to the relevance of available water capacity for different species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -6342,6 +6400,7 @@
               {
                 "filename": "BDW.tif",
                 "title": "Bulk Density - Whole Earth",
+                "parametername": "bdw",
                 "tooltip": "Bulk density of the whole soil (including coarse fragments) in mass per unit volume and is a useful indication of a soils physical condition.",
                 "unit": "g/cm3",
                 "unitfull": "Grams per centimetre cubed",
@@ -6448,6 +6507,7 @@
               {
                 "filename": "CLY.tif",
                 "title": "Clay",
+                "parametername": "cly",
                 "tooltip": "Clay is a useful proxy for defining the nutritional and biological capacity of soil.",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -6554,6 +6614,7 @@
               {
                 "filename": "DER.tif",
                 "title": "Depth of Regolith",
+                "parametername": "der",
                 "tooltip": "Depth to hard rock, inclusive of all regolith.",
                 "unit": "m",
                 "unitfull": "Meters",
@@ -6660,6 +6721,7 @@
               {
                 "filename": "DES.tif",
                 "title": "Depth of Soil",
+                "parametername": "des",
                 "tooltip": "Depth of soil profile (A & B horizons)",
                 "unit": "m",
                 "unitfull": "Meters",
@@ -6766,6 +6828,7 @@
               {
                 "filename": "ECE.tif",
                 "title": "Effective Cation Exchange Capacity",
+                "parametername": "ece",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil for difference species. ",
                 "unit": "meq/100g",
                 "unitfull": "milliequivalent per 100 grams",
@@ -6872,6 +6935,7 @@
               {
                 "filename": "NTO.tif",
                 "title": "Total Nitrogen",
+                "parametername": "nto",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil chemistry for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -6978,6 +7042,7 @@
               {
                 "filename": "PHC.tif",
                 "title": "pH - CaCl2",
+                "parametername": "phc",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil chemistry for difference species. ",
                 "unit": "unitless",
                 "unitfull": "unitless",
@@ -7084,6 +7149,7 @@
               {
                 "filename": "PTO.tif",
                 "title": "Total Phosphorus",
+                "parametername": "pto",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil chemistry for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -7190,6 +7256,7 @@
               {
                 "filename": "SLT.tif",
                 "title": "Silt",
+                "parametername": "slt",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil, particularly silt for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -7296,6 +7363,7 @@
               {
                 "filename": "SND.tif",
                 "title": "Sand",
+                "parametername": "snd",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil, particularly sand for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -7402,6 +7470,7 @@
               {
                 "filename": "SOC.tif",
                 "title": "Organic Carbon",
+                "parametername": "soc",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil chemistry for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -7546,6 +7615,7 @@
               {
                 "filename": "TWI.tif",
                 "title": "Topographic wetness index",
+                "parametername": "twi",
                 "tooltip": "Topographic Wetness Index estimates the relative wetness within a catchment.",
                 "unit": "index",
                 "unitfull": "index",
@@ -7652,9 +7722,10 @@
               {
                 "filename": "SlopeDeg.tif",
                 "title": "Slope",
+                "parametername": "slopedeg",
                 "tooltip": "This index measures the inclination of the land surface from the horizontal. ",
                 "unit": "Degree",
-                "unitfull": "",
+                "unitfull": "Degree",
                 "genre": "Substrate",
                 "bounds": [
                   112.9,
@@ -7758,6 +7829,7 @@
               {
                 "filename": "profCurv.tif",
                 "title": "Profile curvature",
+                "parametername": "profcurv",
                 "tooltip": "This index is the rate of change of potential gradient down a flow line and represents the changes in flow velocity down a slope. It is significant for flow acceleration, erosion/deposition rates and geomorphology.",
                 "unit": "Index",
                 "unitfull": "Index",
@@ -7864,6 +7936,7 @@
               {
                 "filename": "PlanCurv.tif",
                 "title": "Plan curvature",
+                "parametername": "plancurv",
                 "tooltip": "Plan (or contour) curvature is the rate of change of aspect (orthogonal to the slope) and represents topographic convergence or divergence. It is significant for water movement across the landscape.",
                 "unit": "Index",
                 "unitfull": "Index",
@@ -7970,6 +8043,7 @@
               {
                 "filename": "ELVR1000.tif",
                 "title": "Elevation",
+                "parametername": "elvr1000",
                 "tooltip": "This index can help provide information pertaining to the relevance of elevation change for different species. ",
                 "unit": "Index",
                 "unitfull": "Index",
@@ -8076,6 +8150,7 @@
               {
                 "filename": "ConArea.tif",
                 "title": "Contributing area",
+                "parametername": "conarea",
                 "tooltip": "Contributing area is the contributing area in m2 computed using multiple flow directions on hillslopes and ANUDEM-derived flow directions in channels.",
                 "unit": "Index",
                 "unitfull": "Index",
@@ -8182,6 +8257,7 @@
               {
                 "filename": "AWC.tif",
                 "title": "Available Water Capacity",
+                "parametername": "awc",
                 "tooltip": "This index can help provide information pertaining to the relevance of available water capacity for different species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -8288,6 +8364,7 @@
               {
                 "filename": "BDW.tif",
                 "title": "Bulk Density - Whole Earth",
+                "parametername": "bdw",
                 "tooltip": "Bulk density of the whole soil (including coarse fragments) in mass per unit volume and is a useful indication of a soils physical condition.",
                 "unit": "g/cm3",
                 "unitfull": "Grams per centimetre cubed",
@@ -8394,6 +8471,7 @@
               {
                 "filename": "CLY.tif",
                 "title": "Clay",
+                "parametername": "cly",
                 "tooltip": "Clay is a useful proxy for defining the nutritional and biological capacity of soil.",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -8500,6 +8578,7 @@
               {
                 "filename": "DER.tif",
                 "title": "Depth of Regolith",
+                "parametername": "der",
                 "tooltip": "Depth to hard rock, inclusive of all regolith.",
                 "unit": "m",
                 "unitfull": "Meters",
@@ -8606,6 +8685,7 @@
               {
                 "filename": "DES.tif",
                 "title": "Depth of Soil",
+                "parametername": "des",
                 "tooltip": "Depth of soil profile (A & B horizons)",
                 "unit": "m",
                 "unitfull": "Meters",
@@ -8712,6 +8792,7 @@
               {
                 "filename": "ECE.tif",
                 "title": "Effective Cation Exchange Capacity",
+                "parametername": "ece",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil for difference species. ",
                 "unit": "meq/100g",
                 "unitfull": "milliequivalent per 100 grams",
@@ -8818,6 +8899,7 @@
               {
                 "filename": "NTO.tif",
                 "title": "Total Nitrogen",
+                "parametername": "nto",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil chemistry for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -8924,6 +9006,7 @@
               {
                 "filename": "PHC.tif",
                 "title": "pH - CaCl2",
+                "parametername": "phc",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil chemistry for difference species. ",
                 "unit": "unitless",
                 "unitfull": "unitless",
@@ -9030,6 +9113,7 @@
               {
                 "filename": "PTO.tif",
                 "title": "Total Phosphorus",
+                "parametername": "pto",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil chemistry for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -9136,6 +9220,7 @@
               {
                 "filename": "SLT.tif",
                 "title": "Silt",
+                "parametername": "slt",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil, particularly silt for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -9242,6 +9327,7 @@
               {
                 "filename": "SND.tif",
                 "title": "Sand",
+                "parametername": "snd",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil, particularly sand for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -9348,6 +9434,7 @@
               {
                 "filename": "SOC.tif",
                 "title": "Organic Carbon",
+                "parametername": "soc",
                 "tooltip": "This index can help provide information pertaining to the relevance of soil chemistry for difference species. ",
                 "unit": "%",
                 "unitfull": "Percent",
@@ -9469,7 +9556,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Australia, National Vegetation Information System ",
+            "title": "Australia, National Vegetation Information System",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -9492,6 +9579,7 @@
               {
                 "filename": "nvis_mgv.tif",
                 "title": "NVIS Major Vegetation Groups",
+                "parametername" : "nvis_mgv",
                 "tooltip": "This index provides information pertaining to the importance of vegetation for different species and contains thirty-three (33) major vegetation groups.",
                 "unit": "mgv",
                 "unitfull": "Major Vegetation Groups",
@@ -9594,6 +9682,7 @@
               {
                 "filename": "nvis_mvs.tif",
                 "title": "NVIS Major Vegetation Subgroups ",
+                "parametername": "nvis_mvs",
                 "tooltip": "This index provides information pertaining to the importance of vegetation for different species and contains eighty-five (85) major vegetation subgroups.",
                 "unit": "mvs",
                 "unitfull": "Major Vegetation Subgroups",

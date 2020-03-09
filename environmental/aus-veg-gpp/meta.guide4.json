@@ -1,0 +1,952 @@
+{
+  "data": {
+    "collections": [
+      {
+        "collection_type": "Environmental",
+        "collection_subtype": "Vegetation",
+        "collection_name": "Australia Fraction of Photosynthetically Active Radiation (fPAR)",
+        "collection_description": "Australia, MODIS-fPAR (2000-2014), 9 arcsec (~250 m)",
+        "collection_extent": "Australia",
+        "dataset collection_year": "2000-2014",
+        "dataset collection_resolution": "9 arcsec (~250 m)",
+        "dataset collection_layers": "fPAR Minimum, fPAR Mean, fPAR Maximum, fPAR Coefficient of Variance",
+        "datasets": [
+          {
+            "id": "",
+            "title": "Australia Fraction of Photosynthetically Active Radiation (fPAR)",
+            "domain": "Terrestrial",
+            "period": "Current ",
+            "temporal_range": "Long-term",
+            "description": "Measures of the variability in the greenness of the vegetation of the land surface in Australia.",
+            "description_full": "Measures of the variability in the greenness of the vegetation of the land surface in Australia. Data aggregated over years 2000 to 2014 (Average, Minimum, Maximum, Coefficient of Variation)",
+            "provider": "Brendan Mackey and collaborators",
+            "citation": "Mackey B, Berry S, Hugh S, Ferrier S, Harwood TD, Williams KJ (2012) Ecosystem greenspots: identifying potential drought, fire, and climate\u2010change micro\u2010refuges. Ecological Applications, 22(6), 1852-1864.",
+            "citation-url": "https://experts.griffith.edu.au/18562-brendan-mackey",
+            "version": "",
+            "year_range": [
+              2000,
+              2014
+            ],
+            "published": "2012",
+            "licence": "CC BY Attribution 3.0",
+            "resolution": "9 arcsec (~250 m)",
+            "extent": "Australia",
+           "landingpage": "https://experts.griffith.edu.au/18562-brendan-mackey/about",
+            "CRS": "",
+            "GCM": "",
+            "emsc": "",
+            "layers": [
+              {
+                "filename": "fpar.2000-2014.cov.aust.tif",
+                "title": "fPAR Coefficient of Variance",
+                "parametername": "fparcov",
+                "tooltip": "Fraction of Photosynthetically Active Radiation (fPAR) (Coefficient of Variance) quantifies the solar radiation absorbed by live leaves for photosynthesis. This variable shows information on the importance of exchanges of energy, water vapor and carbon dioxide between the earths surface and the atmosphere for different species.",
+                "unit": "fraction",
+                "unitfull": "fraction",
+                "genre": "vegetation",
+                "bounds": [
+                  110.0,
+                  -45.000512,
+                  155.001329,
+                  -10.0
+                ],
+                "resolution": [
+                  0.002348712369519833,
+                  0.00234871238759898
+                ],
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "nodata": 1.175494351e-38,
+                  "width": 19160,
+                  "height": 14902,
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "transform": [
+                    0.002348712369519833,
+                    0.0,
+                    110.0,
+                    0.0,
+                    -0.00234871238759898,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                "info": {
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    110.0,
+                    -45.000512,
+                    155.001329,
+                    -10.0
+                  ],
+                  "checksum": [
+                    53361
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "lzw",
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "height": 14902,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    132.5006645,
+                    -27.500256
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": 1.175494351e-38,
+                  "res": [
+                    0.002348712369519833,
+                    0.00234871238759898
+                  ],
+                  "shape": [
+                    14902,
+                    19160
+                  ],
+                  "stats": [
+                    {
+                      "max": 0.99999988079071,
+                      "mean": 0.22669465779451,
+                      "min": 0.015802044421434,
+                      "stddev": 0.11086246731663
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.002348712369519833,
+                    0.0,
+                    110.0,
+                    0.0,
+                    -0.00234871238759898,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    null
+                  ],
+                  "width": 19160
+                }
+              },
+              {
+                "filename": "fpar.2000-2014.max.aust.tif",
+                "title": "fPAR Maximum",
+                "parametername": "fparmax",
+                "tooltip": "Fraction of Photosynthetically Active Radiation (fPAR) (Max) quantifies the solar radiation absorbed by live leaves for photosynthesis. This variable shows information on the importance of exchanges of energy, water vapor and carbon dioxide between the earths surface and the atmosphere for different species.",
+                "unit": "fraction",
+                "unitfull": "fraction",
+                "genre": "vegetation",
+                "bounds": [
+                  110.0,
+                  -45.000512,
+                  155.001329,
+                  -10.0
+                ],
+                "resolution": [
+                  0.002348712369519833,
+                  0.00234871238759898
+                ],
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "nodata": 1.175494351e-38,
+                  "width": 19160,
+                  "height": 14902,
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "transform": [
+                    0.002348712369519833,
+                    0.0,
+                    110.0,
+                    0.0,
+                    -0.00234871238759898,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                "info": {
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    110.0,
+                    -45.000512,
+                    155.001329,
+                    -10.0
+                  ],
+                  "checksum": [
+                    15242
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "lzw",
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "height": 14902,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    132.5006645,
+                    -27.500256
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": 1.175494351e-38,
+                  "res": [
+                    0.002348712369519833,
+                    0.00234871238759898
+                  ],
+                  "shape": [
+                    14902,
+                    19160
+                  ],
+                  "stats": [
+                    {
+                      "max": 0.9488000273704529,
+                      "mean": 0.48752849817281296,
+                      "min": 0.0
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.002348712369519833,
+                    0.0,
+                    110.0,
+                    0.0,
+                    -0.00234871238759898,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    null
+                  ],
+                  "width": 19160
+                }
+              },
+              {
+                "filename": "fpar.2000-2014.mean.aust.tif",
+                "title": "fPAR Mean",
+                "parametername": "fparmean",
+                "tooltip": "Fraction of Photosynthetically Active Radiation (fPAR) (Mean) quantifies the solar radiation absorbed by live leaves for photosynthesis. This variable shows information on the importance of exchanges of energy, water vapor and carbon dioxide between the earths surface and the atmosphere for different species.",
+                "unit": "fraction",
+                "unitfull": "fraction",
+                "genre": "vegetation",
+                "bounds": [
+                  110.0,
+                  -45.000512,
+                  155.001329,
+                  -10.0
+                ],
+                "resolution": [
+                  0.002348712369519833,
+                  0.00234871238759898
+                ],
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "nodata": 1.175494351e-38,
+                  "width": 19160,
+                  "height": 14902,
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "transform": [
+                    0.002348712369519833,
+                    0.0,
+                    110.0,
+                    0.0,
+                    -0.00234871238759898,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                "info": {
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    110.0,
+                    -45.000512,
+                    155.001329,
+                    -10.0
+                  ],
+                  "checksum": [
+                    40340
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "lzw",
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "height": 14902,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    132.5006645,
+                    -27.500256
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": 1.175494351e-38,
+                  "res": [
+                    0.002348712369519833,
+                    0.00234871238759898
+                  ],
+                  "shape": [
+                    14902,
+                    19160
+                  ],
+                  "stats": [
+                    {
+                      "max": 0.8689427971839905,
+                      "mean": 0.30617976673789704,
+                      "min": 0.0
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.002348712369519833,
+                    0.0,
+                    110.0,
+                    0.0,
+                    -0.00234871238759898,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    null
+                  ],
+                  "width": 19160
+                }
+              },
+              {
+                "filename": "fpar.2000-2014.min.aust.tif",
+                "title": "fPAR Minimum",
+                "parametername": "fparmin",
+                "tooltip": "Fraction of Photosynthetically Active Radiation (fPAR) (Min) quantifies the solar radiation absorbed by live leaves for photosynthesis. This variable shows information on the importance of exchanges of energy, water vapor and carbon dioxide between the earths surface and the atmosphere for different species.",
+                "unit": "fraction",
+                "unitfull": "fraction",
+                "genre": "vegetation",
+                "bounds": [
+                  110.0,
+                  -45.000512,
+                  155.001329,
+                  -10.0
+                ],
+                "resolution": [
+                  0.002348712369519833,
+                  0.00234871238759898
+                ],
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "nodata": 1.175494351e-38,
+                  "width": 19160,
+                  "height": 14902,
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "transform": [
+                    0.002348712369519833,
+                    0.0,
+                    110.0,
+                    0.0,
+                    -0.00234871238759898,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                "info": {
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    110.0,
+                    -45.000512,
+                    155.001329,
+                    -10.0
+                  ],
+                  "checksum": [
+                    24151
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "lzw",
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "height": 14902,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    132.5006645,
+                    -27.500256
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": 1.175494351e-38,
+                  "res": [
+                    0.002348712369519833,
+                    0.00234871238759898
+                  ],
+                  "shape": [
+                    14902,
+                    19160
+                  ],
+                  "stats": [
+                    {
+                      "max": 0.8180999755859375,
+                      "mean": 0.19345655746456453,
+                      "min": 0.0
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.002348712369519833,
+                    0.0,
+                    110.0,
+                    0.0,
+                    -0.00234871238759898,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    null
+                  ],
+                  "width": 19160
+                }
+              }
+            ],
+            "doi": "",
+            "folder_location": "data/tiffs/aus-veg-fpar/fpar"
+          }
+        ]
+      },
+      {
+        "collection_type": "Environmental",
+        "collection_subtype": "Vegetation",
+        "collection_name": "Australia, Gross Primary Productivity (2000-2006), 30 arcsec (~1 km)",
+        "collection_description": "Australia, Gross Primary Productivity (2000-2006), 30 arcsec (~1 km)",
+        "collection_extent": "Australia",
+        "dataset collection_year": "2000-2006",
+        "dataset collection_resolution": "30 arcsec (~1 km)",
+        "dataset collection_layers": "Minimum GPP, Mean GPP, Maximum GPP, Coefficient of Variation of GPP",
+        "datasets": [
+          {
+            "id": "",
+            "title": "Australia, Gross Primary Productivity",
+            "domain": "Terrestrial",
+            "period": "Current ",
+            "temporal_range": "Long-term",
+            "description": "Measures the the gross uptake of carbon dioxide by plant photosynthesis.",
+            "description_full": "Measures the the gross uptake of carbon dioxide by plant photosynthesis. Data aggregated over period 2000 - 2007.",
+            "provider": "Brendan Mackey and collaborators",
+            "citation": "For more information contact Brendan Mackey.",
+            "citation-url": "https://experts.griffith.edu.au/18562-brendan-mackey",
+            "version": "",
+            "year_range": [
+              2000,
+              2007
+            ],
+            "published": "",
+            "licence": "CC BY Attribution 3.0",
+            "resolution": "30 arcsec (~1 km)",
+            "extent": "Australia",
+            "landingpage": "https://experts.griffith.edu.au/18562-brendan-mackey/about",
+            "CRS": "",
+            "GCM": "",
+            "emsc": "",
+            "layers": [
+              {
+                "filename": "gppyrmin_2000_07_molco2yr.tif",
+                "title": "Minimum Gross Primary Productivity (GPP)",
+                "parametername": "gppmin",
+                "tooltip": "The GPP offers information pertaining to the importance of terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.",
+                "unit": "mol CO2/m",
+                "unitfull": "mol CO2/m",
+                "genre": "vegetation",
+                "bounds": [
+                  112.8974991,
+                  -43.7400017,
+                  154.0,
+                  -10.0
+                ],
+                "resolution": [
+                  0.002500152122871046,
+                  0.00249981489960732
+                ],
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "int16",
+                  "nodata": -9999.0,
+                  "width": 16440,
+                  "height": 13497,
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "transform": [
+                    0.002500152122871046,
+                    0.0,
+                    112.8974991,
+                    0.0,
+                    -0.00249981489960732,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                "info": {
+                  "bounds": [
+                    112.8974991,
+                    -43.7400017,
+                    154.0,
+                    -10.0
+                  ],
+                  "checksum": [
+                    65524
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "int16",
+                  "height": 13497,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.44874955,
+                    -26.87000085
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": -9999.0,
+                  "res": [
+                    0.002500152122871046,
+                    0.00249981489960732
+                  ],
+                  "shape": [
+                    13497,
+                    16440
+                  ],
+                  "stats": [
+                    {
+                      "max": 292.0,
+                      "mean": 46.72144435293988,
+                      "min": 0.0
+                    }
+                  ],
+                  "tiled": false,
+                  "transform": [
+                    0.002500152122871046,
+                    0.0,
+                    112.8974991,
+                    0.0,
+                    -0.00249981489960732,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    null
+                  ],
+                  "width": 16440
+                }
+              },
+              {
+                "filename": "gppyrmean_2000_07_molco2yr.tif",
+                "title": "Mean Gross Primary Productivity (GPP)",
+                "parametername": "gppmean",
+                "tooltip": "The GPP offers information pertaining to the importance of terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.",
+                "unit": "mol CO2/m",
+                "unitfull": "mol CO2/m",
+                "genre": "vegetation",
+                "bounds": [
+                  112.8974991,
+                  -43.7400017,
+                  154.0,
+                  -10.0
+                ],
+                "resolution": [
+                  0.002500152122871046,
+                  0.00249981489960732
+                ],
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "int16",
+                  "nodata": -9999.0,
+                  "width": 16440,
+                  "height": 13497,
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "transform": [
+                    0.002500152122871046,
+                    0.0,
+                    112.8974991,
+                    0.0,
+                    -0.00249981489960732,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                "info": {
+                  "bounds": [
+                    112.8974991,
+                    -43.7400017,
+                    154.0,
+                    -10.0
+                  ],
+                  "checksum": [
+                    34842
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "int16",
+                  "height": 13497,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.44874955,
+                    -26.87000085
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": -9999.0,
+                  "res": [
+                    0.002500152122871046,
+                    0.00249981489960732
+                  ],
+                  "shape": [
+                    13497,
+                    16440
+                  ],
+                  "stats": [
+                    {
+                      "max": 295.0,
+                      "mean": 61.84765646206741,
+                      "min": 0.0
+                    }
+                  ],
+                  "tiled": false,
+                  "transform": [
+                    0.002500152122871046,
+                    0.0,
+                    112.8974991,
+                    0.0,
+                    -0.00249981489960732,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    null
+                  ],
+                  "width": 16440
+                }
+              },
+              {
+                "filename": "gppyrmax_2000_07_molco2yr.tif",
+                "title": "Maximum Gross Primary Productivity (GPP)",
+                "parametername": "gppmax",
+                "tooltip": "The GPP offers information pertaining to the importance of terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.",
+                "unit": "mol CO2/m",
+                "unitfull": "mol CO2/m",
+                "genre": "vegetation",
+                "bounds": [
+                  112.8974991,
+                  -43.7400017,
+                  154.0,
+                  -10.0
+                ],
+                "resolution": [
+                  0.002500152122871046,
+                  0.00249981489960732
+                ],
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "int16",
+                  "nodata": -9999.0,
+                  "width": 16440,
+                  "height": 13497,
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "transform": [
+                    0.002500152122871046,
+                    0.0,
+                    112.8974991,
+                    0.0,
+                    -0.00249981489960732,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                "info": {
+                  "bounds": [
+                    112.8974991,
+                    -43.7400017,
+                    154.0,
+                    -10.0
+                  ],
+                  "checksum": [
+                    46595
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "int16",
+                  "height": 13497,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.44874955,
+                    -26.87000085
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": -9999.0,
+                  "res": [
+                    0.002500152122871046,
+                    0.00249981489960732
+                  ],
+                  "shape": [
+                    13497,
+                    16440
+                  ],
+                  "stats": [
+                    {
+                      "max": 311.0,
+                      "mean": 80.31684746209312,
+                      "min": 1.0
+                    }
+                  ],
+                  "tiled": false,
+                  "transform": [
+                    0.002500152122871046,
+                    0.0,
+                    112.8974991,
+                    0.0,
+                    -0.00249981489960732,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    null
+                  ],
+                  "width": 16440
+                }
+              },
+              {
+                "filename": "gpp_summary_00_07_cov.tif",
+                "title": "Coefficient of variation of Gross Primary Productivity (GPP)",
+                "parametername": "gppcov",
+                "tooltip": "The GPP offers information pertaining to the importance of terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.",
+                "unit": "mol CO2/m",
+                "unitfull": "mol CO2/m",
+                "genre": "vegetation",
+                "bounds": [
+                  112.8974991,
+                  -43.7400017,
+                  154.0,
+                  -10.0
+                ],
+                "resolution": [
+                  0.002500152122871046,
+                  0.00249981489960732
+                ],
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "nodata": -9999.0,
+                  "width": 16440,
+                  "height": 13497,
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "transform": [
+                    0.002500152122871046,
+                    0.0,
+                    112.8974991,
+                    0.0,
+                    -0.00249981489960732,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                "info": {
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    112.8974991,
+                    -43.7400017,
+                    154.0,
+                    -10.0
+                  ],
+                  "checksum": [
+                    35405
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "lzw",
+                  "count": 1,
+                  "crs": "EPSG:4326",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "height": 13497,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.44874955,
+                    -26.87000085
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": -9999.0,
+                  "res": [
+                    0.002500152122871046,
+                    0.00249981489960732
+                  ],
+                  "shape": [
+                    13497,
+                    16440
+                  ],
+                  "stats": [
+                    {
+                      "max": 2.4494898319244385,
+                      "mean": 0.3210454288017862,
+                      "min": 0.0014881468378007412
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.002500152122871046,
+                    0.0,
+                    112.8974991,
+                    0.0,
+                    -0.00249981489960732,
+                    -10.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    null
+                  ],
+                  "width": 16440
+                }
+              }
+            ],
+            "doi": "",
+            "folder_location": "data/tiffs/aus-veg-gpp/gpp"
+          }
+        ]
+      }
+    ]
+  }
+}

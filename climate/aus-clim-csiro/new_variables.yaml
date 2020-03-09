@@ -1,0 +1,742 @@
+- id: b01
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 01: Annual mean temperature'
+  measure_type: continuous
+  units: "\xB0C"
+  description: The annual mean temperature approximates the total energy inputs for
+    an ecosystem.
+- id: b02
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 02: Mean Diurnal Range (Mean of monthly (max temp - min temp))'
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index can help provide information pertaining to the relevance
+    of temperature fluctuation for different species.
+- id: b03
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 03: Isothermality (BIO2/BIO7) (* 100)'
+  measure_type: continuous
+  units: proportion
+  description: Isothermality quantifies how large the day-to-night temperatures oscillate
+    relative to the summer- to-winter (annual) oscillations. An isothermal value of
+    100 indicates the diurnal temperature range is equiva- lent to the annual temperature
+    range, while anything less than 100 indicates a smaller level of temperature variability
+    within an average month relative to the year. A species distribution may be influenced
+    by larger or smaller temperature fluctuations within a month relative to the year
+    and this predictor is useful for ascertaining such information.
+- id: b04
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 04: Temperature Seasonality (standard deviation *100)'
+  measure_type: continuous
+  units: proportion
+  description: Temperature seasonality is a measure of temperature change over the
+    course of the year. The larger the value, the greater the variability of temperature.
+- id: b05
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 05: Max Temperature of Warmest Month'
+  measure_type: continuous
+  units: "\xB0C"
+  description: This information is useful when examining whether species distributions
+    are affected by warm temperature anomalies throughout the year.
+- id: b06
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 06: Min Temperature of Coldest Month'
+  measure_type: continuous
+  units: "\xB0C"
+  description: This information is useful when examining whether species distributions
+    are affected by cold temperature anomalies throughout the year.
+- id: b07
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 07: Temperature Annual Range (BIO5-BIO6)'
+  measure_type: continuous
+  units: "\xB0C"
+  description: This information is useful when examining whether species distributions
+    are affected by ranges of extreme temperature conditions.
+- id: b08
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 08: Mean Temperature of Wettest Quarter'
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index provides mean temperatures during the wettest three months
+    of the year, which can be useful for examining how such environmental factors
+    may affect species seasonal distributions
+- id: b09
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 09: Mean Temperature of Driest Quarter'
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index provides mean temperatures during the driest three months
+    of the year, which can be useful for examining how such environmental factors
+    may affect species seasonal distributions
+- id: b10
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 10: Mean Temperature of Warmest Quarter'
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index provides mean temperatures during the warmest three months
+    of the year, which can be useful for examining how such environmental factors
+    may affect species seasonal distributions.
+- id: b11
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 11: Mean Temperature of Coldest Quarter'
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index provides mean temperatures during the coldest three months
+    of the year, which can be useful for examining how such environmental factors
+    may affect species seasonal distributions.
+- id: b12
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 12: Annual Precipitation'
+  measure_type: continuous
+  units: mm
+  description: Annual total precipitation approximates the total water inputs and
+    is therefore useful when ascertaining the importance of water availability to
+    a species distribution.
+- id: b13
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 13: Precipitation of Wettest Month'
+  measure_type: continuous
+  units: mm
+  description: The wettest month is useful if extreme precipitation conditions during
+    the year influence a species potential range.
+- id: b14
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 14: Precipitation of Driest Month'
+  measure_type: continuous
+  units: mm
+  description: The driest month is useful if extreme precipitation conditions during
+    the year influence a species potential range.
+- id: b15
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 15: Precipitation Seasonality (Coefficient of Variation)'
+  measure_type: continuous
+  units: proportion
+  description: Since species distributions can be strongly influenced by variability
+    in precipitation, this index provides a percentage of precipitation variability
+    where larger percentages represent greater variability of precipitation.
+- id: b16
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 16: Precipitation of Wettest Quarter'
+  measure_type: continuous
+  units: mm
+  description: This index provides total precipitation during the wettest three months
+    of the year, which can be useful for examining how such environmental factors
+    may affect species seasonal distributions.
+- id: b17
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 17: Precipitation of Driest Quarter'
+  measure_type: continuous
+  units: mm
+  description: This index provides total precipitation during the driest three months
+    of the year, which can be useful for examining how such environmental factors
+    may affect species seasonal distributions.
+- id: b18
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 18: Precipitation of Warmest Quarter'
+  measure_type: continuous
+  units: mm
+  description: This index provides total precipitation during the warmest three months
+    of the year, which can be useful for examining how such environmental factors
+    may affect species seasonal distributions.
+- id: b19
+  type: Concept
+  prefLabel:
+    en: 'Bioclim 19: Precipitation of Coldest Quarter'
+  measure_type: continuous
+  units: mm
+  description: This index provides total precipitation during the coldest three months
+    of the year, which can be useful for examining how such environmental factors
+    may affect species seasonal distributions.
+
+- id: max_temperature_txm
+  type: Concept
+  prefLabel:
+    en: Maximum temperature - Annual mean (TXM)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index can help provide information pertaining to the relevance
+    of maximum temperatures on different species.
+- id: max_temperature_txi
+  type: Concept
+  prefLabel:
+    en: Maximum temperature - monthly minimum (TXI)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index can help provide information pertaining to the relevance
+    of maximum temperatures on different species.
+- id: max_temperature_txx
+  type: Concept
+  prefLabel:
+    en: Maximum temperature - monthly maximum (TXX)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index can help provide information pertaining to the relevance
+    of maximum temperatures on different species.
+- id: min_temperature_tnm
+  type: Concept
+  prefLabel:
+    en: Minimum temperature - Annual mean (TNM)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index can help provide information pertaining to the relevance
+    of minimum temperatures on different species.
+- id: min_temperature_tni
+  type: Concept
+  prefLabel:
+    en: Minimum temperature - monthly minimum (TNI)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index can help provide information pertaining to the relevance
+    of minimum temperatures on different species.
+- id: min_temperature_tnx
+  type: Concept
+  prefLabel:
+    en: Minimum temperature - monthly maximum (TNX)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index can help provide information pertaining to the relevance
+    of minimum temperatures on different species.
+- id: temperature_range_tri
+  type: Concept
+  prefLabel:
+    en: Minimum monthly mean diurnal temperature range (TRI)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index shows the difference between the minimum temperatures across
+    months.
+- id: temperature_range_trx
+  type: Concept
+  prefLabel:
+    en: Maximum monthly mean diurnal temperature range (TRX)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index shows the difference between the maximum temperatures across
+    months.
+- id: temperature_range_tra
+  type: Concept
+  prefLabel:
+    en: Annual temperature range (TRA)
+  measure_type: continuous
+  units: "\xB0C"
+  description: This index shows the difference between the hottest and coldest months
+    over a year period.
+- id: aridity_index_adm
+  type: Concept
+  prefLabel:
+    en: Mean annual aridity index (ADM)
+  measure_type: continuous
+  units: Proportion
+  description: This index shows important information pertaining to the importance
+    of aridity (annual precipitation / annual potential evaporation) for different
+    species.
+- id: aridity_index_adi
+  type: Concept
+  prefLabel:
+    en: Minimum monthly aridity index (ADI)
+  measure_type: continuous
+  units: Proportion
+  description: This index shows important information pertaining to the importance
+    of minimum aridity (minimum monthly precipitation/evaporation) for different species.
+- id: aridity_index_adx
+  type: Concept
+  prefLabel:
+    en: Maximum monthly aridity index (ADX)
+  measure_type: continuous
+  units: Proportion
+  description: This index shows important information pertaining to the importance
+    of maximum aridity (maximum monthly precipitation/evaporation) for different species.
+- id: evaporation_epa
+  type: Concept
+  prefLabel:
+    en: Annual potential evaporation (EPA)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of  evaporation (EPA) for different species.
+- id: evaporation_epi
+  type: Concept
+  prefLabel:
+    en: Minimum monthly potential evaporation (EPI)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of  evaporation (EPI) for different species.
+- id: evaporation_epx
+  type: Concept
+  prefLabel:
+    en: Maximum monthly potential evaporation (EPX)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of  maximum monthly evaporation (EPX) for different species.
+- id: evaporation_eaa
+  type: Concept
+  prefLabel:
+    en: Annual total actual evapotranspiration terrain scaled using MODIS (EAA)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of annual total actual evapotranspiration for different species.
+- id: evaporation_eaas
+  type: Concept
+  prefLabel:
+    en: Annual total actual evapotranspiration modelled using terrain-scaled water
+      holding capacity (EAAS)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of annual total actual evapotranspiration for different species.
+- id: precipitation_pta
+  type: Concept
+  prefLabel:
+    en: Annual precipitation (PTA)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of precipitation for different species.
+- id: precipitation_pti
+  type: Concept
+  prefLabel:
+    en: Minimum monthly precipitation (PTI)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of minimum precipitation for different species.
+- id: precipitation_ptx
+  type: Concept
+  prefLabel:
+    en: Maximum monthly precipitation (PTX)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of maximum precipitation for different species.
+- id: precipitation_pts1
+  type: Concept
+  prefLabel:
+    en: Precipitation seasonality 1- solstice seasonality composite factor ratio (PTS1)
+  measure_type: continuous
+  units: Ratio
+  description: This index shows important information pertaining to the importance
+    of precipitation during the solstice period for different species.
+- id: precipitation_pts2
+  type: Concept
+  prefLabel:
+    en: Precipitation seasonality 2- equinox seasonality composite factor ratio (PTS2)
+  measure_type: continuous
+  units: Ratio
+  description: This index shows important information pertaining to the importance
+    of precipitation during the equinox period for different species.
+- id: water_deficit_wda
+  type: Concept
+  prefLabel:
+    en: Annual atmospheric water deficit (WDA)
+  measure_type: continuous
+  units: mm
+  description: This index shows important information pertaining to the importance
+    of annual water deficit (annual precipitation - annual potential evaporation)
+    for different species.
+- id: water_deficit_wdi
+  type: Concept
+  prefLabel:
+    en: Minimum monthly atmospheric water deficit (WDI)
+  measure_type: continuous
+  units: mm
+  description: This index shows inportant information pertaining to the importance
+    of minimum monthly water deficit (precipitation - potential evaporation) for different
+    species.
+- id: water_deficit_wdx
+  type: Concept
+  prefLabel:
+    en: Maximum monthly atmospheric water deficit (WDX)
+  measure_type: continuous
+  units: mm
+  description: This index shows inportant information pertaining to the importance
+    of maximum monthly water deficit (precipitation - potential evaporation) for different
+    species.
+
+- id: mrrtf_3s
+  type: Concept
+  prefLabel:
+    en: Multi-resolution Ridge Top Flatness (MrRTF)
+  measure_type: continuous
+  units: MrRTF index
+  description: This topographic index designed to identify high flat areas at a range
+    of scales. Zero values indicate areas that are steep or low, with values 1 and
+    larger indicating progressively larger areas of high flat land.
+- id: mrvbf_3s
+  type: Concept
+  prefLabel:
+    en: Multi-resolution Valley Bottom Flatness (MrVBF)
+  measure_type: continuous
+  units: MrVBF index
+  description: MrVBF is a topographic index is designed to identify areas of deposited
+    material at a range of scales. Zero values indicate erosional terrain with values
+    1 and larger indicating progressively larger areas of deposition.
+
+- id: geolmnage
+  type: Concept
+  prefLabel:
+    en: Mean geological age
+  measure_type: continuous
+  units: m.y.
+  description: Mean geological age (millions of years before present) derived from
+    the 1:1 million surface geology of Australia (Raymond 2009) by combining the descriptive
+    geological age fields with the timescales database (Laurie et al. 2008) to assign
+    numerical ages to each map unit.
+- id: geolrnage
+  type: Concept
+  prefLabel:
+    en: Range in geological ages
+  measure_type: continuous
+  units: m.y.
+  description: The range in age can help provide information pertaining to the substrate
+    for different species and is derived as the difference between the minimum and
+    maximum of the age values.
+- id: gravity
+  type: Concept
+  prefLabel:
+    en: Onshore gravity grid of Australia
+  measure_type: continuous
+  units: Gal
+  description: The onshore gravity grid of Australia is a compilation of over 1.4
+    Million gravity stations using Bouguer gravity anomalies in galileo units of acceleration
+    (Gal).
+- id: magnetics
+  type: Concept
+  prefLabel:
+    en: Magnetics
+  measure_type: continuous
+  units: nT
+  description: These data derive from the 1000m gridded Magnetic Anomaly Map of Australia.
+    The grid was compiled from about 9 million line-kilometres of TMI data held in
+    the National Airborne Geophysics Database.
+- id: wii
+  type: Concept
+  prefLabel:
+    en: Weathering intensity index
+  measure_type: continuous
+  units: Intensity
+  description: This weathering intensity index (WII) over the Australian continent
+    has been developed at a 100m resolution using regression models based on airborne
+    gamma-ray spectrometry imagery and the Shuttle Radar Topography Mission (SRTM)
+    elevation data.
+- id: twi
+  type: Concept
+  prefLabel:
+    en: Topographic wetness index
+  measure_type: continuous
+  units: index
+  description: Topographic Wetness Index estimates the relative wetness within a catchment.
+- id: slopedeg
+  type: Concept
+  prefLabel:
+    en: Slope
+  measure_type: continuous
+  units: Degree
+  description: This index measures the inclination of the land surface from the horizontal.
+- id: profcurv
+  type: Concept
+  prefLabel:
+    en: Profile curvature
+  measure_type: continuous
+  units: Index
+  description: This index is the rate of change of potential gradient down a flow
+    line and represents the changes in flow velocity down a slope. It is significant
+    for flow acceleration, erosion/deposition rates and geomorphology.
+- id: plancurv
+  type: Concept
+  prefLabel:
+    en: Plan curvature
+  measure_type: continuous
+  units: Index
+  description: Plan (or contour) curvature is the rate of change of aspect (orthogonal
+    to the slope) and represents topographic convergence or divergence. It is significant
+    for water movement across the landscape.
+
+- id: elvr1000
+  type: Concept
+  prefLabel:
+    en: Elevation
+  measure_type: continuous
+  units: Index
+  description: This index can help provide information pertaining to the relevance
+    of elevation change for different species.
+- id: conarea
+  type: Concept
+  prefLabel:
+    en: Contributing area
+  measure_type: continuous
+  units: Index
+  description: Contributing area is the contributing area in m2 computed using multiple
+    flow directions on hillslopes and ANUDEM-derived flow directions in channels.
+- id: awc
+  type: Concept
+  prefLabel:
+    en: Available Water Capacity
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of available water capacity for different species.
+- id: bdw
+  type: Concept
+  prefLabel:
+    en: Bulk Density - Whole Earth
+  measure_type: continuous
+  units: g/cm3
+  description: Bulk density of the whole soil (including coarse fragments) in mass
+    per unit volume and is a useful indication of a soils physical condition.
+- id: cly
+  type: Concept
+  prefLabel:
+    en: Clay
+  measure_type: continuous
+  units: '%'
+  description: Clay is a useful proxy for defining the nutritional and biological
+    capacity of soil.
+
+- id: der
+  type: Concept
+  prefLabel:
+    en: Depth of Regolith
+  measure_type: continuous
+  units: m
+  description: Depth to hard rock, inclusive of all regolith.
+- id: des
+  type: Concept
+  prefLabel:
+    en: Depth of Soil
+  measure_type: continuous
+  units: m
+  description: Depth of soil profile (A & B horizons)
+- id: ece
+  type: Concept
+  prefLabel:
+    en: Effective Cation Exchange Capacity
+  measure_type: continuous
+  units: meq/100g
+  description: This index can help provide information pertaining to the relevance
+    of soil for difference species.
+- id: nto
+  type: Concept
+  prefLabel:
+    en: Total Nitrogen
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil chemistry for difference species.
+- id: phc
+  type: Concept
+  prefLabel:
+    en: pH - CaCl2
+  measure_type: continuous
+  units: unitless
+  description: This index can help provide information pertaining to the relevance
+    of soil chemistry for difference species.
+- id: pto
+  type: Concept
+  prefLabel:
+    en: Total Phosphorus
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil chemistry for difference species.
+- id: slt
+  type: Concept
+  prefLabel:
+    en: Silt
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil, particularly silt for difference species.
+- id: snd
+  type: Concept
+  prefLabel:
+    en: Sand
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil, particularly sand for difference species.
+- id: soc
+  type: Concept
+  prefLabel:
+    en: Organic Carbon
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil chemistry for difference species.
+- id: twi
+  type: Concept
+  prefLabel:
+    en: Topographic wetness index
+  measure_type: continuous
+  units: index
+  description: Topographic Wetness Index estimates the relative wetness within a catchment.
+- id: slopedeg
+  type: Concept
+  prefLabel:
+    en: Slope
+  measure_type: continuous
+  units: Degree
+  description: This index measures the inclination of the land surface from the horizontal.
+- id: profcurv
+  type: Concept
+  prefLabel:
+    en: Profile curvature
+  measure_type: continuous
+  units: Index
+  description: This index is the rate of change of potential gradient down a flow
+    line and represents the changes in flow velocity down a slope. It is significant
+    for flow acceleration, erosion/deposition rates and geomorphology.
+- id: plancurv
+  type: Concept
+  prefLabel:
+    en: Plan curvature
+  measure_type: continuous
+  units: Index
+  description: Plan (or contour) curvature is the rate of change of aspect (orthogonal
+    to the slope) and represents topographic convergence or divergence. It is significant
+    for water movement across the landscape.
+- id: elvr1000
+  type: Concept
+  prefLabel:
+    en: Elevation
+  measure_type: continuous
+  units: Index
+  description: This index can help provide information pertaining to the relevance
+    of elevation change for different species.
+- id: conarea
+  type: Concept
+  prefLabel:
+    en: Contributing area
+  measure_type: continuous
+  units: Index
+  description: Contributing area is the contributing area in m2 computed using multiple
+    flow directions on hillslopes and ANUDEM-derived flow directions in channels.
+- id: awc
+  type: Concept
+  prefLabel:
+    en: Available Water Capacity
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of available water capacity for different species.
+- id: bdw
+  type: Concept
+  prefLabel:
+    en: Bulk Density - Whole Earth
+  measure_type: continuous
+  units: g/cm3
+  description: Bulk density of the whole soil (including coarse fragments) in mass
+    per unit volume and is a useful indication of a soils physical condition.
+- id: cly
+  type: Concept
+  prefLabel:
+    en: Clay
+  measure_type: continuous
+  units: '%'
+  description: Clay is a useful proxy for defining the nutritional and biological
+    capacity of soil.
+- id: der
+  type: Concept
+  prefLabel:
+    en: Depth of Regolith
+  measure_type: continuous
+  units: m
+  description: Depth to hard rock, inclusive of all regolith.
+- id: des
+  type: Concept
+  prefLabel:
+    en: Depth of Soil
+  measure_type: continuous
+  units: m
+  description: Depth of soil profile (A & B horizons)
+- id: ece
+  type: Concept
+  prefLabel:
+    en: Effective Cation Exchange Capacity
+  measure_type: continuous
+  units: meq/100g
+  description: This index can help provide information pertaining to the relevance
+    of soil for difference species.
+- id: nto
+  type: Concept
+  prefLabel:
+    en: Total Nitrogen
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil chemistry for difference species.
+- id: phc
+  type: Concept
+  prefLabel:
+    en: pH - CaCl2
+  measure_type: continuous
+  units: unitless
+  description: This index can help provide information pertaining to the relevance
+    of soil chemistry for difference species.
+- id: pto
+  type: Concept
+  prefLabel:
+    en: Total Phosphorus
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil chemistry for difference species.
+- id: slt
+  type: Concept
+  prefLabel:
+    en: Silt
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil, particularly silt for difference species.
+- id: snd
+  type: Concept
+  prefLabel:
+    en: Sand
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil, particularly sand for difference species.
+- id: soc
+  type: Concept
+  prefLabel:
+    en: Organic Carbon
+  measure_type: continuous
+  units: '%'
+  description: This index can help provide information pertaining to the relevance
+    of soil chemistry for difference species.
+- id: nvis_mgv
+  type: Concept
+  prefLabel:
+    en: NVIS Major Vegetation Groups
+  measure_type: continuous
+  units: mgv
+  description: This index provides information pertaining to the importance of vegetation
+    for different species and contains thirty-three (33) major vegetation groups.
+- id: nvis_mvs
+  type: Concept
+  prefLabel:
+    en: NVIS Major Vegetation Subgroups
+  measure_type: continuous
+  units: mvs
+  description: This index provides information pertaining to the importance of vegetation
+    for different species and contains eighty-five (85) major vegetation subgroups.

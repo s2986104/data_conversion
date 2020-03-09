@@ -150,7 +150,8 @@ class MetadataGenerator:
         parameters = {}
         for f in in_dataset["layers"]:
             base, _ = f["filename"].split(".")
-            parameters[base] = {
+            parametername = f["parametername"]
+            parameters[parametername] = {
               "type": "Parameter",
               "observedProperty": {
                 "label": {
@@ -160,6 +161,7 @@ class MetadataGenerator:
                 "dmgr:nodata": f["meta"]["nodata"],
                 "dmgr:legend": f["unitfull"]
               },
+              "tooltip": f["tooltip"],
               "unit": {
                 "symbol": {
                   "value": f["unit"],
@@ -174,7 +176,8 @@ class MetadataGenerator:
         tiffs = {}
         for f in in_dataset["layers"]:
             base_filename, _ = f["filename"].split(".")
-            tiffs[base_filename] = {
+            parametername = f["parametername"]
+            tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
                 "datatype": "uint8",
                 "axisNames": [
