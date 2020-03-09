@@ -1,0 +1,73 @@
+- id: fparcov
+  type: Concept
+  prefLabel:
+    en: fPAR Coefficient of Variance
+  measure_type: continuous
+  units: fraction
+  description: Fraction of Photosynthetically Active Radiation (fPAR) (Coefficient
+    of Variance) quantifies the solar radiation absorbed by live leaves for photosynthesis.
+    This variable shows information on the importance of exchanges of energy, water
+    vapor and carbon dioxide between the earths surface and the atmosphere for different
+    species.
+- id: fparmax
+  type: Concept
+  prefLabel:
+    en: fPAR Maximum
+  measure_type: continuous
+  units: fraction
+  description: Fraction of Photosynthetically Active Radiation (fPAR) (Max) quantifies
+    the solar radiation absorbed by live leaves for photosynthesis. This variable
+    shows information on the importance of exchanges of energy, water vapor and carbon
+    dioxide between the earths surface and the atmosphere for different species.
+- id: fparmean
+  type: Concept
+  prefLabel:
+    en: fPAR Mean
+  measure_type: continuous
+  units: fraction
+  description: Fraction of Photosynthetically Active Radiation (fPAR) (Mean) quantifies
+    the solar radiation absorbed by live leaves for photosynthesis. This variable
+    shows information on the importance of exchanges of energy, water vapor and carbon
+    dioxide between the earths surface and the atmosphere for different species.
+- id: fparmin
+  type: Concept
+  prefLabel:
+    en: fPAR Minimum
+  measure_type: continuous
+  units: fraction
+  description: Fraction of Photosynthetically Active Radiation (fPAR) (Min) quantifies
+    the solar radiation absorbed by live leaves for photosynthesis. This variable
+    shows information on the importance of exchanges of energy, water vapor and carbon
+    dioxide between the earths surface and the atmosphere for different species.
+- id: gppmin
+  type: Concept
+  prefLabel:
+    en: Minimum Gross Primary Productivity (GPP)
+  measure_type: continuous
+  units: mol CO2/m
+  description: The GPP offers information pertaining to the importance of terrestrial
+    energy, carbon, water cycle processes, and biogeochemistry of vegetation.
+- id: gppmean
+  type: Concept
+  prefLabel:
+    en: Mean Gross Primary Productivity (GPP)
+  measure_type: continuous
+  units: mol CO2/m
+  description: The GPP offers information pertaining to the importance of terrestrial
+    energy, carbon, water cycle processes, and biogeochemistry of vegetation.
+- id: gppmax
+  type: Concept
+  prefLabel:
+    en: Maximum Gross Primary Productivity (GPP)
+  measure_type: continuous
+  units: mol CO2/m
+  description: The GPP offers information pertaining to the importance of terrestrial
+    energy, carbon, water cycle processes, and biogeochemistry of vegetation.
+- id: gppcov
+  type: Concept
+  prefLabel:
+    en: Coefficient of variation of Gross Primary Productivity (GPP)
+  measure_type: continuous
+  units: mol CO2/m
+  description: The GPP offers information pertaining to the importance of terrestrial
+    energy, carbon, water cycle processes, and biogeochemistry of vegetation.
