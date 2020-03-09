@@ -4,14 +4,14 @@ import copy
 
 class MetadataGenerator:
 
-    COL_IDX_IN_GUIDE = 0  # collection index in meta.guide4.json
+    COL_IDX_IN_GUIDE = 1  # collection index in meta.guide4.json
 
     def __init__(self):
         self.guide = {}  # input json data serving as a guide
         self.collection = {}  # output json data, goes to collections.json
         self.datasets = []  # output json data, goes to datasets.json
         self.data = []  # output json data, goes to data.json
-        self.destination = "source/aus-veg-fpar"  # where to write json files
+        self.destination = "source/aus-veg-gpp"  # where to write json files
 
     def _load_guide(self):
         """Loads a template json file as a guide to the whole operation."""
@@ -28,7 +28,7 @@ class MetadataGenerator:
           "type": "CollectionList",
           "collections": [
             {
-              "_id": "aus-veg-fpar",
+              "_id": "aus-veg-gpp",
               "type": "Collection",
               "uuid": str(uuid.uuid4()),
               "title": collection_guide["collection_name"],
@@ -85,14 +85,14 @@ class MetadataGenerator:
               "domainType": in_dataset["domain"],
               "axes": {
                 "x": {
-                  "start": 110.0,
-                  "stop": 155.001329,
-                  "num": 19160
+                  "start": 112.8974991,
+                  "stop": 154.0,
+                  "num": 16440
                 },
                 "y": {
-                  "start": -45.000512,
+                  "start": -43.7400017,
                   "stop": -10.0,
-                  "num": 14902
+                  "num": 13497
                 }
               },
               "referencing": [
@@ -148,7 +148,8 @@ class MetadataGenerator:
         parameters = {}
         for f in in_dataset["layers"]:
             base, _ = f["filename"].rsplit(".", 1)
-            parameters[base] = {
+            parametername = f["parametername"]
+            parameters[parametername] = {
               "type": "Parameter",
               "observedProperty": {
                 "label": {
@@ -158,6 +159,7 @@ class MetadataGenerator:
                 "dmgr:nodata": f["meta"]["nodata"],
                 "dmgr:legend": f["unitfull"]
               },
+              "tooltip": f["tooltip"],
               "unit": {
                 "symbol": {
                   "value": f["unit"],
@@ -172,9 +174,10 @@ class MetadataGenerator:
         tiffs = {}
         for f in in_dataset["layers"]:
             base_filename, _ = f["filename"].rsplit(".", 1)
-            tiffs[base_filename] = {
+            parametername = f["parametername"]
+            tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
-                "datatype": "float32",
+                "datatype":  f["meta"]["dtype"],
                 "axisNames": [
                     "y",
                     "x"
@@ -186,7 +189,7 @@ class MetadataGenerator:
                 "dmgr:missingValue": f["meta"]["nodata"],
                 "dmgr:min": f["info"]["stats"][0]["min"],
                 "dmgr:max": f["info"]["stats"][0]["max"],
-                "dmgr:datatype": f["meta"]["dtype"],  # "Float32",
+                "dmgr:datatype": f["meta"]["dtype"],  # "int16/float32",
                 "url": self._get_url(in_dataset, base_filename)
             }
         alternates["dmgr:tiff"] = tiffs
@@ -195,7 +198,7 @@ class MetadataGenerator:
     def _get_url(self, in_dataset, base_filename):
         url_base = "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677"
         (_, _, collection_name, dataset_name) = in_dataset["folder_location"].split("/")
-        return "{}/aus-veg-fpar_layers/{}/{}/{}.tif".format(url_base, collection_name, dataset_name, base_filename)
+        return "{}/aus-veg-gpp_layers/{}/{}/{}.tif".format(url_base, collection_name, dataset_name, base_filename)
 
     def _generate_data(self):
         """Generates data.json from info in self.datasets

@@ -77,6 +77,9 @@ class MetadataGenerator:
     def _generate_dataset(self, collection_guide, in_dataset):
         ds = {
             "type": "Coverage",
+            "title": in_dataset["title"],
+            "description": in_dataset["description"],
+            "description_full": in_dataset["description_full"],
             "domain": {
               "type": "Domain",
               "domainType": in_dataset["domain"],
@@ -123,7 +126,7 @@ class MetadataGenerator:
               "license": in_dataset["licence"],
               "title": in_dataset["title"],
               "year": in_dataset["published"],
-              "year_range": "",
+              "year_range": in_dataset["year_range"],
               "extent_wgs84": {
                 "bottom": -4841000.0,
                 "left": -1888000.0,
@@ -145,7 +148,8 @@ class MetadataGenerator:
         parameters = {}
         for f in in_dataset["layers"]:
             base, _ = f["filename"].split(".")
-            parameters[base] = {
+            parametername = f["parametername"]
+            parameters[parametername] = {
               "type": "Parameter",
               "observedProperty": {
                 "label": {
@@ -155,6 +159,7 @@ class MetadataGenerator:
                 "dmgr:nodata": f["meta"]["nodata"],
                 "dmgr:legend": f["unitfull"]
               },
+              "tooltip": f["tooltip"],
               "unit": {
                 "symbol": {
                   "value": f["unit"],
@@ -169,7 +174,8 @@ class MetadataGenerator:
         tiffs = {}
         for f in in_dataset["layers"]:
             base_filename, _ = f["filename"].split(".")
-            tiffs[base_filename] = {
+            parametername = f["parametername"]
+            tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
                 "datatype": "uint8",
                 "axisNames": [
@@ -207,6 +213,7 @@ class MetadataGenerator:
                 new_item = copy.deepcopy(ds)
                 new_item["parameters"] = {f: ds["parameters"][f]}  # copies one file item only
                 new_item["rangeAlternates"]["dmgr:tiff"] = {f: ds["rangeAlternates"]["dmgr:tiff"][f]}  # copies one item
+                new_item["bccvl:metadata"]["url"] = ds["rangeAlternates"]["dmgr:tiff"][f]["url"]  # copies url
                 self.data.append(new_item)
 
         datafile_path = "{}/data.json".format(self.destination)

@@ -10,7 +10,7 @@ class GenerateYamlVariables:
 
     def _load_guide(self):
         """Loads a template json file as a guide to the whole operation."""
-        with open("meta.guide3.json", "r") as fp:
+        with open("meta.guide4.json", "r") as fp:
             self.guide = json.load(fp)
 
 

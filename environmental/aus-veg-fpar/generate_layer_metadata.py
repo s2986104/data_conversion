@@ -4,18 +4,18 @@ import copy
 
 class MetadataGenerator:
 
-    COL_IDX_IN_GUIDE = 4  # collection index in guide.json
+    COL_IDX_IN_GUIDE = 0  # collection index in meta.guide4.json
 
     def __init__(self):
         self.guide = {}  # input json data serving as a guide
         self.collection = {}  # output json data, goes to collections.json
         self.datasets = []  # output json data, goes to datasets.json
         self.data = []  # output json data, goes to data.json
-        self.destination = "source/aus-enviro-vegetation"  # where to write json files
+        self.destination = "source/aus-veg-fpar"  # where to write json files
 
     def _load_guide(self):
         """Loads a template json file as a guide to the whole operation."""
-        with open("meta.guide3.json", "r") as fp:
+        with open("meta.guide4.json", "r") as fp:
             self.guide = json.load(fp)
 
     def _generate_collection(self):
@@ -28,7 +28,7 @@ class MetadataGenerator:
           "type": "CollectionList",
           "collections": [
             {
-              "_id": "aus-enviro-vegetation",
+              "_id": "aus-veg-fpar",
               "type": "Collection",
               "uuid": str(uuid.uuid4()),
               "title": collection_guide["collection_name"],
@@ -50,7 +50,7 @@ class MetadataGenerator:
                 }
               ],
               "subjects": [
-                  "Extent and distribution of vegetation types in Australian landscapes for the present and pre-1750.,98 (with spaces)"
+                  "Australia Fraction of Photosynthetically Active Radiation (fPAR)"
               ]
             }
           ]
@@ -85,14 +85,14 @@ class MetadataGenerator:
               "domainType": in_dataset["domain"],
               "axes": {
                 "x": {
-                  "start": -1888000.0,
-                  "stop": 2122000.0,
-                  "num": 40100
+                  "start": 110.0,
+                  "stop": 155.001329,
+                  "num": 19160
                 },
                 "y": {
-                  "start": -4841000.0,
-                  "stop": -1004000.0,
-                  "num": 38370
+                  "start": -45.000512,
+                  "stop": -10.0,
+                  "num": 14902
                 }
               },
               "referencing": [
@@ -103,8 +103,8 @@ class MetadataGenerator:
                   ],
                   "system": {
                     "type": "GeographicCRS",
-                    "id": "http://www.opengis.net/def/crs/EPSG/0/3577",
-                    "wkt": "\"PROJCS[\"GDA94 / Australian Albers\",GEOGCS[\"GDA94\",DATUM[\"Geocentric_Datum_of_Australia_1994\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6283\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4283\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"standard_parallel_1\",-18],PARAMETER[\"standard_parallel_2\",-36],PARAMETER[\"latitude_of_center\",0],PARAMETER[\"longitude_of_center\",132],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH],AUTHORITY[\"EPSG\",\"3577\"]]"
+                    "id": "http://www.opengis.net/def/crs/EPSG/0/4326",
+                    "wkt": "GEOGCS[\"WGS 84\", DATUM[\"WGS_1984\", SPHEROID[\"WGS 84\",6378137,298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], AUTHORITY[\"EPSG\",\"6326\"]], PRIMEM[\"Greenwich\",0, AUTHORITY[\"EPSG\",\"8901\"]], UNIT[\"degree\",0.0174532925199433, AUTHORITY[\"EPSG\",\"9122\"]], AUTHORITY[\"EPSG\",\"4326\"]] (base) admins-mbp:jupyter admin$ gdalsrsinfo EPSG:4326 PROJ.4 : +proj=longlat +datum=WGS84 +no_defs OGC WKT : GEOGCS[\"WGS 84\", DATUM[\"WGS_1984\", SPHEROID[\"WGS 84\",6378137,298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], AUTHORITY[\"EPSG\",\"6326\"]], PRIMEM[\"Greenwich\",0, AUTHORITY[\"EPSG\",\"8901\"]], UNIT[\"degree\",0.0174532925199433, AUTHORITY[\"EPSG\",\"9122\"]], AUTHORITY[\"EPSG\",\"4326\"]]"
                   }
                 }
               ]
@@ -128,10 +128,10 @@ class MetadataGenerator:
               "year": in_dataset["published"],
               "year_range": in_dataset["year_range"],
               "extent_wgs84": {
-                "bottom": -4841000.0,
-                "left": -1888000.0,
-                "top": -1004000.0,
-                "right": 2122000.0
+                "bottom": -45.000512,
+                "left": 110.0,
+                "top": -10.0,
+                "right": 155.001329
               },
               "uuid": str(uuid.uuid4()),
               "partof": [
@@ -147,8 +147,9 @@ class MetadataGenerator:
     def _collect_parameters(self, in_dataset):
         parameters = {}
         for f in in_dataset["layers"]:
-            base, _ = f["filename"].split(".")
-            parameters[base] = {
+            base, _ = f["filename"].rsplit(".", 1)
+            parametername = f["parametername"]
+            parameters[parametername] = {
               "type": "Parameter",
               "observedProperty": {
                 "label": {
@@ -171,10 +172,11 @@ class MetadataGenerator:
         alternates = {}
         tiffs = {}
         for f in in_dataset["layers"]:
-            base_filename, _ = f["filename"].split(".")
-            tiffs[base_filename] = {
+            base_filename, _ = f["filename"].rsplit(".", 1)
+            parametername = f["parametername"]
+            tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
-                "datatype": "uint8",
+                "datatype": "float32",
                 "axisNames": [
                     "y",
                     "x"
@@ -186,7 +188,7 @@ class MetadataGenerator:
                 "dmgr:missingValue": f["meta"]["nodata"],
                 "dmgr:min": f["info"]["stats"][0]["min"],
                 "dmgr:max": f["info"]["stats"][0]["max"],
-                "dmgr:datatype": f["meta"]["dtype"],  # "Float64",
+                "dmgr:datatype": f["meta"]["dtype"],  # "Float32",
                 "url": self._get_url(in_dataset, base_filename)
             }
         alternates["dmgr:tiff"] = tiffs
@@ -195,7 +197,7 @@ class MetadataGenerator:
     def _get_url(self, in_dataset, base_filename):
         url_base = "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677"
         (_, _, collection_name, dataset_name) = in_dataset["folder_location"].split("/")
-        return "{}/aus-csiro_layers/{}/{}/{}.tif".format(url_base, collection_name, dataset_name, base_filename)
+        return "{}/aus-veg-fpar_layers/{}/{}/{}.tif".format(url_base, collection_name, dataset_name, base_filename)
 
     def _generate_data(self):
         """Generates data.json from info in self.datasets

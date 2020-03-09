@@ -410,7 +410,6 @@
   description: The range in age can help provide information pertaining to the substrate
     for different species and is derived as the difference between the minimum and
     maximum of the age values.
-
 - id: gravity
   type: Concept
   prefLabel:

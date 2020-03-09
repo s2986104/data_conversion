@@ -2,6 +2,7 @@ import json
 import uuid
 import copy
 
+
 class MetadataGenerator:
 
     COL_IDX_IN_GUIDE = 1  # collection index in guide.json
@@ -58,7 +59,8 @@ class MetadataGenerator:
         collection_path = "{}/collection.json".format(self.destination)
         self._write_results(collection_path, self.collection)
 
-    def _write_results(self, fpath, data):
+    @staticmethod
+    def _write_results(fpath, data):
         """Outputs the results to a json file."""
         with open(fpath, 'w') as fout:
             json.dump(data, fout, indent=2)
@@ -77,6 +79,9 @@ class MetadataGenerator:
     def _generate_dataset(self, collection_guide, in_dataset):
         ds = {
             "type": "Coverage",
+            "title": in_dataset["title"],
+            "description": in_dataset["description"],
+            "description_full": in_dataset["description_full"],
             "domain": {
               "type": "Domain",
               "domainType": in_dataset["domain"],
@@ -101,10 +106,7 @@ class MetadataGenerator:
                   "system": {
                     "type": "GeographicCRS",
                     "id": "http://www.opengis.net/def/crs/EPSG/0/4326",
-                    "wkt": "GEOGCS["WGS 84",DATUM["WGS_1984", SPHEROID["WGS 84",6378137,298.257223563, "\
-                      "AUTHORITY["EPSG","7030"]], AUTHORITY["EPSG","6326"]], PRIMEM["Greenwich",0, "\
-                      "AUTHORITY["EPSG","8901"]], UNIT["degree",0.0174532925199433, AUTHORITY["EPSG","9122"]], "\
-                      "AUTHORITY["EPSG","4326"]]"
+                    "wkt": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]"
                   }
                 }
               ]
@@ -126,7 +128,7 @@ class MetadataGenerator:
               "license": in_dataset["licence"],
               "title": in_dataset["title"],
               "year": in_dataset["published"],
-              "year_range": "",
+              "year_range": in_dataset["year_range"],
               "extent_wgs84": {
                 "bottom": -44.0004166673,
                 "left": 112.9995833309998,
@@ -148,7 +150,8 @@ class MetadataGenerator:
         parameters = {}
         for f in in_dataset["layers"]:
             base, _ = f["filename"].split(".")
-            parameters[base] = {
+            parametername = f["parametername"]
+            parameters[parametername] = {
               "type": "Parameter",
               "observedProperty": {
                 "label": {
@@ -158,6 +161,7 @@ class MetadataGenerator:
                 "dmgr:nodata": f["meta"]["nodata"],
                 "dmgr:legend": f["unitfull"]
               },
+              "tooltip": f["tooltip"],
               "unit": {
                 "symbol": {
                   "value": f["unit"],
@@ -172,7 +176,8 @@ class MetadataGenerator:
         tiffs = {}
         for f in in_dataset["layers"]:
             base_filename, _ = f["filename"].split(".")
-            tiffs[base_filename] = {
+            parametername = f["parametername"]
+            tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
                 "datatype": "uint8",
                 "axisNames": [
@@ -192,7 +197,8 @@ class MetadataGenerator:
         alternates["dmgr:tiff"] = tiffs
         return alternates
 
-    def _get_url(self, in_dataset, base_filename):
+    @staticmethod
+    def _get_url(in_dataset, base_filename):
         url_base = "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677"
         (_, _, collection_name, dataset_name) = in_dataset["folder_location"].split("/")
         return "{}/aus-csiro_layers/{}/{}/{}.tif".format(url_base, collection_name, dataset_name, base_filename)
@@ -210,13 +216,14 @@ class MetadataGenerator:
                 new_item = copy.deepcopy(ds)
                 new_item["parameters"] = {f: ds["parameters"][f]}  # copies one file item only
                 new_item["rangeAlternates"]["dmgr:tiff"] = {f: ds["rangeAlternates"]["dmgr:tiff"][f]}  # copies one item
+                new_item["bccvl:metadata"]["url"] = ds["rangeAlternates"]["dmgr:tiff"][f]["url"]  # copies url
                 self.data.append(new_item)
 
         datafile_path = "{}/data.json".format(self.destination)
         self._write_results(datafile_path, self.data)
 
-
-    def _flatten(self, file_list):
+    @staticmethod
+    def _flatten(file_list):
         return [item for sublist in file_list for item in sublist]
 
     def run(self):

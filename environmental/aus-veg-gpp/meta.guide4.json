@@ -31,7 +31,7 @@
             "licence": "CC BY Attribution 3.0",
             "resolution": "9 arcsec (~250 m)",
             "extent": "Australia",
-            "landingpage": "",
+           "landingpage": "https://experts.griffith.edu.au/18562-brendan-mackey/about",
             "CRS": "",
             "GCM": "",
             "emsc": "",
@@ -39,6 +39,7 @@
               {
                 "filename": "fpar.2000-2014.cov.aust.tif",
                 "title": "fPAR Coefficient of Variance",
+                "parametername": "fparcov",
                 "tooltip": "Fraction of Photosynthetically Active Radiation (fPAR) (Coefficient of Variance) quantifies the solar radiation absorbed by live leaves for photosynthesis. This variable shows information on the importance of exchanges of energy, water vapor and carbon dioxide between the earths surface and the atmosphere for different species.",
                 "unit": "fraction",
                 "unitfull": "fraction",
@@ -148,6 +149,7 @@
               {
                 "filename": "fpar.2000-2014.max.aust.tif",
                 "title": "fPAR Maximum",
+                "parametername": "fparmax",
                 "tooltip": "Fraction of Photosynthetically Active Radiation (fPAR) (Max) quantifies the solar radiation absorbed by live leaves for photosynthesis. This variable shows information on the importance of exchanges of energy, water vapor and carbon dioxide between the earths surface and the atmosphere for different species.",
                 "unit": "fraction",
                 "unitfull": "fraction",
@@ -256,6 +258,7 @@
               {
                 "filename": "fpar.2000-2014.mean.aust.tif",
                 "title": "fPAR Mean",
+                "parametername": "fparmean",
                 "tooltip": "Fraction of Photosynthetically Active Radiation (fPAR) (Mean) quantifies the solar radiation absorbed by live leaves for photosynthesis. This variable shows information on the importance of exchanges of energy, water vapor and carbon dioxide between the earths surface and the atmosphere for different species.",
                 "unit": "fraction",
                 "unitfull": "fraction",
@@ -364,6 +367,7 @@
               {
                 "filename": "fpar.2000-2014.min.aust.tif",
                 "title": "fPAR Minimum",
+                "parametername": "fparmin",
                 "tooltip": "Fraction of Photosynthetically Active Radiation (fPAR) (Min) quantifies the solar radiation absorbed by live leaves for photosynthesis. This variable shows information on the importance of exchanges of energy, water vapor and carbon dioxide between the earths surface and the atmosphere for different species.",
                 "unit": "fraction",
                 "unitfull": "fraction",
@@ -471,7 +475,7 @@
               }
             ],
             "doi": "",
-            "folder_location": "data/tiffs/fpar/fpar"
+            "folder_location": "data/tiffs/aus-veg-fpar/fpar"
           }
         ]
       },
@@ -505,7 +509,7 @@
             "licence": "CC BY Attribution 3.0",
             "resolution": "30 arcsec (~1 km)",
             "extent": "Australia",
-            "landingpage": "",
+            "landingpage": "https://experts.griffith.edu.au/18562-brendan-mackey/about",
             "CRS": "",
             "GCM": "",
             "emsc": "",
@@ -513,6 +517,7 @@
               {
                 "filename": "gppyrmin_2000_07_molco2yr.tif",
                 "title": "Minimum Gross Primary Productivity (GPP)",
+                "parametername": "gppmin",
                 "tooltip": "The GPP offers information pertaining to the importance of terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.",
                 "unit": "mol CO2/m",
                 "unitfull": "mol CO2/m",
@@ -618,6 +623,7 @@
               {
                 "filename": "gppyrmean_2000_07_molco2yr.tif",
                 "title": "Mean Gross Primary Productivity (GPP)",
+                "parametername": "gppmean",
                 "tooltip": "The GPP offers information pertaining to the importance of terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.",
                 "unit": "mol CO2/m",
                 "unitfull": "mol CO2/m",
@@ -723,6 +729,7 @@
               {
                 "filename": "gppyrmax_2000_07_molco2yr.tif",
                 "title": "Maximum Gross Primary Productivity (GPP)",
+                "parametername": "gppmax",
                 "tooltip": "The GPP offers information pertaining to the importance of terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.",
                 "unit": "mol CO2/m",
                 "unitfull": "mol CO2/m",
@@ -828,6 +835,7 @@
               {
                 "filename": "gpp_summary_00_07_cov.tif",
                 "title": "Coefficient of variation of Gross Primary Productivity (GPP)",
+                "parametername": "gppcov",
                 "tooltip": "The GPP offers information pertaining to the importance of terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.",
                 "unit": "mol CO2/m",
                 "unitfull": "mol CO2/m",
@@ -935,7 +943,7 @@
               }
             ],
             "doi": "",
-            "folder_location": "data/tiffs/gpp/gpp"
+            "folder_location": "data/tiffs/aus-veg-gpp/gpp"
           }
         ]
       }
