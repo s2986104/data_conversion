@@ -9564,7 +9564,7 @@
             "description_full": "Australia, National Vegetation Information System (NVIS, v5.1), 3 arcsec (~90 m) broad vegetation groups and subgroups (extant vegetation, pre-1750 vegetation).",
             "provider": "Australian Government Department of the Environment and Energy",
             "citation": "National Vegetation Information System V5.1 \u00a9 Australian Government Department of the Environment and Energy 2018",
-            "citation-url": "",
+            "citation-url": "https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system/data-products",
             "version": "v5.1",
             "year_range": [1997, 2006],
             "published": "2018",

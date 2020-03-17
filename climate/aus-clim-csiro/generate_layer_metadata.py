@@ -79,6 +79,10 @@ class MetadataGenerator:
             "title": in_dataset["title"],
             "description": in_dataset["description"],
             "description_full": in_dataset["description_full"],
+            "citation": in_dataset["citation"],
+            "citation-url": in_dataset["citation-url"],
+            "provider": in_dataset["provider"],
+            "landingpage": in_dataset["landingpage"],
             "domain": {
               "type": "Domain",
               "domainType": in_dataset["domain"],
