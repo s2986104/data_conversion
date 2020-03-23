@@ -76,10 +76,8 @@ class MetadataGenerator:
         self._write_results(datasets_path, self.datasets)
 
     def _generate_dataset(self, collection_guide, in_dataset):
-        myuuid = str(uuid.uuid4())
         ds = {
             "type": "Coverage",
-            "uuid": myuuid,
             "title": in_dataset["title"],
             "description": in_dataset["description"],
             "domain": {
@@ -115,7 +113,7 @@ class MetadataGenerator:
             "ranges": {},
             "rangeAlternates": {},  # inserted by code
             "bccvl:metadata": {
-                "uuid": myuuid,
+                "uuid": str(uuid.uuid4()),  # dataset uuid
                 "categories": [
                     collection_guide["collection_type"],
                     collection_guide["collection_subtype"]
@@ -157,10 +155,8 @@ class MetadataGenerator:
         for f in in_dataset["layers"]:
             base, _ = f["filename"].split(".")
             parametername = f["parametername"]
-            f["uuid"] = str(uuid.uuid4())
             parameters[parametername] = {
                 "type": "Parameter",
-                "uuid": f["uuid"],
                 "observedProperty": {
                     "label": {
                         "en": f["title"]
@@ -187,7 +183,6 @@ class MetadataGenerator:
             parametername = f["parametername"]
             tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
-                "uuid": f["uuid"],
                 "datatype": "float32",
                 "axisNames": [
                     "y",
@@ -226,6 +221,7 @@ class MetadataGenerator:
                 new_item["parameters"] = {f: ds["parameters"][f]}  # copies one file item only
                 new_item["rangeAlternates"]["dmgr:tiff"] = {f: ds["rangeAlternates"]["dmgr:tiff"][f]}  # copies one item
                 new_item["bccvl:metadata"]["url"] = ds["rangeAlternates"]["dmgr:tiff"][f]["url"]  # copies url
+                new_item["bccvl:metadata"]["uuid"] = str(uuid.uuid4())  # layer uuid
                 del new_item["bccvl:metadata"]["partof"]
                 self.data.append(new_item)
 
