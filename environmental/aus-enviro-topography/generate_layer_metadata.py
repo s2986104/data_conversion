@@ -81,11 +81,6 @@ class MetadataGenerator:
             "type": "Coverage",
             "title": in_dataset["title"],
             "description": in_dataset["description"],
-            "description_full": in_dataset["description_full"],
-            "citation": in_dataset["citation"],
-            "citation-url": in_dataset["citation-url"],
-            "provider": in_dataset["provider"],
-            "landingpage": in_dataset["landingpage"],
             "domain": {
               "type": "Domain",
               "domainType": in_dataset["domain"],
@@ -123,6 +118,11 @@ class MetadataGenerator:
                 collection_guide["collection_type"],
                 collection_guide["collection_subtype"]
               ],
+              "description_full": in_dataset["description_full"],
+              "citation": in_dataset["citation"],
+              "citation-url": in_dataset["citation-url"],
+              "provider": in_dataset["provider"],
+              "landingpage": in_dataset["landingpage"],
               "domain": in_dataset["domain"],
               "spatial_domain": "Australia",
               "time_domain": in_dataset["period"],

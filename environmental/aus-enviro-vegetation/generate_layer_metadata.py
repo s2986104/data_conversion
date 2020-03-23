@@ -75,15 +75,12 @@ class MetadataGenerator:
         self._write_results(datasets_path, self.datasets)
 
     def _generate_dataset(self, collection_guide, in_dataset):
+        myuuid = str(uuid.uuid4())
         ds = {
             "type": "Coverage",
+            "uuid": myuuid,
             "title": in_dataset["title"],
             "description": in_dataset["description"],
-            "description_full": in_dataset["description_full"],
-            "citation": in_dataset["citation"],
-            "citation-url": in_dataset["citation-url"],
-            "provider": in_dataset["provider"],
-            "landingpage": in_dataset["landingpage"],
             "domain": {
               "type": "Domain",
               "domainType": in_dataset["domain"],
@@ -117,30 +114,35 @@ class MetadataGenerator:
             "ranges": {},
             "rangeAlternates": {},  # inserted by code
             "bccvl:metadata": {
-              "categories": [
-                collection_guide["collection_type"],
-                collection_guide["collection_subtype"]
-              ],
-              "domain": in_dataset["domain"],
-              "spatial_domain": "Australia",
-              "time_domain": in_dataset["period"],
-              "resolution": in_dataset["resolution"],
-              "acknowledgement": in_dataset["provider"],
-              "external_url": in_dataset["doi"],
-              "license": in_dataset["licence"],
-              "title": in_dataset["title"],
-              "year": in_dataset["published"],
-              "year_range": in_dataset["year_range"],
-              "extent_wgs84": {
-                "bottom": -44.318220539340075,
-                "left": 109.5043559220607,
-                "top": -8.138805200337014,
-                "right": 157.2170998449442
-              },
-              "uuid": str(uuid.uuid4()),
-              "partof": [
-                self.collection["collections"][0]["uuid"]
-              ]
+                "uuid": myuuid,
+                "categories": [
+                    collection_guide["collection_type"],
+                    collection_guide["collection_subtype"]
+                ],
+                "description_full": in_dataset["description_full"],
+                "citation": in_dataset["citation"],
+                "citation-url": in_dataset["citation-url"],
+                "provider": in_dataset["provider"],
+                "landingpage": in_dataset["landingpage"],
+                "domain": in_dataset["domain"],
+                "spatial_domain": "Australia",
+                "time_domain": in_dataset["period"],
+                "resolution": in_dataset["resolution"],
+                "acknowledgement": in_dataset["provider"],
+                "external_url": in_dataset["doi"],
+                "license": in_dataset["licence"],
+                "title": in_dataset["title"],
+                "year": in_dataset["published"],
+                "year_range": in_dataset["year_range"],
+                "extent_wgs84": {
+                    "bottom": -44.318220539340075,
+                    "left": 109.5043559220607,
+                    "top": -8.138805200337014,
+                    "right": 157.2170998449442
+                },
+                "partof": [
+                    self.collection["collections"][0]["uuid"]
+                ]
             }
           }
         ds["parameters"] = self._collect_parameters(in_dataset)
@@ -153,9 +155,11 @@ class MetadataGenerator:
         for f in in_dataset["layers"]:
             base, _ = f["filename"].split(".")
             parametername = f["parametername"]
+            f["uuid"] = str(uuid.uuid4())
             parameters[parametername] = {
-              "type": "Parameter",
-              "observedProperty": {
+                "type": "Parameter",
+                "uuid": f["uuid"],
+                "observedProperty": {
                 "label": {
                   "en": f["title"]
                 },
@@ -181,6 +185,7 @@ class MetadataGenerator:
             parametername = f["parametername"]
             tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
+                "uuid": f["uuid"],
                 "datatype": "uint8",
                 "axisNames": [
                     "y",
@@ -218,11 +223,11 @@ class MetadataGenerator:
                 new_item["parameters"] = {f: ds["parameters"][f]}  # copies one file item only
                 new_item["rangeAlternates"]["dmgr:tiff"] = {f: ds["rangeAlternates"]["dmgr:tiff"][f]}  # copies one item
                 new_item["bccvl:metadata"]["url"] = ds["rangeAlternates"]["dmgr:tiff"][f]["url"]  # copies url
+                del new_item["bccvl:metadata"]["partof"]
                 self.data.append(new_item)
 
         datafile_path = "{}/data.json".format(self.destination)
         self._write_results(datafile_path, self.data)
-
 
     def _flatten(self, file_list):
         return [item for sublist in file_list for item in sublist]
