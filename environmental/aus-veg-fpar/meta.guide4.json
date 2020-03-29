@@ -13,7 +13,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Australia Fraction of Photosynthetically Active Radiation (fPAR)",
+            "title": "Australia, MODIS-fPAR (2000-2014), 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current ",
             "temporal_range": "Long-term",
@@ -482,7 +482,7 @@
       {
         "collection_type": "Environmental",
         "collection_subtype": "Vegetation",
-        "collection_name": "Australia, Gross Primary Productivity (2000-2006), 30 arcsec (~1 km)",
+        "collection_name": "Australia, Gross Primary Productivity",
         "collection_description": "Australia, Gross Primary Productivity (2000-2006), 30 arcsec (~1 km)",
         "collection_extent": "Australia",
         "dataset collection_year": "2000-2006",
@@ -491,7 +491,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Australia, Gross Primary Productivity",
+            "title": "Australia, Gross Primary Productivity (2000-2006), 30 arcsec (~1 km)",
             "domain": "Terrestrial",
             "period": "Current ",
             "temporal_range": "Long-term",

@@ -9556,7 +9556,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Australia, National Vegetation Information System",
+            "title": "Australia, National Vegetation Information System (NVIS, v5.1), 3 arcsec (~90 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",

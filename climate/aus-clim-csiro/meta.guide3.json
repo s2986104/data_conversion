@@ -13,7 +13,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "9s climatology for continental Australia 1976-2005: BIOCLIM variable suite",
+            "title": "Australia, current climate BIOCLIM variable suite (1976-2005), CSIRO, 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current ",
             "temporal_range": "Long-term",
@@ -4785,7 +4785,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Multi-resolution Ridge Top Flatness (MrRTF)",
+            "title": "Australia, Multi-resolution Ridge Top Flatness (v2, 2016), 3 arcsec (~90 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -4920,7 +4920,7 @@
           },
           {
             "id": "",
-            "title": "Multi-resolution Valley Bottom Flatness (MrVBF)",
+            "title": "Multi-resolution Valley Bottom Flatness (v2, 2016), 3 arcsec (~90 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -5067,7 +5067,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "9 second substrate rasters for continental modelling of Australia's biodiversity patterns",
+            "title": "Australia, substrate, CSIRO, 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -5628,7 +5628,7 @@
           },
           {
             "id": "",
-            "title": "Australia, landform, CSIRO, 9 arcsec (~250 m)",
+            "title": "Australia, soil and landform, CSIRO, 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -9556,7 +9556,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Australia, National Vegetation Information System",
+            "title": "Australia, National Vegetation Information System (NVIS, v5.1), 3 arcsec (~90 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",

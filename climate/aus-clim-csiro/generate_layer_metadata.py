@@ -111,38 +111,39 @@ class MetadataGenerator:
             "ranges": {},
             "rangeAlternates": {},  # inserted by code
             "bccvl:metadata": {
-              "uuid": str(uuid.uuid4()),  # dataset uuid
-              "categories": [
-                collection_guide["collection_type"],
-                collection_guide["collection_subtype"]
-              ],
-              "description_full": in_dataset["description_full"],
-              "citation": in_dataset["citation"],
-              "citation-url": in_dataset["citation-url"],
-              "provider": in_dataset["provider"],
-              "landingpage": in_dataset["landingpage"],
-              "domain": in_dataset["domain"],
-              "spatial_domain": "Australia",
-              "time_domain": in_dataset["period"],
-              "resolution": in_dataset["resolution"],
-              "acknowledgement": in_dataset["provider"],
-              "external_url": in_dataset["doi"],
-              "license": in_dataset["licence"],
-              "title": in_dataset["title"],
-              "year": in_dataset["published"],
-              "year_range": [
-                1976,
-                2005
-              ],
-              "extent_wgs84": {
-                "bottom": -43.7425,
-                "left": 112.9,
-                "top": -8.0,
-                "right": 154.0
-              },
-              "partof": [
-                self.collection["collections"][self.COL_IDX_IN_GUIDE]["uuid"]
-              ]
+                "uuid": str(uuid.uuid4()),  # dataset uuid
+                "categories": [
+                    collection_guide["collection_type"],
+                    collection_guide["collection_subtype"]
+                ],
+                "description_full": in_dataset["description_full"],
+                "citation": in_dataset["citation"],
+                "citation-url": in_dataset["citation-url"],
+                "provider": in_dataset["provider"],
+                "landingpage": in_dataset["landingpage"],
+                "domain": in_dataset["domain"],
+                "spatial_domain": "Australia",
+                "time_domain": in_dataset["period"],
+                "resolution": in_dataset["resolution"],
+                "acknowledgement": in_dataset["provider"],
+                "external_url": in_dataset["doi"],
+                "origin_doi": in_dataset["doi"],
+                "license": in_dataset["licence"],
+                "title": in_dataset["title"],
+                "year": in_dataset["published"],
+                "year_range": [
+                    1976,
+                    2005
+                ],
+                "extent_wgs84": {
+                    "bottom": -43.7425,
+                    "left": 112.9,
+                    "top": -8.0,
+                    "right": 154.0
+                },
+                "partof": [
+                    self.collection["collections"][self.COL_IDX_IN_GUIDE]["uuid"]
+                ]
             }
           }
         ds["parameters"] = self._collect_parameters(in_dataset)

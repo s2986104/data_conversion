@@ -13,7 +13,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "9s climatology for continental Australia 1976-2005: BIOCLIM variable suite",
+            "title": "Australia, current climate BIOCLIM variable suite (1976-2005), 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current ",
             "temporal_range": "Long-term",
@@ -5067,7 +5067,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "9 second substrate rasters for continental modelling of Australia's biodiversity patterns",
+            "title": "Australia, substrate, CSIRO, 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -5628,7 +5628,7 @@
           },
           {
             "id": "",
-            "title": "Australia, landform, CSIRO, 9 arcsec (~250 m)",
+            "title": "Australia, soil and landform, CSIRO, 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",

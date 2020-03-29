@@ -4785,7 +4785,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Multi-resolution Ridge Top Flatness (MrRTF)",
+            "title": "Australia, Multi-resolution Ridge Top Flatness (v2, 2016), 3 arcsec (~90 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -4920,7 +4920,7 @@
           },
           {
             "id": "",
-            "title": "Multi-resolution Valley Bottom Flatness (MrVBF)",
+            "title": "Australia, Multi-resolution Valley Bottom Flatness (v2, 2016), 3 arcsec (~90 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
