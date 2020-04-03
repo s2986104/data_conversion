@@ -128,6 +128,7 @@ class MetadataGenerator:
                 "resolution": in_dataset["resolution"],
                 "acknowledgement": in_dataset["provider"],
                 "external_url": in_dataset["doi"],
+                "doi": in_dataset["doi"],
                 "license": in_dataset["licence"],
                 "title": in_dataset["title"],
                 "year": in_dataset["published"],
@@ -219,7 +220,9 @@ class MetadataGenerator:
                 new_item["rangeAlternates"]["dmgr:tiff"] = {f: ds["rangeAlternates"]["dmgr:tiff"][f]}  # copies one item
                 new_item["bccvl:metadata"]["url"] = ds["rangeAlternates"]["dmgr:tiff"][f]["url"]  # copies url
                 new_item["bccvl:metadata"]["uuid"] = str(uuid.uuid4())  # layer uuid
+                new_item["bccvl:metadata"]["data_type"] = "continuous"  # gpp layers are continuous
                 del new_item["bccvl:metadata"]["partof"]
+                del new_item["bccvl:metadata"]["categories"]
                 self.data.append(new_item)
 
         datafile_path = "{}/data.json".format(self.destination)

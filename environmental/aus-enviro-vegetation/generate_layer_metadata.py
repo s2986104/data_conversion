@@ -128,6 +128,7 @@ class MetadataGenerator:
                 "resolution": in_dataset["resolution"],
                 "acknowledgement": in_dataset["provider"],
                 "external_url": in_dataset["doi"],
+                "doi": in_dataset["doi"],
                 "license": in_dataset["licence"],
                 "title": in_dataset["title"],
                 "year": in_dataset["published"],
@@ -156,20 +157,22 @@ class MetadataGenerator:
             parameters[parametername] = {
                 "type": "Parameter",
                 "observedProperty": {
-                "label": {
-                  "en": f["title"]
+                    "label": {
+                      "en": f["title"]
+                    },
+                    "categories": f.get("categories"),
+                    "dmgr:statistics": f["info"]["stats"],
+                    "dmgr:nodata": f["meta"]["nodata"],
+                    "dmgr:legend": f["unitfull"]
                 },
-                "dmgr:statistics": f["info"]["stats"],
-                "dmgr:nodata": f["meta"]["nodata"],
-                "dmgr:legend": f["unitfull"]
-              },
-              "tooltip": f["tooltip"],
-              "unit": {
-                "symbol": {
-                  "value": f["unit"],
-                  "type": f["unitfull"]
+                "categoryEncoding": f.get("categoryEncoding"),
+                "tooltip": f["tooltip"],
+                "unit": {
+                    "symbol": {
+                        "value": f["unit"],
+                        "type": f["unitfull"]
+                    }
                 }
-              }
             }
         return parameters
 
@@ -219,7 +222,9 @@ class MetadataGenerator:
                 new_item["rangeAlternates"]["dmgr:tiff"] = {f: ds["rangeAlternates"]["dmgr:tiff"][f]}  # copies one item
                 new_item["bccvl:metadata"]["url"] = ds["rangeAlternates"]["dmgr:tiff"][f]["url"]  # copies url
                 new_item["bccvl:metadata"]["uuid"] = str(uuid.uuid4())  # layer uuid
+                new_item["bccvl:metadata"]["data_type"] = "categorical"  # NVIS is categorical data
                 del new_item["bccvl:metadata"]["partof"]
+                del new_item["bccvl:metadata"]["categories"]
                 self.data.append(new_item)
 
         datafile_path = "{}/data.json".format(self.destination)

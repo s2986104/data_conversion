@@ -127,7 +127,7 @@ class MetadataGenerator:
                 "resolution": in_dataset["resolution"],
                 "acknowledgement": in_dataset["provider"],
                 "external_url": in_dataset["doi"],
-                "origin_doi": in_dataset["doi"],
+                "doi": in_dataset["doi"],
                 "license": in_dataset["licence"],
                 "title": in_dataset["title"],
                 "year": in_dataset["published"],
