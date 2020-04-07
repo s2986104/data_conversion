@@ -160,7 +160,7 @@ class MetadataGenerator:
                     "label": {
                         "en": f["title"]
                     },
-                    "dmgr:statistics": f["info"]["stats"],
+                    "dmgr:statistics": f["info"]["stats"][0],
                     "dmgr:nodata": f["meta"]["nodata"],
                     "dmgr:legend": f["unitfull"]
                 },

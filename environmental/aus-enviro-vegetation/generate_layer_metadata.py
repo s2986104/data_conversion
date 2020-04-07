@@ -161,7 +161,7 @@ class MetadataGenerator:
                       "en": f["title"]
                     },
                     "categories": f.get("categories"),
-                    "dmgr:statistics": f["info"]["stats"],
+                    "dmgr:statistics": f["info"]["stats"][0],
                     "dmgr:nodata": f["meta"]["nodata"],
                     "dmgr:legend": f["unitfull"]
                 },
