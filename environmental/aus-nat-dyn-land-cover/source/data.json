@@ -1,0 +1,802 @@
+[
+  {
+    "type": "Coverage",
+    "domain": {
+      "type": "Domain",
+      "domainType": "Grid",
+      "axes": {
+        "x": {
+          "start": 110.00118,
+          "stop": 155.00802,
+          "num": 19161
+        },
+        "y": {
+          "start": -45.00362,
+          "stop": -10.00117,
+          "num": 14902
+        }
+      },
+      "referencing": [
+        {
+          "coordinates": [
+            "x",
+            "y"
+          ],
+          "system": {
+            "type": "GeographicCRS",
+            "id": "http://www.opengis.net/def/crs/EPSG/0/4326",
+            "wkt": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]"
+          }
+        }
+      ]
+    },
+    "parameters": {
+      "dlcdv1_class_reduced": {
+        "type": "Parameter",
+        "observedProperty": {
+          "label": {
+            "en": "Dynamic Land Cover - Reduced classification (5 classes)"
+          },
+          "categories": [
+            {
+              "id": "NV",
+              "label": {
+                "en": "Non-vegetation, crops & pasture"
+              }
+            },
+            {
+              "id": "HE",
+              "label": {
+                "en": "Herbacious"
+              }
+            },
+            {
+              "id": "WS",
+              "label": {
+                "en": "Woody shrubs"
+              }
+            },
+            {
+              "id": "FO",
+              "label": {
+                "en": "Forest"
+              }
+            },
+            {
+              "id": "WL",
+              "label": {
+                "en": "Woodland"
+              }
+            }
+          ],
+          "dmgr:legend": "categories"
+        },
+        "unit": {
+          "symbol": {
+            "value": "{land-cover category}",
+            "type": "http://www.opengis.net/def/uom/UCUM/"
+          }
+        },
+        "tooltip": "Dynamic Land Cover - Reduced classification (5 classes)",
+        "categoryEncoding": {
+          "NV": 1,
+          "HE": 2,
+          "WS": 3,
+          "FO": 4,
+          "WL": 5
+        }
+      }
+    },
+    "ranges": {},
+    "rangeAlternates": {
+      "dmgr:tiff": {
+        "dlcdv1_class_reduced": {
+          "type": "dmgr:TIFF2DArray",
+          "datatype": "integer",
+          "axisNames": [
+            "y",
+            "x"
+          ],
+          "shape": [
+            14902,
+            19161
+          ],
+          "dmgr:band": 1,
+          "dmgr:offset": 0.0,
+          "dmgr:scale": 1.0,
+          "dmgr:missingValue": null,
+          "dmgr:min": 0.0,
+          "dmgr:max": 5.0,
+          "dmgr:datatype": "Byte",
+          "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_dlcdv1-class-reduced.tif"
+        }
+      }
+    },
+    "bccvl:metadata": {
+      "year": 2004,
+      "year_range": [
+        2000,
+        2008
+      ],
+      "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_dlcdv1-class-reduced.tif",
+      "auxfiles": [
+        {
+          "type": "PAMDataset",
+          "path": "ndlc-2004-250m_dlcdv1-class-reduced.tif.aux.xml"
+        }
+      ],
+      "resolution": "9 arcsec (~250m)",
+      "spatial_domain": "Global",
+      "time_domain": "Current",
+      "extent_wgs84": {
+        "bottom": -45.00479,
+        "left": 110.00001,
+        "top": -10.0,
+        "right": 155.00919
+      },
+      "acknowledgement": "Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), Geoscience Australia, Canberra.",
+      "uuid": "14faebda-baf2-5544-83c8-59cc63fe8a0b"
+    }
+  },
+  {
+    "type": "Coverage",
+    "domain": {
+      "type": "Domain",
+      "domainType": "Grid",
+      "axes": {
+        "x": {
+          "start": 110.00118,
+          "stop": 155.00802,
+          "num": 19161
+        },
+        "y": {
+          "start": -45.00362,
+          "stop": -10.00117,
+          "num": 14902
+        }
+      },
+      "referencing": [
+        {
+          "coordinates": [
+            "x",
+            "y"
+          ],
+          "system": {
+            "type": "GeographicCRS",
+            "id": "http://www.opengis.net/def/crs/EPSG/0/4326",
+            "wkt": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]"
+          }
+        }
+      ]
+    },
+    "parameters": {
+      "dlcdv1_class": {
+        "type": "Parameter",
+        "observedProperty": {
+          "label": {
+            "en": "Dynamic Land Cover - Original classification (34 classes)"
+          },
+          "categories": [
+            {
+              "id": "Primarily Non-Vegetated_Artificial Surfaces & Associated Areas_Non Built-Up_Extraction Sites__",
+              "label": {
+                "en": "Extraction Sites"
+              }
+            },
+            {
+              "id": "Primarily Non-Vegetated_Bare Areas____",
+              "label": {
+                "en": "Bare Areas"
+              }
+            },
+            {
+              "id": "Primarily Non-Vegetated_Waterbodies_Water___",
+              "label": {
+                "en": "Inland Waterbodies"
+              }
+            },
+            {
+              "id": "Primarily Non-Vegetated_Waterbodies_Water___Brine",
+              "label": {
+                "en": "Salt Lakes"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Irrigated_",
+              "label": {
+                "en": "Irrigated Cropping"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Irrigated_Pasture",
+              "label": {
+                "en": "Irrigated Pasture"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Irrigated_Sugar",
+              "label": {
+                "en": "Irrigated Sugar"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Rainfed_",
+              "label": {
+                "en": "Rainfed Cropping"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Rainfed_Pasture",
+              "label": {
+                "en": "Rainfed Pasture"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Rainfed_Sugar",
+              "label": {
+                "en": "Rainfed Sugar"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Aquatic Vegetation____",
+              "label": {
+                "en": "Wetlands"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Forbs_Open_",
+              "label": {
+                "en": "Forbs - Open"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Forbs_Sparse_",
+              "label": {
+                "en": "Forbs - Sparse"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Closed_Tussock Grasses",
+              "label": {
+                "en": "Tussock Grasses - Closed"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Open_Alpine",
+              "label": {
+                "en": "Alpine Grasses - Open"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Open_Hummock Grasses",
+              "label": {
+                "en": "Hummock Grasses - Open"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Open_Sedges",
+              "label": {
+                "en": "Sedges - Open"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Open_Tussock Grasses",
+              "label": {
+                "en": "Tussock Grasses - Open"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Scattered_",
+              "label": {
+                "en": "Grassland - Scattered"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Scattered_Tussock Grasses",
+              "label": {
+                "en": "Tussock Grasses - Scattered"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Sparse_",
+              "label": {
+                "en": "Grassland - Sparse"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Sparse_Hummock Grasses",
+              "label": {
+                "en": "Hummock Grasses - Sparse"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Sparse_Tussock Grasses",
+              "label": {
+                "en": "Tussock Grasses - Sparse"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Closed_",
+              "label": {
+                "en": "Shrubs - Closed"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Open_",
+              "label": {
+                "en": "Shrubs - Open"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Open_Chenopods",
+              "label": {
+                "en": "Chenopod Shrubs - Open"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Scattered_",
+              "label": {
+                "en": "Shrubs - Scattered"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Scattered_Chenopods",
+              "label": {
+                "en": "Chenopod Shrubs - Scattered"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Sparse_",
+              "label": {
+                "en": "Shrubs - Sparse"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Sparse_Chenopods",
+              "label": {
+                "en": "Chenopod Shrubs - Sparse"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Trees_Closed_",
+              "label": {
+                "en": "Trees - Closed"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Trees_Open_",
+              "label": {
+                "en": "Trees - Open"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Trees_Scattered_",
+              "label": {
+                "en": "Trees - Scattered"
+              }
+            },
+            {
+              "id": "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Trees_Sparse_",
+              "label": {
+                "en": "Trees - Sparse"
+              }
+            }
+          ],
+          "dmgr:legend": "categories"
+        },
+        "unit": {
+          "symbol": {
+            "value": "{land-cover category}",
+            "type": "http://www.opengis.net/def/uom/UCUM/"
+          }
+        },
+        "tooltip": "Dynamic Land Cover - Original classification (34 classes)",
+        "categoryEncoding": {
+          "Primarily Non-Vegetated_Artificial Surfaces & Associated Areas_Non Built-Up_Extraction Sites__": 1,
+          "Primarily Non-Vegetated_Bare Areas____": 2,
+          "Primarily Non-Vegetated_Waterbodies_Water___": 3,
+          "Primarily Non-Vegetated_Waterbodies_Water___Brine": 4,
+          "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Irrigated_": 5,
+          "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Irrigated_Pasture": 6,
+          "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Irrigated_Sugar": 7,
+          "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Rainfed_": 8,
+          "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Rainfed_Pasture": 9,
+          "Primarily Vegetated_Cultivated & Managed Lands_Herbaceous_Graminoids_Rainfed_Sugar": 10,
+          "Primarily Vegetated_Natural & Semi-Natural Aquatic Vegetation____": 11,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Forbs_Open_": 12,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Forbs_Sparse_": 13,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Closed_Tussock Grasses": 14,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Open_Alpine": 15,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Open_Hummock Grasses": 16,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Open_Sedges": 17,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Open_Tussock Grasses": 18,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Scattered_": 19,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Scattered_Tussock Grasses": 20,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Sparse_": 21,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Sparse_Hummock Grasses": 22,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Herbaceous_Graminoids_Sparse_Tussock Grasses": 23,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Closed_": 24,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Open_": 25,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Open_Chenopods": 26,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Scattered_": 27,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Scattered_Chenopods": 28,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Sparse_": 29,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Shrubs_Sparse_Chenopods": 30,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Trees_Closed_": 31,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Trees_Open_": 32,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Trees_Scattered_": 33,
+          "Primarily Vegetated_Natural & Semi-Natural Terrestrial Vegetation_Woody_Trees_Sparse_": 34
+        }
+      }
+    },
+    "ranges": {},
+    "rangeAlternates": {
+      "dmgr:tiff": {
+        "dlcdv1_class": {
+          "type": "dmgr:TIFF2DArray",
+          "datatype": "integer",
+          "axisNames": [
+            "y",
+            "x"
+          ],
+          "shape": [
+            14902,
+            19161
+          ],
+          "dmgr:band": 1,
+          "dmgr:offset": 0.0,
+          "dmgr:scale": 1.0,
+          "dmgr:missingValue": 0.0,
+          "dmgr:min": 1.0,
+          "dmgr:max": 34.0,
+          "dmgr:datatype": "Byte",
+          "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_dlcdv1-class.tif"
+        }
+      }
+    },
+    "bccvl:metadata": {
+      "TIFFTAG_RESOLUTIONUNIT": "1 (unitless)",
+      "TIFFTAG_SOFTWARE": "IMAGINE TIFF Support\nCopyright 1991 - 1999 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile: etif.c $ $Revision: 1.10.1.9.1.9.2.11 $ $Date: 2004/09/15 18:42:01EDT $",
+      "TIFFTAG_XRESOLUTION": "1",
+      "TIFFTAG_YRESOLUTION": "1",
+      "year": 2004,
+      "year_range": [
+        2000,
+        2008
+      ],
+      "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_dlcdv1-class.tif",
+      "auxfiles": [
+        {
+          "type": "PAMDataset",
+          "path": "ndlc-2004-250m_dlcdv1-class.tif.aux.xml"
+        }
+      ],
+      "resolution": "9 arcsec (~250m)",
+      "spatial_domain": "Global",
+      "time_domain": "Current",
+      "extent_wgs84": {
+        "bottom": -45.00479,
+        "left": 110.00001,
+        "top": -10.0,
+        "right": 155.00919
+      },
+      "acknowledgement": "Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), Geoscience Australia, Canberra.",
+      "uuid": "88f3ac90-acb5-5061-a973-2cd1945fc683"
+    }
+  },
+  {
+    "type": "Coverage",
+    "domain": {
+      "type": "Domain",
+      "domainType": "Grid",
+      "axes": {
+        "x": {
+          "start": 110.00117,
+          "stop": 155.00801,
+          "num": 19161
+        },
+        "y": {
+          "start": -45.00362,
+          "stop": -10.00117,
+          "num": 14902
+        }
+      },
+      "referencing": [
+        {
+          "coordinates": [
+            "x",
+            "y"
+          ],
+          "system": {
+            "type": "GeographicCRS",
+            "id": "http://www.opengis.net/def/crs/EPSG/0/4326",
+            "wkt": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]"
+          }
+        }
+      ]
+    },
+    "parameters": {
+      "trend_evi_max": {
+        "type": "Parameter",
+        "observedProperty": {
+          "label": {
+            "en": "Annual maximum Enhanced Vegetation Index (EVI) trend"
+          },
+          "dmgr:statistics": {
+            "min": -999.0,
+            "max": 0.11597920209169388,
+            "mean": -558.01413269318,
+            "stddev": 496.05934402819
+          },
+          "dmgr:nodata": null
+        },
+        "unit": {
+          "symbol": {
+            "value": "{enhanced vegetation index}",
+            "type": "http://www.opengis.net/def/uom/UCUM/"
+          }
+        },
+        "tooltip": "Annual maximum Enhanced Vegetation Index (EVI) trend"
+      }
+    },
+    "ranges": {},
+    "rangeAlternates": {
+      "dmgr:tiff": {
+        "trend_evi_max": {
+          "type": "dmgr:TIFF2DArray",
+          "datatype": "float",
+          "axisNames": [
+            "y",
+            "x"
+          ],
+          "shape": [
+            14902,
+            19161
+          ],
+          "dmgr:band": 1,
+          "dmgr:offset": 0.0,
+          "dmgr:scale": 1.0,
+          "dmgr:missingValue": null,
+          "dmgr:min": -999.0,
+          "dmgr:max": 0.11597920209169,
+          "dmgr:datatype": "Float32",
+          "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_trend-evi-max.tif"
+        }
+      }
+    },
+    "bccvl:metadata": {
+      "TIFFTAG_RESOLUTIONUNIT": "1 (unitless)",
+      "TIFFTAG_SOFTWARE": "IMAGINE TIFF Support\nCopyright 1991 - 1999 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile: etif.c $ $Revision: 1.10.1.9.1.9.2.11 $ $Date: 2004/09/15 18:42:01EDT $",
+      "TIFFTAG_XRESOLUTION": "1",
+      "TIFFTAG_YRESOLUTION": "1",
+      "year": 2004,
+      "year_range": [
+        2000,
+        2008
+      ],
+      "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_trend-evi-max.tif",
+      "auxfiles": [],
+      "resolution": "9 arcsec (~250m)",
+      "spatial_domain": "Global",
+      "time_domain": "Current",
+      "extent_wgs84": {
+        "bottom": -45.00479,
+        "left": 110.0,
+        "top": -10.0,
+        "right": 155.00918
+      },
+      "acknowledgement": "Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), Geoscience Australia, Canberra.",
+      "uuid": "bd82ffa6-4b78-52d6-be49-63ceb8477438"
+    }
+  },
+  {
+    "type": "Coverage",
+    "domain": {
+      "type": "Domain",
+      "domainType": "Grid",
+      "axes": {
+        "x": {
+          "start": 110.00117,
+          "stop": 155.00801,
+          "num": 19161
+        },
+        "y": {
+          "start": -45.00362,
+          "stop": -10.00117,
+          "num": 14902
+        }
+      },
+      "referencing": [
+        {
+          "coordinates": [
+            "x",
+            "y"
+          ],
+          "system": {
+            "type": "GeographicCRS",
+            "id": "http://www.opengis.net/def/crs/EPSG/0/4326",
+            "wkt": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]"
+          }
+        }
+      ]
+    },
+    "parameters": {
+      "trend_evi_mean": {
+        "type": "Parameter",
+        "observedProperty": {
+          "label": {
+            "en": "Annual mean Enhanced Vegetation Index (EVI) trend"
+          },
+          "dmgr:statistics": {
+            "min": -999.0,
+            "max": 0.08792238682508469,
+            "mean": -558.01374585639,
+            "stddev": 496.05977915651
+          },
+          "dmgr:nodata": null
+        },
+        "unit": {
+          "symbol": {
+            "value": "{enhanced vegetation index}",
+            "type": "http://www.opengis.net/def/uom/UCUM/"
+          }
+        },
+        "tooltip": "Annual mean Enhanced Vegetation Index (EVI) trend"
+      }
+    },
+    "ranges": {},
+    "rangeAlternates": {
+      "dmgr:tiff": {
+        "trend_evi_mean": {
+          "type": "dmgr:TIFF2DArray",
+          "datatype": "float",
+          "axisNames": [
+            "y",
+            "x"
+          ],
+          "shape": [
+            14902,
+            19161
+          ],
+          "dmgr:band": 1,
+          "dmgr:offset": 0.0,
+          "dmgr:scale": 1.0,
+          "dmgr:missingValue": null,
+          "dmgr:min": -999.0,
+          "dmgr:max": 0.087922386825085,
+          "dmgr:datatype": "Float32",
+          "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_trend-evi-mean.tif"
+        }
+      }
+    },
+    "bccvl:metadata": {
+      "TIFFTAG_RESOLUTIONUNIT": "1 (unitless)",
+      "TIFFTAG_SOFTWARE": "IMAGINE TIFF Support\nCopyright 1991 - 1999 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile: etif.c $ $Revision: 1.10.1.9.1.9.2.11 $ $Date: 2004/09/15 18:42:01EDT $",
+      "TIFFTAG_XRESOLUTION": "1",
+      "TIFFTAG_YRESOLUTION": "1",
+      "year": 2004,
+      "year_range": [
+        2000,
+        2008
+      ],
+      "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_trend-evi-mean.tif",
+      "auxfiles": [],
+      "resolution": "9 arcsec (~250m)",
+      "spatial_domain": "Global",
+      "time_domain": "Current",
+      "extent_wgs84": {
+        "bottom": -45.00479,
+        "left": 110.0,
+        "top": -10.0,
+        "right": 155.00918
+      },
+      "acknowledgement": "Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), Geoscience Australia, Canberra.",
+      "uuid": "40f3eeef-8f84-5897-8711-f2518992c1c7"
+    }
+  },
+  {
+    "type": "Coverage",
+    "domain": {
+      "type": "Domain",
+      "domainType": "Grid",
+      "axes": {
+        "x": {
+          "start": 110.00117,
+          "stop": 155.00801,
+          "num": 19161
+        },
+        "y": {
+          "start": -45.00362,
+          "stop": -10.00117,
+          "num": 14902
+        }
+      },
+      "referencing": [
+        {
+          "coordinates": [
+            "x",
+            "y"
+          ],
+          "system": {
+            "type": "GeographicCRS",
+            "id": "http://www.opengis.net/def/crs/EPSG/0/4326",
+            "wkt": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]"
+          }
+        }
+      ]
+    },
+    "parameters": {
+      "trend_evi_min": {
+        "type": "Parameter",
+        "observedProperty": {
+          "label": {
+            "en": "Annual minimum Enhanced Vegetation Index (EVI) trend"
+          },
+          "dmgr:statistics": {
+            "min": -999.0,
+            "max": 0.07923112064599991,
+            "mean": -558.23734256171,
+            "stddev": 496.03418790532
+          },
+          "dmgr:nodata": null
+        },
+        "unit": {
+          "symbol": {
+            "value": "{enhanced vegetation index}",
+            "type": "http://www.opengis.net/def/uom/UCUM/"
+          }
+        },
+        "tooltip": "Annual minimum Enhanced Vegetation Index (EVI) trend"
+      }
+    },
+    "ranges": {},
+    "rangeAlternates": {
+      "dmgr:tiff": {
+        "trend_evi_min": {
+          "type": "dmgr:TIFF2DArray",
+          "datatype": "float",
+          "axisNames": [
+            "y",
+            "x"
+          ],
+          "shape": [
+            14902,
+            19161
+          ],
+          "dmgr:band": 1,
+          "dmgr:offset": 0.0,
+          "dmgr:scale": 1.0,
+          "dmgr:missingValue": null,
+          "dmgr:min": -999.0,
+          "dmgr:max": 0.079231120646,
+          "dmgr:datatype": "Float32",
+          "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_trend-evi-min.tif"
+        }
+      }
+    },
+    "bccvl:metadata": {
+      "TIFFTAG_RESOLUTIONUNIT": "1 (unitless)",
+      "TIFFTAG_SOFTWARE": "IMAGINE TIFF Support\nCopyright 1991 - 1999 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile: etif.c $ $Revision: 1.10.1.9.1.9.2.11 $ $Date: 2004/09/15 18:42:01EDT $",
+      "TIFFTAG_XRESOLUTION": "1",
+      "TIFFTAG_YRESOLUTION": "1",
+      "year": 2004,
+      "year_range": [
+        2000,
+        2008
+      ],
+      "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_trend-evi-min.tif",
+      "auxfiles": [],
+      "resolution": "9 arcsec (~250m)",
+      "spatial_domain": "Global",
+      "time_domain": "Current",
+      "extent_wgs84": {
+        "bottom": -45.00479,
+        "left": 110.0,
+        "top": -10.0,
+        "right": 155.00918
+      },
+      "acknowledgement": "Lymburner L., Tan P., Mueller N., Thackway R., Lewis A., Thankappan M., Randall L., Islam A., and Senarath U., (2010), 250 metre Dynamic Land Cover Dataset (1st Edition), Geoscience Australia, Canberra.",
+      "uuid": "5845761e-0557-52c8-b048-8392ddbfa95f"
+    }
+  }
+]

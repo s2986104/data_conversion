@@ -205,7 +205,7 @@ def convert_dataset(srcfolder, dsname):
     ziproot = create_target_dir(dsttmpdir, destdir)
     for zipfile in glob.glob(os.path.join(srcfolder, dsglob)):
         try:
-            print "converting ", dsname, zipfile
+            print("converting ", dsname, zipfile)
             srctmpdir = unzip_dataset(zipfile)
             
             # find all tif files in srctmpdir:
@@ -241,7 +241,7 @@ def convert_dataset(srcfolder, dsname):
                     class_map = {1: range(1,11), 2: range(11,24), 3: range(24,31), 4: range(31,33), 5: range(33,35)}
                     reclassify(tiffile, class_map, os.path.join(ziproot, 'data', new_tiffile))
         except Exception as e:
-            print "Error:", e
+            print("Error: ", e)
         finally:
             if srctmpdir:
                 shutil.rmtree(srctmpdir)
