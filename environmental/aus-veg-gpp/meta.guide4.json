@@ -13,7 +13,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Australia Fraction of Photosynthetically Active Radiation (fPAR)",
+            "title": "Australia, MODIS-fPAR (2000-2014), 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current ",
             "temporal_range": "Long-term",
@@ -31,7 +31,7 @@
             "licence": "CC BY Attribution 3.0",
             "resolution": "9 arcsec (~250 m)",
             "extent": "Australia",
-           "landingpage": "https://experts.griffith.edu.au/18562-brendan-mackey/about",
+            "landingpage": "https://experts.griffith.edu.au/18562-brendan-mackey/about",
             "CRS": "",
             "GCM": "",
             "emsc": "",

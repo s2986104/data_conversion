@@ -1,6 +1,7 @@
 import json
 import uuid
 import copy
+from typing import List, Dict, Tuple
 
 class MetadataGenerator:
 
@@ -15,7 +16,7 @@ class MetadataGenerator:
 
     def _load_guide(self):
         """Loads a template json file as a guide to the whole operation."""
-        with open("meta.guide4.json", "r") as fp:
+        with open("meta.guide5.json", "r") as fp:
             self.guide = json.load(fp)
 
     def _generate_collection(self):
@@ -149,24 +150,28 @@ class MetadataGenerator:
 
     def _collect_parameters(self, in_dataset):
         parameters = {}
-        for f in in_dataset["layers"]:
-            base, _ = f["filename"].split(".")
-            parametername = f["parametername"]
+        for lyr in in_dataset["layers"]:
+            base, _ = lyr["filename"].split(".")
+            parametername = lyr["parametername"]
             parameters[parametername] = {
                 "type": "Parameter",
                 "observedProperty": {
                     "label": {
-                      "en": f["title"]
+                      "en": lyr["title"]
                     },
-                    "categories": f.get("categories"),
-                    "dmgr:statistics": f["info"]["stats"][0],
-                    "dmgr:nodata": f["meta"]["nodata"],
-                    "dmgr:legend": f["legend"]
+                    "dmgr:statistics": lyr["info"]["stats"][0],
+                    "dmgr:nodata": lyr["meta"]["nodata"],
                 },
-                "categoryEncoding": f.get("categoryEncoding"),
-                "tooltip": f["tooltip"],
-                "unit": f["unit"]
+                "tooltip": lyr["tooltip"],
+                "unit": lyr["unit"]
             }
+            if "legend" in lyr:
+                parameters[parametername]["observedProperty"]["dmgr:legend"] = lyr["legend"]
+
+            if lyr["datatype"] == "categorical":
+                parameters[parametername]["observedProperty"]["categories"] = lyr.get("categories")
+                parameters[parametername]["categoryEncoding"] = lyr.get("categoryEncoding")
+
         return parameters
 
     def _collect_alternates(self, in_dataset):
@@ -177,7 +182,7 @@ class MetadataGenerator:
             parametername = f["parametername"]
             tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
-                "datatype": "uint8",
+                # "datatype": f["meta"]["dtype"],
                 "axisNames": [
                     "y",
                     "x"
@@ -189,13 +194,13 @@ class MetadataGenerator:
                 "dmgr:missingValue": f["meta"]["nodata"],
                 "dmgr:min": f["info"]["stats"][0]["min"],
                 "dmgr:max": f["info"]["stats"][0]["max"],
-                "dmgr:datatype": f["meta"]["dtype"],  # "uint8"
+                "dmgr:datatype": f["meta"]["dtype"],
                 "url": f["url"]
             }
         alternates["dmgr:tiff"] = tiffs
         return alternates
 
-    def _generate_data(self):
+    def _generate_data(self) -> None:
         """Generates data.json from info in self.datasets
         For each file in the dataset.parameters section,
         copy the dataset section,
@@ -203,29 +208,68 @@ class MetadataGenerator:
              one corresponding item in rangeAlternates.tiff section
         """
         for ds in self.datasets:
-            file_names = list(ds["parameters"].keys())
-            for f in file_names:
+            parameters = list(ds["parameters"].keys())
+            for f in parameters:
                 new_item = copy.deepcopy(ds)
                 new_item["parameters"] = {f: ds["parameters"][f]}  # copies one file item only
                 new_item["rangeAlternates"]["dmgr:tiff"] = {f: ds["rangeAlternates"]["dmgr:tiff"][f]}  # copies one item
                 new_item["bccvl:metadata"]["url"] = ds["rangeAlternates"]["dmgr:tiff"][f]["url"]  # copies url
                 new_item["bccvl:metadata"]["uuid"] = str(uuid.uuid4())  # layer uuid
-                new_item["bccvl:metadata"]["data_type"] = "categorical"  # NVIS is categorical data
+                new_item["bccvl:metadata"]["data_type"] = self._get_datatype_from_guide_layer(ds['title'], f)
+
+                # any auxfiles?
+                auxfiles = self._get_auxfiles_from_guide_layer(ds["title"], f)
+                if auxfiles:  # not None
+                    new_item["bccvl:metadata"]["auxfiles"] = auxfiles
+                # else:
+                #     new_item["bccvl:metadata"]["auxfiles"] = []
+
                 del new_item["bccvl:metadata"]["partof"]
                 del new_item["bccvl:metadata"]["categories"]
                 self.data.append(new_item)
 
+
         datafile_path = "{}/data.json".format(self.destination)
         self._write_results(datafile_path, self.data)
 
-    def _flatten(self, file_list):
+    def _flatten(self, file_list) -> List:
         return [item for sublist in file_list for item in sublist]
 
-    def run(self):
+    def run(self) -> None:
         self._load_guide()
         self._generate_collection()
         self._generate_datasets()
         self._generate_data()
+
+    def _get_datatype_from_guide_layer(self, dataset_title: str, parameter_name: str) -> str:
+        guide_ds = self._get_guide_dataset(dataset_title)
+        guide_lyr = self._get_guide_layer(guide_ds, parameter_name)
+        return guide_lyr.get("datatype", "continuous")  # default is "continuous"
+
+    def _get_auxfiles_from_guide_layer(self, dataset_title: str, parameter_name: str) -> Dict:
+        result = None
+        guide_ds = self._get_guide_dataset(dataset_title)
+        guide_lyr = self._get_guide_layer(guide_ds, parameter_name)
+        result = guide_lyr.get("auxfiles", None)
+        return result
+
+    def _get_guide_layer(self, guide_ds: Dict, parameter_name: str) -> Dict:
+        result = None
+        for layer in guide_ds["layers"]:
+            if layer["parametername"] == parameter_name:
+                result = layer
+                break
+        return result
+
+    def _get_guide_dataset(self, title: str) -> Dict:
+        result = None
+        collection_guide = self.guide["data"]["collections"][self.COL_IDX_IN_GUIDE]
+        guide_datasets = collection_guide["datasets"]
+        for ds in guide_datasets:
+            if ds["title"] == title:
+                result = ds
+                break
+        return result
 
 
 if __name__ == '__main__':

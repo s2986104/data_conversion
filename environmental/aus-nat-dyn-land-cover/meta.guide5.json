@@ -6,9 +6,9 @@
         "collection_type": "environmental",
         "collection_subtype": "land cover",
         "collection_name": "Australia National Dynamic Land Cover",
-        "collection_description": "Comprehensive land cover data for Australia.\n\nGeographic extent: Australia\nYear range: 2000-2008\nResolution: 9 arcsec (~250m)\nData layers: Dynamic Land Cover, Enhanced Vegetation Index (min, max, mean)",
+        "collection_description": "Comprehensive land cover data for Australia. Geographic extent: Australia Year range: 2000-2008 Resolution: 9 arcsec (~250m) Data layers: Dynamic Land Cover, Enhanced Vegetation Index (min, max, mean)",
         "collection_extent": "Australia",
-        "dataset collection_year": "",
+        "dataset collection_year": "2008",
         "dataset collection_resolution": "3 arcsec (~90 m)",
         "dataset collection_layers": "Major Vegetation Groups (extant vegetation, pre-1750 vegetation), Major Vegetation Subgroups (extant vegetation, pre-1750 vegetation)",
         "licence": "CC-BY Attribution 3.0",
@@ -46,7 +46,7 @@
             "emsc": "",
             "layers": [
               {
-                "filename": "dlcdv1_class_reduced.tif",
+                "filename": "ndlc-2004-250m_dlcdv1_class_reduced.tif",
                 "title": "Dynamic Land Cover - Reduced classification (5 classes)",
                 "parametername" : "dlcdv1_class_reduced",
                 "tooltip": "This index provides information pertaining to the reduced classification (5 classes) of dynamic land cover.",
@@ -107,6 +107,7 @@
                   0.0023489999999999995,
                   0.002348999999999999
                 ],
+                "datatype": "categorical",
                 "meta": {
                   "driver": "GTiff",
                   "dtype": "uint8",
@@ -196,10 +197,16 @@
                   ],
                   "width": 19161
                 },
+                "auxfiles": [
+                  {
+                    "type": "PAMDataset",
+                    "path": "ndlc-2004-250m_dlcdv1-class-reduced.tif.aux.xml"
+                  }
+                ],
                 "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_dlcdv1-class-reduced.tif"
               },
               {
-                "filename": "dlcdv1_class.tif",
+                "filename": "ndlc-2004-250m_dlcdv1_class.tif",
                 "title": "Dynamic Land Cover - Original classification (34 classes)",
                 "parametername": "dlcdv1_class",
                 "tooltip": "This index provides information pertaining to the original classification (34 classes) of dynamic land cover.",
@@ -463,6 +470,7 @@
                   0.0023489999999999995,
                   0.002348999999999999
                 ],
+                "datatype": "categorical",
                 "meta": {
                   "driver": "GTiff",
                   "dtype": "uint8",
@@ -551,6 +559,12 @@
                   ],
                   "width": 19161
                 },
+                "auxfiles": [
+                  {
+                    "type": "PAMDataset",
+                    "path": "ndlc-2004-250m_dlcdv1-class.tif.aux.xml"
+                  }
+                ],
                 "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national-dynamic-land-cover_layers/ndlc-2004-250m/ndlc-2004-250m_dlcdv1-class.tif"
               }
             ],
@@ -597,7 +611,6 @@
                     "type": "http://www.opengis.net/def/uom/UCUM/"
                   }
                 },
-                "legend": "categories",
                 "bounds": [
                   110.0,
                   -45.004798,
@@ -608,6 +621,7 @@
                   0.002349,
                   0.002349
                 ],
+                "datatype": "continuous",
                 "meta": {
                   "driver": "GTiff",
                   "dtype": "float32",
@@ -709,7 +723,6 @@
                     "type": "http://www.opengis.net/def/uom/UCUM/"
                   }
                 },
-                "legend": "categories",
                 "bounds": [
                   110.0,
                   -45.004798,
@@ -720,6 +733,7 @@
                   0.002349,
                   0.002349
                 ],
+                "datatype": "continuous",
                 "meta": {
                   "driver": "GTiff",
                   "dtype": "float32",
@@ -821,7 +835,6 @@
                     "type": "http://www.opengis.net/def/uom/UCUM/"
                   }
                 },
-                "legend": "categories",
                 "bounds": [
                   110.0,
                   -45.004798,
@@ -832,6 +845,7 @@
                   0.002349,
                   0.002349
                 ],
+                "datatype": "continuous",
                 "meta": {
                   "driver": "GTiff",
                   "dtype": "float32",

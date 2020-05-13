@@ -4798,7 +4798,7 @@
             "year_range": [2000, 2000],
             "published": "2016",
             "licence": "CC BY 4.0",
-            "resolution": "3 arcsec (~90m)",
+            "resolution": "3 arcsec (~90 m)",
             "extent": "Australia",
             "landingpage": "https://doi.org/10.4225/08/56EA312A5E63B",
             "CRS": "",
@@ -4920,7 +4920,7 @@
           },
           {
             "id": "",
-            "title": "Multi-resolution Valley Bottom Flatness (v2, 2016), 3 arcsec (~90 m)",
+            "title": "Australia, Multi-resolution Valley Bottom Flatness (v2, 2016), 3 arcsec (~90 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -4933,7 +4933,7 @@
             "year_range": [2000, 2000],
             "published": "2016",
             "licence": "CC BY 4.0",
-            "resolution": "3 arcsec (~90m)",
+            "resolution": "3 arcsec (~90 m)",
             "extent": "Australia",
             "landingpage": "https://doi.org/10.4225/08/5701C885AB4FE",
             "CRS": "",
@@ -5067,7 +5067,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Australia, substrate, CSIRO, 9 arcsec (~250 m)",
+            "title": "Australia, Substrate, CSIRO (v3, 2019), 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -5628,7 +5628,7 @@
           },
           {
             "id": "",
-            "title": "Australia, soil and landform, CSIRO, 9 arcsec (~250 m)",
+            "title": "Australia, Soil and Landform, CSIRO (v1, 2018), 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -7586,13 +7586,13 @@
         "collection_name": "Australia Soil and Landform - CSIRO",
         "collection_description": "A suite of variables describing landscape characteristics and soil conditions for 0-30 cm depth of the land surface in Australia.",
         "collection_extent": "Australia",
-        "dataset collection_year": "",
+        "dataset collection_year": "2018",
         "dataset collection_resolution": "9 arcsec (~250 m)",
         "dataset collection_layers": "12 soil and 6 landform variables",
         "datasets": [
           {
             "id": "",
-            "title": "Australia, landform, CSIRO, 9 arcsec (~250 m)",
+            "title": "Australia, Landform, CSIRO (v1, 2018), 9 arcsec (~250 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -7605,7 +7605,7 @@
             "year_range": [1950, 2013],
             "published": "2018",
             "licence": "CC BY 4.0",
-            "resolution": "9 arcsec (~250 m",
+            "resolution": "9 arcsec (~250 m)",
             "extent": "Australia",
             "landingpage": "https://doi.org/10.4225/08/5b285fd14991f",
             "CRS": "",
@@ -9556,7 +9556,7 @@
         "datasets": [
           {
             "id": "",
-            "title": "Australia, National Vegetation Information System (NVIS, v5.1), 3 arcsec (~90 m)",
+            "title": "Australia, National Vegetation Information System (v5.1, 2018), 3 arcsec (~90 m)",
             "domain": "Terrestrial",
             "period": "Current",
             "temporal_range": "Long-term",
@@ -9564,7 +9564,7 @@
             "description_full": "Australia, National Vegetation Information System (NVIS, v5.1), 3 arcsec (~90 m) broad vegetation groups and subgroups (extant vegetation, pre-1750 vegetation).",
             "provider": "Australian Government Department of the Environment and Energy",
             "citation": "National Vegetation Information System V5.1 (c) Australian Government Department of the Environment and Energy 2018",
-            "citation-url": "",
+            "citation-url": "https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system/data-products",
             "version": "v5.1",
             "year_range": [1997, 2006],
             "published": "2018",
@@ -9581,9 +9581,249 @@
                 "title": "NVIS Major Vegetation Groups",
                 "parametername" : "nvis_mgv",
                 "tooltip": "This index provides information pertaining to the importance of vegetation for different species and contains thirty-three (33) major vegetation groups.",
-                "unit": "mgv",
+                "unit": {
+                  "symbol": {
+                    "value": "vegetation group class",
+                    "type": "http://www.opengis.net/def/uom/UCUM/"
+                  }
+                },
                 "unitfull": "Major Vegetation Groups",
                 "genre": "Vegetation",
+                "categories": [
+                    {
+                      "id": "Rainforests and Vine Thickets",
+                      "label": {
+                        "en": "rainforests"
+                      }
+                    },
+                    {
+                      "id": "Eucalypt Tall Open Forests",
+                      "label": {
+                        "en": "tall eucalypt forests (trees taller than 30 m)"
+                      }
+                    },
+                    {
+                      "id": "Eucalypt Open Forests",
+                      "label": {
+                        "en": "eucalypt forests (trees 10 to 30 m tall)"
+                      }
+                    },
+                    {
+                      "id": "Eucalypt Low Open Forests",
+                      "label": {
+                        "en": "low eucalypt forests (trees shorter than 10 m)"
+                      }
+                    },
+                    {
+                      "id": "Eucalypt Woodlands",
+                      "label": {
+                        "en": "eucalypt woodlands (tree crowns not touching)"
+                      }
+                    },
+                    {
+                      "id": "Acacia Forests and Woodlands",
+                      "label": {
+                        "en": "acacia forests and woodlands"
+                      }
+                    },
+                    {
+                      "id": "Callitris Forests and Woodlands",
+                      "label": {
+                        "en": "cypress pine forests and woodlands"
+                      }
+                    },
+                    {
+                      "id": "Casuarina Forests and Woodlands",
+                      "label": {
+                        "en": "she-oak forests and woodlands"
+                      }
+                    },
+                    {
+                      "id": "Melaleuca Forests and Woodlands",
+                      "label": {
+                        "en": "paperbark forests and woodlands"
+                      }
+                    },
+                    {
+                      "id": "Other Forests and Woodlands",
+                      "label": {
+                        "en": "other forests and woodlands"
+                      }
+                    },
+                    {
+                      "id": "Eucalypt Open Woodlands",
+                      "label": {
+                        "en": "sparse eucalypt woodlands"
+                      }
+                    },
+                    {
+                      "id": "Tropical Eucalypt Woodlands/Grasslands",
+                      "label": {
+                        "en": "tropical eucalypt woodlands with annual tussock grasses taller than 2 m"
+                      }
+                    },
+                    {
+                      "id": "Acacia Open Woodlands",
+                      "label": {
+                        "en": "sparse acacia woodlands"
+                      }
+                    },
+                    {
+                      "id": "Mallee Woodlands and Shrublands",
+                      "label": {
+                        "en": "mallee eucalypt woodlands and shrublands"
+                      }
+                    },
+                    {
+                      "id": "Low Closed Forests and Tall Closed Shrublands",
+                      "label": {
+                        "en": "tall dense thickets"
+                      }
+                    },
+                    {
+                      "id": "Acacia Shrublands",
+                      "label": {
+                        "en": "acacia shrublands"
+                      }
+                    },
+                    {
+                      "id": "Other Shrublands",
+                      "label": {
+                        "en": "other shrublands"
+                      }
+                    },
+                    {
+                      "id": "Heathlands",
+                      "label": {
+                        "en": "heathlands (low, dense, fine-leaved shrublands)"
+                      }
+                    },
+                    {
+                      "id": "Tussock Grasslands",
+                      "label": {
+                        "en": "grasslands"
+                      }
+                    },
+                    {
+                      "id": "Hummock Grasslands",
+                      "label": {
+                        "en": "arid spinifex grasslands"
+                      }
+                    },
+                    {
+                      "id": "Other Grasslands, Herblands, Sedgelands and Rushlands",
+                      "label": {
+                        "en": "swampy grasses, sedges, etc."
+                      }
+                    },
+                    {
+                      "id": "Chenopod Shrublands, Samphire Shrublands and Forblands",
+                      "label": {
+                        "en": "saltbushes and salt marshes"
+                      }
+                    },
+                    {
+                      "id": "Mangroves",
+                      "label": {
+                        "en": "mangroves"
+                      }
+                    },
+                    {
+                      "id": "Inland aquatic - freshwater, salt lakes, lagoons",
+                      "label": {
+                        "en": "water"
+                      }
+                    },
+                    {
+                      "id": "Cleared, non-native vegetation, buildings",
+                      "label": {
+                        "en": "cleared vegetation"
+                      }
+                    },
+                    {
+                      "id": "Unclassified native vegetation",
+                      "label": {
+                        "en": "unclassified native vegetation"
+                      }
+                    },
+                    {
+                      "id": "Naturally bare - sand, rock, claypan, mudflat",
+                      "label": {
+                        "en": "naturally bare"
+                      }
+                    },
+                    {
+                      "id": "Sea and estuaries",
+                      "label": {
+                        "en": "sea"
+                      }
+                    },
+                    {
+                      "id": "Regrowth, modified native vegetation",
+                      "label": {
+                        "en": "regrowth"
+                      }
+                    },
+                    {
+                      "id": "Unclassified Forest",
+                      "label": {
+                        "en": "forest"
+                      }
+                    },
+                    {
+                      "id": "Other Open Woodlands",
+                      "label": {
+                        "en": "other sparse woodlands"
+                      }
+                    },
+                    {
+                      "id": "Mallee Open Woodlands and Sparse Mallee Shrublands",
+                      "label": {
+                        "en": "sparse mallee eucalypt woodlands and shrublands"
+                      }
+                    },
+                    {
+                      "id": "Unknown/no data",
+                      "label": {
+                        "en": "unknown"
+                      }
+                    }
+                ],
+                "categoryEncoding": {
+                  "Rainforests and Vine Thickets": 1,
+                  "Eucalypt Tall Open Forests": 2,
+                  "Eucalypt Open Forests": 3,
+                  "Eucalypt Low Open Forests": 4,
+                  "Eucalypt Woodlands": 5,
+                  "Acacia Forests and Woodlands": 6,
+                  "Callitris Forests and Woodlands": 7,
+                  "Casuarina Forests and Woodlands": 8,
+                  "Melaleuca Forests and Woodlands": 9,
+                  "Other Forests and Woodlands": 10,
+                  "Eucalypt Open Woodlands": 11,
+                  "Tropical Eucalypt Woodlands/Grasslands": 12,
+                  "Acacia Open Woodlands": 13,
+                  "Mallee Woodlands and Shrublands": 14,
+                  "Low Closed Forests and Tall Closed Shrublands": 15,
+                  "Acacia Shrublands": 16,
+                  "Other Shrublands": 17,
+                  "Heathlands": 18,
+                  "Tussock Grasslands": 19,
+                  "Hummock Grasslands": 20,
+                  "Other Grasslands, Herblands, Sedgelands and Rushlands": 21,
+                  "Chenopod Shrublands, Samphire Shrublands and Forblands": 22,
+                  "Mangroves": 23,
+                  "Inland aquatic - freshwater, salt lakes, lagoons": 24,
+                  "Cleared, non-native vegetation, buildings": 25,
+                  "Unclassified native vegetation": 26,
+                  "Naturally bare - sand, rock, claypan, mudflat": 27,
+                  "Sea and estuaries": 28,
+                  "Regrowth, modified native vegetation": 29,
+                  "Unclassified Forest": 30,
+                  "Other Open Woodlands": 31,
+                  "Mallee Open Woodlands and Sparse Mallee Shrublands": 32,
+                  "Unknown/no data": 99
+                },
                 "bounds": [
                     109.50435598124278,
                     -44.31837513989431,
@@ -9594,6 +9834,7 @@
                     0.000970167219907167,
                     0.000970167219907167
                   ],
+                "datatype": "categorical",
                 "meta": {
                   "driver": "GTiff",
                   "dtype": "uint8",
@@ -9684,9 +9925,613 @@
                 "title": "NVIS Major Vegetation Subgroups ",
                 "parametername": "nvis_mvs",
                 "tooltip": "This index provides information pertaining to the importance of vegetation for different species and contains eighty-five (85) major vegetation subgroups.",
-                "unit": "mvs",
+                "unit": {
+                  "symbol": {
+                    "value": "vegetation subgroup class",
+                    "type": "http://www.opengis.net/def/uom/UCUM/"
+                  }
+                },
                 "unitfull": "Major Vegetation Subgroups",
                 "genre": "Vegetation",
+                "categories": [
+                  {
+                    "id": "Cool temperate rainforest",
+                    "label": {
+                      "en": "Cool temperate rainforest"
+                    }
+                  },
+                  {
+                    "id": "Tropical or sub-tropical rainforest",
+                    "label": {
+                      "en": "Tropical or sub-tropical rainforest"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus (+/-tall) open forest with a dense broad-leaved and/or tree-fern understorey (wet sclerophyll)",
+                    "label": {
+                      "en": "Eucalyptus (+/-tall) open forest with a dense broad-leaved and/or tree-fern understorey (wet sclerophyll)"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus open forests with a shrubby understorey",
+                    "label": {
+                      "en": "Eucalyptus open forests with a shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus open forests with a grassy understorey",
+                    "label": {
+                      "en": "Eucalyptus open forests with a grassy understorey"
+                    }
+                  },
+                  {
+                    "id": "Warm temperate rainforest",
+                    "label": {
+                      "en": "Warm temperate rainforest"
+                    }
+                  },
+                  {
+                    "id": "Tropical Eucalyptusopenforestsand woodlands with a tall annual grassy understorey",
+                    "label": {
+                      "en": "Tropical Eucalyptusopenforestsand woodlands with a tall annual grassy understorey"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus woodlands witha shrubby understorey",
+                    "label": {
+                      "en": "Eucalyptus woodlands witha shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus woodlands with a tussock grass understorey",
+                    "label": {
+                      "en": "Eucalyptus woodlands with a tussock grass understorey"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus woodlands with a hummock grass understorey",
+                    "label": {
+                      "en": "Eucalyptus woodlands with a hummock grass understorey"
+                    }
+                  },
+                  {
+                    "id": "Tropical mixed spp forests and woodlands",
+                    "label": {
+                      "en": "Tropical mixed spp forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Callitris forests and woodlands",
+                    "label": {
+                      "en": "Callitris forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Brigalow (Acacia harpophylla) forests and woodlands",
+                    "label": {
+                      "en": "Brigalow (Acacia harpophylla) forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Other Acacia forests and woodlands",
+                    "label": {
+                      "en": "Other Acacia forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Melaleuca open forests and woodlands",
+                    "label": {
+                      "en": "Melaleuca open forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Other forests and woodlands",
+                    "label": {
+                      "en": "Other forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Boulders/rock with algae, lichen or scattered plants, or alpine fieldmarks",
+                    "label": {
+                      "en": "Boulders/rock with algae, lichen or scattered plants, or alpine fieldmarks"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus low open woodlands with hummock grass",
+                    "label": {
+                      "en": "Eucalyptus low open woodlands with hummock grass"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus low open woodlands with tussock grass",
+                    "label": {
+                      "en": "Eucalyptus low open woodlands with tussock grass"
+                    }
+                  },
+                  {
+                    "id": "Mulga (Acacia aneura) woodlands +/-tussock grass +/-forbs",
+                    "label": {
+                      "en": "Mulga (Acacia aneura) woodlands +/-tussock grass +/-forbs"
+                    }
+                  },
+                  {
+                    "id": "Other Acacia tall open shrublands and [tall] shrublands",
+                    "label": {
+                      "en": "Other Acacia tall open shrublands and [tall] shrublands"
+                    }
+                  },
+                  {
+                    "id": "Acacia (+/-low) open woodlands and shrublands with chenopods",
+                    "label": {
+                      "en": "Acacia (+/-low) open woodlands and shrublands with chenopods"
+                    }
+                  },
+                  {
+                    "id": "Acacia (+/-low) open woodlands and shrublands with hummock grass",
+                    "label": {
+                      "en": "Acacia (+/-low) open woodlands and shrublands with hummock grass"
+                    }
+                  },
+                  {
+                    "id": "Acacia (+/-low) open woodlands and shrublands +/-tussock grass",
+                    "label": {
+                      "en": "Acacia (+/-low) open woodlands and shrublands +/-tussock grass"
+                    }
+                  },
+                  {
+                    "id": "Acacia (+/-low) open woodlands and sparse shrublands with a shrubby understorey",
+                    "label": {
+                      "en": "Acacia (+/-low) open woodlands and sparse shrublands with a shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Casuarina and Allocasuarina forests and woodlands",
+                    "label": {
+                      "en": "Casuarina and Allocasuarina forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Mallee with hummock grass",
+                    "label": {
+                      "en": "Mallee with hummock grass"
+                    }
+                  },
+                  {
+                    "id": "Low closed forest or tall closed shrublands (including Acacia, Melaleuca and Banksia)",
+                    "label": {
+                      "en": "Low closed forest or tall closed shrublands (including Acacia, Melaleuca and Banksia)"
+                    }
+                  },
+                  {
+                    "id": "Mallee with a dense shrubby understorey",
+                    "label": {
+                      "en": "Mallee with a dense shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Heathlands",
+                    "label": {
+                      "en": "Heathlands"
+                    }
+                  },
+                  {
+                    "id": "Saltbush and bluebush shrublands",
+                    "label": {
+                      "en": "Saltbush and bluebush shrublands"
+                    }
+                  },
+                  {
+                    "id": "Other shrublands",
+                    "label": {
+                      "en": "Other shrublands"
+                    }
+                  },
+                  {
+                    "id": "Hummock grasslands",
+                    "label": {
+                      "en": "Hummock grasslands"
+                    }
+                  },
+                  {
+                    "id": "Mitchell grass (Astrebla) tussock grasslands",
+                    "label": {
+                      "en": "Mitchell grass (Astrebla) tussock grasslands"
+                    }
+                  },
+                  {
+                    "id": "Blue grass (Dicanthium) and tall bunch grass (Vitiveria syn: Chrysopogon) tussock grasslands",
+                    "label": {
+                      "en": "Blue grass (Dicanthium) and tall bunch grass (Vitiveria syn: Chrysopogon) tussock grasslands"
+                    }
+                  },
+                  {
+                    "id": "Temperate tussock grasslands",
+                    "label": {
+                      "en": "Temperate tussock grasslands"
+                    }
+                  },
+                  {
+                    "id": "Other tussock grasslands",
+                    "label": {
+                      "en": "Other tussock grasslands"
+                    }
+                  },
+                  {
+                    "id": "Wet tussock grassland with herbs, sedges or rushes, herblands or ferns",
+                    "label": {
+                      "en": "Wet tussock grassland with herbs, sedges or rushes, herblands or ferns"
+                    }
+                  },
+                  {
+                    "id": "Mixed chenopod, samphire +/-forbs",
+                    "label": {
+                      "en": "Mixed chenopod, samphire +/-forbs"
+                    }
+                  },
+                  {
+                    "id": "Mangroves",
+                    "label": {
+                      "en": "Mangroves"
+                    }
+                  },
+                  {
+                    "id": "Saline or brackish sedgelands or grasslands",
+                    "label": {
+                      "en": "Saline or brackish sedgelands or grasslands"
+                    }
+                  },
+                  {
+                    "id": "Naturally bare, sand, rock, claypan, mudflat",
+                    "label": {
+                      "en": "Naturally bare, sand, rock, claypan, mudflat"
+                    }
+                  },
+                  {
+                    "id": "Salt lakes and lagoons",
+                    "label": {
+                      "en": "Salt lakes and lagoons"
+                    }
+                  },
+                  {
+                    "id": "Freshwater, dams, lakes, lagoons or aquatic plants",
+                    "label": {
+                      "en": "Freshwater, dams, lakes, lagoons or aquatic plants"
+                    }
+                  },
+                  {
+                    "id": "Mulga (Acacia aneura) open woodlands and sparse shrublands +/-tussock grass",
+                    "label": {
+                      "en": "Mulga (Acacia aneura) open woodlands and sparse shrublands +/-tussock grass"
+                    }
+                  },
+                  {
+                    "id": "Sea, estuaries (includes seagrass)",
+                    "label": {
+                      "en": "Sea, estuaries (includes seagrass)"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus open woodlands with shrubby understorey",
+                    "label": {
+                      "en": "Eucalyptus open woodlands with shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus open woodlands with a grassy understorey",
+                    "label": {
+                      "en": "Eucalyptus open woodlands with a grassy understorey"
+                    }
+                  },
+                  {
+                    "id": "Melaleuca shrublands and open shrublands",
+                    "label": {
+                      "en": "Melaleuca shrublands and open shrublands"
+                    }
+                  },
+                  {
+                    "id": "Banksia woodlands",
+                    "label": {
+                      "en": "Banksia woodlands"
+                    }
+                  },
+                  {
+                    "id": "Mulga (Acacia aneura) woodlands and shrublands with hummock grass",
+                    "label": {
+                      "en": "Mulga (Acacia aneura) woodlands and shrublands with hummock grass"
+                    }
+                  },
+                  {
+                    "id": "Mulga (Acacia aneura) open woodlands and sparse shrublands with hummock grass",
+                    "label": {
+                      "en": "Mulga (Acacia aneura) open woodlands and sparse shrublands with hummock grass"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus low open woodlands with a shrubby understorey",
+                    "label": {
+                      "en": "Eucalyptus low open woodlands with a shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus tall open forest with a fine-leaved shrubby understorey",
+                    "label": {
+                      "en": "Eucalyptus tall open forest with a fine-leaved shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Mallee  with an open shrubby understorey",
+                    "label": {
+                      "en": "Mallee  with an open shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus (+/-low) open woodlands with a chenopod or samphire understorey",
+                    "label": {
+                      "en": "Eucalyptus (+/-low) open woodlands with a chenopod or samphire understorey"
+                    }
+                  },
+                  {
+                    "id": "Lignum shrublands and wetlands",
+                    "label": {
+                      "en": "Lignum shrublands and wetlands"
+                    }
+                  },
+                  {
+                    "id": "Leptospermum forests and woodlands",
+                    "label": {
+                      "en": "Leptospermum forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus woodlands with ferns, herbs, sedges, rushes or wet tussock grassland",
+                    "label": {
+                      "en": "Eucalyptus woodlands with ferns, herbs, sedges, rushes or wet tussock grassland"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus tall open forests and open forests with ferns, herbs, sedges, rushes or wet tussock grasses",
+                    "label": {
+                      "en": "Eucalyptus tall open forests and open forests with ferns, herbs, sedges, rushes or wet tussock grasses"
+                    }
+                  },
+                  {
+                    "id": "Mallee with a tussock grass understorey",
+                    "label": {
+                      "en": "Mallee with a tussock grass understorey"
+                    }
+                  },
+                  {
+                    "id": "Dry rainforest or vine thickets",
+                    "label": {
+                      "en": "Dry rainforest or vine thickets"
+                    }
+                  },
+                  {
+                    "id": "Sedgelands, rushs or reeds",
+                    "label": {
+                      "en": "Sedgelands, rushs or reeds"
+                    }
+                  },
+                  {
+                    "id": "Other grasslands",
+                    "label": {
+                      "en": "Other grasslands"
+                    }
+                  },
+                  {
+                    "id": "Eucalyptus woodlands with a chenopod or samphire understorey",
+                    "label": {
+                      "en": "Eucalyptus woodlands with a chenopod or samphire understorey"
+                    }
+                  },
+                  {
+                    "id": "Open mallee woodlands and sparse mallee shrublands with a hummock grass understorey",
+                    "label": {
+                      "en": "Open mallee woodlands and sparse mallee shrublands with a hummock grass understorey"
+                    }
+                  },
+                  {
+                    "id": "Open mallee woodlands and sparse mallee shrublands with a tussock grass understorey",
+                    "label": {
+                      "en": "Open mallee woodlands and sparse mallee shrublands with a tussock grass understorey"
+                    }
+                  },
+                  {
+                    "id": "Open mallee woodlands and sparse mallee shrublands with an open shrubby understorey",
+                    "label": {
+                      "en": "Open mallee woodlands and sparse mallee shrublands with an open shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Open mallee woodlands and sparse mallee shrublands with a dense shrubby understorey",
+                    "label": {
+                      "en": "Open mallee woodlands and sparse mallee shrublands with a dense shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Callitris open woodlands",
+                    "label": {
+                      "en": "Callitris open woodlands"
+                    }
+                  },
+                  {
+                    "id": "Casuarina and Allocasuarina open woodlands with a tussock grass understorey",
+                    "label": {
+                      "en": "Casuarina and Allocasuarina open woodlands with a tussock grass understorey"
+                    }
+                  },
+                  {
+                    "id": "Casuarina and Allocasuarina open woodlands with a hummock grass understorey",
+                    "label": {
+                      "en": "Casuarina and Allocasuarina open woodlands with a hummock grass understorey"
+                    }
+                  },
+                  {
+                    "id": "Casuarina and Allocasuarina open woodlands with a chenopod shrub understorey",
+                    "label": {
+                      "en": "Casuarina and Allocasuarina open woodlands with a chenopod shrub understorey"
+                    }
+                  },
+                  {
+                    "id": "Casuarina and Allocasuarina open woodlands with a shrubby understorey",
+                    "label": {
+                      "en": "Casuarina and Allocasuarina open woodlands with a shrubby understorey"
+                    }
+                  },
+                  {
+                    "id": "Melaleuca open woodlands",
+                    "label": {
+                      "en": "Melaleuca open woodlands"
+                    }
+                  },
+                  {
+                    "id": "Other open Woodlands",
+                    "label": {
+                      "en": "Other open Woodlands"
+                    }
+                  },
+                  {
+                    "id": "Other sparse shrublands and sparse heathlands",
+                    "label": {
+                      "en": "Other sparse shrublands and sparse heathlands"
+                    }
+                  },
+                  {
+                    "id": "Regrowth or modified forests and woodlands",
+                    "label": {
+                      "en": "Regrowth or modified forests and woodlands"
+                    }
+                  },
+                  {
+                    "id": "Regrowth or modified shrublands",
+                    "label": {
+                      "en": "Regrowth or modified shrublands"
+                    }
+                  },
+                  {
+                    "id": "Regrowth or modified graminoids",
+                    "label": {
+                      "en": "Regrowth or modified graminoids"
+                    }
+                  },
+                  {
+                    "id": "Regrowth or modified chenopod shrublands, samphire or forblands",
+                    "label": {
+                      "en": "Regrowth or modified chenopod shrublands, samphire or forblands"
+                    }
+                  },
+                  {
+                    "id": "Unclassified forest",
+                    "label": {
+                      "en": "Unclassified forest"
+                    }
+                  },
+                  {
+                    "id": "Unclassified native vegetation",
+                    "label": {
+                      "en": "Unclassified native vegetation"
+                    }
+                  },
+                  {
+                    "id": "Cleared, non-native vegetation, buildings",
+                    "label": {
+                      "en": "Cleared, non-native vegetation, buildings"
+                    }
+                  },
+                  {
+                    "id": "Unknown/No data",
+                    "label": {
+                      "en": "Unknown/No data"
+                    }
+                  }
+                ],
+                "categoryEncoding": {
+                  "Cool temperate rainforest": 1,
+                  "Tropical or sub-tropical rainforest": 2,
+                  "Eucalyptus (+/-tall) open forest with a dense broad-leaved and/or tree-fern understorey (wet sclerophyll)": 3,
+                  "Eucalyptus open forests with a shrubby understorey": 4,
+                  "Eucalyptus open forests with a grassy understorey": 5,
+                  "Warm temperate rainforest": 6,
+                  "Tropical Eucalyptus open forests and woodlands with a tall annual grassy understorey": 7,
+                  "Eucalyptus woodlands with a shrubby understorey": 8,
+                  "Eucalyptus woodlands with a tussock grass understorey": 9,
+                  "Eucalyptus woodlands with a hummock grass understorey": 10,
+                  "Tropical mixed spp forests and woodlands": 11,
+                  "Callitris forests and woodlands": 12,
+                  "Brigalow (Acacia harpophylla) forests and woodlands": 13,
+                  "Other Acacia forests and woodlands": 14,
+                  "Melaleuca open forests and woodlands": 15,
+                  "Other forests and woodlands": 16,
+                  "Boulders/rock with algae, lichen or scattered plants, or alpine fieldmarks": 17,
+                  "Eucalyptus low open woodlands with hummock grass": 18,
+                  "Eucalyptus low open woodlands with tussock grass": 19,
+                  "Mulga (Acacia aneura) woodlands +/-tussock grass +/-forbs": 20,
+                  "Other Acacia tall open shrublands and [tall] shrublands": 21,
+                  "Acacia (+/-low) open woodlands and shrublands with chenopods": 22,
+                  "Acacia (+/-low) open woodlands and shrublands with hummock grass": 23,
+                  "Acacia (+/-low) open woodlands and shrublands +/-tussock grass": 24,
+                  "Acacia (+/-low) open woodlands and sparse shrublands with a shrubby understorey": 25,
+                  "Casuarina and Allocasuarina forests and woodlands": 26,
+                  "Mallee with hummock grass": 27,
+                  "Low closed forest or tall closed shrublands (including Acacia, Melaleuca and Banksia)": 28,
+                  "Mallee with a dense shrubby understorey": 29,
+                  "Heathlands": 30,
+                  "Saltbush and bluebush shrublands": 31,
+                  "Other shrublands": 32,
+                  "Hummock grasslands": 33,
+                  "Mitchell grass (Astrebla) tussock grasslands": 34,
+                  "Blue grass (Dicanthium) and tall bunch grass (Vitiveria syn: Chrysopogon) tussock grasslands": 35,
+                  "Temperate tussock grasslands": 36,
+                  "Other tussock grasslands": 37,
+                  "Wet tussock grassland with herbs, sedges or rushes, herblands or ferns": 38,
+                  "Mixed chenopod, samphire +/-forbs": 39,
+                  "Mangroves": 40,
+                  "Saline or brackish sedgelands or grasslands": 41,
+                  "Naturally bare, sand, rock, claypan, mudflat": 42,
+                  "Salt lakes and lagoons": 43,
+                  "Freshwater, dams, lakes, lagoons or aquatic plants": 44,
+                  "Mulga (Acacia aneura) open woodlands and sparse shrublands +/-tussock grass": 45,
+                  "Sea, estuaries (includes seagrass)": 46,
+                  "Eucalyptus open woodlands with shrubby understorey": 47,
+                  "Eucalyptus open woodlands with a grassy understorey": 48,
+                  "Melaleuca shrublands and open shrublands": 49,
+                  "Banksia woodlands": 50,
+                  "Mulga (Acacia aneura) woodlands and shrublands with hummock grass": 51,
+                  "Mulga (Acacia aneura) open woodlands and sparse shrublands with hummock grass": 52,
+                  "Eucalyptus low open woodlands with a shrubby understorey": 53,
+                  "Eucalyptus tall open forest with a fine-leaved shrubby understorey": 54,
+                  "Mallee  with an open shrubby understorey": 55,
+                  "Eucalyptus (+/-low) open woodlands with a chenopod or samphire understorey": 56,
+                  "Lignum shrublands and wetlands": 57,
+                  "Leptospermum forests and woodlands": 58,
+                  "Eucalyptus woodlands with ferns, herbs, sedges, rushes or wet tussock grassland": 59,
+                  "Eucalyptus tall open forests and open forests with ferns, herbs, sedges, rushes or wet tussock grasses": 60,
+                  "Mallee with a tussock grass understorey": 61,
+                  "Dry rainforest or vine thickets": 62,
+                  "Sedgelands, rushs or reeds": 63,
+                  "Other grasslands": 64,
+                  "Eucalyptus woodlands with a chenopod or samphire understorey": 65,
+                  "Open mallee woodlands and sparse mallee shrublands with a hummock grass understorey": 66,
+                  "Open mallee woodlands and sparse mallee shrublands with a tussock grass understorey": 67,
+                  "Open mallee woodlands and sparse mallee shrublands with an open shrubby understorey": 68,
+                  "Open mallee woodlands and sparse mallee shrublands with a dense shrubby understorey": 69,
+                  "Callitris open woodlands": 70,
+                  "Casuarina and Allocasuarina open woodlands with a tussock grass understorey": 71,
+                  "Casuarina and Allocasuarina open woodlands with a hummock grass understorey": 72,
+                  "Casuarina and Allocasuarina open woodlands with a chenopod shrub understorey": 73,
+                  "Casuarina and Allocasuarina open woodlands with a shrubby understorey": 74,
+                  "Melaleuca open woodlands": 75,
+                  "Other open Woodlands": 79,
+                  "Other sparse shrublands and sparse heathlands": 80,
+                  "Regrowth or modified forests and woodlands": 90,
+                  "Regrowth or modified shrublands": 91,
+                  "Regrowth or modified graminoids": 92,
+                  "Regrowth or modified chenopod shrublands, samphire or forblands": 93,
+                  "Unclassified forest": 96,
+                  "Unclassified native vegetation": 97,
+                  "Cleared, non-native vegetation, buildings": 98,
+                  "Unknown/No data": 99
+                },
                 "bounds": [
                     109.5043559220607,
                     -44.318220539340075,
@@ -9697,6 +10542,7 @@
                     0.0009701655942025921,
                     0.0009701655942025921
                   ],
+                "datatype": "categorical",
                 "meta": {
                   "driver": "GTiff",
                   "dtype": "uint8",

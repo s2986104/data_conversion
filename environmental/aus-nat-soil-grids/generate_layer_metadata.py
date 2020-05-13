@@ -1,6 +1,7 @@
 import json
 import uuid
 import copy
+from typing import List, Dict, Tuple
 
 class MetadataGenerator:
 
@@ -11,14 +12,14 @@ class MetadataGenerator:
         self.collection = {}   # output json data, goes to collections.json
         self.datasets = []     # output json data, goes to datasets.json
         self.data = []         # output json data, goes to data.json
-        self.destination = "dest/national-dynamic-land-cover"  # where to write json files
+        self.destination = "dest"  # where to write json files
 
-    def _load_guide(self):
+    def _load_guide(self) -> None:
         """Loads a template json file as a guide to the whole operation."""
-        with open("meta.guide4.json", "r") as fp:
+        with open("meta.guide6.json", "r") as fp:
             self.guide = json.load(fp)
 
-    def _generate_collection(self):
+    def _generate_collection(self) -> None:
         """Generates the collection.json file based on the meta.guide.json
         This program works on generating metadata files for the first collection only.
         """
@@ -34,7 +35,7 @@ class MetadataGenerator:
               "title": collection_guide["collection_name"],
               "description": collection_guide["collection_description"],
               "categories": [
-                "environmental", "vegetation", "land cover"
+                "environmental"
               ],
               "rights": [
                 {
@@ -56,12 +57,12 @@ class MetadataGenerator:
         collection_path = "{}/collection.json".format(self.destination)
         self._write_results(collection_path, self.collection)
 
-    def _write_results(self, fpath, data):
+    def _write_results(self, fpath, data) -> None:
         """Outputs the results to a json file."""
         with open(fpath, 'w') as fout:
             json.dump(data, fout, indent=2)
 
-    def _generate_datasets(self):
+    def _generate_datasets(self) -> None:
         """Generates the datasets.json file based on the meta.guide.json """
         collection_guide = self.guide["data"]["collections"][self.COL_IDX_IN_GUIDE]
         guide_datasets = collection_guide["datasets"]
@@ -72,7 +73,7 @@ class MetadataGenerator:
         datasets_path = "{}/datasets.json".format(self.destination)
         self._write_results(datasets_path, self.datasets)
 
-    def _generate_dataset(self, collection_guide, in_dataset):
+    def _generate_dataset(self, collection_guide, in_dataset) -> None:
         ds = {
             "type": "Coverage",
             "title": in_dataset["title"],
@@ -87,8 +88,8 @@ class MetadataGenerator:
                   "num": in_dataset["width"]
                 },
                 "y": {
-                  "start": in_dataset["coords"]["y.top"],
-                  "stop": in_dataset["coords"]["y.bottom"],
+                  "start": in_dataset["coords"]["y.bottom"],
+                  "stop": in_dataset["coords"]["y.top"],
                   "num": in_dataset["height"]
                 }
               },
@@ -100,8 +101,8 @@ class MetadataGenerator:
                   ],
                   "system": {
                     "type": "GeographicCRS",
-                    "id": "http://www.opengis.net/def/crs/EPSG/0/4326",
-                    "wkt": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4326\"]]"
+                    "id": "http://www.opengis.net/def/crs/EPSG/0/4283",
+                    "wkt": "GEOGCS[\"GDA94\",DATUM[\"Geocentric_Datum_of_Australia_1994\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6283\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST],AUTHORITY[\"EPSG\",\"4283\"]]"
                   }
                 }
               ]
@@ -147,29 +148,33 @@ class MetadataGenerator:
 
         self.datasets.append(ds)
 
-    def _collect_parameters(self, in_dataset):
+    def _collect_parameters(self, in_dataset) -> Dict:
         parameters = {}
-        for f in in_dataset["layers"]:
-            base, _ = f["filename"].split(".")
-            parametername = f["parametername"]
+        for lyr in in_dataset["layers"]:
+            base, _ = lyr["filename"].split(".")
+            parametername = lyr["parametername"]
             parameters[parametername] = {
                 "type": "Parameter",
                 "observedProperty": {
                     "label": {
-                      "en": f["title"]
+                      "en": lyr["title"]
                     },
-                    "categories": f.get("categories"),
-                    "dmgr:statistics": f["info"]["stats"][0],
-                    "dmgr:nodata": f["meta"]["nodata"],
-                    "dmgr:legend": f["legend"]
+                    "dmgr:statistics": lyr["info"]["stats"][0],
+                    "dmgr:nodata": lyr["meta"]["nodata"],
                 },
-                "categoryEncoding": f.get("categoryEncoding"),
-                "tooltip": f["tooltip"],
-                "unit": f["unit"]
+                "tooltip": lyr["tooltip"],
+                "unit": lyr["unit"]
             }
+            if "legend" in lyr:
+                parameters[parametername]["observedProperty"]["dmgr:legend"] = lyr["legend"]
+
+            if lyr["datatype"] == "categorical":
+                parameters[parametername]["observedProperty"]["categories"] = lyr.get("categories")
+                parameters[parametername]["categoryEncoding"] = lyr.get("categoryEncoding")
+
         return parameters
 
-    def _collect_alternates(self, in_dataset):
+    def _collect_alternates(self, in_dataset) -> Dict:
         alternates = {}
         tiffs = {}
         for f in in_dataset["layers"]:
@@ -177,7 +182,7 @@ class MetadataGenerator:
             parametername = f["parametername"]
             tiffs[parametername] = {
                 "type": "dmgr:TIFF2DArray",
-                "datatype": "uint8",
+                # "datatype": f["meta"]["dtype"],
                 "axisNames": [
                     "y",
                     "x"
@@ -189,13 +194,13 @@ class MetadataGenerator:
                 "dmgr:missingValue": f["meta"]["nodata"],
                 "dmgr:min": f["info"]["stats"][0]["min"],
                 "dmgr:max": f["info"]["stats"][0]["max"],
-                "dmgr:datatype": f["meta"]["dtype"],  # "uint8"
+                "dmgr:datatype": f["meta"]["dtype"],
                 "url": f["url"]
             }
         alternates["dmgr:tiff"] = tiffs
         return alternates
 
-    def _generate_data(self):
+    def _generate_data(self) -> None:
         """Generates data.json from info in self.datasets
         For each file in the dataset.parameters section,
         copy the dataset section,
@@ -210,7 +215,15 @@ class MetadataGenerator:
                 new_item["rangeAlternates"]["dmgr:tiff"] = {f: ds["rangeAlternates"]["dmgr:tiff"][f]}  # copies one item
                 new_item["bccvl:metadata"]["url"] = ds["rangeAlternates"]["dmgr:tiff"][f]["url"]  # copies url
                 new_item["bccvl:metadata"]["uuid"] = str(uuid.uuid4())  # layer uuid
-                new_item["bccvl:metadata"]["data_type"] = "categorical"  # NVIS is categorical data
+                new_item["bccvl:metadata"]["data_type"] = self._get_datatype_from_guide_layer(ds['title'], f)
+
+                # any auxfiles?
+                auxfiles = self._get_auxfiles_from_guide_layer(ds["title"], f)
+                if auxfiles:  # not None
+                    new_item["bccvl:metadata"]["auxfiles"] = auxfiles
+                # else:
+                #     new_item["bccvl:metadata"]["auxfiles"] = []
+
                 del new_item["bccvl:metadata"]["partof"]
                 del new_item["bccvl:metadata"]["categories"]
                 self.data.append(new_item)
@@ -218,14 +231,44 @@ class MetadataGenerator:
         datafile_path = "{}/data.json".format(self.destination)
         self._write_results(datafile_path, self.data)
 
-    def _flatten(self, file_list):
+    def _flatten(self, file_list) -> List:
         return [item for sublist in file_list for item in sublist]
 
-    def run(self):
+    def run(self) -> None:
         self._load_guide()
         self._generate_collection()
         self._generate_datasets()
         self._generate_data()
+
+    def _get_datatype_from_guide_layer(self, dataset_title: str, parameter_name: str) -> str:
+        guide_ds = self._get_guide_dataset(dataset_title)
+        guide_lyr = self._get_guide_layer(guide_ds, parameter_name)
+        return guide_lyr.get("datatype", "continuous")
+
+    def _get_auxfiles_from_guide_layer(self, dataset_title: str, parameter_name: str) -> Dict:
+        result = None
+        guide_ds = self._get_guide_dataset(dataset_title)
+        guide_lyr = self._get_guide_layer(guide_ds, parameter_name)
+        result = guide_lyr.get("auxfiles", None)
+        return result
+
+    def _get_guide_layer(self, guide_ds: Dict, parameter_name: str) -> Dict:
+        result = None
+        for layer in guide_ds["layers"]:
+            if layer["parametername"] == parameter_name:
+                result = layer
+                break
+        return result
+
+    def _get_guide_dataset(self, title: str) -> Dict:
+        result = None
+        collection_guide = self.guide["data"]["collections"][self.COL_IDX_IN_GUIDE]
+        guide_datasets = collection_guide["datasets"]
+        for ds in guide_datasets:
+            if ds["title"] == title:
+                result = ds
+                break
+        return result
 
 
 if __name__ == '__main__':

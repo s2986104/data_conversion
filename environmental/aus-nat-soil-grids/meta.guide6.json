@@ -1,0 +1,661 @@
+{
+  "data": {
+    "collections": [
+      {
+        "uuid": "1e7eb0c57-33f1-11e9-bbab-acde48001122",
+        "_id": "national_soil_grids_layers",
+        "collection_type": "environmental",
+        "collection_subtype": "land cover",
+        "collection_name": "National Soil Grids Australia",
+        "collection_description": "Soil classification and attributes. Geographic extent: Australia, Year range: 2012, Resolution: 9 arcsec (~250m), Data layers: Soil classification, Bulk density, Clay content, Plant available water capacity, pH",
+        "collection_extent": "Australia",
+        "dataset collection_year": "",
+        "dataset collection_resolution": "3 arcsec (~90 m)",
+        "dataset collection_layers": "Major Vegetation Groups (extant vegetation, pre-1750 vegetation), Major Vegetation Subgroups (extant vegetation, pre-1750 vegetation)",
+        "licence": "CC-BY Attribution 3.0",
+        "landingpage": "http://www.asris.csiro.au/themes/NationalGrids.html",
+        "citation": "National soil data provided by the Australian Collaborative Land Evaluation Program ACLEP, endorsed through the National Committee on Soil and Terrain NCST (www.clw.csiro.au/aclep).",
+        "subjects": ["Soil Grids"],
+        "datasets": [
+          {
+            "title": "Australia, Soil Grids (2012), 9 arcsec (~250 m)",
+            "description": "Standard national soil data products.",
+            "description_full": "Standard national soil data products have been produced as gridded/raster surfaces (250m) across continental Australia. It includes: Clay content percentage, Bulk density, pH, Plant available water capacity, Australian Soil Classification",
+            "domainType": "Grid",
+            "coords": {
+              "x.left": 112.0,
+              "x.right": 154.0,
+              "y.top":  -9.0,
+              "y.bottom": -44.0
+            },
+            "width": 16800,
+            "height": 14000,
+            "citation": "Australian Soil Resource Information System, ASRIS",
+            "citation-url": "https://www.asris.csiro.au/themes/NationalGrids.html",
+            "provider": "CSIRO",
+            "landingpage": "https://www.clw.csiro.au/aclep/soilandlandscapegrid/index.html",
+            "domain": "terrestrial",
+            "spatial_domain": "Australia",
+            "time_domain": "Current",
+            "version": "v5.1",
+            "year_range": [1950, 2012],
+            "published": "2014",
+            "licence": "CC BY Attribution 4.0",
+            "resolution": "9 arcsec (~250 m)",
+            "CRS": "EPSG:4283",
+            "GCM": "",
+            "emsc": "",
+            "layers": [
+              {
+                "filename": "nsg-2011-250m_asc.tif",
+                "title": "Australian Soil Classification",
+                "parametername": "asc",
+                "tooltip": "Australian Soil Classification",
+                "unit": {
+                  "symbol":  {
+                    "value": "{soil class}",
+                    "type":  "http://www.opengis.net/def/uom/UCUM/"
+                  }
+                },
+                "legend": "categories",
+                "categories": [
+                  {
+                    "id": "AN",
+                    "label": {
+                      "en": "Anthroposols"
+                    }
+                  },
+                  {
+                    "id": "CA",
+                    "label": {
+                      "en": "Calcarosols"
+                    }
+                  },
+                  {
+                    "id": "CH",
+                    "label": {
+                      "en": "Chromosols"
+                    }
+                  },
+                  {
+                    "id": "DE",
+                    "label": {
+                      "en": "Dermosols"
+                    }
+                  },
+                  {
+                    "id": "FE",
+                    "label": {
+                      "en": "Ferrosols"
+                    }
+                  },
+                  {
+                    "id": "HY",
+                    "label": {
+                      "en": "Hydrosols"
+                    }
+                  },
+                  {
+                    "id": "KA",
+                    "label": {
+                      "en": "Kandosols"
+                    }
+                  },
+                  {
+                    "id": "KU",
+                    "label": {
+                      "en": "Kurosols"
+                    }
+                  },
+                  {
+                    "id": "OR",
+                    "label": {
+                      "en": "Organosols"
+                    }
+                  },
+                  {
+                    "id": "PO",
+                    "label": {
+                      "en": "Podosols"
+                    }
+                  },
+                  {
+                    "id": "RU",
+                    "label": {
+                      "en": "Rudosols"
+                    }
+                  },
+                  {
+                    "id": "SO",
+                    "label": {
+                      "en": "Sodosols"
+                    }
+                  },
+                  {
+                    "id": "TE",
+                    "label": {
+                      "en": "Tenosols"
+                    }
+                  },
+                  {
+                    "id": "VE",
+                    "label": {
+                      "en": "Vertosols"
+                    }
+                  }
+                ],
+                "categoryEncoding": {
+                  "AN": 1,
+                  "CA": 2,
+                  "CH": 3,
+                  "DE": 4,
+                  "FE": 5,
+                  "HY": 6,
+                  "KA": 7,
+                  "KU": 8,
+                  "OR": 9,
+                  "PO": 10,
+                  "RU": 11,
+                  "SO": 12,
+                  "TE": 13,
+                  "VE": 14
+                },
+                "bounds":  [112.00000000000003, -44.00000000000001, 154.00000000000003, -9.0],
+                "resolution": [0.0025, 0.0025],
+                "datatype": "categorical",
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "uint8",
+                  "nodata": 255.0,
+                  "width": 16800,
+                  "height": 14000,
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "transform": [0.0025, 0.0, 112.00000000000003, 0.0, -0.0025000000000000005, -9.0, 0.0, 0.0, 1.0]
+                },
+                "info": {
+                  "source": "rio info --verbose --indent 2 nsg-2011-250m_asc.tif",
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    112.00000000000003,
+                    -44.00000000000001,
+                    154.00000000000003,
+                    -9.0
+                  ],
+                  "checksum": [
+                    52783
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "deflate",
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "uint8",
+                  "height": 14000,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.00000000000003,
+                    -26.500000000000004
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": 255.0,
+                  "res": [
+                    0.0025,
+                    0.0025000000000000005
+                  ],
+                  "shape": [
+                    14000,
+                    16800
+                  ],
+                  "stats": [
+                    {
+                      "max": 14.0,
+                      "mean": 9.169500685291268,
+                      "min": 1.0
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.0025,
+                    0.0,
+                    112.00000000000003,
+                    0.0,
+                    -0.0025000000000000005,
+                    -9.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    "{soil class}"
+                  ],
+                  "width": 16800
+
+                },
+                "auxfiles": [
+                  {
+                    "type": "PAMDataset",
+                    "path": "nsg-2011-250m_asc.tif.aux.xml"
+                  }
+                ],
+                "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national_soil_grids_layers/nsg-2011-250m/nsg-2011-250m_asc.tif"
+              },
+              {
+                "filename": "nsg-2011-250m_bd30.tif",
+                "title": "Bulk density 0-30 cm",
+                "parametername": "bd30",
+                "tooltip": "Bulk density 0-30 cm",
+                "unit": {"symbol":  {"value": "Mg/m3", "type":  "http://www.opengis.net/def/uom/UCUM/"}},
+                "statistics": {"max": 2.309999942779541, "mean": 1.430078095852424, "min": 0.0},
+                "nodata": -3.4028234663852886e+38,
+                "bounds":  [112.92000000000003, -43.862500000000004, 153.64000000000001, -9.14],
+                "resolution": [0.0025, 0.0025],
+                "datatype": "continuous",
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "nodata": -3.4028234663852886e+38,
+                  "width": 16288,
+                  "height": 13889,
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "transform": [0.002499999999999999, 0.0, 112.92000000000003, 0.0, -0.0025, -9.14, 0.0, 0.0, 1.0]
+                },
+                "info": {
+                  "source": "rio info --verbose --indent 2 nsg-2011-250m_bd30.tif",
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    112.92000000000003,
+                    -43.862500000000004,
+                    153.64000000000001,
+                    -9.14
+                  ],
+                  "checksum": [
+                    31520
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "deflate",
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "height": 13889,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.28000000000003,
+                    -26.501250000000002
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": -3.4028234663852886e+38,
+                  "res": [
+                    0.002499999999999999,
+                    0.0025
+                  ],
+                  "shape": [
+                    13889,
+                    16288
+                  ],
+                  "stats": [
+                    {
+                      "max": 2.309999942779541,
+                      "mean": 1.430078095852424,
+                      "min": 0.0
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.002499999999999999,
+                    0.0,
+                    112.92000000000003,
+                    0.0,
+                    -0.0025,
+                    -9.14,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    "Mg/m3"
+                  ],
+                  "width": 16288
+
+
+                },
+                "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national_soil_grids_layers/nsg-2011-250m/nsg-2011-250m_bd30.tif"
+              },
+              {
+                "filename": "nsg-2011-250m_clay30.tif",
+                "title": "Clay content percentage 0-30 cm",
+                "parametername": "clay30",
+                "tooltip": "Clay content percentage 0-30 cm",
+                "unit": {"symbol":  {"value": "Mg/m3", "type":  "http://www.opengis.net/def/uom/UCUM/"}},
+                "statistics": {"max": 83.0, "mean": 22.769953112681936, "min": 0.0},
+                "nodata": -3.4028234663852886e+38,
+                "bounds":  [112.92, -43.8625, 153.64, -9.14],
+                "resolution": [0.0025, 0.0025],
+                "datatype": "continuous",
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "nodata": -3.4028234663852886e+38,
+                  "width": 16288,
+                  "height": 13889,
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "transform": [0.002499999999999999, 0.0, 112.92000000000003, 0.0, -0.0025, -9.14, 0.0, 0.0, 1.0]
+                },
+                "info": {
+                  "source": "rio info --verbose --indent 2 nsg-2011-250m_clay30.tif",
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    112.92000000000003,
+                    -43.862500000000004,
+                    153.64000000000001,
+                    -9.14
+                  ],
+                  "checksum": [
+                    41575
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "deflate",
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "height": 13889,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.28000000000003,
+                    -26.501250000000002
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": -3.4028234663852886e+38,
+                  "res": [
+                    0.002499999999999999,
+                    0.0025
+                  ],
+                  "shape": [
+                    13889,
+                    16288
+                  ],
+                  "stats": [
+                    {
+                      "max": 83.0,
+                      "mean": 22.769953112681936,
+                      "min": 0.0
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.002499999999999999,
+                    0.0,
+                    112.92000000000003,
+                    0.0,
+                    -0.0025,
+                    -9.14,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    "%"
+                  ],
+                  "width": 16288
+
+
+
+                },
+                "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national_soil_grids_layers/nsg-2011-250m/nsg-2011-250m_clay30.tif"
+              },
+              {
+                "filename": "nsg-2011-250m_pawc-1m.tif",
+                "title": "Plant available water capacity 0-1 m",
+                "parametername": "pawc_1m",
+                "tooltip": "Plant available water capacity 0-1 m",
+                "unit": {
+                  "symbol":  {
+                    "value": "mm",
+                    "type":  "http://www.opengis.net/def/uom/UCUM/"
+                  }
+                },
+                "statistics": {"max": 287.0, "mean": 83.81184438316022, "min": 2.0},
+                "nodata": -32768.0,
+                "bounds":  [112.0, -44.0, 154.0, -9.0],
+                "resolution": [0.0025, 0.0025],
+                "datatype": "continuous",
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "int16",
+                  "nodata": -32768.0,
+                  "width": 16800,
+                  "height": 14000,
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "transform": [0.0025, 0.0, 112.0, 0.0, -0.0025, -9.0, 0.0, 0.0, 1.0]
+                },
+                "info": {
+                  "source": "rio info --verbose --indent 2 nsg-2011-250m_pawc-1m.tif",
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    112.0,
+                    -44.0,
+                    154.0,
+                    -9.0
+                  ],
+                  "checksum": [
+                    53830
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "deflate",
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "int16",
+                  "height": 14000,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.0,
+                    -26.5
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": -32768.0,
+                  "res": [
+                    0.0025,
+                    0.0025
+                  ],
+                  "shape": [
+                    14000,
+                    16800
+                  ],
+                  "stats": [
+                    {
+                      "max": 287.0,
+                      "mean": 83.81184438316022,
+                      "min": 2.0
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.0025,
+                    0.0,
+                    112.0,
+                    0.0,
+                    -0.0025,
+                    -9.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    "mm"
+                  ],
+                  "width": 16800
+
+
+                },
+                "auxfiles": [
+                  {
+                    "type": "PAMDataset",
+                    "path": "nsg-2011-250m_pawc-1m.tif.aux.xml"
+                  }
+                ],
+                "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national_soil_grids_layers/nsg-2011-250m/nsg-2011-250m_pawc-1m.tif"
+              },
+              {
+                "filename": "nsg-2011-250m_ph-0-30.tif",
+                "title": "pH (Calcium Chloride 1:5) 0-30cm",
+                "parametername": "ph_0_30",
+                "tooltip": "pH. Indicates the degree of weathering.",
+                "unit": {"symbol":  {"value": "[pH]", "type":  "http://www.opengis.net/def/uom/UCUM/"}},
+                "statistics": {"max": 9.0, "mean": 6.178257177457174, "min": 0.6000000238418579},
+                "nodata": -3.4028234663852886e+38,
+                "bounds":  [112.0, -44.0, 154.0, -9.0],
+                "resolution": [0.0025, 0.0025],
+                "datatype": "continuous",
+                "meta": {
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "nodata": -3.4028234663852886e+38,
+                  "width": 16800,
+                  "height": 14000,
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "transform": [0.0025, 0.0, 112.0, 0.0, -0.0025, -9.0, 0.0, 0.0, 1.0]
+                },
+                "info": {
+                  "source": "rio info --verbose --indent 2 nsg-2011-250m_ph-0-30.tif",
+                  "blockxsize": 256,
+                  "blockysize": 256,
+                  "bounds": [
+                    112.0,
+                    -44.0,
+                    154.0,
+                    -9.0
+                  ],
+                  "checksum": [
+                    40307
+                  ],
+                  "colorinterp": [
+                    "gray"
+                  ],
+                  "compress": "deflate",
+                  "count": 1,
+                  "crs": "EPSG:4283",
+                  "descriptions": [
+                    null
+                  ],
+                  "driver": "GTiff",
+                  "dtype": "float32",
+                  "height": 14000,
+                  "indexes": [
+                    1
+                  ],
+                  "interleave": "band",
+                  "lnglat": [
+                    133.0,
+                    -26.5
+                  ],
+                  "mask_flags": [
+                    [
+                      "nodata"
+                    ]
+                  ],
+                  "nodata": -3.4028234663852886e+38,
+                  "res": [
+                    0.0025,
+                    0.0025
+                  ],
+                  "shape": [
+                    14000,
+                    16800
+                  ],
+                  "stats": [
+                    {
+                      "max": 9.0,
+                      "mean": 6.178257177457174,
+                      "min": 0.6000000238418579
+                    }
+                  ],
+                  "tiled": true,
+                  "transform": [
+                    0.0025,
+                    0.0,
+                    112.0,
+                    0.0,
+                    -0.0025,
+                    -9.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "units": [
+                    "[pH]"
+                  ],
+                  "width": 16800
+
+
+
+                },
+                "url": "https://swift.rc.nectar.org.au/v1/AUTH_0bc40c2c2ff94a0b9404e6f960ae5677/national_soil_grids_layers/nsg-2011-250m/nsg-2011-250m_ph-0-30.tif"
+              }
+            ],
+            "doi": "https://doi.org/10.4225/08/546F540FE10AA",
+            "folder_location": "data/national_soil_grids/nsg-2011-250m"
+          }
+        ]
+      }
+    ]
+  }
+}

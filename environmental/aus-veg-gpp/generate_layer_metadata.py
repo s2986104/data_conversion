@@ -4,7 +4,7 @@ import copy
 
 class MetadataGenerator:
 
-    COL_IDX_IN_GUIDE = 1  # collection index in meta.guide4.json
+    COL_IDX_IN_GUIDE = 1  # collection index in meta.guide5.json
 
     def __init__(self):
         self.guide = {}  # input json data serving as a guide
